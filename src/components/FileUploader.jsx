@@ -1,42 +1,60 @@
-import { useState } from 'react';
-import { supabase } from '../utils/supaBaseClient';
+import React from 'react';
+import { useRef } from 'react';
+import { supabase } from '../utils/supaBaseClient'; // Adjust the path if needed
+
 
 const FileUploader = ({ onUploadComplete }) => {
-  const [uploading, setUploading] = useState(false);
+  const handleUpload = async (event) => {
+    const files = event.target?.files;
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setUploading(true);
-
-    const filePath = `contracts/${Date.now()}_${file.name}`;
-    const { data, error } = await supabase.storage.from('contracts').upload(filePath, file);
-
-    if (error) {
-      alert('Upload failed');
-      console.error(error);
-      setUploading(false);
+    if (!files || files.length === 0) {
+      alert('Please select a file before uploading.');
       return;
     }
 
-    const { data: publicUrlData } = supabase.storage.from('contracts').getPublicUrl(filePath);
-    const publicUrl = publicUrlData.publicUrl;
+    const file = files[0];
+    const filePath = `uploads/${Date.now()}-${file.name}`;
 
-    setUploading(false);
-    onUploadComplete({
-      url: publicUrl,
-      name: file.name,
-      type: file.type,
-    });
+    const { data, error } = await supabase.storage
+      .from('contracts')
+      .upload(filePath, file);
+
+    if (error) {
+      console.error('Upload error:', error.message);
+      alert('❌ Upload failed. Check console.');
+    } else {
+      const { data: publicUrl } = supabase
+        .storage
+        .from('contracts')
+        .getPublicUrl(filePath);
+
+      if (onUploadComplete) {
+        onUploadComplete({
+          url: publicUrl.publicUrl,
+          name: file.name,
+          type: file.type,
+        });
+      }
+
+      alert('✅ File uploaded successfully!');
+    }
   };
 
-  return (
-    <div>
-      <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" onChange={handleFileChange} />
-      {uploading && <p>Uploading...</p>}
-    </div>
-  );
+  const fileInputRef = useRef();
+
+return (
+  <>
+    <input
+      type="file"
+      ref={fileInputRef}
+      style={{ display: 'none' }}
+      onChange={handleUpload}
+    />
+    <button onClick={() => fileInputRef.current.click()}>
+      Upload File
+    </button>
+  </>
+);
 };
 
 export default FileUploader;

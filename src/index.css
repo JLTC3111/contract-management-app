@@ -56,6 +56,28 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.sidebar {
+  background-color: #111827;
+  color: white;
+  padding: 2rem;
+  height: 100vh;
+  width: 240px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar a:hover {
+  text-decoration: underline;
+}
+
 .contract-table {
   width: 100%;
   border-collapse: collapse;
@@ -94,6 +116,32 @@ button:focus-visible {
   color: #666;
   font-size: 0.85rem;
 }
+
+.contract-detail {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-top: 1rem;
+  line-height: 1.6;
+}
+
+.contract-detail input,
+.contract-detail select {
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.contract-detail iframe {
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+
 
 
 @media (prefers-color-scheme: light) {

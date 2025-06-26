@@ -3,6 +3,8 @@ import { useUser } from './hooks/useUser';
 import Dashboard from './pages/Dashboard';
 import ContractDetail from './pages/ContractDetail';
 import Login from './pages/Login';
+import Home from './pages/Home';
+import NewContract from './pages/NewContract'
 
 function App() {
   const { user, loading } = useUser();
@@ -13,7 +15,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+      <Route path="/home" element={<Home />} />
         <Route path="/" element={<Dashboard />} />
+        <Route path="/new" element={<NewContract />} /> {/* ✅ New route */}
         <Route path="/contracts/:id" element={<ContractDetail />} />
       </Routes>
     </BrowserRouter>
