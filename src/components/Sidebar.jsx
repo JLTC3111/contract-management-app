@@ -16,6 +16,13 @@ const Sidebar = () => {
       navigate('/login');
     }
   };
+  
+  const roleDescriptions = {
+    admin: 'Full access: create, edit, approve, and delete contracts.',
+    editor: 'Can create and edit contracts but not approve or delete.',
+    approver: 'Can review and approve contracts. No editing access.',
+    viewer: 'Read-only access to all contracts.'
+  };
 
   return (
     <div style={{
@@ -30,7 +37,7 @@ const Sidebar = () => {
     }}>
       {/* Top Navigation Links */}
       <div>
-        <h2 style={{ marginBottom: '2rem', fontSize: '1.2rem' }}>📁 ContractApp</h2>
+        <h2 style={{ marginBottom: '2rem', fontSize: '1.2rem' }}></h2>
 
         <button onClick={() => navigate('/')} style={linkStyle}>
           <Home size={18} /> Dashboard
@@ -46,19 +53,19 @@ const Sidebar = () => {
       {/* Bottom - User Info & Logout */}
       <div>
         {user && (
-          <div style={{ fontSize: '0.85rem', marginBottom: '2.5rem', color: '#334155' }}>
-            Logged in as:<br />
-            <strong>{user.email}</strong>
+          <div style={{ fontSize: '0.85rem', marginBottom: '60%', color: '#334155' }}>
+            <div style={{ marginTop: '0.75rem' }}>
+              <div><strong>Role:</strong> {user.role ?? 'unknown'}</div>
+              <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem' }}>
+                {roleDescriptions[user.role] || 'Role not recognized.'}
+              </div>
+            </div>
           </div>
         )}
-
-        <button onClick={handleLogout} style={{ ...linkStyle, marginBottom: '3rem', color: '#ef4444' }}>
-          <LogOut size={18} /> Logout
-        </button>
+            </div>
       </div>
-    </div>
-  );
-};
+      );
+    };
 
 const linkStyle = {
   display: 'flex',

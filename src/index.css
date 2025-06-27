@@ -56,6 +56,10 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+nav {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
 .sidebar {
   background-color: #111827;
   color: white;

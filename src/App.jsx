@@ -4,7 +4,9 @@ import Dashboard from './pages/Dashboard';
 import ContractDetail from './pages/ContractDetail';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import NewContract from './pages/NewContract'
+import NewContract from './pages/NewContract';
+import Navbar from './components/Navbar';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const { user, loading } = useUser();
@@ -13,9 +15,11 @@ function App() {
   if (!user) return <Login />;
 
   return (
+    
     <BrowserRouter>
+     <Navbar />
       <Routes>
-      <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="/new" element={<NewContract />} /> {/* ✅ New route */}
         <Route path="/contracts/:id" element={<ContractDetail />} />
