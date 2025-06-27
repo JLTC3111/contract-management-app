@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import FileUploader from '../components/FileUploader';
 import { useUser } from '../hooks/useUser';
+import { ArrowLeft } from 'lucide-react';
 
 const ContractDetail = () => {
   const { user, loading: userLoading } = useUser(); // from context
@@ -13,8 +14,7 @@ const ContractDetail = () => {
   const [editMode, setEditMode] = useState(false);
   const [updated, setUpdated] = useState({});
   const canEdit = user && ['admin', 'editor'].includes(user.role);
-
-
+  
   useEffect(() => {
     const fetchContract = async () => {
       const { data, error } = await supabase
@@ -65,9 +65,45 @@ const ContractDetail = () => {
   const isPDF = updated.file_type === 'application/pdf';
 
   if (userLoading) return <p>Loading user...</p>;
-if (!user) return <p>User not available</p>;
-if (loading) return <p>Loading contract...</p>;
-if (!contract) return <p>Contract not found</p>;
+  if (!user) return <p>User not available</p>;
+  if (loading) return <p>Loading contract...</p>;
+  if (!contract) return <p>Contract not found</p>;
+
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this contract and its file?')) return;
+  
+    try {
+      // First, delete the file from Supabase Storage
+      const { error: fileError } = await supabase.storage
+        .from('contracts') // 👈 your bucket name
+        .remove([contract.file_name]); // assumes file_name is the key used in upload
+  
+      if (fileError) {
+        console.error('Error deleting file:', fileError.message);
+        alert('Failed to delete file from storage.');
+        return;
+      }
+  
+      // Now delete the metadata from the contracts table
+      const { error: dbError } = await supabase
+        .from('contracts')
+        .delete()
+        .eq('id', contract.id);
+  
+      if (dbError) {
+        console.error('Error deleting contract:', dbError.message);
+        alert('Failed to delete contract.');
+        return;
+      }
+  
+      alert('Contract and file deleted successfully.');
+      navigate('/');
+    } catch (err) {
+      console.error('Unexpected error during deletion:', err);
+      alert('Something went wrong.');
+    }
+  };
+  
 
   return (
     <div style={{ padding: '2rem' }}>
@@ -148,22 +184,84 @@ if (!contract) return <p>Contract not found</p>;
         )}
       </div>
   
-      {/* Only show controls for admin/editor */}
-      {['admin', 'editor'].includes(user.role) && (
-        <div style={{ marginTop: '2rem' }}>
-          {editMode ? (
-            <>
-              <button onClick={handleSave}>💾 Save</button>{' '}
-              <button onClick={() => setEditMode(false)}>Cancel</button>
-            </>
-          ) : (
-            <button onClick={() => setEditMode(true)}>✏️ Edit</button>
-          )}
-        </div>
+  
+      <button
+          onClick={() => navigate(-1)}
+          style={{
+            marginBottom: '1rem',
+            padding: '0.5rem 1rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            backgroundColor: '#ddd',
+            border: 'none',
+            borderRadius: '12px',
+            cursor: 'pointer',
+          }}>
+          <ArrowLeft size={14} /> Back 
+     </button>
+  {['admin', 'editor'].includes(user.role) && (
+    <div style={{ marginTop: '2rem', display: 'flex', gap: '0.5rem' }}>
+      {editMode ? (
+        <>
+          <button
+            onClick={handleSave}
+            style={{
+              backgroundColor: '#3b82f6', // blue-500
+              color: '#fff',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+            }}
+          >
+            💾 Save
+          </button>
+          <button
+            onClick={() => setEditMode(false)}
+            style={{
+              backgroundColor: '#e5e7eb', // gray-200
+              color: '#111827',           // gray-900
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleDelete}
+            style={{
+              backgroundColor: '#000', // red-500
+              color: '#fff',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+            }}
+          >
+            ❌ Delete
+          </button>
+        </>
+      ) : (
+        <button
+          onClick={() => setEditMode(true)}
+          style={{
+            backgroundColor: '#3b82f6', // blue-500
+            color: '#fff',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '6px',
+            cursor: 'pointer',
+          }}
+        >
+          ✏️ Edit
+        </button>
       )}
     </div>
-  );
-  
-};
+  )}
+</div>
+);};
 
 export default ContractDetail;

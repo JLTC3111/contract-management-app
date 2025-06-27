@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import FileUploader from '../components/FileUploader';
+import { ArrowLeft } from 'lucide-react';
 
 const NewContract = () => {
   const [title, setTitle] = useState('');
@@ -56,6 +57,23 @@ const NewContract = () => {
       </select>
       <FileUploader onUploadComplete={setFile} />
       <button onClick={handleSubmit}>Save Contract</button>
+
+      <button
+        onClick={() => navigate(-1)}
+        style={{
+          marginBottom: '1rem',
+          padding: '0.5rem 1rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          backgroundColor: '#ddd',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+        }}>
+        <ArrowLeft size={18} /> Back 
+      </button>
+      
     </div>
   );
 };
