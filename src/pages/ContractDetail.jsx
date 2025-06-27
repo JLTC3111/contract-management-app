@@ -310,22 +310,22 @@ const ContractDetail = () => {
 
       {!editMode && (
         <div style={{ marginTop: '1rem', marginLeft: '2.75%' }}>
-          {files.length ? (
-              <h3>📂 Files ({files.length})</h3>
-            ) : (
-              <h3>📂 No files found or still loading...</h3>
-            )}
+          {fileList.length ? (
+            <h3>📂 Files ({fileList.length})</h3>
+          ) : (
+            <h3>📂 No files found or still loading...</h3>
+          )}
           <ul style={{ paddingLeft: '5%' }}>
             {fileList.map(file => {
               const publicUrl = supabase
                 .storage
                 .from('contracts')
-                .getPublicUrl(`uploads/${contract.id}/${fileList.name}`).data.publicUrl;
+                .getPublicUrl(`uploads/${contract.id}/${file.name}`).data.publicUrl;
 
               return (
                 <li key={file.name}>
                   <a href={publicUrl} target="_blank" rel="noopener noreferrer">
-                    {file.name}
+                    📎 {file.name}
                   </a>
                 </li>
               );

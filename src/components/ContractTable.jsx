@@ -11,6 +11,7 @@ const ContractTable = ({ contracts }) => {
           <th>Status</th>
           <th>Version</th>
           <th>Last Updated</th>
+          <th>Author</th>
         </tr>
       </thead>
       <tbody>

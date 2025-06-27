@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import NewContract from './pages/NewContract';
 import NavBar from './components/NavBar';
 import { Toaster } from 'react-hot-toast';
+import './index.css';
 
 function App() {
   const { user, loading } = useUser();
