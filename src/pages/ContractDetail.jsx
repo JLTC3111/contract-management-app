@@ -21,7 +21,7 @@ const ContractDetail = () => {
   const [previewType, setPreviewType] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const canDelete = user && ['admin', 'editor'].includes(user.role);
-
+  const [highlightedFiles, setHighlightedFiles] = useState([]);
 
   useEffect(() => {
     if (contract?.id) {
@@ -30,23 +30,21 @@ const ContractDetail = () => {
   }, [contract?.id]);
 
   const listFiles = async (contractId) => {
-    const folder = `uploads/${contractId}`;
-
+    const folder = `uploads/${contractId}`.replace(/^\/+|\/+$/g, '');
+  
     const { data, error } = await supabase
       .storage
       .from('contracts')
-      .list(folder, {
-        limit: 100,
-        offset: 0,
-      });
-
+      .list(folder);
+  
     if (error) {
       console.error('Error fetching files:', error.message);
-      setFiles([]);
+      setFiles([]); // Reset files on error
     } else {
       setFiles(data || []);
     }
   };
+  
   
   useEffect(() => {
     const fetchContract = async () => {
@@ -170,7 +168,8 @@ const ContractDetail = () => {
         toast.error('❌ Failed to delete file(s).');
       } else {
         toast.success(`✅ Deleted ${deletePaths.length} file(s).`);
-        listFiles(contract.id); // Refresh list
+        await listFiles(contract.id); // Refresh after delete
+        setSelectedFiles([]);
       }
     } catch (err) {
       console.error('Unexpected error:', err);
@@ -242,7 +241,7 @@ const ContractDetail = () => {
           >
             <ArrowLeft size={14} /> Back
           </button>
-          <button
+          <button 
             onClick={() => handleDeleteFiles(selectedFiles)}
             style={{
               backgroundColor: '#ddd',
@@ -324,36 +323,63 @@ const ContractDetail = () => {
         </p>
         
         {editMode && (
-            <FileUploader
+          <FileUploader
             contract={contract}
-            onUploadComplete={(file) => {
-              setUpdated((prev) => ({
-                ...prev,
-                file_url: file.url,
-                file_name: file.name,
-                file_type: file.type,
-              }));
+            onUploadComplete={(files) => {
+              const latestFile = files?.[0];
+              if (latestFile) {
+                setUpdated((prev) => ({
+                  ...prev,
+                  file_url: latestFile.url,
+                  file_name: latestFile.name,
+                  file_type: latestFile.type,
+                }));
+              }
             }}
-            onUploadSuccess={() => listFiles(contract.id)} // 👈 Refresh on upload
-          />          
+            onUploadSuccess={() => {
+              listFiles(contract.id);
+              // 👇 highlight new files for 2s
+              setTimeout(() => setHighlightedFiles([]), 2000);
+              supabase
+                .storage
+                .from('contracts')
+                .list(`uploads/${contract.id}`)
+                .then(({ data }) => {
+                  if (data?.length) {
+                    const names = data.map(f => f.name);
+                    setHighlightedFiles(names);
+                  }
+                });
+            }}
+          />                   
         )}
 
       {!editMode && (
         <div>
           <h3>📂 Files ({files.length})</h3>
-<ul style={{ listStyle: 'none', padding: 0 }}>
-  {files.map((file) => {
-    const fileName = file.name;
-    const publicUrl = supabase
-      .storage
-      .from('contracts')
-      .getPublicUrl(`uploads/${contract.id}/${fileName}`).data.publicUrl;
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {files.map((file) => {
+              const fileName = file.name;
+              const publicUrl = supabase
+                .storage
+                .from('contracts')
+                .getPublicUrl(`uploads/${contract.id}/${fileName}`).data.publicUrl;
 
-    const isPdf = fileName.toLowerCase().endsWith('.pdf');
-    const isSelected = selectedFiles.includes(fileName);
+              const isPdf = fileName.toLowerCase().endsWith('.pdf');
+              const isSelected = selectedFiles.includes(fileName);
 
     return (
-      <li key={fileName} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+      <li key={fileName} style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1rem',
+        padding: '0.25rem 0.5rem',
+        borderRadius: '6px',
+        background: highlightedFiles.includes(fileName)
+          ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))'
+          : 'transparent',
+        transition: 'background-color 0.6s ease',
+        }}>
         <input
           type="checkbox"
           checked={isSelected}
@@ -408,7 +434,7 @@ const ContractDetail = () => {
 </ul>
 
 
-          {previewUrl && previewType === 'pdf' && (
+  {previewUrl && previewType === 'pdf' && (
             <div
               style={{
                 marginTop: '2rem',
