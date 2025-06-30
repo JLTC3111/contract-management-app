@@ -99,13 +99,44 @@ const ContractDetail = () => {
   if (loading) return <p>Loading contract...</p>;
   if (!contract) return <p>Contract not found</p>;
 
+  const handleDeleteFiles = async () => {
+    const confirmed = confirm('Delete file(s)?');
+    if (!confirmed) return;
+  
+    const fileKey = contract.file_name;
+    
+    console.log('Contract:', contract);
+    if (!fileKey) {
+      alert('No file path specified!');
+      return;
+    }
+  
+    try {
+      const { error } = await supabase.storage
+        .from('contracts')
+        .remove([fileKey]);
+  
+      if (error) {
+        console.error('Supabase deletion error:', error.message);
+        alert('❌ Failed to delete file.');
+      } else {
+        toast.success('✅ File deleted successfully.');
+        navigate('/');
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      alert('🚨 Something went wrong.');
+    }
+  };
+  
+
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this contract and its file?')) return;
   
     try {
       // First, delete the file from Supabase Storage
       const { error: fileError } = await supabase.storage
-        .from('contracts') // 👈 your bucket name
+        .from('contracts') // 👈 bucket name
         .remove([contract.file_name]); // assumes file_name is the key used in upload
   
       if (fileError) {
@@ -162,6 +193,19 @@ const ContractDetail = () => {
           >
             <ArrowLeft size={14} /> Back
           </button>
+          <button
+                onClick={handleDeleteFiles}
+                style={{
+                  backgroundColor: '#000',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                }}
+              >
+                ❌ Delete File
+              </button>
         </div>
       )}
   

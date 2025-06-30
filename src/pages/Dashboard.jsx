@@ -19,13 +19,38 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchContracts = async () => {
-      const { data, error } = await supabase.from('contracts').select('*');
+      setLoading(true); // move this up for safety
+  
+      const { data, error } = await supabase
+        .from('contracts')
+        .select('*')
+        .order('updated_at', { ascending: false });
+  
       if (error) {
         console.error('Supabase error:', error.message);
-      } else {
-        console.log('Fetched contracts:', data);
-        setContracts(data);
+        setLoading(false);
+        return;
       }
+  
+      if (!data || !Array.isArray(data)) {
+        console.error('Unexpected data format:', data);
+        setLoading(false);
+        return;
+      }
+  
+      setContracts(prevContracts => {
+        if (prevContracts.length === 0) {
+          // First load
+          return data;
+        }
+  
+        // Update only modified contracts, keep order
+        return prevContracts.map(existing => {
+          const updated = data.find(d => d.id === existing.id);
+          return updated ? updated : existing;
+        });
+      });
+  
       setLoading(false);
     };
   

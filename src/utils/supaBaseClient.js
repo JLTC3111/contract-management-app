@@ -11,3 +11,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: true,
   },
 });
+
+// expose supabase globally for dev tools (optional in dev only)
+if (typeof window !== 'undefined') {
+  window.supabase = supabase;
+}
