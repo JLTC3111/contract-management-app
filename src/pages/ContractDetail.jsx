@@ -4,6 +4,7 @@ import { supabase } from '../utils/supaBaseClient';
 import FileUploader from '../components/FileUploader';
 import { useUser } from '../hooks/useUser';
 import { ArrowLeft } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const ContractDetail = () => {
   const { user, loading: userLoading } = useUser(); // from context
@@ -18,6 +19,10 @@ const ContractDetail = () => {
   const [fileList, setFileList] = useState([]);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [previewType, setPreviewType] = useState(null);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const canDelete = user && ['admin', 'editor'].includes(user.role);
+
 
   useEffect(() => {
     if (contract?.id) {
@@ -65,26 +70,37 @@ const ContractDetail = () => {
   }, [id]);
 
   const handleSave = async () => {
-    const { error } = await supabase
-      .from('contracts')
-      .update({
-        title: updated.title,
-        version: updated.version,
-        status: updated.status,
-        file_url: updated.file_url,
-        file_name: updated.file_name,
-        file_type: updated.file_type,
-        updated_at: new Date().toISOString(),
-        author: updated.author,
-      })
-      .eq('id', id);
-
-    if (!error) {
-      setContract(updated);
-      setEditMode(false);
-    } else {
-      alert('Failed to update contract.');
-      console.error(error);
+    if (actionLoading) return; // Prevent spamming
+    setActionLoading(true);
+  
+    try {
+      const { error } = await supabase
+        .from('contracts')
+        .update({
+          title: updated.title?.trim(),
+          version: updated.version?.trim(),
+          status: updated.status,
+          file_url: updated.file_url,
+          file_name: updated.file_name,
+          file_type: updated.file_type,
+          updated_at: new Date().toISOString(),
+          author: updated.author?.trim(),
+        })
+        .eq('id', id);
+  
+      if (error) {
+        toast.error('❌ Failed to update contract.');
+        console.error(error);
+      } else {
+        setContract(updated);
+        setEditMode(false);
+        toast.success('✅ Contract updated!');
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      toast.error('🚨 Something went wrong.');
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -99,33 +115,58 @@ const ContractDetail = () => {
   if (loading) return <p>Loading contract...</p>;
   if (!contract) return <p>Contract not found</p>;
 
-  const handleDeleteFiles = async () => {
-    const confirmed = confirm('Delete file(s)?');
+  const handleDeleteFiles = async (fileToDelete = null) => {
+    const confirmed = confirm(
+      fileToDelete
+        ? `Delete "${fileToDelete.name || fileToDelete}"?`
+        : 'Delete all files for this contract?'
+    );
     if (!confirmed) return;
   
-    const fileKey = contract.file_name;
-    
-    console.log('Contract:', contract);
-    if (!fileKey) {
-      alert('No file path specified!');
-      return;
-    }
-  
     try {
-      const { error } = await supabase.storage
-        .from('contracts')
-        .remove([fileKey]);
+      let filesToDelete = [];
   
-      if (error) {
-        console.error('Supabase deletion error:', error.message);
-        alert('❌ Failed to delete file.');
+      const folder = `uploads/${contract.id}`;
+  
+      if (fileToDelete) {
+        const fileName = typeof fileToDelete === 'string' ? fileToDelete : fileToDelete.name;
+        filesToDelete = [`${folder}/${fileName}`];
       } else {
-        toast.success('✅ File deleted successfully.');
-        navigate('/');
+        // Delete all files in the folder
+        const { data: allFiles, error: listError } = await supabase
+          .storage
+          .from('contracts')
+          .list(folder);
+  
+        if (listError) {
+          console.error('Error listing files:', listError.message);
+          toast.error('Failed to list files.');
+          return;
+        }
+  
+        if (!allFiles || allFiles.length === 0) {
+          toast.error('No files found to delete.');
+          return;
+        }
+  
+        filesToDelete = allFiles.map(f => `${folder}/${f.name}`);
+      }
+  
+      const { error: deleteError } = await supabase
+        .storage
+        .from('contracts')
+        .remove(filesToDelete);
+  
+      if (deleteError) {
+        console.error('Supabase deletion error:', deleteError.message);
+        toast.error('❌ Failed to delete file(s).');
+      } else {
+        toast.success(`✅ Deleted ${filesToDelete.length} file(s).`);
+        listFiles(contract.id); // Refresh file list
       }
     } catch (err) {
       console.error('Unexpected error:', err);
-      alert('🚨 Something went wrong.');
+      toast.error('🚨 Something went wrong.');
     }
   };
   
@@ -169,7 +210,7 @@ const ContractDetail = () => {
   return (
     <div>
       {/* Back button in top-right when NOT editing */}
-      {!editMode && (
+      {!editMode && canDelete && (
         <div
           style={{
             display: 'flex',
@@ -194,18 +235,19 @@ const ContractDetail = () => {
             <ArrowLeft size={14} /> Back
           </button>
           <button
-                onClick={handleDeleteFiles}
-                style={{
-                  backgroundColor: '#000',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                }}
-              >
-                ❌ Delete File
-              </button>
+            onClick={() => handleDeleteFiles(selectedFile)}
+            style={{
+              backgroundColor: '#ddd',
+              color: '#000',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+            }}
+            disabled={!selectedFile} // Optional: disable when no file selected
+          >
+            🗑️ Delete File
+          </button>
         </div>
       )}
   
@@ -290,59 +332,67 @@ const ContractDetail = () => {
         <div>
           <h3>📂 Files ({files.length})</h3>
           <ul>
-            {files.map(file => {
-              const publicUrl = supabase
-                .storage
-                .from('contracts')
-                .getPublicUrl(`uploads/${contract.id}/${file.name}`).data.publicUrl;
+          {files.map(file => {
+            const fileName = file.name;
+            const publicUrl = supabase
+              .storage
+              .from('contracts')
+              .getPublicUrl(`uploads/${contract.id}/${fileName}`).data.publicUrl;
 
-              const isPdf = file.name.toLowerCase().endsWith('.pdf');
+            const isPdf = fileName.toLowerCase().endsWith('.pdf');
 
-              return (
-                <li key={file.name}>
-                  {isPdf ? (
-                    <button
-                      onClick={() => {
-                        setPreviewUrl(publicUrl);
-                        setPreviewType('pdf');
-                      }}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: 'blue',
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                        padding: 0,
-                        font: 'inherit'
-                      }}
-                    >
-                      📄 {file.name}
-                    </button>
-                  ) : (
-                    <a
-                      href={publicUrl}
-                      download
-                      onClick={(e) => {
-                        const confirmed = window.confirm(
-                          `Download "${file.name}"?`
-                        );
-                        if (!confirmed) {
-                          e.preventDefault(); // Cancel download
-                        }
-                      }}
-                      style={{
-                        color: '#0077cc',
-                        textDecoration: 'underline',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      📥 {file.name}
-                    </a>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+            return (
+              <li key={fileName} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                {/* Circle selector */}
+                <input
+                  type="radio"
+                  name="fileToDelete"
+                  checked={selectedFile === fileName}
+                  onChange={() => setSelectedFile(fileName)}
+                />
+
+                {/* File link or preview */}
+                {isPdf ? (
+                  <button
+                    onClick={() => {
+                      setPreviewUrl(publicUrl);
+                      setPreviewType('pdf');
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'blue',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      padding: 0,
+                      font: 'inherit'
+                    }}
+                  >
+                    📄 {fileName}
+                  </button>
+                ) : (
+                  <a
+                    href={publicUrl}
+                    download
+                    onClick={(e) => {
+                      if (!window.confirm(`Download "${fileName}"?`)) {
+                        e.preventDefault();
+                      }
+                    }}
+                    style={{
+                      color: '#0077cc',
+                      textDecoration: 'underline',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    📥 {fileName}
+                  </a>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+
           {previewUrl && previewType === 'pdf' && (
             <div
               style={{
@@ -423,7 +473,7 @@ const ContractDetail = () => {
                   cursor: 'pointer',
                 }}
               >
-                ❌ Delete
+                ❌ Delete Contract
               </button>
             </>
           ) : (
