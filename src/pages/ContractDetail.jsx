@@ -16,11 +16,10 @@ const ContractDetail = () => {
   const [updated, setUpdated] = useState({});
   const canEdit = user && ['admin', 'editor'].includes(user.role);
   const [files, setFiles] = useState([]);
-  const [fileList, setFileList] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [previewType, setPreviewType] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
   const canDelete = user && ['admin', 'editor'].includes(user.role);
 
 
@@ -115,24 +114,33 @@ const ContractDetail = () => {
   if (loading) return <p>Loading contract...</p>;
   if (!contract) return <p>Contract not found</p>;
 
-  const handleDeleteFiles = async (fileToDelete = null) => {
+  const handleDeleteFiles = async (filesToDelete = []) => {
+    // Normalize input: single string or file object -> array
+    if (!Array.isArray(filesToDelete)) {
+      filesToDelete = [filesToDelete];
+    }
+  
+    const folder = `uploads/${contract.id}`;
+  
+    // If no files specified, confirm deleting all
     const confirmed = confirm(
-      fileToDelete
-        ? `Delete "${fileToDelete.name || fileToDelete}"?`
+      filesToDelete.length > 0
+        ? `Delete ${filesToDelete.length} selected file(s)?`
         : 'Delete all files for this contract?'
     );
+  
     if (!confirmed) return;
   
     try {
-      let filesToDelete = [];
+      let deletePaths = [];
   
-      const folder = `uploads/${contract.id}`;
-  
-      if (fileToDelete) {
-        const fileName = typeof fileToDelete === 'string' ? fileToDelete : fileToDelete.name;
-        filesToDelete = [`${folder}/${fileName}`];
+      if (filesToDelete.length > 0) {
+        deletePaths = filesToDelete.map(file =>
+          typeof file === 'string'
+            ? `${folder}/${file}`
+            : `${folder}/${file.name}`
+        );
       } else {
-        // Delete all files in the folder
         const { data: allFiles, error: listError } = await supabase
           .storage
           .from('contracts')
@@ -149,27 +157,27 @@ const ContractDetail = () => {
           return;
         }
   
-        filesToDelete = allFiles.map(f => `${folder}/${f.name}`);
+        deletePaths = allFiles.map(f => `${folder}/${f.name}`);
       }
   
       const { error: deleteError } = await supabase
         .storage
         .from('contracts')
-        .remove(filesToDelete);
+        .remove(deletePaths);
   
       if (deleteError) {
         console.error('Supabase deletion error:', deleteError.message);
         toast.error('❌ Failed to delete file(s).');
       } else {
-        toast.success(`✅ Deleted ${filesToDelete.length} file(s).`);
-        listFiles(contract.id); // Refresh file list
+        toast.success(`✅ Deleted ${deletePaths.length} file(s).`);
+        listFiles(contract.id); // Refresh list
       }
     } catch (err) {
       console.error('Unexpected error:', err);
       toast.error('🚨 Something went wrong.');
+      setSelectedFiles([]); // Clear selection after deletion
     }
-  };
-  
+  };  
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this contract and its file?')) return;
@@ -235,7 +243,7 @@ const ContractDetail = () => {
             <ArrowLeft size={14} /> Back
           </button>
           <button
-            onClick={() => handleDeleteFiles(selectedFile)}
+            onClick={() => handleDeleteFiles(selectedFiles)}
             style={{
               backgroundColor: '#ddd',
               color: '#000',
@@ -244,9 +252,9 @@ const ContractDetail = () => {
               borderRadius: '6px',
               cursor: 'pointer',
             }}
-            disabled={!selectedFile} // Optional: disable when no file selected
+            disabled={selectedFiles.length === 0}
           >
-            🗑️ Delete File
+            🗑️ Delete File{selectedFiles.length > 1 ? 's' : ''} ({selectedFiles.length})
           </button>
         </div>
       )}
@@ -316,82 +324,89 @@ const ContractDetail = () => {
         </p>
         
         {editMode && (
-            <FileUploader contract={contract}
-              onUploadComplete={(file) => {
-                setUpdated((prev) => ({
-                  ...prev,
-                  file_url: file.url,
-                  file_name: file.name,
-                  file_type: file.type,
-                }));
-              }}
-            />
+            <FileUploader
+            contract={contract}
+            onUploadComplete={(file) => {
+              setUpdated((prev) => ({
+                ...prev,
+                file_url: file.url,
+                file_name: file.name,
+                file_type: file.type,
+              }));
+            }}
+            onUploadSuccess={() => listFiles(contract.id)} // 👈 Refresh on upload
+          />          
         )}
 
       {!editMode && (
         <div>
           <h3>📂 Files ({files.length})</h3>
-          <ul>
-          {files.map(file => {
-            const fileName = file.name;
-            const publicUrl = supabase
-              .storage
-              .from('contracts')
-              .getPublicUrl(`uploads/${contract.id}/${fileName}`).data.publicUrl;
+<ul style={{ listStyle: 'none', padding: 0 }}>
+  {files.map((file) => {
+    const fileName = file.name;
+    const publicUrl = supabase
+      .storage
+      .from('contracts')
+      .getPublicUrl(`uploads/${contract.id}/${fileName}`).data.publicUrl;
 
-            const isPdf = fileName.toLowerCase().endsWith('.pdf');
+    const isPdf = fileName.toLowerCase().endsWith('.pdf');
+    const isSelected = selectedFiles.includes(fileName);
 
-            return (
-              <li key={fileName} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                {/* Circle selector */}
-                <input
-                  type="radio"
-                  name="fileToDelete"
-                  checked={selectedFile === fileName}
-                  onChange={() => setSelectedFile(fileName)}
-                />
-
-                {/* File link or preview */}
-                {isPdf ? (
-                  <button
-                    onClick={() => {
-                      setPreviewUrl(publicUrl);
-                      setPreviewType('pdf');
-                    }}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'blue',
-                      textDecoration: 'underline',
-                      cursor: 'pointer',
-                      padding: 0,
-                      font: 'inherit'
-                    }}
-                  >
-                    📄 {fileName}
-                  </button>
-                ) : (
-                  <a
-                    href={publicUrl}
-                    download
-                    onClick={(e) => {
-                      if (!window.confirm(`Download "${fileName}"?`)) {
-                        e.preventDefault();
-                      }
-                    }}
-                    style={{
-                      color: '#0077cc',
-                      textDecoration: 'underline',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    📥 {fileName}
-                  </a>
-                )}
-              </li>
+    return (
+      <li key={fileName} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={() => {
+            setSelectedFiles(prev =>
+              isSelected
+                ? prev.filter(name => name !== fileName)
+                : [...prev, fileName]
             );
-          })}
-        </ul>
+          }}
+        />
+
+        {isPdf ? (
+          <button
+            onClick={() => {
+              setPreviewUrl(publicUrl);
+              setPreviewType('pdf');
+            }}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'blue',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              padding: 0,
+              font: 'inherit'
+            }}
+          >
+            📄 {fileName}
+          </button>
+        ) : (
+          <a
+            href={publicUrl}
+            download
+            onClick={(e) => {
+              if (!window.confirm(`Download "${fileName}"?`)) {
+                e.preventDefault();
+              }
+            }}
+            style={{
+              color: '#0077cc',
+              textDecoration: 'underline',
+              cursor: 'pointer'
+            }}
+          >
+            📥 {fileName}
+          </a>
+        )}
+      </li>
+    );
+  })}
+</ul>
+
 
           {previewUrl && previewType === 'pdf' && (
             <div

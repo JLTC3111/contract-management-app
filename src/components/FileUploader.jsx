@@ -8,7 +8,7 @@ const sanitizeFileName = (name) =>
     .replace(/\s+/g, '-')
     .replace(/[^a-zA-Z0-9.\-_]/g, '');
 
-const FileUploader = ({ onUploadComplete, contract }) => {
+const FileUploader = ({ onUploadComplete, onUploadSuccess, contract }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const fileInputRef = useRef();
 
@@ -53,32 +53,34 @@ const FileUploader = ({ onUploadComplete, contract }) => {
             .storage
             .from('contracts')
             .getPublicUrl(filePath);
-
-          // ✅ Add to uploads list
+      
           uploads.push({
             url: publicUrlData.publicUrl,
             name: file.name,
             type: file.type,
           });
-
+      
           toast.success(`✅ ${file.name} uploaded!`);
-
-          // ✅ Only update DB when upload is successful
+      
           const { error: updateError } = await supabase
             .from('contracts')
             .update({ file_name: filePath })
             .eq('id', contract.id);
-
+      
           if (updateError) {
             console.error('Error saving file path to DB:', updateError.message);
             toast.error(`⚠️ File uploaded but DB not updated`);
           }
-
+      
+          // ✅ Immediately refresh the file list UI
+          if (onUploadSuccess) onUploadSuccess();
+      
         } else {
           console.error(`Failed to upload ${file.name}:`, xhr.responseText);
           toast.error(`❌ Failed to upload ${file.name}`);
         }
       };
+      
 
       xhr.onerror = () => {
         toast.error(`❌ Upload error for ${file.name}`);
@@ -124,49 +126,50 @@ const FileUploader = ({ onUploadComplete, contract }) => {
       </button>
 
       {Object.entries(uploadProgress).map(([filename, progress]) => (
-  <div key={filename} style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-    <div style={{ flex: 1 }}>
-      <strong>{filename}</strong>: {progress}%
-      <div style={{
-        width: '100%',
-        height: '8px',
-        backgroundColor: '#ddd',
-        borderRadius: '4px',
-        overflow: 'hidden',
-        marginTop: '4px',
-      }}>
-        <div style={{
-          width: `${progress}%`,
-          height: '100%',
-          backgroundColor: '#4caf50',
-          transition: 'width 0.2s'
-        }}></div>
-      </div>
-    </div>
+        <div key={filename} style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{ flex: 1 }}>
+            <strong>{filename}</strong>: {progress}%
+            <div style={{
+              width: '100%',
+              height: '8px',
+              backgroundColor: '#ddd',
+              borderRadius: '4px',
+              overflow: 'hidden',
+              marginTop: '4px',
+            }}>
+              <div style={{
+              width: `${progress}%`,
+              height: '100%',
+              background: 'linear-gradient(90deg, #000000, #3b82f6)', // black to Tailwind blue-600
+              transition: 'width 0.2s',
+            }}></div>
+            </div>
+          </div>
 
-    {/* ✅ Green checkmark when complete */}
-    {progress === 100 && (
-      <div
-        style={{
-          marginTop: '4px',
-          width: '18px',
-          height: '18px',
-          borderRadius: '50%',
-          backgroundColor: '#4caf50',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: '#fff',
-          fontSize: '16px',
-          fontWeight: 'bold',
-        }}
-        title="Upload complete"
-      >
-        ✓
-      </div>
-    )}
-  </div>
-))}
+        {/* ✅ Green checkmark when complete */}
+        {progress === 100 && (
+          <div
+            style={{
+              border: '1px solid blue',
+              marginTop: '24px',
+              width: '18px',
+              height: '18px',
+              borderRadius: '50%',
+              background: 'linear-gradient(90deg,rgb(255, 252, 173),rgb(0, 255, 30))',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: '#000',
+              fontSize: '16px',
+              fontWeight: 'bold',
+            }}
+            title="Upload complete"
+          >
+            ✓
+          </div>
+              )}
+            </div>
+          ))}
 
     </>
   );
