@@ -244,12 +244,15 @@ const ContractDetail = () => {
           <button 
             onClick={() => handleDeleteFiles(selectedFiles)}
             style={{
-              backgroundColor: '#ddd',
-              color: '#000',
-              border: 'none',
+              backgroundColor: selectedFiles.length === 0 ? '#eee' : '#ddd',
+              color: selectedFiles.length === 0 ? '#999' : '#000',
               padding: '0.5rem 1rem',
+              border: 'none',
               borderRadius: '6px',
-              cursor: 'pointer',
+              cursor: selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
+              filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
+              opacity: selectedFiles.length === 0 ? 0.6 : 1,
+              transition: 'all 0.2s ease',
             }}
             disabled={selectedFiles.length === 0}
           >
