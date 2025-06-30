@@ -25,6 +25,7 @@ const ContractTable = ({ contracts }) => {
             <td>{contract.status}</td>
             <td>{contract.version}</td>
             <td>{new Date(contract.updated_at).toLocaleString()}</td>
+            <td>{contract.author}</td>
           </tr>
         ))}
       </tbody>

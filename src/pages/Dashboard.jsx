@@ -23,7 +23,7 @@ const Dashboard = () => {
       if (error) {
         console.error('Supabase error:', error.message);
       } else {
-        console.log('Fetched contracts:', data); // ✅ Add this!
+        console.log('Fetched contracts:', data);
         setContracts(data);
       }
       setLoading(false);
@@ -41,12 +41,12 @@ const Dashboard = () => {
           <DashboardMetrics data={metrics} />
           <ContractTable contracts={contracts} />
           <button
-  style={{ marginTop: '1rem', padding: '0.5rem 1rem', fontSize: '1rem' }}
-  onClick={() => navigate('/new')}
->
-  + New Contract
-</button>
-        </>}
+      style={{ marginTop: '1rem', padding: '0.5rem 1rem', fontSize: '1rem' }}
+      onClick={() => navigate('/new')}
+    >
+      + New Contract
+      </button> </>}
+       
       </main>
     </div>
   );

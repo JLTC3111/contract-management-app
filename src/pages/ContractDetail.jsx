@@ -16,6 +16,8 @@ const ContractDetail = () => {
   const canEdit = user && ['admin', 'editor'].includes(user.role);
   const [files, setFiles] = useState([]);
   const [fileList, setFileList] = useState([]);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewType, setPreviewType] = useState(null);
 
   useEffect(() => {
     if (contract?.id) {
@@ -73,6 +75,7 @@ const ContractDetail = () => {
         file_name: updated.file_name,
         file_type: updated.file_type,
         updated_at: new Date().toISOString(),
+        author: updated.author,
       })
       .eq('id', id);
 
@@ -212,16 +215,21 @@ const ContractDetail = () => {
         </p>
   
         <div style={{ marginTop: '1rem' }}>
-          <p>
-            <strong>File:</strong> {contract.file_name}
-          </p>
-  
           
-            <a href={updated.file_url} target="_blank" rel="noopener noreferrer">
-              📎 {updated.file_name}
-            </a>
-  
-          {editMode && (
+          <p>
+          <strong>Author:</strong>{' '}
+          {editMode ? (
+            <input
+              type="text"
+              value={updated.author}
+              onChange={(e) => handleChange('author', e.target.value)}
+            />
+          ) : (
+            contract.author
+          )}
+        </p>
+        
+        {editMode && (
             <FileUploader contract={contract}
               onUploadComplete={(file) => {
                 setUpdated((prev) => ({
@@ -232,21 +240,106 @@ const ContractDetail = () => {
                 }));
               }}
             />
-          )}
+        )}
+
+      {!editMode && (
         <div>
           <h3>📂 Files ({files.length})</h3>
           <ul>
-            {files.map(file => (
-              <li key={file.name}>{file.name}</li>
-            ))}
+            {files.map(file => {
+              const publicUrl = supabase
+                .storage
+                .from('contracts')
+                .getPublicUrl(`uploads/${contract.id}/${file.name}`).data.publicUrl;
+
+              const isPdf = file.name.toLowerCase().endsWith('.pdf');
+
+              return (
+                <li key={file.name}>
+                  {isPdf ? (
+                    <button
+                      onClick={() => {
+                        setPreviewUrl(publicUrl);
+                        setPreviewType('pdf');
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'blue',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        padding: 0,
+                        font: 'inherit'
+                      }}
+                    >
+                      📄 {file.name}
+                    </button>
+                  ) : (
+                    <a
+                      href={publicUrl}
+                      download
+                      onClick={(e) => {
+                        const confirmed = window.confirm(
+                          `Download "${file.name}"?`
+                        );
+                        if (!confirmed) {
+                          e.preventDefault(); // Cancel download
+                        }
+                      }}
+                      style={{
+                        color: '#0077cc',
+                        textDecoration: 'underline',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      📥 {file.name}
+                    </a>
+                  )}
+                </li>
+              );
+            })}
           </ul>
+          {previewUrl && previewType === 'pdf' && (
+            <div
+              style={{
+                marginTop: '2rem',
+                opacity: 1,
+                transition: 'opacity 0.4s ease-in-out',
+              }}
+            >
+              <iframe
+                src={previewUrl}
+                title="PDF Preview"
+                width="100%"
+                height="500px"
+                style={{ border: '1px solid #ccc', borderRadius: '8px' }}
+              />
+              <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+                <button
+                  onClick={() => setPreviewUrl(null)}
+                  style={{
+                    backgroundColor: '#ef4444',
+                    color: '#fff',
+                    border: 'none',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s ease',
+                  }}
+                >
+                  ❌ Close Preview
+                </button>
+              </div>
+            </div>
+          )}
+        </div>)}
         </div>
-        </div>
+
       </div>
   
       {/* Admin/editor-only controls */}
       {['admin', 'editor'].includes(user.role) && (
-        <div style={{ marginTop: '2rem', display: 'flex', gap: '0.5rem' }}>
+        <div style={{marginLeft: '2rem', marginTop: '2rem', display: 'flex', gap: '0.5rem' }}>
           {editMode ? (
             <>
               <button
@@ -308,31 +401,7 @@ const ContractDetail = () => {
         </div>
       )}
 
-      {!editMode && (
-        <div style={{ marginTop: '1rem', marginLeft: '2.75%' }}>
-          {fileList.length ? (
-            <h3>📂 Files ({fileList.length})</h3>
-          ) : (
-            <h3>📂 No files found or still loading...</h3>
-          )}
-          <ul style={{ paddingLeft: '5%' }}>
-            {fileList.map(file => {
-              const publicUrl = supabase
-                .storage
-                .from('contracts')
-                .getPublicUrl(`uploads/${contract.id}/${file.name}`).data.publicUrl;
-
-              return (
-                <li key={file.name}>
-                  <a href={publicUrl} target="_blank" rel="noopener noreferrer">
-                    📎 {file.name}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
+    
     </div>
   );}
 
