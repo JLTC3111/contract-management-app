@@ -5,6 +5,7 @@ import FileUploader from '../components/FileUploader';
 import { useUser } from '../hooks/useUser';
 import { ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { FolderTree } from 'lucide-react';
 
 const ContractDetail = () => {
   const { user, loading: userLoading } = useUser(); // from context
@@ -39,6 +40,60 @@ const ContractDetail = () => {
       listFiles(currentPath);
     }
     }, [currentPath]);
+  
+    const renderBreadcrumb = () => {
+      const parts = currentPath.split('/').filter(Boolean); // remove empty strings
+      if (!contract?.id) return null; // or return a loading state
+      return (
+        <div style={{ marginBottom: '1rem', fontSize: '1rem' }}>
+          <svg style={{ marginRight: '8px', marginBottom: '-4px', cursor: 'pointer'}} width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 19H14M2 19H10" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 17V14" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="12" cy="19" r="2" stroke="#1C274C" stroke-width="1.5"/>
+          <path d="M2 11C2 9.34315 3.34315 8 5 8H19C20.6569 8 22 9.34315 22 11C22 12.6569 20.6569 14 19 14H5C3.34315 14 2 12.6569 2 11Z" stroke="#1C274C" stroke-width="1.5"/>
+          <path d="M2 5C2 3.34315 3.34315 2 5 2H19C20.6569 2 22 3.34315 22 5C22 6.65685 20.6569 8 19 8H5C3.34315 8 2 6.65685 2 5Z" stroke="#1C274C" stroke-width="1.5"/>
+          <path d="M13 5L19 5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M13 11L19 11" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="6" cy="5" r="1" fill="#1C274C"/>
+          <circle cx="6" cy="11" r="1" fill="#1C274C"/>
+          </svg>{''}
+
+          {parts.map((part, index) => {
+            const isContractId = part === String(contract.id);
+            const isLast = index === parts.length - 1;
+    
+            const displayLabel = isContractId
+              ? `📄 ${contract.title || 'Contract'}`
+              : part;
+    
+            const pathSlice = parts.slice(0, index + 1).join('/');
+    
+            return (
+              <span key={pathSlice}>
+                <span
+                  style={{
+                    cursor: isLast ? 'default' : 'pointer',
+                    color: isLast ? 'black' : '#1d4ed8',
+                    textDecoration: isLast ? 'none' : 'underline',
+                    marginRight: '0.5rem',
+                  }}
+                  onClick={() => {
+                    if (!isLast) {
+                      setCurrentPath(pathSlice);
+                    }
+                  }}
+                >
+                  {displayLabel}
+                </span>
+                {!isLast && <span style={{ marginRight: '0.5rem' }}>/</span>}
+              </span>
+            );
+          })}
+        </div>
+      );
+    };
+    
+    
 
   const getAllPathsInFolder = async (basePath) => {
       let paths = [];
@@ -222,18 +277,18 @@ const ContractDetail = () => {
           // Check if it's a folder by listing inside it
           const fileObj = files.find((f) => f.name === itemName);
 
-if (!fileObj || !fileObj.metadata?.mimetype) {
-  // It's a folder — delete all contents recursively
-  const allPaths = await getAllPathsInFolder(fullPath);
-  if (allPaths.length > 0) {
-    deletePaths.push(...allPaths);
-  }
-  // Always try to delete the .keep file
-  deletePaths.push(`${fullPath}/.keep`);
-} else {
-  // It's a regular file
-  deletePaths.push(fullPath);
-}
+          if (!fileObj || !fileObj.metadata?.mimetype) {
+            // It's a folder — delete all contents recursively
+            const allPaths = await getAllPathsInFolder(fullPath);
+            if (allPaths.length > 0) {
+              deletePaths.push(...allPaths);
+            }
+            // Always try to delete the .keep file
+            deletePaths.push(`${fullPath}/.keep`);
+          } else {
+            // It's a regular file
+            deletePaths.push(fullPath);
+          }
         }
       } else {
         // No specific files — delete everything
@@ -338,7 +393,7 @@ if (!fileObj || !fileObj.metadata?.mimetype) {
               cursor: 'pointer',
             }}
           >
-            <ArrowLeft size={14} /> Back
+            <ArrowLeft size={22} /> To Dashboard!
           </button>
           <button onClick={() => setShowFolderInput(!showFolderInput)}>
   📁 Create Folder
@@ -484,6 +539,7 @@ if (!fileObj || !fileObj.metadata?.mimetype) {
         {editMode && (
           <FileUploader
             contract={contract}
+            currentPath={currentPath}
             onUploadComplete={(files) => {
               const latestFile = files?.[0];
               if (latestFile) {
@@ -515,6 +571,7 @@ if (!fileObj || !fileObj.metadata?.mimetype) {
 
 {!editMode && (
   <div>
+    {renderBreadcrumb()}
     {/* Back button if not at root folder */}
     {currentPath !== `uploads/${contract.id}` && (
       <button
@@ -536,10 +593,8 @@ if (!fileObj || !fileObj.metadata?.mimetype) {
       </button>
     )}
     
-    
-
     <ul style={{ listStyle: 'none', padding: 0 }}>
-      {files.map((file) => {
+      {files.filter(file => file.name !== '.keep').map((file) => {
         const isFolder = !file.metadata?.mimetype;
         const fileName = file.name;
         const filePath = fileName; // relative to currentPath

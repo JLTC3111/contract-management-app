@@ -2,16 +2,17 @@ import React, { useRef, useState } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import toast from 'react-hot-toast';
 
+
 const sanitizeFileName = (name) =>
   name.normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, '-')
     .replace(/[^a-zA-Z0-9.\-_]/g, '');
 
-const FileUploader = ({ onUploadComplete, onUploadSuccess, contract }) => {
+const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const fileInputRef = useRef();
-
+  
   const handleUpload = async (event) => {
     const files = event.target?.files;
     if (!files || files.length === 0) {
@@ -24,7 +25,10 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract }) => {
     for (const file of files) {
       const sanitizedFileName = sanitizeFileName(file.name);
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const filePath = `uploads/${contract.id}/${timestamp}-${sanitizedFileName}`;
+      const defaultPath = `uploads/${contract.id}`;
+      const cleanedPath = (currentPath?.startsWith('uploads/') ? currentPath : `${defaultPath}/${currentPath}`).replace(/^\/+|\/+$/g, '');
+      const filePath = `${cleanedPath}/${timestamp}-${sanitizedFileName}`;
+
 
       const { data: signedUrlData, error: signedUrlError } = await supabase
         .storage
@@ -104,6 +108,9 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract }) => {
         style={{ display: 'none' }}
         onChange={handleUpload}
       />
+     <p style={{ fontSize: '0.8rem', color: '#555' }}>
+        Uploading to: <code>{currentPath || `uploads/${contract.id}`}</code>
+     </p>
      <button
         onClick={() => fileInputRef.current.click()}
         style={{
