@@ -21,39 +21,56 @@ const ContractDetail = () => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [previewType, setPreviewType] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
-  const canDelete = user && ['admin', 'editor'].includes(user.role);
   const [highlightedFiles, setHighlightedFiles] = useState([]);
   const [showFolderInput, setShowFolderInput] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
   const [currentPath, setCurrentPath] = useState('');
-  
-const folderInputRef = useRef();
+  const folderInputRef = useRef('');
 
 useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (
-      showFolderInput &&
-      folderInputRef.current &&
-      !folderInputRef.current.contains(event.target)
-    ) {
-      setShowFolderInput(false);
+    if (showFolderInput) {
+      requestAnimationFrame(() => {
+        if (folderInputRef.current) {
+          console.log("Focusing input");
+          folderInputRef.current.focus();
+        } else {
+          console.warn("Input not available yet!");
+        }
+      });
     }
-  };
+  }, [showFolderInput]);
 
-  const handleEsc = (event) => {
-    if (event.key === 'Escape') {
-      setShowFolderInput(false);
-    }
-  };
+useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showFolderInput &&
+        folderInputRef.current &&
+        !folderInputRef.current.contains(event.target)
+      ) {
+        setNewFolderName('');
+        setShowFolderInput(false);
+      }
+    };
+  
+    const handleEsc = (event) => {
+      if (event.key === 'Escape') {
+        setNewFolderName('');
+        setShowFolderInput(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEsc);
+  
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [showFolderInput]);
+  
 
-  document.addEventListener('mousedown', handleClickOutside);
-  document.addEventListener('keydown', handleEsc);
-
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-    document.removeEventListener('keydown', handleEsc); }; }, [showFolderInput]);
-
-    const handleCreateFolder = async () => {
+  const handleCreateFolder = async () => {
+      console.log('Creating folder with name:', newFolderName);
       if (!newFolderName.trim()) {
         toast.error('Folder name cannot be empty.');
         return;
@@ -65,16 +82,22 @@ useEffect(() => {
         .storage
         .from('contracts')
         .upload(newFolderPath, new Blob(['keep'], { type: 'text/plain' }));
-    
+
       if (error) {
-        toast.error('❌ Failed to create folder.');
-        console.error(error.message);
+        if (error.message.includes('The resource already exists')) {
+          toast(`⚠️ Folder "${cleanName}" already exists.`);
+        } else {
+          toast.error('❌ Failed to create folder.');
+          console.error(error.message);
+        }
       } else {
         toast.success(`📁 Folder "${cleanName}" created.`);
-        setNewFolderName('');
-        setShowFolderInput(false);
-        listFiles(currentPath);
       }
+
+      // ✅ Always reset input and refresh view
+      setNewFolderName('');
+      setShowFolderInput(false);
+      listFiles(currentPath);
     };
     
   useEffect(() => {
@@ -97,13 +120,13 @@ useEffect(() => {
       return (
         <div style={{ marginBottom: '1rem', fontSize: '1rem' }}>
           <svg style={{ marginRight: '8px', marginBottom: '-4px', cursor: 'pointer'}} width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 19H14M2 19H10" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M12 17V14" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="12" cy="19" r="2" stroke="#1C274C" stroke-width="1.5"/>
-          <path d="M2 11C2 9.34315 3.34315 8 5 8H19C20.6569 8 22 9.34315 22 11C22 12.6569 20.6569 14 19 14H5C3.34315 14 2 12.6569 2 11Z" stroke="#1C274C" stroke-width="1.5"/>
-          <path d="M2 5C2 3.34315 3.34315 2 5 2H19C20.6569 2 22 3.34315 22 5C22 6.65685 20.6569 8 19 8H5C3.34315 8 2 6.65685 2 5Z" stroke="#1C274C" stroke-width="1.5"/>
-          <path d="M13 5L19 5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M13 11L19 11" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M22 19H14M2 19H10" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
+          <path d="M12 17V14" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
+          <circle cx="12" cy="19" r="2" stroke="#1C274C" strokeWidth="1.5"/>
+          <path d="M2 11C2 9.34315 3.34315 8 5 8H19C20.6569 8 22 9.34315 22 11C22 12.6569 20.6569 14 19 14H5C3.34315 14 2 12.6569 2 11Z" stroke="#1C274C" strokeWidth="1.5"/>
+          <path d="M2 5C2 3.34315 3.34315 2 5 2H19C20.6569 2 22 3.34315 22 5C22 6.65685 20.6569 8 19 8H5C3.34315 8 2 6.65685 2 5Z" stroke="#1C274C" strokeWidth="1.5"/>
+          <path d="M13 5L19 5" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
+          <path d="M13 11L19 11" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
           <circle cx="6" cy="5" r="1" fill="#1C274C"/>
           <circle cx="6" cy="11" r="1" fill="#1C274C"/>
           </svg>{''}
@@ -143,8 +166,6 @@ useEffect(() => {
       );
     };
     
-    
-
   const getAllPathsInFolder = async (basePath) => {
       let paths = [];
     
@@ -418,12 +439,13 @@ useEffect(() => {
   };
   
 
-  return (
+return (
     <div>
       {/* Back button in top-right when NOT editing */}
-      {!editMode && canDelete && (
+      {!editMode && canEdit && (
         <div
           style={{
+            gap: '10px',
             display: 'flex',
             justifyContent: 'flex-end',
             padding: '.5rem',
@@ -445,85 +467,81 @@ useEffect(() => {
           >
             <ArrowLeft size={22} /> To Dashboard!
           </button>
-          <button onClick={() => setShowFolderInput(!showFolderInput)}>
-  📁 Create Folder
-</button>
+          
+          <button
+            onClick={() => {
+              setNewFolderName('');
+              setShowFolderInput(true);
+            }}>
+            📁 Create Folder
+          </button>
 
-{showFolderInput && (
-  <div style={{ marginTop: '.25rem', marginLeft: '.5rem', display: 'flex', gap: '0.5rem' }}>
-    <input
-      type="text"
-      value={newFolderName}
-      onChange={(e) => setNewFolderName(e.target.value)}
-      onKeyDown={async (e) => {
-        if (e.key === 'Enter') {
-          await handleCreateFolder(); // Trigger on Enter key
-        }
-      }}
-      placeholder="Folder name (e.g. specs)"
-      style={{
-        padding: '0.4rem',
-        borderRadius: '6px',
-        border: '1px solid #ccc',
-        minWidth: '150px',
-      }}
-    />
-    <button
-      onClick={async () => {
-        if (!newFolderName.trim()) {
-          toast.error('Folder name cannot be empty.');
-          return;
-        }
-
-        const cleanName = newFolderName.trim().replace(/^\/+|\/+$/g, '');
-        const newFolderPath = `${currentPath}/${cleanName}/.keep`;
-
-        const { error } = await supabase
-          .storage
-          .from('contracts')
-          .upload(newFolderPath, new Blob(['keep'], { type: 'text/plain' }));
-
-        if (error) {
-          toast.error('❌ Failed to create folder.');
-          console.error(error.message);
-        } else {
-          toast.success(`📁 Folder "${cleanName}" created.`);
-          setNewFolderName('');
-          setShowFolderInput(false);
-          listFiles(currentPath); // refresh current folder
-        }
-      }}
-
-      style={{
-        backgroundColor: '#3b82f6',
-        color: '#fff',
-        border: 'none',
-        padding: '0.5rem 1rem',
-        borderRadius: '6px',
-        cursor: 'pointer',
-      }}>➕ Add
-    </button>
-  </div>
-)}
-
-    <button 
-      onClick={() => handleDeleteItems(selectedFiles)}
+    {showFolderInput && (
+      <div
+        ref={folderInputRef} // ✅ apply ref here instead of the <input>
         style={{
-              backgroundColor: selectedFiles.length === 0 ? '#eee' : '#ddd',
-              color: selectedFiles.length === 0 ? '#999' : '#000',
-              padding: '0.5rem 1rem',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
-              filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
-              opacity: selectedFiles.length === 0 ? 0.6 : 1,
-              transition: 'all 0.2s ease',
-            }}
-            disabled={selectedFiles.length === 0}
+          marginTop: '.25rem',
+          marginLeft: '.5rem',
+          display: 'flex',
+          gap: '0.5rem',
+        }}
+      >
+        <input
+          type="text"
+          value={newFolderName}
+          onChange={(e) => setNewFolderName(e.target.value)}
+          onKeyDown={async (e) => {
+            if (e.key === 'Enter') {
+              await handleCreateFolder(); // 👌 Works
+            }
+          }}
+          placeholder="Folder name (e.g. specs)"
+          style={{
+            padding: '0.4rem',
+            borderRadius: '6px',
+            border: '1px solid #ccc',
+            minWidth: '150px',
+          }}
+        />
+        <button
+          type="button"
+          disabled={!newFolderName.trim()}
+          onClick={async () => {
+            console.log("Add button clicked!");
+            await handleCreateFolder();
+          }}
+          style={{
+            backgroundColor: newFolderName.trim() ? '#3b82f6' : '#ccc',
+            color: '#fff',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '6px',
+            cursor: newFolderName.trim() ? 'pointer' : 'not-allowed',
+          }}
         >
-            🗑️ {getDeleteLabel()} ({selectedFiles.length})
-    </button>
-  </div>)}
+          ➕ Add
+        </button>
+      </div>
+    )}
+
+      <button 
+        onClick={() => handleDeleteItems(selectedFiles)}
+          style={{
+                backgroundColor: selectedFiles.length === 0 ? '#eee' : '#ddd',
+                color: selectedFiles.length === 0 ? '#999' : '#000',
+                padding: '0.5rem 1rem',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
+                filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
+                opacity: selectedFiles.length === 0 ? 0.6 : 1,
+                transition: 'all 0.2s ease',
+              }}
+              disabled={selectedFiles.length === 0}
+          >
+              🗑️ {getDeleteLabel()} ({selectedFiles.length})
+      </button>
+    </div>)}
 
       {/* Main content */}
       <div style={{ padding: '2rem' }}>
