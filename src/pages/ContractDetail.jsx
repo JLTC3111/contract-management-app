@@ -39,7 +39,36 @@ const ContractDetail = () => {
       listFiles(currentPath);
     }
     }, [currentPath]);
-  
+
+  const getAllPathsInFolder = async (basePath) => {
+      let paths = [];
+    
+      const { data: items, error } = await supabase
+        .storage
+        .from('contracts')
+        .list(basePath, { limit: 1000 });
+    
+      if (error) {
+        console.error(`Error listing folder ${basePath}:`, error.message);
+        return paths;
+      }
+    
+      for (const item of items) {
+        const fullPath = `${basePath}/${item.name}`;
+        if (!item.metadata?.mimetype) {
+          // It's a folder
+          const subPaths = await getAllPathsInFolder(fullPath);
+          paths.push(...subPaths);
+          paths.push(`${fullPath}/.keep`);
+        } else {
+          // It's a file
+          paths.push(fullPath);
+        }
+      }
+    
+      return paths;
+   };
+    
     const listFiles = async (path = currentPath) => {
       const cleanedPath = path.replace(/^\/+|\/+$/g, '');
     
@@ -123,17 +152,60 @@ const ContractDetail = () => {
   if (!user) return <p>User not available</p>;
   if (loading) return <p>Loading contract...</p>;
   if (!contract) return <p>Contract not found</p>;
-
-  const handleDeleteFiles = async (filesToDelete = []) => {
+  
+  const getDeleteLabel = () => {
+    if (selectedFiles.length === 0) return 'Delete';
+  
+    let folders = 0;
+    let filesCount = 0;
+  
+    for (const itemName of selectedFiles) {
+      const fileObj = files.find((f) => f.name === itemName);
+  
+      if (!fileObj || !fileObj.metadata?.mimetype) {
+        folders += 1;
+      } else {
+        filesCount += 1;
+      }
+    }
+  
+    if (folders > 0 && filesCount === 0) return `Delete Folder${folders > 1 ? 's' : ''}`;
+    if (filesCount > 0 && folders === 0) return `Delete File${filesCount > 1 ? 's' : ''}`;
+    return `Delete Item${selectedFiles.length > 1 ? 's' : ''}`;
+  };
+  
+  const handleDeleteItems = async (filesToDelete = []) => {
     if (!Array.isArray(filesToDelete)) {
       filesToDelete = [filesToDelete];
     }
   
     const folder = `uploads/${contract.id}`;
   
+    let folders = 0;
+    let filesCount = 0;
+  
+    // Distinguish folders vs files
+    for (const itemName of filesToDelete) {
+      const fileObj = files.find((f) => f.name === itemName);
+      if (!fileObj || !fileObj.metadata?.mimetype) {
+        folders++;
+      } else {
+        filesCount++;
+      }
+    }
+  
+    let promptMessage = '';
+    if (folders > 0 && filesCount === 0) {
+      promptMessage = `Delete ${folders} folder${folders > 1 ? 's' : ''}?`;
+    } else if (filesCount > 0 && folders === 0) {
+      promptMessage = `Delete ${filesCount} file${filesCount > 1 ? 's' : ''}?`;
+    } else {
+      promptMessage = `Delete ${filesToDelete.length} item${filesToDelete.length > 1 ? 's' : ''}?`;
+    }
+  
     const confirmed = confirm(
       filesToDelete.length > 0
-        ? `Delete ${filesToDelete.length} selected item(s)?`
+        ? promptMessage
         : 'Delete all files for this contract?'
     );
   
@@ -148,23 +220,20 @@ const ContractDetail = () => {
           const fullPath = `${folder}/${itemName}`;
   
           // Check if it's a folder by listing inside it
-          const { data: nested, error: listError } = await supabase
-            .storage
-            .from('contracts')
-            .list(fullPath, { limit: 1000 });
-  
-          if (!listError && nested.length > 0) {
-            // It's a folder — queue all files inside
-            for (const file of nested) {
-              deletePaths.push(`${fullPath}/${file.name}`);
-            }
-  
-            // Try to delete `.keep` file to remove the folder visually
-            deletePaths.push(`${fullPath}/.keep`);
-          } else {
-            // It's a regular file
-            deletePaths.push(fullPath);
-          }
+          const fileObj = files.find((f) => f.name === itemName);
+
+if (!fileObj || !fileObj.metadata?.mimetype) {
+  // It's a folder — delete all contents recursively
+  const allPaths = await getAllPathsInFolder(fullPath);
+  if (allPaths.length > 0) {
+    deletePaths.push(...allPaths);
+  }
+  // Always try to delete the .keep file
+  deletePaths.push(`${fullPath}/.keep`);
+} else {
+  // It's a regular file
+  deletePaths.push(fullPath);
+}
         }
       } else {
         // No specific files — delete everything
@@ -207,7 +276,6 @@ const ContractDetail = () => {
     }
   };
   
-    
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this contract and its file?')) return;
@@ -330,9 +398,9 @@ const ContractDetail = () => {
   </div>
 )}
 
-          <button 
-            onClick={() => handleDeleteFiles(selectedFiles)}
-            style={{
+    <button 
+      onClick={() => handleDeleteItems(selectedFiles)}
+        style={{
               backgroundColor: selectedFiles.length === 0 ? '#eee' : '#ddd',
               color: selectedFiles.length === 0 ? '#999' : '#000',
               padding: '0.5rem 1rem',
@@ -344,12 +412,11 @@ const ContractDetail = () => {
               transition: 'all 0.2s ease',
             }}
             disabled={selectedFiles.length === 0}
-          >
-            🗑️ Delete File{selectedFiles.length > 1 ? 's' : ''} ({selectedFiles.length})
-          </button>
-        </div>
-      )}
-  
+        >
+            🗑️ {getDeleteLabel()} ({selectedFiles.length})
+    </button>
+  </div>)}
+
       {/* Main content */}
       <div style={{ padding: '2rem' }}>
         <h2>
@@ -465,32 +532,11 @@ const ContractDetail = () => {
           marginBottom: '1rem',
         }}
       >
-        🔙 Back to parent
+        🔙 Prev Folder
       </button>
     )}
     
-    <h3>📂 Files ({files.length})</h3>
-    {currentPath !== `uploads/${contract.id}` && (
-      <button
-        onClick={() => {
-          const parts = currentPath.split('/');
-          parts.pop(); // go up one level
-          const newPath = parts.join('/');
-          setCurrentPath(newPath);
-          listFiles(newPath);
-        }}
-        style={{
-          marginBottom: '1rem',
-          backgroundColor: '#eee',
-          border: '1px solid #ccc',
-          padding: '0.4rem 0.8rem',
-          borderRadius: '6px',
-          cursor: 'pointer',
-        }}
-      >
-        🔙 Go Back
-      </button>
-    )}
+    
 
     <ul style={{ listStyle: 'none', padding: 0 }}>
       {files.map((file) => {
