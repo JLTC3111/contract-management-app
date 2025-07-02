@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import FileUploader from '../components/FileUploader';
 import { useUser } from '../hooks/useUser';
 import { ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { FolderTree } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
 
 const ContractDetail = () => {
   const { user, loading: userLoading } = useUser(); // from context
@@ -26,7 +26,57 @@ const ContractDetail = () => {
   const [showFolderInput, setShowFolderInput] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
   const [currentPath, setCurrentPath] = useState('');
+  
+const folderInputRef = useRef();
 
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      showFolderInput &&
+      folderInputRef.current &&
+      !folderInputRef.current.contains(event.target)
+    ) {
+      setShowFolderInput(false);
+    }
+  };
+
+  const handleEsc = (event) => {
+    if (event.key === 'Escape') {
+      setShowFolderInput(false);
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  document.addEventListener('keydown', handleEsc);
+
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+    document.removeEventListener('keydown', handleEsc); }; }, [showFolderInput]);
+
+    const handleCreateFolder = async () => {
+      if (!newFolderName.trim()) {
+        toast.error('Folder name cannot be empty.');
+        return;
+      }
+      const cleanName = newFolderName.trim().replace(/^\/+|\/+$/g, '');
+      const newFolderPath = `${currentPath}/${cleanName}/.keep`;
+    
+      const { error } = await supabase
+        .storage
+        .from('contracts')
+        .upload(newFolderPath, new Blob(['keep'], { type: 'text/plain' }));
+    
+      if (error) {
+        toast.error('❌ Failed to create folder.');
+        console.error(error.message);
+      } else {
+        toast.success(`📁 Folder "${cleanName}" created.`);
+        setNewFolderName('');
+        setShowFolderInput(false);
+        listFiles(currentPath);
+      }
+    };
+    
   useEffect(() => {
     if (loading || !contract?.id) return;
   
@@ -379,7 +429,7 @@ const ContractDetail = () => {
             padding: '.5rem',
           }}
         >
-          <button
+        <button
             onClick={() => navigate(-1)}
             style={{
               padding: '0.5rem 1rem',
@@ -405,6 +455,11 @@ const ContractDetail = () => {
       type="text"
       value={newFolderName}
       onChange={(e) => setNewFolderName(e.target.value)}
+      onKeyDown={async (e) => {
+        if (e.key === 'Enter') {
+          await handleCreateFolder(); // Trigger on Enter key
+        }
+      }}
       placeholder="Folder name (e.g. specs)"
       style={{
         padding: '0.4rem',
@@ -420,7 +475,6 @@ const ContractDetail = () => {
           return;
         }
 
-        // 🧠 Build the folder path dynamically
         const cleanName = newFolderName.trim().replace(/^\/+|\/+$/g, '');
         const newFolderPath = `${currentPath}/${cleanName}/.keep`;
 
@@ -439,6 +493,7 @@ const ContractDetail = () => {
           listFiles(currentPath); // refresh current folder
         }
       }}
+
       style={{
         backgroundColor: '#3b82f6',
         color: '#fff',
@@ -446,9 +501,7 @@ const ContractDetail = () => {
         padding: '0.5rem 1rem',
         borderRadius: '6px',
         cursor: 'pointer',
-      }}
-    >
-      ➕ Add
+      }}>➕ Add
     </button>
   </div>
 )}

@@ -13,6 +13,7 @@ const Dashboard = () => {
   const metrics = [
     { label: 'Active', count: contracts.filter(c => c.status === 'approved').length },
     { label: 'Pending', count: contracts.filter(c => c.status === 'pending').length },
+    { label: 'Expiring Soon', count: contracts.filter(c => c.status === 'expiring').length },
     { label: 'Drafts', count: contracts.filter(c => c.status === 'draft').length },
     { label: 'Rejected', count: contracts.filter(c => c.status === 'rejected').length },
   ];
@@ -65,13 +66,10 @@ const Dashboard = () => {
         {loading ? <p>Loading...</p> : <>
           <DashboardMetrics data={metrics} />
           <ContractTable contracts={contracts} />
-          <button
-      style={{ marginTop: '1rem', padding: '0.5rem 1rem', fontSize: '1rem' }}
-      onClick={() => navigate('/new')}
-    >
-      + New Contract
-      </button> </>}
-       
+          <button style={{ background: '#088eee', color: '#fff', marginTop: '1rem', padding: '0.5rem 1rem', fontSize: '1rem' }}
+          onClick={() => navigate('/new')}>
+            + New Contract
+          </button> </>}
       </main>
     </div>
   );
