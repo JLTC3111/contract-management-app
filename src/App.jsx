@@ -24,6 +24,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/new" element={<NewContract />} /> {/* ✅ New route */}
         <Route path="/contracts/:id" element={<ContractDetail />} />
+
       </Routes>
     </BrowserRouter>
   );

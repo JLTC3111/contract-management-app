@@ -66,14 +66,12 @@ nav {
   top: 0;
   left: 0;
 }
-
 .sidebar a {
   display: block;
   color: white;
   text-decoration: none;
   margin-bottom: 1.5rem;
 }
-
 .sidebar a:hover {
   text-decoration: underline;
 }
@@ -142,8 +140,6 @@ nav {
   margin-top: 1rem;
   border-radius: 8px;
 }
-
-
 
 
 @media (prefers-color-scheme: light) {
