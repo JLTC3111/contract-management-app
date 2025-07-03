@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+.sidebar {
+  width: 220px;
+  background: #1d2939;
+  color: #fff;
+  min-height: 100vh;
+  transition: width 0.3s;
+  position: relative;
+  z-index: 100;
+  font-family: 'Poppins', sans-serif;
+}
+.sidebar.collapsed {
+  width: 60px;
+}
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar nav ul li {
+  padding: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border-radius: 8px;
+  margin: 0.25rem 0;
+}
+.sidebar nav ul li:hover {
+  background: linear-gradient(to right, #1d9ae7, #0077c2);
+  color: #fff;
+}
+.sidebar .hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 101;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60px;
+  }
+  .sidebar nav {
+    display: none;
+  }
+  .sidebar.open nav {
+    display: block;
+    background: #1d2939;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 180px;
+    border-radius: 0 0 12px 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+  .sidebar .hamburger {
+    display: block;
+  }
+} 

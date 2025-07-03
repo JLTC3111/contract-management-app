@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [contracts, setContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const metrics = [
     { label: 'Active', count: contracts.filter(c => c.status === 'approved').length },
@@ -16,6 +17,7 @@ const Dashboard = () => {
     { label: 'Expiring Soon', count: contracts.filter(c => c.status === 'expiring').length },
     { label: 'Drafts', count: contracts.filter(c => c.status === 'draft').length },
     { label: 'Rejected', count: contracts.filter(c => c.status === 'rejected').length },
+    { label: 'Expired', count: contracts.filter(c => c.status === 'expired').length },
   ];
 
   useEffect(() => {
@@ -57,19 +59,34 @@ const Dashboard = () => {
   
     fetchContracts();
   }, []);
-  
+
   return (
     <>
       <div style={{ display: 'flex' }}>
         <Sidebar />
         <main style={{ padding: '2rem', flex: 1 }}>
           <h1>Dashboard</h1>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '1rem' }}>
+            <input
+              type="text"
+              placeholder="Search contracts..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                padding: '.5rem',
+                width: '100%',
+                maxWidth: '300px',
+                fontSize: '1rem',
+                marginLeft: 'auto',
+              }}
+            />
+          </div>
           {loading ? (
             <p>Loading...</p>
           ) : (
             <>
               <DashboardMetrics data={metrics} />
-              <ContractTable contracts={contracts} />
+              <ContractTable contracts={contracts} searchQuery={searchQuery} />
               <button
                 style={{
                   background: '#088eee',

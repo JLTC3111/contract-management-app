@@ -254,6 +254,7 @@ useEffect(() => {
           file_type: updated.file_type,
           updated_at: new Date().toISOString(),
           author: updated.author?.trim(),
+          expiry_date: updated.expiry_date,
         })
         .eq('id', contract.id);
   
@@ -573,6 +574,8 @@ return (
               <option value="pending">Pending</option>
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
+              <option value="expiring">Expiring Soon</option>
+              <option value="expired">Expired</option>
             </select>
           ) : (
             contract.status
@@ -595,6 +598,19 @@ return (
         <p>
           <strong>Last Updated:</strong>{' '}
           {new Date(contract.updated_at).toLocaleString()}
+        </p>
+  
+        <p>
+          <strong>Expiry Date:</strong>{' '}
+          {editMode ? (
+            <input
+              type="date"
+              value={updated.expiry_date ? updated.expiry_date.slice(0, 10) : ''}
+              onChange={e => handleChange('expiry_date', e.target.value)}
+            />
+          ) : (
+            contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString() : '—'
+          )}
         </p>
   
         <div style={{ marginTop: '1rem' }}>

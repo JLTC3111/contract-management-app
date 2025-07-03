@@ -55,11 +55,11 @@ const NewContract = () => {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: '1.5rem'}}>
       <h2>New Contract</h2>
       {!contract ? (
-        <>
-          <input
+        <><div style={{display:'flex', gap:'10px', marginBottom: '.5rem'}}>
+          <input 
             type="text"
             placeholder="Contract Title"
             value={title}
@@ -76,8 +76,11 @@ const NewContract = () => {
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
             <option value="rejected">Rejected</option>
+            <option value="expiring">Expiring Soon</option>
+            <option value="expired">Expired</option>
           </select>
-          <button onClick={handleCreateContract} style={{ marginRight: '1rem' }}>Create Contract</button>
+          <button onClick={handleCreateContract} style={{ background:'#ddd' }}>Create Contract</button>
+          </div>
         </>
       ) : (
         <>
