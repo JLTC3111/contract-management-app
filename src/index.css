@@ -1,5 +1,3 @@
-
-
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -141,6 +139,66 @@ nav {
   border-radius: 8px;
 }
 
+.dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.metric-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-left: 6px solid #3b82f6; /* Tailwind blue-500 */
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.metric-card h4 {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin-bottom: 0.3rem;
+}
+
+.metric-card p {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.metric-pending {
+  border-left-color: #ffefad; /* yellow-400 */
+}
+.metric-expiring {
+  border-left-color: #3c75fb; /* orange-400 */
+}
+.metric-expired {
+  border-left-color: #ef4444; /* red-500 */
+}
+.metric-approved {
+  border-left-color: #10b981; /* green-500 */
+}
+.metric-draft {
+  border-left-color: #7d7d7d; /* grey-400 */
+}
+.metric-rejected {
+  border-left-color: #460000; /* red-800 */
+}
 
 @media (prefers-color-scheme: light) {
   :root {

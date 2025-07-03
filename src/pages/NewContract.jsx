@@ -85,25 +85,46 @@ const NewContract = () => {
       ) : (
         <>
           <p>Contract created! Now upload a file:</p>
-          <FileUploader contract={contract} onUploadComplete={handleUploadComplete} />
-          {uploading && <p>Updating contract with file...</p>}
+          <div style={{ marginBottom: '1rem' }}>
+            <FileUploader contract={contract} onUploadComplete={handleUploadComplete} />
+            {uploading && <p>Updating contract with file...</p>}
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '1.5rem' }}>
+            <button
+              onClick={() => navigate(-1)}
+              style={{
+                padding: '0.5rem 1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                backgroundColor: '#ddd',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              <ArrowLeft size={18} /> Back
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              style={{
+                padding: '0.5rem 1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                backgroundColor: '#ddd',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: 'normal',
+                fontSize: '1rem',
+              }}
+            >
+              Done
+            </button>
+          </div>
         </>
       )}
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          marginBottom: '1rem',
-          padding: '0.5rem 1rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          backgroundColor: '#ddd',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}>
-        <ArrowLeft size={18} /> Back 
-      </button>
     </div>
   );
 };

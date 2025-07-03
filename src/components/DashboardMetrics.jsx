@@ -1,24 +1,24 @@
+const metricClassMap = {
+  'Active': 'metric-approved',
+  'Pending': 'metric-pending',
+  'Expiring Soon': 'metric-expiring',
+  'Drafts': 'metric-draft',
+  'Rejected': 'metric-rejected',
+  'Expired': 'metric-expired',
+};
+
 const DashboardMetrics = ({ data }) => {
   if (!data || data.length === 0) return <p>No metrics available.</p>;
 
   return (
-    <div style={{ display: 'flex', gap: '1rem' }}>
+    <div className="dashboard-metrics">
       {data.map(({ label, count }) => (
         <div
           key={label}
-          style={{
-            padding: '1rem',
-            background: '#e3e8f0',
-            borderRadius: '8px',
-            minWidth: '100px',
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.5rem'
-          }}
+          className={`metric-card ${metricClassMap[label] || ''}`.trim()}
         >
-          <strong>{label}</strong>
-          <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{count}</div>
+          <h4>{label}</h4>
+          <p>{count}</p>
         </div>
       ))}
     </div>
