@@ -464,14 +464,14 @@ return (
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              marginRight:'2.5%',
+              margin:0,
               backgroundColor: '#ddd',
               border: 'none',
               borderRadius: '12px',
               cursor: 'pointer',
             }}
           >
-            <ArrowLeft size={22} /> To Dashboard!
+            <ArrowLeft size={20} /> 
           </button>
           
           <button

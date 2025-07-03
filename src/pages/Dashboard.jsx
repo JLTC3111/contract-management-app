@@ -1,4 +1,3 @@
-import Sidebar from '../components/Sidebar';
 import DashboardMetrics from '../components/DashboardMetrics';
 import ContractTable from '../components/ContractTable';
 import { useEffect, useState } from 'react';
@@ -63,7 +62,7 @@ const Dashboard = () => {
   return (
     <>
       <div style={{ display: 'flex' }}>
-        <Sidebar />
+        
         <main style={{ padding: '2rem', flex: 1 }}>
           <h1>Dashboard</h1>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '1rem' }}>

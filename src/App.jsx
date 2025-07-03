@@ -5,9 +5,9 @@ import ContractDetail from './pages/ContractDetail';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import NewContract from './pages/NewContract';
-import Approvals from './pages/Approvals'; // 👈 Import this!
-import NavBar from './components/NavBar';
+import Approvals from './pages/Approvals';
 import { Toaster } from 'react-hot-toast';
+import Layout from './components/Layout'; // 👈 Add this
 import './index.css';
 
 function App() {
@@ -18,14 +18,19 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar />
       <Toaster />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/new" element={<NewContract />} />
-        <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
-        <Route path="/contracts/:contractId/approvals" element={<Approvals user={user} />} />
+        {/* Routes with Sidebar */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/new" element={<NewContract />} />
+          <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
+          <Route path="/contracts/:contractId/approvals" element={<Approvals user={user} />} />
+        </Route>
+
+        {/* Optional: Login Route - if you want to support logout redirect */}
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

@@ -32,9 +32,9 @@ const Navbar = () => {
       alignItems: 'center',
       position: 'sticky',
       top: 0,
-      zIndex: -1
+      zIndex: 10
     }}>
-      <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold' }}>📁 Contract Manager</h2>
+      <h2 style={{ marginRight: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>📁 Contract Manager</h2>
       
       {user && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
