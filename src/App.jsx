@@ -5,6 +5,7 @@ import ContractDetail from './pages/ContractDetail';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import NewContract from './pages/NewContract';
+import Approvals from './pages/Approvals'; // 👈 Import this!
 import NavBar from './components/NavBar';
 import { Toaster } from 'react-hot-toast';
 import './index.css';
@@ -16,15 +17,15 @@ function App() {
   if (!user) return <Login />;
 
   return (
-    
     <BrowserRouter>
-     <NavBar />
+      <NavBar />
+      <Toaster />
       <Routes>
-        <Route path="/home" element={<Home />} />
         <Route path="/" element={<Dashboard />} />
-        <Route path="/new" element={<NewContract />} /> {/* ✅ New route */}
-        <Route path="/contracts/:id" element={<ContractDetail />} />
-
+        <Route path="/home" element={<Home />} />
+        <Route path="/new" element={<NewContract />} />
+        <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
+        <Route path="/contracts/:contractId/approvals" element={<Approvals user={user} />} />
       </Routes>
     </BrowserRouter>
   );

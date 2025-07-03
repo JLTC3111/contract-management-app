@@ -1,9 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '../utils/supaBaseClient';
+
 import FileUploader from '../components/FileUploader';
+import toast from 'react-hot-toast';
 import { useUser } from '../hooks/useUser';
 import { ArrowLeft } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useParams, useNavigate } from 'react-router-dom';
+import { supabase } from '../utils/supaBaseClient';
+import Approvals from '../pages/Approvals';
 import { FolderTree } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 
