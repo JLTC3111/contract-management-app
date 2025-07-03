@@ -16,9 +16,14 @@ const DashboardMetrics = ({ data }) => {
         <div
           key={label}
           className={`metric-card ${metricClassMap[label] || ''}`.trim()}
+          style={{
+            background: 'var(--card-bg)',
+            color: 'var(--text)',
+            borderColor: 'var(--card-border)',
+          }}
         >
-          <h4>{label}</h4>
-          <p>{count}</p>
+          <h4 style={{ color: 'var(--text)' }}>{label}</h4>
+          <p style={{ color: 'var(--text)' }}>{count}</p>
         </div>
       ))}
     </div>

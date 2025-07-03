@@ -19,14 +19,15 @@ const Navbar = () => {
     }
   };
 
-  // Don’t show on login page
+  // Don't show on login page
   if (location.pathname === '/login') return null;
 
   return (
     <nav style={{
-      backgroundColor: '#f8fafc',
+      backgroundColor: 'var(--card-bg)',
+      color: 'var(--text)',
       padding: '1rem 2rem',
-      borderBottom: '1px solid #e2e8f0',
+      borderBottom: '1px solid var(--card-border)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -38,7 +39,7 @@ const Navbar = () => {
       
       {user && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span style={{ fontSize: '0.9rem', color: '#4b5563' }}>Logged in as <strong>{user.email}</strong></span>
+          <span className="text-secondary" style={{ fontSize: '0.9rem'}}>Logged in as <strong>{user.email}</strong></span>
           <button
             onClick={handleLogout}
             style={{

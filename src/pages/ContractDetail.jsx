@@ -147,7 +147,7 @@ useEffect(() => {
                 <span
                   style={{
                     cursor: isLast ? 'default' : 'pointer',
-                    color: isLast ? 'black' : '#1d4ed8',
+                    color: isLast ? 'var(--text)' : 'var(--primary)',
                     textDecoration: isLast ? 'none' : 'underline',
                     marginRight: '0.5rem',
                   }}
@@ -465,10 +465,12 @@ return (
               alignItems: 'center',
               gap: '0.5rem',
               margin:0,
-              backgroundColor: '#ddd',
-              border: 'none',
+              backgroundColor: 'var(--card-bg)',
+              color: 'var(--text)',
+              border: '1px solid var(--card-border)',
               borderRadius: '12px',
               cursor: 'pointer',
+              transition: 'background 0.2s, color 0.2s, border-color 0.2s',
             }}
           >
             <ArrowLeft size={20} /> 
@@ -478,7 +480,18 @@ return (
             onClick={() => {
               setNewFolderName('');
               setShowFolderInput(true);
-            }}>
+            }}
+            style={{
+              backgroundColor: 'var(--primary)',
+              color: '#fff',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: 500,
+              transition: 'background 0.2s',
+            }}
+          >
             📁 Create Folder
           </button>
 
@@ -554,6 +567,7 @@ return (
         <h2>
           {editMode ? (
             <input
+              className="table-filter-input"
               type="text"
               value={updated.title}
               onChange={(e) => handleChange('title', e.target.value)}
@@ -567,6 +581,7 @@ return (
           <strong>Status:</strong>{' '}
           {editMode ? (
             <select
+              className="table-filter-input"
               value={updated.status}
               onChange={(e) => handleChange('status', e.target.value)}
             >
@@ -586,6 +601,7 @@ return (
           <strong>Version:</strong>{' '}
           {editMode ? (
             <input
+              className="table-filter-input"
               type="text"
               value={updated.version}
               onChange={(e) => handleChange('version', e.target.value)}
@@ -604,6 +620,7 @@ return (
           <strong>Expiry Date:</strong>{' '}
           {editMode ? (
             <input
+              className="table-filter-input"
               type="date"
               value={updated.expiry_date ? updated.expiry_date.slice(0, 10) : ''}
               onChange={e => handleChange('expiry_date', e.target.value)}
@@ -619,6 +636,7 @@ return (
           <strong>Author:</strong>{' '}
           {editMode ? (
             <input
+              className="table-filter-input"
               type="text"
               value={updated.author}
               onChange={(e) => handleChange('author', e.target.value)}

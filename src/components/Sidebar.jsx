@@ -13,15 +13,25 @@ import {
   UserIcon,
   FolderPlus,
   ListChecks,
+  FolderIcon,
+  FileText,
+  FilePlus,
+  Check,
+  BookOpen,
+  Moon,
+  Sun
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
+import { useTheme } from '../hooks/useTheme';
+import './ContractTable.css';
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useUser();
+  const { darkMode, toggleDarkMode } = useTheme();
 
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
   const [createOpen, setCreateOpen] = useState(() => localStorage.getItem('createOpen') !== 'false');
@@ -52,21 +62,35 @@ const Sidebar = () => {
   return (
     <div
       style={{
-        width: collapsed ? '64px' : '200px',
+        width: collapsed ? '64px' : '150px',
         height: '100vh',
-        backgroundColor: '#f1f5f9',
+        backgroundColor: 'var(--sidebar-bg)',
         padding: '1rem',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         transition: 'width 0.3s',
         boxShadow: '2px 0 5px rgba(0,0,0,0.05)',
+        color: 'var(--sidebar-text)',
       }}
     >
       <div>
         <div style={{ display: 'flex', justifyContent: collapsed ? 'center' : 'flex-end', marginBottom: '0' }}>
-          <button onClick={() => setCollapsed(!collapsed)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-            {collapsed ? <ChevronsRight size={18} /> : <ChevronsLeft size={18} />}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              marginRight: '-15px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--sidebar-text)',
+              borderRadius: '6px',
+              transition: 'background 0.2s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--sidebar-hover-bg)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'none'}
+          >
+            {collapsed ? <ChevronsRight size={22} /> : <ChevronsLeft size={22} />}
           </button>
         </div>
 
@@ -137,7 +161,7 @@ const Sidebar = () => {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <SubMenu items={['Folder', 'File', 'Contract']} />
+              <SubMenu items={[{ label: 'Folder', icon: <FolderIcon size={14} /> }, { label: 'File', icon: <FileText size={14} /> }, { label: 'Contract', icon: <FilePlus size={14} /> }]} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -158,7 +182,7 @@ const Sidebar = () => {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <SubMenu items={['Work', 'Private', 'Coding']} />
+              <SubMenu items={[{ label: 'Work', icon: <Check size={14} /> }, { label: 'Private', icon: <BookOpen size={14} /> }, { label: 'Coding', icon: <FileText size={14} /> }]} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -177,10 +201,17 @@ const Sidebar = () => {
           collapsed={collapsed}
           onClick={handleLogout}
         />
+        <SidebarButton
+          icon={darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          label={darkMode ? 'Light Mode' : 'Dark Mode'}
+          collapsed={collapsed}
+          onClick={toggleDarkMode}
+        />
+
         {!collapsed && user && (
-          <div style={{ fontSize: '0.85rem', marginBottom: '2rem', color: '#334155' }}>
+          <div style={{ fontSize: '0.85rem', marginBottom: '2rem', color: 'var(--sidebar-text)' }}>
             <div><strong>Role:</strong> {user.role ?? 'unknown'}</div>
-            <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem' }}>
+            <div style={{ fontSize: '0.8rem', color: darkMode ? '#9ca3af' : '#64748b', marginTop: '0.25rem' }}>
               {roleDescriptions[user.role] || 'Role not recognized.'}
             </div>
           </div>
@@ -204,13 +235,13 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
         width: '100%',
         padding: '0.5rem 0',
         borderRadius: '6px',
-        backgroundColor: isActive ? '#c7d2fe' : 'transparent',
-        color: isActive ? '#1e3a8a' : '#1e293b',
+        backgroundColor: isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent',
+        color: isActive ? 'var(--sidebar-active-text,rgb(220, 229, 254))' : undefined,
         fontWeight: isActive ? 'bold' : 'normal',
         transition: 'background 0.2s ease',
       }}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0e7ff'}
-      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = isActive ? '#c7d2fe' : 'transparent'}
+      onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--sidebar-hover-bg, #e0e7ff)'}
+      onMouseLeave={e => e.currentTarget.style.backgroundColor = isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent'}
     >
       <div
         style={{
@@ -234,25 +265,38 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
   );
 };
 
-const SubMenu = ({ items }) => (
-  <ul style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}>
-    {items.map((item) => (
-      <li
-        key={item}
-        style={{
-          fontSize: '0.9rem',
-          color: '#475569',
-          padding: '0.25rem 0.5rem',
-          cursor: 'pointer',
-          borderRadius: '4px',
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e2e8f0'}
-        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-      >
-        {item}
-      </li>
-    ))}
-  </ul>
-);
+const SubMenu = ({ items }) => {
+  const { darkMode } = useTheme();
+  return (
+    <ul style={{ marginLeft: '5%', marginBottom: '1rem', paddingLeft: 0 }}>
+      {items.map(({ label, icon }) => (
+        <li
+          key={label}
+          style={{
+            fontSize: '0.9rem',
+            color: darkMode ? '#fff' : 'var(--sidebar-text)',
+            padding: '0.25rem 0.5rem',
+            cursor: 'pointer',
+            borderRadius: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.backgroundColor = darkMode ? '#232b3b' : '#e0e7ff';
+            e.currentTarget.style.color = darkMode ? '#fff' : '#000';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = darkMode ? '#fff' : 'var(--sidebar-text)';
+          }}
+        >
+          {icon}
+          {label}
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 export default Sidebar;

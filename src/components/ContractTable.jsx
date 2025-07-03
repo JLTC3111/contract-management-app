@@ -111,13 +111,14 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
         ref={el => (popoverRefs.current[key] = el)}
         style={{
           position: 'absolute',
-          background: '#fff',
-          border: '1px solid #ddd',
+          background: 'var(--card-bg)',
+          border: '1px solid var(--card-border)',
           borderRadius: 6,
           boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
           padding: 12,
           zIndex: 10,
           marginTop: 4,
+          color: 'var(--text)',
         }}
       >
         {content}
@@ -140,12 +141,13 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
           <tr>
             <th style={{ position: 'relative' }}>
               Title
-              <span onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, title: !f.title })); }}>
+              <span className="table-filter-input" onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, title: !f.title })); }}>
                 {filterIcon}
               </span>
               {renderPopover('title', (
                 <input
                   type="text"
+                  className="table-filter-input"
                   value={filters.title}
                   onChange={e => setFilters(f => ({ ...f, title: e.target.value }))}
                   placeholder="Filter by title"
@@ -161,6 +163,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               </span>
               {renderPopover('status', (
                 <select
+                  className="table-filter-input"
                   value={filters.status}
                   onChange={e => setFilters(f => ({ ...f, status: e.target.value }))}
                   style={{ width: 160 }}
@@ -178,6 +181,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               </span>
               {renderPopover('version', (
                 <select
+                  className="table-filter-input"
                   value={filters.version}
                   onChange={e => setFilters(f => ({ ...f, version: e.target.value }))}
                   style={{ width: 160 }}
@@ -196,6 +200,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               {renderPopover('updated', (
                 <input
                   type="date"
+                  className="table-filter-input"
                   value={filters.updated}
                   onChange={e => setFilters(f => ({ ...f, updated: e.target.value }))}
                   style={{ width: 160 }}
@@ -210,6 +215,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               </span>
               {renderPopover('author', (
                 <select
+                  className="table-filter-input"
                   value={filters.author}
                   onChange={e => setFilters(f => ({ ...f, author: e.target.value }))}
                   style={{ width: 160 }}
@@ -228,6 +234,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               {renderPopover('expiry', (
                 <input
                   type="date"
+                  className="table-filter-input"
                   value={filters.expiry}
                   onChange={e => setFilters(f => ({ ...f, expiry: e.target.value }))}
                   style={{ width: 160 }}
@@ -245,7 +252,6 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               key={contract.id}
               style={{
                 cursor: 'pointer',
-                borderBottom: '1px solid #e2e8f0',
                 transition: 'background 0.2s ease',
               }}
               onClick={() => navigate(`/contracts/${contract.id}`)}

@@ -27,7 +27,7 @@ const Home = () => {
       <div>
         <h1>🏠 Dashboard</h1>
         {user && (
-          <p style={{ color: '#555', fontSize: '0.9rem' }}>
+          <p className="text-secondary" style={{ fontSize: '0.9rem' }}>
             Logged in as <strong>{user.email}</strong>
           </p>
         )}

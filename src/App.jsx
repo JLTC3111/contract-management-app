@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import NewContract from './pages/NewContract';
 import Approvals from './pages/Approvals';
-import { Toaster } from 'react-hot-toast';
+
 import Layout from './components/Layout'; // 👈 Add this
 import './index.css';
 
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Toaster />
+      
       <Routes>
         {/* Routes with Sidebar */}
         <Route element={<Layout />}>

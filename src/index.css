@@ -6,16 +6,41 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+  --bg: #ffffff;
+  --text: #1e293b;
+  --card-bg: #f3f3f3;
+  --card-border: #e5e7eb;
+  --hover-bg: #f9f9ff;
+  --primary: #3b82f6;
+  --danger: #ef4444;
+  --success: #10b981;
+  --sidebar-bg: #f1f5f9;
+  --sidebar-text: #1e293b;
+  --input-bg: #fff;
+  --input-border: #d1d5db;
+  --text-secondary: #555;
+  --sidebar-hover-bg: #e6f0fa;
+  --sidebar-active-bg: #fefeff;
+  --sidebar-active-text: #1e3a8a;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+body.dark {
+  --bg: #1f2937;
+  --text: #f1f5f9;
+  --card-bg: #181e29;
+  --card-border: #334155;
+  --hover-bg: #232b3b;
+  --primary: #60a5fa;
+  --danger: #f87171;
+  --success: #34d399;
+  --sidebar-bg: #111827;
+  --sidebar-text: #f1f5f9;
+  --input-bg: #232b3b;
+  --input-border: #334155;
+  --text-secondary: #ffffff;
+  --sidebar-hover-bg: #232b3b;
+  --sidebar-active-bg: #334155;
+  --sidebar-active-text: #fff;
 }
 
 body {
@@ -24,6 +49,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
 }
 
 h1 {
@@ -55,8 +82,8 @@ nav {
 }
 
 .sidebar {
-  background-color: #111827;
-  color: white;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
   padding: 2rem;
   height: 100vh;
   width: 240px;
@@ -70,8 +97,8 @@ nav {
   text-decoration: none;
   margin-bottom: 1.5rem;
 }
-.sidebar a:hover {
-  text-decoration: underline;
+.sidebar a:hover, .sidebar a:focus {
+  color: #000 !important;
 }
 
 .contract-table {
@@ -79,30 +106,42 @@ nav {
   border-collapse: collapse;
   margin-top: 1.5rem;
   font-size: 0.95rem;
-  background: white;
+  background: var(--card-bg);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   overflow: hidden;
 }
 
 .contract-table th {
-  background-color: #f6f8fa;
+  background-color: var(--card-bg);
   text-align: center;
   justify-content: center;
   padding: 12px 16px;
   font-weight: 600;
   border-bottom: 1px solid #e0e0e0;
+  color: var(--text);
 }
 
 .contract-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid #f0f0f0;
   transition: background-color 0.2s ease-in-out;
   text-align: center;
+  background: var(--card-bg);
+  color: var(--text);
+}
+
+/* Expiry date column: 6th column, set text color to white */
+.contract-table td:nth-child(6) {
+  color: var(--text) !important;
 }
 
 .contract-table tbody tr:hover {
-  background-color: #f9f9ff;
+  background: var(--hover-bg);
+}
+
+/* Anchor tag in contract table: on hover, set color to black for contrast */
+.contract-table a:hover {
+  color: #000 !important;
 }
 
 .contract-table td:nth-child(2) {
@@ -122,6 +161,8 @@ nav {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   margin-top: 1rem;
   line-height: 1.6;
+  background: var(--card-bg);
+  color: var(--text);
 }
 
 .contract-detail input,
@@ -129,9 +170,11 @@ nav {
   padding: 0.5rem;
   margin-top: 0.25rem;
   margin-bottom: 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
   width: 100%;
+  background: var(--input-bg);
+  color: var(--text);
 }
 
 .contract-detail iframe {
@@ -144,11 +187,13 @@ nav {
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 1.5rem;
   margin: 2rem 0;
+  background: none;
+  color: var(--text);
 }
 
 .metric-card {
-  background: #f3f3f3;
-  border: 1px solid #e5e7eb;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-bottom: 9px solid #e5efff; /* Tailwind blue-500 */
   padding: 3.5px;
   border-radius: 0.75rem;
@@ -160,7 +205,14 @@ nav {
   justify-content: center;
   min-height: 50px;
   text-align: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+body.dark .metric-card {
+  box-shadow: 0 4px 12px rgba(255,255,255,0.08);
+}
+
+body.dark .metric-card:hover {
+  box-shadow: 0 6px 18px rgba(255,255,255,0.18);
 }
 
 .metric-card:hover {
@@ -170,14 +222,14 @@ nav {
 
 .metric-card h4 {
   font-size: 1rem;
-  color: #262626;
+  color: var(--text);
   margin-bottom: 0.3rem;
 }
 
 .metric-card p {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #000000;
+  color: var(--text);
   margin: 0;
 }
 
@@ -205,6 +257,48 @@ nav {
   border-bottom-color: #3b82f6; /* green-500 */
 }
 
+.metric-approved:hover {
+  border-bottom-color: #60a5fa !important;
+}
+.metric-pending:hover {
+  border-bottom-color: #fde68a !important;
+}
+.metric-expiring:hover {
+  border-bottom-color: #fdba74 !important;
+}
+.metric-draft:hover {
+  border-bottom-color: #6ee7b7 !important;
+}
+.metric-rejected:hover {
+  border-bottom-color: #fca5a5 !important;
+}
+.metric-expired:hover {
+  border-bottom-color: #f87171 !important;
+}
+
+body.dark .dashboard-metrics .metric-approved:hover {
+  border-bottom-color: #60a5fa !important;
+}
+body.dark .dashboard-metrics .metric-pending:hover {
+  border-bottom-color: #fde68a !important;
+}
+body.dark .dashboard-metrics .metric-expiring:hover {
+  border-bottom-color: #fdba74 !important;
+}
+body.dark .dashboard-metrics .metric-draft:hover {
+  border-bottom-color: #6ee7b7 !important;
+}
+body.dark .dashboard-metrics .metric-rejected:hover {
+  border-bottom-color: #fca5a5 !important;
+}
+body.dark .dashboard-metrics .metric-expired:hover {
+  border-bottom-color: #f87171 !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -216,4 +310,57 @@ nav {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.table-filter-input {
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.table-filter-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+/* Hide default calendar icon for date input (cross-browser best effort) */
+.input-date-custom::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  display: none;
+}
+.input-date-custom::-webkit-input-placeholder {
+  color: var(--text-secondary);
+}
+.input-date-custom::-moz-placeholder {
+  color: var(--text-secondary);
+}
+.input-date-custom:-ms-input-placeholder {
+  color: var(--text-secondary);
+}
+.input-date-custom::placeholder {
+  color: var(--text-secondary);
+}
+.input-date-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.input-date-custom {
+  width: 100%;
+  padding-right: 2.2em;
+}
+.input-date-calendar-icon {
+  position: absolute;
+  right: 0.7em;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text);
+  width: 1.2em;
+  height: 1.2em;
+  opacity: 0.8;
 }

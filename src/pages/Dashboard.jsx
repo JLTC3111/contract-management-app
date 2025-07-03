@@ -68,6 +68,7 @@ const Dashboard = () => {
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '1rem' }}>
             <input
               type="text"
+              className="table-filter-input"
               placeholder="Search contracts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
