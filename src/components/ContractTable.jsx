@@ -125,7 +125,6 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
           <button
             className="fancy-btn"
             onClick={() => setFilters(f => ({ ...f, [key]: '' }))}
-            style={{ fontSize: 12, color: '#888', background: 'none', border: 'none', cursor: 'pointer', padding: '0.5rem 1rem' }}
           >
             Clear
           </button>

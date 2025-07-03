@@ -32,7 +32,7 @@ const Navbar = () => {
       alignItems: 'center',
       position: 'sticky',
       top: 0,
-      zIndex: 1000
+      zIndex: -1
     }}>
       <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold' }}>📁 Contract Manager</h2>
       

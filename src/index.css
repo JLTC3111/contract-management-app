@@ -147,10 +147,10 @@ nav {
 }
 
 .metric-card {
-  background: #ffffff;
+  background: #f3f3f3;
   border: 1px solid #e5e7eb;
-  border-left: 6px solid #3b82f6; /* Tailwind blue-500 */
-  padding: 0.7rem 0.9rem;
+  border-bottom: 9px solid #e5efff; /* Tailwind blue-500 */
+  padding: 3.5px;
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   transition: transform 0.2s ease;
@@ -169,35 +169,40 @@ nav {
 }
 
 .metric-card h4 {
-  font-size: 0.85rem;
-  color: #4b5563;
+  font-size: 1rem;
+  color: #262626;
   margin-bottom: 0.3rem;
 }
 
 .metric-card p {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
+  color: #000000;
   margin: 0;
 }
 
-.metric-pending {
-  border-left-color: #ffefad; /* yellow-400 */
+.metric-rejected:hover {
+  border-bottom-color: #350000;
 }
-.metric-expiring {
-  border-left-color: #3c75fb; /* orange-400 */
+
+.metric-draft:hover {
+  border-bottom-color: #61f7c5; /* blue-500 */
 }
-.metric-expired {
-  border-left-color: #ef4444; /* red-500 */
+
+.metric-pending:hover {
+  border-bottom-color: #facc15; /* yellow-400 */
 }
-.metric-approved {
-  border-left-color: #10b981; /* green-500 */
+
+.metric-expiring:hover {
+  border-bottom-color: #f97316; /* orange-500 */
 }
-.metric-draft {
-  border-left-color: #7d7d7d; /* grey-400 */
+
+.metric-expired:hover {
+  border-bottom-color: #ef4444; /* red-500 */
 }
-.metric-rejected {
-  border-left-color: #460000; /* red-800 */
+
+.metric-approved:hover {
+  border-bottom-color: #3b82f6; /* green-500 */
 }
 
 @media (prefers-color-scheme: light) {
