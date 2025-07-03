@@ -1,4 +1,3 @@
-
 import FileUploader from '../components/FileUploader';
 import toast from 'react-hot-toast';
 import { useUser } from '../hooks/useUser';
@@ -11,7 +10,7 @@ import { useEffect, useState, useRef } from 'react';
 
 const ContractDetail = () => {
   const { user, loading: userLoading } = useUser(); // from context
-  const { id } = useParams();
+  const { contractId } = useParams();
   const navigate = useNavigate();
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -217,10 +216,14 @@ useEffect(() => {
   
   useEffect(() => {
     const fetchContract = async () => {
+      if (!contractId) {
+        setLoading(false);
+        return;
+      }
       const { data, error } = await supabase
         .from('contracts')
         .select('*')
-        .eq('id', id)
+        .eq('id', Number(contractId))
         .single();
 
       if (!error) {
@@ -233,7 +236,7 @@ useEffect(() => {
     };
 
     fetchContract();
-  }, [id]);
+  }, [contractId]);
 
   const handleSave = async () => {
     if (actionLoading) return; // Prevent spamming
@@ -252,7 +255,7 @@ useEffect(() => {
           updated_at: new Date().toISOString(),
           author: updated.author?.trim(),
         })
-        .eq('id', id);
+        .eq('id', contract.id);
   
       if (error) {
         toast.error('❌ Failed to update contract.');

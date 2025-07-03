@@ -57,66 +57,9 @@ const Dashboard = () => {
   
     fetchContracts();
   }, []);
-  const handleRunCron = async () => {
-    try {
-      const response = await fetch('https://idkfmgdfzcsydrqnjcla.functions.supabase.co/contract-status-cron', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-cron-secret': import.meta.env.VITE_CRON_SECRET,
-        },
-      });
-  
-      const result = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(result?.message || 'Unknown error');
-      }
-  
-      alert(`✅ Cron Success: ${result.message}`);
-    } catch (error) {
-      console.error('🚨 Cron failed:', error);
-      alert(`Cron failed: ${error.message}`);
-    }
-  };
   
   return (
     <>
-      <button
-    style={{
-      background: '#00b894',
-      color: '#fff',
-      padding: '0.5rem 1rem',
-      fontSize: '1rem',
-      marginBottom: '1rem',
-    }}
-    onClick={async () => {
-      try {
-        const response = await fetch('https://idkfmgdfzcsydrqnjcla.functions.supabase.co/contract-status-cron', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_CRON_SECRET}`,
-          },
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          console.error('❌ Cron failed:', result);
-          alert(`❌ Cron failed: ${result.error || result.message || 'Unknown error'}`);
-        } else {
-          alert(`✅ Cron ran successfully! ${result.updatedCount ? `(${result.updatedCount} contract(s) updated)` : ''}`);
-        }
-      } catch (error) {
-        console.error('🚨 Error triggering cron:', error);
-        alert('🚨 Failed to trigger cron job. Check network or CORS settings.');
-      }
-    }}
-  >
-    🔁 Update Contract Status
-  </button>
-  
       <div style={{ display: 'flex' }}>
         <Sidebar />
         <main style={{ padding: '2rem', flex: 1 }}>
