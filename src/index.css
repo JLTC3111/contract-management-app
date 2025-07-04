@@ -22,6 +22,8 @@
   --sidebar-hover-bg: #e6f0fa;
   --sidebar-active-bg: #fefeff;
   --sidebar-active-text: #1e3a8a;
+  --fancy-btn-border: #fbf3e7;
+  --fancy-btn-shadow: 0 1.5px 4px rgba(0,0,0,0.15);
 }
 
 body.dark {
@@ -41,6 +43,8 @@ body.dark {
   --sidebar-hover-bg: #232b3b;
   --sidebar-active-bg: #334155;
   --sidebar-active-text: #fff;
+  --fancy-btn-border: #60a5fa;
+  --fancy-btn-shadow: 0 1px 2px rgba(96,165,250,0.45);
 }
 
 body {
@@ -381,13 +385,13 @@ body.dark .dashboard-metrics .metric-expired:hover {
 /* Fancy button style for clear/login */
 .fancy-btn {
   display: block;
-  border: 1px solid #3b82f6; /* Blue inner border */
-  box-shadow: 0 0 0 .5px #fff; /* White outer border */
+  border: 1px solid var(--fancy-btn-border);
+  box-shadow: var(--fancy-btn-shadow), 0 0 0 .5px #fff;
   letter-spacing: 3px;
   font-size: 1rem;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  color: rgb(160, 159, 159);
+  color: var(--text);
   cursor: pointer;
   padding: 0.75rem 1rem;
   position: relative;
@@ -400,8 +404,8 @@ body.dark .dashboard-metrics .metric-expired:hover {
 .fancy-btn:focus,
 .fancy-btn:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-  border: 2px solid #3b82f6;
-  box-shadow: 0 0 0 4px #fff;
+  border: 2px solid var(--fancy-btn-border);
+  box-shadow: var(--fancy-btn-shadow), 0 0 0 4px #fff;
 }
 .fancy-btn::before {
   content: '';

@@ -2,6 +2,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import gsap from 'gsap';
+import { Sun, Moon } from 'lucide-react';
+import { useTheme } from '../hooks/useTheme';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +15,7 @@ const Login = () => {
   const cardRef = useRef(null);
   const modelRef = useRef(null);
   const logoUrl = '/logoIcons/logo.png';
+  const { darkMode, toggleDarkMode } = useTheme();
 
   // Typing animation for ''
   useEffect(() => {
@@ -85,6 +88,7 @@ const Login = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          position: 'relative',
         }}
       >
         <h2 style={{
@@ -144,7 +148,8 @@ const Login = () => {
               required 
               style={{
                 width: '100%',
-                padding: '0.75rem .5rem',
+                maxWidth: '92.5%',
+                padding: '0.75rem',
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
                 fontSize: '1rem',
@@ -174,7 +179,8 @@ const Login = () => {
               required 
               style={{
                 width: '100%',
-                padding: '0.75rem .5rem',
+                maxWidth: '92.5%',
+                padding: '0.75rem',
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
                 fontSize: '1rem',
@@ -212,7 +218,7 @@ const Login = () => {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            Sign In
+            Log In
           </button>
           
           {error && (
@@ -245,7 +251,60 @@ const Login = () => {
           position: 'relative',
         }}
       >
-        
+        {/* Theme Toggle Button (moved here) */}
+        <button
+          onClick={toggleDarkMode}
+          aria-label="Toggle theme"
+          style={{
+            position: 'absolute',
+            top: 18,
+            left: 18,
+            width: 54,
+            height: 32,
+            background: 'var(--card-bg)',
+            borderRadius: 16,
+            border: '1.5px solid var(--card-border)',
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            zIndex: 10,
+            outline: 'none',
+            padding: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <span
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: darkMode ? 26 : 4,
+              transform: 'translateY(-50%)',
+              width: 24,
+              height: 24,
+              borderRadius: '50%',
+              background: 'var(--sidebar-hover-bg)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--text)',
+              fontSize: '1.2rem',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+              transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
+              zIndex: 2,
+            }}
+          >
+            {darkMode ? <Moon size={18} /> : <Sun size={18} />}
+          </span>
+          {/* Show both icons, inactive one faint */}
+          <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
+            <Sun size={14} />
+          </span>
+          <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
+            <Moon size={14} />
+          </span>
+        </button>
         <model-viewer
           ref={modelViewerRef}
           src="/3d_models/robot.glb"
