@@ -244,7 +244,8 @@ const Dashboard = () => {
                     maxWidth: '300px',
                     fontSize: '1rem',
                     marginLeft: 'auto',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+                    borderRadius: 8,
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
                   }}
                 />
               </div>
