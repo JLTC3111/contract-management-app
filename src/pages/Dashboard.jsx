@@ -154,6 +154,7 @@ const Dashboard = () => {
               <div style={{ position: 'relative', flex: 1 }} ref={searchRef}>
                 <input
                   type="text"
+                  className="file-folder-search-input"
                   placeholder="Search files or folders..."
                   value={searchTerm}
                   onChange={e => { setSearchTerm(e.target.value); setShowDropdown(true); }}

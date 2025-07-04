@@ -122,9 +122,9 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
         }}
       >
         {content}
-        <div style={{ marginTop: 8, textAlign: 'right' }}>
+        <div style={{ marginTop: 8, textAlign: 'center' }}>
           <button
-            className="fancy-btn"
+            className="clear-btn"
             onClick={() => setFilters(f => ({ ...f, [key]: '' }))}
           >
             Clear
@@ -135,7 +135,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
   );
 
   return (
-    <div className="contract-table-wrapper">
+    <div className={`contract-table-wrapper${Object.values(openFilters).some(Boolean) ? ' filter-open' : ''}`}>
       <table className="contract-table">
         <thead>
           <tr>
