@@ -465,12 +465,10 @@ return (
               alignItems: 'center',
               gap: '0.5rem',
               margin:0,
-              backgroundColor: 'var(--card-bg)',
-              color: 'var(--text)',
-              border: '1px solid var(--card-border)',
+              backgroundColor: '#ddd',
+              border: 'none',
               borderRadius: '12px',
               cursor: 'pointer',
-              transition: 'background 0.2s, color 0.2s, border-color 0.2s',
             }}
           >
             <ArrowLeft size={20} /> 
@@ -480,18 +478,7 @@ return (
             onClick={() => {
               setNewFolderName('');
               setShowFolderInput(true);
-            }}
-            style={{
-              backgroundColor: 'var(--primary)',
-              color: '#fff',
-              border: 'none',
-              padding: '0.5rem 1rem',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontWeight: 500,
-              transition: 'background 0.2s',
-            }}
-          >
+            }}>
             📁 Create Folder
           </button>
 

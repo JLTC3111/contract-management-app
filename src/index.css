@@ -26,7 +26,7 @@
 
 body.dark {
   --bg: #1f2937;
-  --text: #f1f5f9;
+  --text: #fff;
   --card-bg: #181e29;
   --card-border: #334155;
   --hover-bg: #232b3b;
@@ -118,7 +118,7 @@ nav {
   justify-content: center;
   padding: 12px 16px;
   font-weight: 600;
-  border-bottom: 1px solid #e0e0e0;
+  
   color: var(--text);
 }
 
@@ -363,4 +363,12 @@ body.dark .dashboard-metrics .metric-expired:hover {
   width: 1.2em;
   height: 1.2em;
   opacity: 0.8;
+}
+
+@keyframes search-move {
+  0% { transform: rotate(-15deg) translateX(0); }
+  25% { transform: rotate(0deg) translateX(4px); }
+  50% { transform: rotate(15deg) translateX(0); }
+  75% { transform: rotate(0deg) translateX(-4px); }
+  100% { transform: rotate(-15deg) translateX(0); }
 }

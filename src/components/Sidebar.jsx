@@ -4,7 +4,7 @@ import {
   HomeIcon,
   LayoutDashboardIcon,
   LogOutIcon,
-  SearchCheckIcon,
+  ShieldCheckIcon,
   RefreshCcwDotIcon,
   ChevronsLeft,
   ChevronsRight,
@@ -86,6 +86,7 @@ const Sidebar = () => {
               color: 'var(--sidebar-text)',
               borderRadius: '6px',
               transition: 'background 0.2s',
+              paddingTop: '20px',
             }}
             onMouseEnter={e => e.currentTarget.style.background = 'var(--sidebar-hover-bg)'}
             onMouseLeave={e => e.currentTarget.style.background = 'none'}
@@ -111,7 +112,7 @@ const Sidebar = () => {
           onClick={() => navigate('/')}
         />
         <SidebarButton
-          icon={<SearchCheckIcon size={18} />}
+          icon={<ShieldCheckIcon size={18} />}
           label="Approve"
           path="/contracts"
           collapsed={collapsed}

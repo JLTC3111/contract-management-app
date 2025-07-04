@@ -141,8 +141,32 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
           <tr>
             <th style={{ position: 'relative' }}>
               Title
-              <span className="table-filter-input" onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, title: !f.title })); }}>
-                {filterIcon}
+              <span
+                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, title: !f.title })); }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 8,
+                  width: 36,
+                  height: 36,
+                  borderRadius: 8,
+                  background: 'var(--card-bg)',
+                  border: '1.5px solid var(--card-border)',
+                  boxShadow: openFilters.title ? '0 2px 8px rgba(0,0,0,0.10)' : 'none',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s, border 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--hover-bg)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'var(--card-bg)';
+                  e.currentTarget.style.boxShadow = openFilters.title ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('title', (
                 <input
@@ -158,8 +182,32 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             </th>
             <th style={{ position: 'relative' }}>
               Status
-              <span onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, status: !f.status })); }}>
-                {filterIcon}
+              <span
+                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, status: !f.status })); }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 8,
+                  width: 36,
+                  height: 36,
+                  borderRadius: 8,
+                  background: 'var(--card-bg)',
+                  border: '1.5px solid var(--card-border)',
+                  boxShadow: openFilters.status ? '0 2px 8px rgba(0,0,0,0.10)' : 'none',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s, border 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--hover-bg)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'var(--card-bg)';
+                  e.currentTarget.style.boxShadow = openFilters.status ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('status', (
                 <select
@@ -176,8 +224,32 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             </th>
             <th style={{ position: 'relative' }}>
               Version
-              <span onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, version: !f.version })); }}>
-                {filterIcon}
+              <span
+                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, version: !f.version })); }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 8,
+                  width: 36,
+                  height: 36,
+                  borderRadius: 8,
+                  background: 'var(--card-bg)',
+                  border: '1.5px solid var(--card-border)',
+                  boxShadow: openFilters.version ? '0 2px 8px rgba(0,0,0,0.10)' : 'none',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s, border 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--hover-bg)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'var(--card-bg)';
+                  e.currentTarget.style.boxShadow = openFilters.version ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('version', (
                 <select
@@ -194,8 +266,32 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             </th>
             <th style={{ position: 'relative' }}>
               Last Updated
-              <span onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, updated: !f.updated })); }}>
-                {filterIcon}
+              <span
+                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, updated: !f.updated })); }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 8,
+                  width: 36,
+                  height: 36,
+                  borderRadius: 8,
+                  background: 'var(--card-bg)',
+                  border: '1.5px solid var(--card-border)',
+                  boxShadow: openFilters.updated ? '0 2px 8px rgba(0,0,0,0.10)' : 'none',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s, border 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--hover-bg)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'var(--card-bg)';
+                  e.currentTarget.style.boxShadow = openFilters.updated ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('updated', (
                 <input
@@ -210,8 +306,32 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             </th>
             <th style={{ position: 'relative' }}>
               Author
-              <span onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, author: !f.author })); }}>
-                {filterIcon}
+              <span
+                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, author: !f.author })); }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 8,
+                  width: 36,
+                  height: 36,
+                  borderRadius: 8,
+                  background: 'var(--card-bg)',
+                  border: '1.5px solid var(--card-border)',
+                  boxShadow: openFilters.author ? '0 2px 8px rgba(0,0,0,0.10)' : 'none',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s, border 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--hover-bg)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'var(--card-bg)';
+                  e.currentTarget.style.boxShadow = openFilters.author ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('author', (
                 <select
@@ -228,8 +348,32 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             </th>
             <th style={{ position: 'relative' }}>
               Expiry Date
-              <span onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, expiry: !f.expiry })); }}>
-                {filterIcon}
+              <span
+                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, expiry: !f.expiry })); }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 8,
+                  width: 36,
+                  height: 36,
+                  borderRadius: 8,
+                  background: 'var(--card-bg)',
+                  border: '1.5px solid var(--card-border)',
+                  boxShadow: openFilters.expiry ? '0 2px 8px rgba(0,0,0,0.10)' : 'none',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s, border 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'var(--hover-bg)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.12)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'var(--card-bg)';
+                  e.currentTarget.style.boxShadow = openFilters.expiry ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('expiry', (
                 <input
@@ -252,11 +396,9 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               key={contract.id}
               style={{
                 cursor: 'pointer',
-                transition: 'background 0.2s ease',
+                transition: 'background 0.3s ease, box-shadow 0.3s, transform 0.3s',
               }}
               onClick={() => navigate(`/contracts/${contract.id}`)}
-              onMouseOver={e => (e.currentTarget.style.background = '#f9fafb')}
-              onMouseOut={e => (e.currentTarget.style.background = '')}
             >
               <td>{highlight(contract.title || 'Untitled Contract', searchQuery)}</td>
               <td>
