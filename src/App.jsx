@@ -9,6 +9,7 @@ import Approvals from './pages/Approvals';
 
 import Layout from './components/Layout'; // 👈 Add this
 import './index.css';
+import './App.css';
 
 function App() {
   const { user, loading } = useUser();
@@ -26,7 +27,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/new" element={<NewContract />} />
           <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
-          <Route path="/contracts/:contractId/approvals" element={<Approvals user={user} />} />
+          <Route path="/approvals" element={<Approvals />} />
         </Route>
 
         {/* Optional: Login Route - if you want to support logout redirect */}

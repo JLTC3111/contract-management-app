@@ -53,8 +53,8 @@ const Sidebar = () => {
   };
 
   const roleDescriptions = {
-    admin: 'Full access: create, edit, approve, and delete contracts.',
-    editor: 'Can create and edit contracts but not approve or delete.',
+    admin: 'Full access: create, edit, approve, comment and delete contracts.',
+    editor: 'Can create, edit and delete contracts but not approve.',
     approver: 'Can review and approve contracts. No editing access.',
     viewer: 'Read-only access to all contracts.',
   };
@@ -68,14 +68,14 @@ const Sidebar = () => {
         padding: '1rem',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         transition: 'width 0.3s',
         boxShadow: '2px 0 5px rgba(0,0,0,0.05)',
         color: 'var(--sidebar-text)',
       }}
     >
-      <div>
-        <div style={{ display: 'flex', justifyContent: collapsed ? 'center' : 'flex-end', marginBottom: '0' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: collapsed ? 'center' : 'flex-end', marginBottom: '1rem', width: '100%' }}>
           <button
             onClick={() => setCollapsed(!collapsed)}
             style={{
@@ -117,7 +117,7 @@ const Sidebar = () => {
           path="/contracts"
           collapsed={collapsed}
           currentPath={location.pathname}
-          onClick={() => navigate('/contracts')}
+          onClick={() => navigate('/approvals')}
         />
         <SidebarButton
           icon={<RefreshCcwDotIcon size={18} />}
@@ -210,7 +210,7 @@ const Sidebar = () => {
         />
 
         {!collapsed && user && (
-          <div style={{ fontSize: '0.85rem', marginBottom: '2rem', color: 'var(--sidebar-text)' }}>
+          <div style={{ fontSize: '0.85rem', marginBottom: '2rem', color: 'var(--sidebar-text)', textAlign: 'center' }}>
             <div><strong>Role:</strong> {user.role ?? 'unknown'}</div>
             <div style={{ fontSize: '0.8rem', color: darkMode ? '#9ca3af' : '#64748b', marginTop: '0.25rem' }}>
               {roleDescriptions[user.role] || 'Role not recognized.'}

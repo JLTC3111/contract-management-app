@@ -4,7 +4,7 @@ import { useUser } from '../hooks/useUser';
 import { ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
-import Approvals from '../pages/Approvals';
+import Approvals from '../components/Approvals';
 import { FolderTree } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 
@@ -27,6 +27,8 @@ const ContractDetail = () => {
   const [newFolderName, setNewFolderName] = useState('');
   const [currentPath, setCurrentPath] = useState('');
   const folderInputRef = useRef('');
+  
+
 
 useEffect(() => {
     if (showFolderInput) {
@@ -278,6 +280,30 @@ useEffect(() => {
     setUpdated((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Handle status update from Approvals component
+  const handleStatusUpdate = (newStatus) => {
+    setContract(prev => ({ ...prev, status: newStatus }));
+  };
+
+  // Keyboard event handlers for edit mode
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (!editMode) return;
+      
+      if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        handleSave();
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        setEditMode(false);
+        setUpdated(contract); // Reset to original values
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [editMode, contract]);
+
   const isPDF = updated.file_type === 'application/pdf';
 
   if (userLoading) return <p>Loading user...</p>;
@@ -446,7 +472,7 @@ useEffect(() => {
   
 
 return (
-    <div>
+    <div style={{ width: '800px', margin: '0 auto' }}>
       {/* Back button in top-right when NOT editing */}
       {!editMode && canEdit && (
         <div
@@ -549,8 +575,15 @@ return (
       </button>
     </div>)}
 
-      {/* Main content */}
-      <div style={{ padding: '2rem' }}>
+      {/* Main content - Full width, aligned to far left */}
+      <div style={{ 
+        padding: '2rem', 
+        maxWidth: '100%', 
+        width: '100%',
+        textAlign: 'left',
+        marginLeft: '0',
+        marginRight: 'auto'
+      }}>
         <h2>
           {editMode ? (
             <input
@@ -863,9 +896,18 @@ return (
       </div>
     )}
   </div>
-)}</div></div>
+)}        </div></div>
 
-{/* Admin/editor-only controls */}
+    {/* Approvals Component for Admin/Editor */}
+    {!editMode && (
+          <Approvals 
+            contractId={contractId} 
+            contract={contract} 
+            onStatusUpdate={handleStatusUpdate}
+          />
+        )}
+
+{/* Admin/editor-only controls - Approvers cannot edit */}
     {['admin', 'editor'].includes(user.role) && (
         <div style={{marginLeft: '2rem', marginTop: '2rem', display: 'flex', gap: '0.5rem' }}>
           {editMode ? (

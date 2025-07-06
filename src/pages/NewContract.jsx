@@ -56,6 +56,33 @@ const NewContract = () => {
 
   return (
     <div style={{ padding: '1.5rem'}}>
+      {/* Back Button */}
+      <div style={{ marginBottom: '1rem' }}>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            background: 'var(--card-bg)',
+            border: '1px solid var(--card-border)',
+            borderRadius: '6px',
+            padding: '0.5rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--text)',
+            transition: 'all 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'var(--hover-bg)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'var(--card-bg)';
+          }}
+        >
+          <ArrowLeft size={20} />
+        </button>
+      </div>
+      
       <h2>New Contract</h2>
       {!contract ? (
         <><div style={{display:'flex', gap:'10px', marginBottom: '.5rem'}}>

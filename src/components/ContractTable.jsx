@@ -70,6 +70,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
     expiry: '',
   });
   const [openFilters, setOpenFilters] = useState({});
+  const [closingFilter, setClosingFilter] = useState(null);
   const popoverRefs = useRef({});
 
   // Close popover on outside click
@@ -105,8 +106,20 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
   const uniqueStatuses = getUnique(contracts, 'status');
 
   // Popover for each column
+  const handleFilterToggle = (key) => {
+    if (openFilters[key]) {
+      setClosingFilter(key);
+      setTimeout(() => {
+        setOpenFilters(f => ({ ...f, [key]: false }));
+        setClosingFilter(null);
+      }, 500); // Match the CSS animation duration (0.5s)
+    } else {
+      setOpenFilters(f => ({ ...f, [key]: true }));
+    }
+  };
+
   const renderPopover = (key, content) => (
-    openFilters[key] && (
+    (openFilters[key] || closingFilter === key) && (
       <div
         ref={el => (popoverRefs.current[key] = el)}
         style={{
@@ -119,6 +132,8 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
           zIndex: 10,
           marginTop: 4,
           color: 'var(--text)',
+          animation: `${closingFilter === key ? 'slideUp' : 'slideDown'} .5s ease`,
+          transformOrigin: 'top center',
         }}
       >
         {content}
@@ -142,7 +157,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             <th style={{ position: 'relative' }}>
               Title
               <span
-                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, title: !f.title })); }}
+                onClick={e => { e.stopPropagation(); handleFilterToggle('title'); }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -183,7 +198,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             <th style={{ position: 'relative' }}>
               Status
               <span
-                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, status: !f.status })); }}
+                onClick={e => { e.stopPropagation(); handleFilterToggle('status'); }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -225,7 +240,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             <th style={{ position: 'relative' }}>
               Version
               <span
-                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, version: !f.version })); }}
+                onClick={e => { e.stopPropagation(); handleFilterToggle('version'); }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -267,7 +282,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             <th style={{ position: 'relative' }}>
               Last Updated
               <span
-                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, updated: !f.updated })); }}
+                onClick={e => { e.stopPropagation(); handleFilterToggle('updated'); }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -307,7 +322,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             <th style={{ position: 'relative' }}>
               Author
               <span
-                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, author: !f.author })); }}
+                onClick={e => { e.stopPropagation(); handleFilterToggle('author'); }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -349,7 +364,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             <th style={{ position: 'relative' }}>
               Expiry Date
               <span
-                onClick={e => { e.stopPropagation(); setOpenFilters(f => ({ ...f, expiry: !f.expiry })); }}
+                onClick={e => { e.stopPropagation(); handleFilterToggle('expiry'); }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',

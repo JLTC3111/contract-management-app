@@ -1,0 +1,40 @@
+import { useUser } from '../hooks/useUser';
+import ApprovalRequestForm from './ApprovalRequestForm';
+import CommentSection from './CommentSection';
+
+const Approvals = ({ contractId, contract, onStatusUpdate }) => {
+  const { user } = useUser();
+
+  if (!user || !['admin', 'editor'].includes(user.role)) {
+    return null;
+  }
+
+  return (
+    <div style={{ 
+      padding: '1.5rem', 
+      background: 'var(--card-bg)', 
+      border: '1px solid var(--card-border)', 
+      borderRadius: '8px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      marginBottom: '2rem'
+    }}>
+      <h3 style={{ marginBottom: '1rem', color: 'var(--text)' }}>
+        📋 {user.role === 'editor' ? 'Editor' : 'Admin'} Actions
+      </h3>
+      
+      {/* Approval Request Section - Only for Editor and Admin */}
+      {(user.role === 'editor' || user.role === 'admin') && (
+        <ApprovalRequestForm 
+          contractId={contractId} 
+          contract={contract} 
+          onStatusUpdate={onStatusUpdate} 
+        />
+      )}
+
+      {/* Comments Section */}
+      <CommentSection contractId={contractId} />
+    </div>
+  );
+};
+
+export default Approvals;
