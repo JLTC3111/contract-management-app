@@ -59,16 +59,29 @@ body {
   color: var(--text);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1, h2, h3 {
+  font-size: clamp(1.5rem, 4vw, 3.2rem);
+}
+
+body, .contract-table, .contract-detail, .dashboard-metrics, .metric-card, button, input, select, textarea {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+}
+
+.contract-detail, .card, .login-card {
+  max-width: 100%;
+  width: clamp(280px, 90vw, 800px);
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+button, input, select, textarea {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  padding: clamp(0.4rem, 1vw, 0.75rem) clamp(0.8rem, 2vw, 1.2rem);
 }
 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   background-color: #dddddd;
@@ -81,10 +94,6 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-nav {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .sidebar {
@@ -430,4 +439,28 @@ body.dark .dashboard-metrics .metric-expired:hover {
 .fancy-btn:hover {
   color: #fff;
   box-shadow: 0 4px 16px rgba(29,154,231,0.12);
+}
+
+@media (max-width: 900px) {
+  .contract-table, .contract-detail, .dashboard-metrics {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    padding: 1rem;
+  }
+  .metric-card {
+    min-width: 120px;
+    padding: 0.5rem;
+  }
+}
+@media (max-width: 600px) {
+  .contract-table, .contract-detail, .dashboard-metrics {
+    font-size: clamp(0.85rem, 4vw, 1rem);
+    padding: 0.5rem;
+  }
+  .metric-card {
+    min-width: 90px;
+    padding: 0.25rem;
+  }
+  h1, h2, h3 {
+    font-size: clamp(1.1rem, 6vw, 2rem);
+  }
 }

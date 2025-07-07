@@ -367,8 +367,8 @@ const Sidebar = () => {
             zIndex: 100,
             background: 'var(--sidebar-submenu-bg)',
             boxShadow: darkMode
-      ? '0 2px 4px rgba(155, 0, 0, 0.8)'   // Dark mode shadow (lighter glow)
-      : '0 2px 4px rgba(0, 77, 110, 0.8)', // Light mode shadow
+            ? '0 2px 4px rgba(155, 0, 0, 0.8)'   // Dark mode shadow (lighter glow)
+            : '0 2px 4px rgba(0, 77, 110, 0.8)', // Light mode shadow
             padding: '1rem 0',
             display: 'flex',
             flexDirection: 'row',

@@ -69,8 +69,8 @@ const Login = () => {
       alignItems: 'center',
       justifyContent: 'center',
       background: 'var(--bg)',
-      padding: '2rem',
-      gap: '2rem',
+      padding: 'clamp(1rem, 4vw, 2rem)',
+      gap: 'clamp(1rem, 4vw, 2rem)',
     }}>
       {/* Login Card */}
       <div
@@ -79,9 +79,9 @@ const Login = () => {
           background: 'var(--card-bg)',
           border: '1.5px solid var(--card-border)',
           borderRadius: '12px',
-          padding: '2.5rem',
+          padding: 'clamp(1rem, 4vw, 2.5rem)',
           width: '100%',
-          maxWidth: '400px',
+          maxWidth: 'clamp(280px, 90vw, 400px)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
           transition: 'all 0.3s ease',
           display: 'flex',
@@ -93,9 +93,9 @@ const Login = () => {
       >
         <h2 style={{
           textAlign: 'center',
-          marginBottom: '2rem',
+          marginBottom: 'clamp(1rem, 4vw, 2rem)',
           color: 'var(--text)',
-          fontSize: '2rem',
+          fontSize: 'clamp(1.2rem, 5vw, 2rem)',
           fontWeight: '600',
           minHeight: '2.5rem',
           letterSpacing: '2px',
@@ -149,10 +149,10 @@ const Login = () => {
               style={{
                 width: '100%',
                 maxWidth: '92.5%',
-                padding: '0.75rem',
+                padding: 'clamp(0.5rem, 2vw, 0.75rem)',
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
-                fontSize: '1rem',
+                fontSize: 'clamp(0.95rem, 2vw, 1rem)',
                 background: 'var(--card-bg)',
                 color: 'var(--text)',
                 outline: 'none',
@@ -180,10 +180,10 @@ const Login = () => {
               style={{
                 width: '100%',
                 maxWidth: '92.5%',
-                padding: '0.75rem',
+                padding: 'clamp(0.5rem, 2vw, 0.75rem)',
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
-                fontSize: '1rem',
+                fontSize: 'clamp(0.95rem, 2vw, 1rem)',
                 background: 'var(--card-bg)',
                 color: 'var(--text)',
                 outline: 'none',
@@ -206,7 +206,7 @@ const Login = () => {
             className="fancy-btn"
             style={{
               width: '100%',
-              fontSize: '1rem',
+              fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               fontWeight: 600,
               marginTop: '0.5rem',
               transition: 'transform 0.2s',

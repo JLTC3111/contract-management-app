@@ -132,15 +132,15 @@ const Approvals = () => {
 
   return (
     <div style={{ padding: '2rem' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+      <div style={{ marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 2vw, 1rem)', marginBottom: '0.5rem' }}>
           <button
             onClick={() => navigate('/')}
             style={{
               background: 'var(--card-bg)',
               border: '1px solid var(--card-border)',
               borderRadius: '6px',
-              padding: '0.5rem',
+              padding: 'clamp(0.3rem, 2vw, 0.5rem)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -157,7 +157,7 @@ const Approvals = () => {
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 style={{ color: 'var(--text)', margin: 0 }}>
+          <h1 style={{ color: 'var(--text)', margin: 0, fontSize: 'clamp(1.2rem, 5vw, 2rem)' }}>
             📋 Approval Requests
           </h1>
         </div>
@@ -204,7 +204,7 @@ const Approvals = () => {
                 background: 'var(--card-bg)',
                 border: '1px solid var(--card-border)',
                 borderRadius: '8px',
-                padding: '1.5rem',
+                padding: 'clamp(1rem, 4vw, 1.5rem)',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
               }}
             >
@@ -233,13 +233,13 @@ const Approvals = () => {
               </div>
 
               {/* Request Details */}
-              <div style={{ marginBottom: '1.5rem' }}>
-                <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text)' }}>
+              <div style={{ marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
+                <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text)', fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>
                   <strong>Request Message:</strong>
                 </p>
                 <div style={{
                   background: 'var(--hover-bg)',
-                  padding: '1rem',
+                  padding: 'clamp(0.5rem, 2vw, 1rem)',
                   borderRadius: '6px',
                   border: '1px solid var(--card-border)',
                   color: 'var(--text)'
@@ -251,9 +251,9 @@ const Approvals = () => {
               {/* Contract Info */}
               <div style={{ 
                 background: 'var(--hover-bg)', 
-                padding: '1rem', 
+                padding: 'clamp(0.5rem, 2vw, 1rem)', 
                 borderRadius: '6px',
-                marginBottom: '1.5rem',
+                marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
                 border: '1px solid var(--card-border)'
               }}>
                 <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
@@ -273,9 +273,9 @@ const Approvals = () => {
               {/* Default Response */}
               <div style={{ 
                 background: 'var(--card-bg)', 
-                padding: '1rem', 
+                padding: 'clamp(0.5rem, 2vw, 1rem)', 
                 borderRadius: '6px',
-                marginBottom: '1.5rem',
+                marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
                 border: '1px solid var(--card-border)'
               }}>
                 <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
@@ -295,13 +295,13 @@ const Approvals = () => {
                     background: '#10b981',
                     color: 'white',
                     border: 'none',
-                    padding: '0.75rem 1.5rem',
+                    padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
                     borderRadius: '6px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    fontSize: '0.875rem',
+                    fontSize: 'clamp(0.95rem, 2vw, 1rem)',
                     fontWeight: '500',
                     transition: 'background 0.2s',
                   }}
@@ -318,13 +318,13 @@ const Approvals = () => {
                     background: '#ef4444',
                     color: 'white',
                     border: 'none',
-                    padding: '0.75rem 1.5rem',
+                    padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
                     borderRadius: '6px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    fontSize: '0.875rem',
+                    fontSize: 'clamp(0.95rem, 2vw, 1rem)',
                     fontWeight: '500',
                     transition: 'background 0.2s',
                   }}

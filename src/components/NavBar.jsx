@@ -17,6 +17,7 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef();
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 500);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -89,6 +90,12 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 500);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Don't show on login page
   if (location.pathname === '/login') return null;
 
@@ -96,46 +103,52 @@ const Navbar = () => {
     <nav style={{
       backgroundColor: 'var(--card-bg)',
       color: 'var(--text)',
-      padding: '1rem 2rem',
+      padding: 'clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 4vw, 2rem)',
       borderBottom: '1px solid var(--card-border)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
       position: 'sticky',
-      top: 0,
-      zIndex: 10
+      top: '0',
+      zIndex: 5,
+      boxShadow: darkMode
+      ? '0 2px 8px rgba(255, 255, 255, 0.8)'   // Dark mode shadow (lighter glow)
+      : '0 2px 8px rgba(0, 0, 0, 0.8)', // Light mode shadow
+      maxHeight: 'clamp(32px, 8vw, 48px)'
     }}>
-      <h2 style={{ marginRight: '1rem', fontSize: '1.25rem', fontWeight: 'bold' }}>📁 Contract Manager</h2>
+      <h2 style={{ marginRight: 'clamp(0.5rem, 2vw, 1rem)', fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 'bold' }}>📁 Contract Manager</h2>
       
       
       {user && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span className="text-secondary" style={{ fontSize: '0.9rem'}}>Logged in as <strong>{user.email}</strong></span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 2vw, 1.5rem)' }}>
+          <span className="text-secondary" style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)'}}>Logged in as <strong>{user.email}</strong></span>
           <button
             onClick={handleLogout}
             style={{
               backgroundColor: '#f87171',
               color: '#fff',
               border: 'none',
-              padding: '0.4rem 0.75rem',
+              padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
               borderRadius: '6px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              fontSize: '0.875rem',
+              fontSize: 'clamp(0.75rem, 1.25vw, 1rem)',
+              fontWeight: 500,
             }}
           >
             <LogOut size={16} />
             Logout
           </button>
+          {!isMobile && (
           <div
         style={{
           position: 'sticky',
           top: '15%',
           left: '3.5%',
-          width: '54px',
-          height: '32px',
+          width: 'clamp(36px, 8vw, 54px)',
+          height: 'clamp(24px, 5vw, 32px)',
           background: 'var(--card-bg)',
           borderRadius: '16px',
           border: '1.5px solid var(--card-border)',
@@ -144,7 +157,7 @@ const Navbar = () => {
           cursor: 'pointer',
           transition: 'background 0.2s',
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-          zIndex: 100,
+          zIndex: 10,
           marginLeft: 'auto',
         }}
         onClick={toggleDarkMode}
@@ -156,15 +169,15 @@ const Navbar = () => {
             top: '50%',
             left: darkMode ? '26px' : '4px',
             transform: 'translateY(-50%)',
-            width: '24px',
-            height: '24px',
+            width: 'clamp(18px, 5vw, 24px)',
+            height: 'clamp(18px, 5vw, 24px)',
             borderRadius: '50%',
             background: 'var(--sidebar-hover-bg)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: 'var(--text)',
-            fontSize: '1.2rem',
+            fontSize: 'clamp(1rem, 3vw, 1.2rem)',
             boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
             transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
             zIndex: 2,
@@ -180,6 +193,7 @@ const Navbar = () => {
               <Moon size={14} />
             </span>
           </div>
+          )}
         </div>
       )}
     </nav>

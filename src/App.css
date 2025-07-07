@@ -6,9 +6,19 @@
   text-align: center;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+
+.main-content {
+  padding: 0;
+}
+
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: clamp(2.5em, 8vw, 6em);
+  padding: clamp(0.5em, 3vw, 1.5em);
   will-change: filter;
   transition: filter 300ms;
 }
@@ -20,7 +30,7 @@
 }
 
 .sidebar-container {
-  padding: 1rem;
+  padding: clamp(1rem, 3vw, 2em);
   display: grid;
   align-Items: start;
 }
@@ -59,8 +69,9 @@ button:disabled {
   }
 }
 
-.card {
-  padding: 2em;
+.card, .sidebar-container, .main-content, .content-area {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  padding: clamp(1rem, 3vw, 2em);
 }
 
 .read-the-docs {
@@ -89,7 +100,7 @@ button:disabled {
     top: unset !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: .5px !important;
+    bottom: 0 !important;
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
@@ -108,7 +119,6 @@ button:disabled {
   
   .main-content {
     width: 100% !important;
-    padding: 1rem!important;
     height: calc(100vh - 60px) !important;
   }
   
@@ -251,4 +261,21 @@ button:disabled {
     height: 20px !important;
   }
 
+}
+
+@media (max-width: 900px) {
+  .card, .sidebar-container, .main-content, .content-area {
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    padding: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .card, .sidebar-container, .main-content, .content-area {
+    font-size: clamp(0.85rem, 4vw, 1rem);
+    padding: 0.5rem;
+  }
+  .logo {
+    height: clamp(2em, 12vw, 3em);
+    padding: clamp(0.25em, 2vw, 0.5em);
+  }
 }

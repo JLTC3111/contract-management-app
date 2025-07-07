@@ -472,7 +472,7 @@ useEffect(() => {
   
 
 return (
-    <div style={{ width: '800px', margin: '0 auto' }}>
+    <div style={{ width: 'clamp(280px, 95vw, 800px)', margin: '0 auto' }}>
       {/* Back button in top-right when NOT editing */}
       {!editMode && canEdit && (
         <div
@@ -486,7 +486,7 @@ return (
         <button
             onClick={() => navigate(-1)}
             style={{
-              padding: '0.5rem 1rem',
+              padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
@@ -577,7 +577,7 @@ return (
 
       {/* Main content - Full width, aligned to far left */}
       <div style={{ 
-        padding: '2rem', 
+        padding: 'clamp(1rem, 4vw, 2rem)', 
         maxWidth: '100%', 
         width: '100%',
         textAlign: 'left',
@@ -591,9 +591,10 @@ return (
               type="text"
               value={updated.title}
               onChange={(e) => handleChange('title', e.target.value)}
+              style={{ fontSize: 'clamp(1.1rem, 4vw, 2rem)' }}
             />
           ) : (
-            contract.title
+            <span style={{ fontSize: 'clamp(1.1rem, 4vw, 2rem)' }}>{contract.title}</span>
           )}
         </h2>
   
@@ -604,6 +605,7 @@ return (
               className="table-filter-input"
               value={updated.status}
               onChange={(e) => handleChange('status', e.target.value)}
+              style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}
             >
               <option value="draft">Draft</option>
               <option value="pending">Pending</option>
@@ -625,6 +627,7 @@ return (
               type="text"
               value={updated.version}
               onChange={(e) => handleChange('version', e.target.value)}
+              style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}
             />
           ) : (
             contract.version
@@ -633,7 +636,7 @@ return (
   
         <p>
           <strong>Last Updated:</strong>{' '}
-          {new Date(contract.updated_at).toLocaleString()}
+          <span style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>{new Date(contract.updated_at).toLocaleString()}</span>
         </p>
   
         <p>
@@ -644,9 +647,10 @@ return (
               type="date"
               value={updated.expiry_date ? updated.expiry_date.slice(0, 10) : ''}
               onChange={e => handleChange('expiry_date', e.target.value)}
+              style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}
             />
           ) : (
-            contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString() : '—'
+            <span style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString() : '—'}</span>
           )}
         </p>
   
@@ -660,9 +664,10 @@ return (
               type="text"
               value={updated.author}
               onChange={(e) => handleChange('author', e.target.value)}
+              style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}
             />
           ) : (
-            contract.author
+            <span style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{contract.author}</span>
           )}
         </p>
         

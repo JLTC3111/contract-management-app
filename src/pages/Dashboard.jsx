@@ -218,7 +218,7 @@ const Dashboard = () => {
           <main style={{ padding: '2rem', flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <h1 style={{
-                fontSize: '2.5rem',
+                fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
                 fontWeight: 'bold',
                 color: 'var(--text)',
                 textShadow: darkMode ? `
@@ -236,7 +236,7 @@ const Dashboard = () => {
                 transformStyle: 'preserve-3d',
                 letterSpacing: '2px',
                 margin: 0,
-                padding: '0.5rem 0',
+                padding: 'clamp(0.25rem, 2vw, 0.5rem) 0',
                 transition: 'all 0.3s ease',
                 cursor: 'default'
               }}
@@ -339,13 +339,13 @@ const Dashboard = () => {
                       onChange={e => { setSearchTerm(e.target.value); setShowDropdown(true); }}
                       onFocus={() => setShowDropdown(true)}
                       style={{
-                        width: 280,
-                        padding: '0.5rem 1rem',
+                        width: 'clamp(180px, 40vw, 280px)',
+                        padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
                         borderRadius: 8,
                         border: '1.5px solid var(--card-border)',
                         background: 'var(--card-bg)',
                         color: 'var(--text, #fff)',
-                        fontSize: '1rem',
+                        fontSize: 'clamp(0.95rem, 2vw, 1rem)',
                         outline: 'none',
                         boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
                         transition: 'border 0.2s, background 0.2s, color 0.2s',
@@ -420,9 +420,9 @@ const Dashboard = () => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       style={{
-                        padding: '.5rem 1rem',
-                        width: 280,
-                        fontSize: '1rem',
+                        padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
+                        width: 'clamp(180px, 40vw, 280px)',
+                        fontSize: 'clamp(0.95rem, 2vw, 1rem)',
                         borderRadius: 8,
                         border: '1.5px solid var(--card-border)',
                         background: 'var(--card-bg)',

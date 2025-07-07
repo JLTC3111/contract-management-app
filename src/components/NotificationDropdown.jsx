@@ -276,8 +276,8 @@ const NotificationDropdown = () => {
             position: 'absolute',
             top: '100%',
             right: 0,
-            width: '400px',
-            maxHeight: '500px',
+            width: 'clamp(220px, 60vw, 400px)',
+            maxHeight: 'clamp(320px, 70vh, 500px)',
             background: 'var(--card-bg)',
             border: '1.5px solid var(--card-border)',
             borderRadius: '8px',
@@ -292,14 +292,14 @@ const NotificationDropdown = () => {
           {/* Header */}
           <div
             style={{
-              padding: '1rem',
+              padding: 'clamp(0.7rem, 2vw, 1rem)',
               borderBottom: '1px solid var(--card-border)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            <h3 style={{ margin: 0, color: 'var(--text)' }}>
+            <h3 style={{ margin: 0, color: 'var(--text)', fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}>
               {user.role === 'editor' ? 'Notifications' : 'Approval Requests'}
             </h3>
             <button
@@ -309,7 +309,7 @@ const NotificationDropdown = () => {
                 border: 'none',
                 color: 'var(--text-secondary)',
                 cursor: 'pointer',
-                padding: '0.25rem',
+                padding: 'clamp(0.2rem, 1vw, 0.5rem)',
               }}
             >
               <X size={16} />
@@ -317,7 +317,7 @@ const NotificationDropdown = () => {
           </div>
 
           {/* Content */}
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+          <div style={{ maxHeight: 'clamp(220px, 50vh, 400px)', overflowY: 'auto', fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>
             {user.role === 'editor' ? (
               // Editor view - show comments
               commentNotifications.length === 0 ? (

@@ -11,14 +11,18 @@ const Approvals = ({ contractId, contract, onStatusUpdate }) => {
 
   return (
     <div style={{ 
-      padding: '1.5rem', 
+      padding: 'clamp(1rem, 3vw, 1.5rem)', 
       background: 'var(--card-bg)', 
       border: '1px solid var(--card-border)', 
-      borderRadius: '8px',
+      borderRadius: 'clamp(8px, 2vw, 16px)',
       boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-      marginBottom: '2rem'
+      marginBottom: 'clamp(1rem, 4vw, 2rem)',
+      fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
+      width: '100%',
+      maxWidth: '100%',
+      boxSizing: 'border-box',
     }}>
-      <h3 style={{ marginBottom: '1rem', color: 'var(--text)' }}>
+      <h3 style={{ marginBottom: 'clamp(0.5rem, 2vw, 1rem)', color: 'var(--text)', fontSize: 'clamp(1.1rem, 3vw, 1.5rem)' }}>
         📋 {user.role === 'editor' ? 'Editor' : 'Admin'} Actions
       </h3>
       

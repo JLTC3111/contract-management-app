@@ -55,16 +55,16 @@ const NewContract = () => {
   };
 
   return (
-    <div style={{ padding: '1.5rem'}}>
+    <div style={{ padding: 'clamp(1rem, 4vw, 1.5rem)'}}>
       {/* Back Button */}
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: 'clamp(0.5rem, 3vw, 1rem)' }}>
         <button
           onClick={() => navigate('/')}
           style={{
             background: 'var(--card-bg)',
             border: '1px solid var(--card-border)',
             borderRadius: '6px',
-            padding: '0.5rem',
+            padding: 'clamp(0.3rem, 2vw, 0.5rem)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -83,22 +83,59 @@ const NewContract = () => {
         </button>
       </div>
       
-      <h2>New Contract</h2>
+      <h2 style={{ fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>New Contract</h2>
       {!contract ? (
-        <><div style={{display:'flex', gap:'10px', marginBottom: '.5rem'}}>
+        <><div style={{display:'flex', flexWrap:'wrap', gap:'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)'}}>
           <input 
             type="text"
             placeholder="Contract Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            style={{
+              fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+              padding: 'clamp(0.5rem, 2vw, 0.75rem)',
+              borderRadius: '8px',
+              border: '1.5px solid var(--card-border)',
+              background: 'var(--card-bg)',
+              color: 'var(--text)',
+              outline: 'none',
+              flex: 1,
+              minWidth: 'clamp(120px, 30vw, 200px)',
+              boxSizing: 'border-box',
+            }}
           />
           <input
             type="text"
             placeholder="Version (e.g. v1.0)"
             value={version}
             onChange={(e) => setVersion(e.target.value)}
+            style={{
+              fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+              padding: 'clamp(0.5rem, 2vw, 0.75rem)',
+              borderRadius: '8px',
+              border: '1.5px solid var(--card-border)',
+              background: 'var(--card-bg)',
+              color: 'var(--text)',
+              outline: 'none',
+              flex: 1,
+              minWidth: 'clamp(100px, 20vw, 160px)',
+              boxSizing: 'border-box',
+            }}
           />
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <select value={status} onChange={(e) => setStatus(e.target.value)}
+            style={{
+              fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+              padding: 'clamp(0.5rem, 2vw, 0.75rem)',
+              borderRadius: '8px',
+              border: '1.5px solid var(--card-border)',
+              background: 'var(--card-bg)',
+              color: 'var(--text)',
+              outline: 'none',
+              flex: 1,
+              minWidth: 'clamp(100px, 20vw, 160px)',
+              boxSizing: 'border-box',
+            }}
+          >
             <option value="draft">Draft</option>
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
@@ -106,21 +143,21 @@ const NewContract = () => {
             <option value="expiring">Expiring Soon</option>
             <option value="expired">Expired</option>
           </select>
-          <button onClick={handleCreateContract} style={{ background:'#ddd' }}>Create Contract</button>
+          <button onClick={handleCreateContract} style={{ background:'#ddd', fontSize: 'clamp(0.95rem, 2vw, 1rem)', padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)', borderRadius: '6px' }}>Create Contract</button>
           </div>
         </>
       ) : (
         <>
-          <p>Contract created! Now upload a file:</p>
-          <div style={{ marginBottom: '1rem' }}>
+          <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>Contract created! Now upload a file:</p>
+          <div style={{ marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
             <FileUploader contract={contract} onUploadComplete={handleUploadComplete} />
-            {uploading && <p>Updating contract with file...</p>}
+            {uploading && <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>Updating contract with file...</p>}
           </div>
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', flexWrap:'wrap', gap: 'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
             <button
               onClick={() => navigate(-1)}
               style={{
-                padding: '0.5rem 1rem',
+                padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
@@ -128,6 +165,7 @@ const NewContract = () => {
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
+                fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               }}
             >
               <ArrowLeft size={18} /> Back
@@ -135,7 +173,7 @@ const NewContract = () => {
             <button
               onClick={() => navigate('/')}
               style={{
-                padding: '0.5rem 1rem',
+                padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
@@ -144,7 +182,7 @@ const NewContract = () => {
                 borderRadius: '4px',
                 cursor: 'pointer',
                 fontWeight: 'normal',
-                fontSize: '1rem',
+                fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               }}
             >
               Done
