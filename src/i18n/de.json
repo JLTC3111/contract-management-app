@@ -1,0 +1,119 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "approvals": "Genehmigungen",
+    "manual": "Handbuch",
+    "sendFeedback": "Feedback senden",
+    "changePassword": "Passwort ändern",
+    "profile": "Profil",
+    "signOut": "Abmelden",
+    "updateStatus": "Status aktualisieren",
+    "home": "Startseite"
+  },
+  "buttons": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "edit": "Bearbeiten",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen",
+    "back": "Zurück",
+    "newContract": "Neuer Vertrag",
+    "light": "Heller Modus",
+    "dark": "Dunkler Modus"
+  },
+  "headers": {
+    "userManual": "Benutzerhandbuch",
+    "changePassword": "Passwort ändern"
+  },
+  "status": {
+    "approved": "Genehmigt",
+    "pending": "Ausstehend",
+    "draft": "Entwurf",
+    "rejected": "Abgelehnt",
+    "expired": "Abgelaufen",
+    "expiring": "Läuft bald ab"
+  },
+  "table": {
+    "title": "Titel",
+    "status": "Status",
+    "version": "Version",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "author": "Autor",
+    "expiryDate": "Ablaufdatum",
+    "all": "Alle",
+    "clear": "Löschen",
+    "filterByTitle": "Nach Titel filtern",
+    "noContractsFound": "Keine Verträge gefunden."
+  },
+  "metrics": {
+    "active": "Aktiv",
+    "pending": "Ausstehend",
+    "expiring": "Läuft bald ab",
+    "drafts": "Entwürfe",
+    "rejected": "Abgelehnt",
+    "expired": "Abgelaufen",
+    "noMetricsAvailable": "Keine Metriken verfügbar."
+  },
+  "common": {
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "edit": "Bearbeiten",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen",
+    "back": "Zurück",
+    "done": "Fertig"
+  },
+  "noPendingRequests": "Keine ausstehenden Anfragen",
+  "approvalRequests": {
+    "title": "Titel",
+    "status": "Status",
+    "version": "Version",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "author": "Autor",
+    "expiryDate": "Ablaufdatum"
+  },
+  "managePendingApprovalRequestsFromEditors": "Verwalten Sie ausstehende Genehmigungsanfragen von Editoren",
+  "currentlyNoApprovalRequestsWaitingForYourReview": "Derzeit warten keine Genehmigungsanfragen auf Ihre Überprüfung.",
+  "home": "Startseite",
+  "dashboard": {
+    "title": "Dashboard",
+    "approvalRequests": "Genehmigungsanfragen",
+    "searchFiles": "Dateien oder Ordner suchen...",
+    "searchContracts": "Verträge suchen..."
+  },
+  "contractTable": {
+    "title": "Titel",
+    "status": {
+      "draft": "Entwurf",
+      "approved": "Genehmigt",
+      "pending": "Ausstehend",
+      "rejected": "Abgelehnt",
+      "expiring": "Läuft bald ab"
+    },
+    "version": "Version",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "author": "Autor",
+    "expiryDate": "Ablaufdatum",
+    "headerStatus": "Status"
+  },
+  "newContract": "Neuer Vertrag",
+  "createContract": "Vertrag erstellen",
+  "edit": "Bearbeiten",
+  "save": "Speichern",
+  "cancel": "Abbrechen",
+  "delete": "Löschen",
+  "deleteContract": "Vertrag löschen",
+  "createFolder": "Ordner erstellen",
+  "contractTitle": "Vertragstitel",
+  "filterByTitle": "Nach Titel filtern...",
+  "no_pending_approval_requests": "Keine ausstehenden Genehmigungsanfragen.",
+  "accessDenied": "Zugriff verweigert",
+  "noPermissionToViewApprovalRequests": "Sie haben keine Berechtigung, Genehmigungsanfragen anzuzeigen.",
+  "loadingApprovalRequests": "Genehmigungsanfragen werden geladen...",
+  "requestedBy": "Angefordert von"
+} 

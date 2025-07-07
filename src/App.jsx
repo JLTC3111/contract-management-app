@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import NewContract from './pages/NewContract';
 import Approvals from './pages/Approvals';
+import ManualViewer from './components/ManualViewer';
 
 import Layout from './components/Layout'; // 👈 Add this
 import './index.css';
@@ -29,6 +30,9 @@ function App() {
           <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
           <Route path="/approvals" element={<Approvals />} />
         </Route>
+
+        {/* Manual route outside sidebar layout */}
+        <Route path="/manual" element={<ManualViewer />} />
 
         {/* Optional: Login Route - if you want to support logout redirect */}
         <Route path="/login" element={<Login />} />

@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { Check, X, Clock, FileText, User, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const Approvals = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   const [approvalRequests, setApprovalRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   // Fetch all pending approval requests
   const fetchApprovalRequests = async () => {
@@ -124,8 +126,8 @@ const Approvals = () => {
   if (!user || (user.role !== 'admin' && user.role !== 'approver')) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <h2>Access Denied</h2>
-        <p>You don't have permission to view approval requests.</p>
+        <h2>{t('accessDenied')}</h2>
+        <p>{t('noPermissionToViewApprovalRequests')}</p>
       </div>
     );
   }
@@ -157,12 +159,12 @@ const Approvals = () => {
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 style={{ color: 'var(--text)', margin: 0, fontSize: 'clamp(1.2rem, 5vw, 2rem)' }}>
-            📋 Approval Requests
+          <h1 style={{ color: 'var(--text)', margin: 0, fontSize: 'clamp(1.2rem, 5vw, 2rem)'}}>
+            📋 {t('approvalRequests.title')}
           </h1>
         </div>
         <p style={{ color: 'var(--text-secondary)', margin: 0 }}>
-          Manage pending approval requests from editors
+          {t('managePendingApprovalRequestsFromEditors')}
         </p>
       </div>
 
@@ -175,7 +177,7 @@ const Approvals = () => {
           color: 'var(--text-secondary)'
         }}>
           <Clock size={24} style={{ marginRight: '0.5rem' }} />
-          Loading approval requests...
+          {t('loadingApprovalRequests')}
         </div>
       ) : approvalRequests.length === 0 ? (
         <div style={{ 
@@ -190,9 +192,9 @@ const Approvals = () => {
           borderRadius: '8px'
         }}>
           <Clock size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
-          <h3 style={{ margin: '0 0 0.5rem 0' }}>No Pending Requests</h3>
+          <h3 style={{ margin: '0 0 0.5rem 0' }}>{t('noPendingRequests')}</h3>
           <p style={{ margin: 0, textAlign: 'center' }}>
-            There are currently no approval requests waiting for your review.
+            {t('currentlyNoApprovalRequestsWaitingForYourReview')}
           </p>
         </div>
       ) : (
@@ -217,7 +219,7 @@ const Approvals = () => {
                   </h3>
                   <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
                     <User size={14} style={{ marginRight: '0.25rem', verticalAlign: 'middle' }} />
-                    Requested by: {request.requester_email}
+                    {t('requestedBy')} {request.requester_email}
                   </p>
                 </div>
                 <span style={{
@@ -228,14 +230,14 @@ const Approvals = () => {
                   fontSize: '0.75rem',
                   fontWeight: '500'
                 }}>
-                  Pending
+                  {t('pending')}
                 </span>
               </div>
 
               {/* Request Details */}
               <div style={{ marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
                 <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text)', fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>
-                  <strong>Request Message:</strong>
+                  <strong>{t('requestMessage')}:</strong>
                 </p>
                 <div style={{
                   background: 'var(--hover-bg)',
@@ -257,16 +259,16 @@ const Approvals = () => {
                 border: '1px solid var(--card-border)'
               }}>
                 <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  <strong>Contract Details:</strong>
+                  <strong>{t('contractDetails')}:</strong>
                 </p>
                 <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  • Status: {request.contracts?.status || 'Unknown'}
+                  • {t('status')}: {request.contracts?.status || 'Unknown'}
                 </p>
                 <p style={{ margin: '0.25rem 0 0 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  • Updated: {new Date(request.contracts?.updated_at).toLocaleDateString()}
+                  • {t('updated')}: {new Date(request.contracts?.updated_at).toLocaleDateString()}
                 </p>
                 <p style={{ margin: '0.25rem 0 0 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  • Request Date: {new Date(request.created_at).toLocaleDateString()}
+                  • {t('requestDate')}: {new Date(request.created_at).toLocaleDateString()}
                 </p>
               </div>
 
@@ -279,10 +281,10 @@ const Approvals = () => {
                 border: '1px solid var(--card-border)'
               }}>
                 <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  <strong>Default Approval Response:</strong>
+                  <strong>{t('defaultApprovalResponse')}:</strong>
                 </p>
                 <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem', fontStyle: 'italic' }}>
-                  "I have reviewed this contract and found it to be compliant with our standards. All terms and conditions have been verified and are acceptable for approval."
+                  "{t('defaultApprovalResponseText')}"
                 </p>
               </div>
 
@@ -309,7 +311,7 @@ const Approvals = () => {
                   onMouseLeave={(e) => e.target.style.background = '#10b981'}
                 >
                   <Check size={16} />
-                  Approve
+                  {t('approve')}
                 </button>
                 <button
                   onClick={() => handleApprovalAction(request.id, 'reject')}
@@ -332,7 +334,7 @@ const Approvals = () => {
                   onMouseLeave={(e) => e.target.style.background = '#ef4444'}
                 >
                   <X size={16} />
-                  Reject
+                  {t('reject')}
                 </button>
               </div>
             </div>

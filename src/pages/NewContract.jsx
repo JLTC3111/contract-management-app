@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import FileUploader from '../components/FileUploader';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const NewContract = () => {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [status, setStatus] = useState('draft');
   const [version, setVersion] = useState('v1.0');
@@ -83,12 +85,12 @@ const NewContract = () => {
         </button>
       </div>
       
-      <h2 style={{ fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>New Contract</h2>
+      <h2 style={{ fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>{t('newContract')}</h2>
       {!contract ? (
         <><div style={{display:'flex', flexWrap:'wrap', gap:'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)'}}>
           <input 
             type="text"
-            placeholder="Contract Title"
+            placeholder={t('contractTitle')}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             style={{
@@ -106,7 +108,7 @@ const NewContract = () => {
           />
           <input
             type="text"
-            placeholder="Version (e.g. v1.0)"
+            placeholder={t('version')}
             value={version}
             onChange={(e) => setVersion(e.target.value)}
             style={{
@@ -136,22 +138,22 @@ const NewContract = () => {
               boxSizing: 'border-box',
             }}
           >
-            <option value="draft">Draft</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-            <option value="expiring">Expiring Soon</option>
-            <option value="expired">Expired</option>
+            <option value="draft">{t('draft')}</option>
+            <option value="pending">{t('pending')}</option>
+            <option value="approved">{t('approved')}</option>
+            <option value="rejected">{t('rejected')}</option>
+            <option value="expiring">{t('expiring')}</option>
+            <option value="expired">{t('expired')}</option>
           </select>
-          <button onClick={handleCreateContract} style={{ background:'#ddd', fontSize: 'clamp(0.95rem, 2vw, 1rem)', padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)', borderRadius: '6px' }}>Create Contract</button>
+          <button onClick={handleCreateContract} style={{ background:'#ddd', fontSize: 'clamp(0.95rem, 2vw, 1rem)', padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)', borderRadius: '6px' }}>{t('createContract')}</button>
           </div>
         </>
       ) : (
         <>
-          <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>Contract created! Now upload a file:</p>
+          <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{t('contractCreated')}</p>
           <div style={{ marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
             <FileUploader contract={contract} onUploadComplete={handleUploadComplete} />
-            {uploading && <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>Updating contract with file...</p>}
+            {uploading && <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{t('updatingContract')}</p>}
           </div>
           <div style={{ display: 'flex', flexWrap:'wrap', gap: 'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
             <button
@@ -168,7 +170,7 @@ const NewContract = () => {
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               }}
             >
-              <ArrowLeft size={18} /> Back
+              <ArrowLeft size={18} /> {t('back')}
             </button>
             <button
               onClick={() => navigate('/')}
@@ -185,7 +187,7 @@ const NewContract = () => {
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               }}
             >
-              Done
+              {t('done')}
             </button>
           </div>
         </>

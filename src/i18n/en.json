@@ -1,0 +1,117 @@
+{
+  "sidebar": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "approvals": "Approvals",
+    "manual": "Manual",
+    "sendFeedback": "Send Feedback",
+    "changePassword": "Change Password",
+    "profile": "Profile",
+    "signOut": "Sign Out",
+    "updateStatus": "Update Status"
+  },
+  "buttons": {
+    "login": "Log In",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "approve": "Approve",
+    "reject": "Reject",
+    "back": "Back",
+    "newContract": "New Contract",
+    "light": "Light Mode",
+    "dark": "Dark Mode"
+  },
+  "headers": {
+    "userManual": "User Manual",
+    "changePassword": "Change Password"
+  },
+  "status": {
+    "approved": "Approved",
+    "pending": "Pending",
+    "draft": "Draft",
+    "rejected": "Rejected",
+    "expired": "Expired",
+    "expiring": "Expiring Soon"
+  },
+  "table": {
+    "title": "Title",
+    "status": "Status",
+    "version": "Version",
+    "lastUpdated": "Last Updated",
+    "author": "Author",
+    "expiryDate": "Expiry Date",
+    "all": "All",
+    "clear": "Clear",
+    "filterByTitle": "Filter by title",
+    "noContractsFound": "No contracts found."
+  },
+  "metrics": {
+    "active": "Active",
+    "pending": "Pending",
+    "expiring": "Expiring Soon",
+    "drafts": "Drafts",
+    "rejected": "Rejected",
+    "expired": "Expired",
+    "noMetricsAvailable": "No metrics available."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "approve": "Approve",
+    "reject": "Reject",
+    "back": "Back",
+    "done": "Done"
+  },
+  "noPendingRequests": "No Pending Requests",
+  "approvalRequests": {
+    "title": "Title",
+    "status": "Status",
+    "version": "Version",
+    "lastUpdated": "Last Updated",
+    "author": "Author",
+    "expiryDate": "Expiry Date"
+  },
+  "managePendingApprovalRequestsFromEditors": "Manage pending approval requests from editors",
+  "currentlyNoApprovalRequestsWaitingForYourReview": "There are currently no approval requests waiting for your review.",
+  "home": "Home",
+  "dashboard": {
+    "title": "Dashboard",
+    "approvalRequests": "Approval Requests",
+    "searchFiles": "Search files or folders...",
+    "searchContracts": "Search contracts..."
+  },
+  "clear": "Clear",
+  "contractTable": {
+    "title": "Title",
+    "status": {
+      "draft": "Draft",
+      "approved": "Approved",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "expiring": "Expiring Soon"
+    },
+    "version": "Version",
+    "lastUpdated": "Last Updated",
+    "author": "Author",
+    "expiryDate": "Expiry Date",
+    "headerStatus": "Status"
+  },
+  "newContract": "New Contract",
+  "createContract": "Create Contract",
+  "delete": "Delete",
+  "deleteContract": "Delete Contract",
+  "createFolder": "Create Folder",
+  "contractTitle": "Contract Title",
+  "filterByTitle": "Filter by title...",
+  "no_pending_approval_requests": "No pending approval requests.",
+  "accessDenied": "Access Denied",
+  "noPermissionToViewApprovalRequests": "You do not have permission to view approval requests.",
+  "loadingApprovalRequests": "Loading approval requests...",
+  "requestedBy": "Requested by"
+} 

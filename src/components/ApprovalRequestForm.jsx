@@ -3,6 +3,7 @@ import { Send, Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 // Centralized Supabase insert helper
 const insertToSupabase = async (table, payload) => {
@@ -29,6 +30,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
   const [showForm, setShowForm] = useState(false);
   const [approvalMessage, setApprovalMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const { t } = useTranslation();
 
   // Check if user already has a pending approval request
   const hasPendingRequest = contract.status === 'pending';
@@ -36,12 +38,12 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
   // Submit approval request with better error handling
   const handleSubmitApprovalRequest = async () => {
     if (!approvalMessage.trim()) {
-      toast.error('Please enter a message for the approval request');
+      toast.error(t('Please enter a message for the approval request'));
       return;
     }
 
     if (hasPendingRequest) {
-      toast.error('Contract is already pending approval');
+      toast.error(t('Contract is already pending approval'));
       return;
     }
 
@@ -69,9 +71,9 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
           hint: contractError.hint,
           code: contractError.code
         });
-        toast.error('Approval request sent but failed to update contract status');
+        toast.error(t('Approval request sent but failed to update contract status'));
       } else {
-        toast.success('Approval request submitted successfully!');
+        toast.success(t('Approval request submitted successfully!'));
         setApprovalMessage('');
         setShowForm(false);
         onStatusUpdate && onStatusUpdate('pending');
@@ -87,13 +89,13 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
       
       // More specific error messages
       if (err.message?.includes('duplicate key')) {
-        toast.error('Approval request already exists for this contract');
+        toast.error(t('Approval request already exists for this contract'));
       } else if (err.message?.includes('foreign key')) {
-        toast.error('Invalid contract or user reference');
+        toast.error(t('Invalid contract or user reference'));
       } else if (err.message?.includes('permission')) {
-        toast.error('Permission denied. Please check your access rights.');
+        toast.error(t('Permission denied. Please check your access rights.'));
       } else {
-        toast.error(`Failed to submit approval request: ${err.message || err.details || 'Database error'}`);
+        toast.error(t(`Failed to submit approval request: ${err.message || err.details || 'Database error'}`));
       }
     } finally {
       setSubmitting(false);
@@ -109,7 +111,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
         <button
           onClick={() => setShowForm(true)}
           disabled={hasPendingRequest}
-          aria-label={hasPendingRequest ? 'Approval already pending' : 'Send approval request'}
+          aria-label={hasPendingRequest ? t('Approval already pending') : t('Send approval request')}
           style={{
             backgroundColor: hasPendingRequest ? '#e5e7eb' : '#3b82f6',
             color: hasPendingRequest ? '#6b7280' : '#fff',
@@ -120,7 +122,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
             opacity: hasPendingRequest ? 0.6 : 1,
           }}
         >
-          📤 Send Approval Request
+          📤 {t('Send Approval Request')}
         </button>
       ) : (
         <div style={{ 
@@ -130,14 +132,14 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
           border: '1px solid var(--card-border)'
         }}>
           <label htmlFor="approval-message" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text)' }}>
-            Approval Message:
+            {t('Approval Message:')}
           </label>
           <textarea
             id="approval-message"
             value={approvalMessage}
             onChange={(e) => setApprovalMessage(e.target.value)}
-            placeholder="Enter your message for the approval request..."
-            aria-label="Approval request message"
+            placeholder={t('Enter your message for the approval request...')}
+            aria-label={t('Approval request message')}
             style={{
               width: '100%',
               minHeight: '80px',
@@ -154,7 +156,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
             <button
               onClick={handleSubmitApprovalRequest}
               disabled={submitting || !approvalMessage.trim()}
-              aria-label={submitting ? 'Sending approval request...' : 'Send approval request'}
+              aria-label={submitting ? t('Sending approval request...') : t('Send approval request')}
               style={{
                 backgroundColor: submitting || !approvalMessage.trim() ? '#e5e7eb' : '#10b981',
                 color: submitting || !approvalMessage.trim() ? '#6b7280' : '#fff',
@@ -168,14 +170,14 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
               }}
             >
               {submitting ? <LoadingSpinner size={14} /> : null}
-              {submitting ? 'Sending...' : '📤 Send Request'}
+              {submitting ? t('Sending...') : t('📤 Send Request')}
             </button>
             <button
               onClick={() => {
                 setShowForm(false);
                 setApprovalMessage('');
               }}
-              aria-label="Cancel approval request"
+              aria-label={t('Cancel approval request')}
               style={{
                 backgroundColor: '#e5e7eb',
                 color: '#374151',
@@ -185,7 +187,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
                 cursor: 'pointer',
               }}
             >
-              Cancel
+              {t('Cancel')}
             </button>
           </div>
         </div>

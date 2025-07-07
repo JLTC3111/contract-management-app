@@ -1,0 +1,122 @@
+{
+  "sidebar": {
+    "dashboard": "Bảng điều khiển",
+    "approvals": "Phê duyệt",
+    "manual": "Hướng dẫn",
+    "sendFeedback": "Gửi phản hồi",
+    "changePassword": "Đổi mật khẩu",
+    "profile": "Hồ sơ",
+    "signOut": "Đăng xuất",
+    "updateStatus": "Cập nhật trạng thái",
+    "home": "Trang chủ"
+  },
+  "buttons": {
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "edit": "Chỉnh sửa",
+    "approve": "Phê duyệt",
+    "reject": "Từ chối",
+    "back": "Quay lại",
+    "newContract": "Hợp đồng mới",
+    "light": "Chế độ sáng",
+    "dark": "Chế độ tối"
+  },
+  "headers": {
+    "userManual": "Hướng dẫn sử dụng",
+    "changePassword": "Đổi mật khẩu"
+  },
+  "status": {
+    "approved": "Đã phê duyệt",
+    "pending": "Chờ duyệt",
+    "draft": "Bản nháp",
+    "rejected": "Bị từ chối",
+    "expired": "Đã hết hạn",
+    "expiring": "Sắp hết hạn"
+  },
+  "table": {
+    "title": "Tiêu đề",
+    "status": "Trạng thái",
+    "version": "Phiên bản",
+    "lastUpdated": "Cập nhật lần cuối",
+    "author": "Tác giả",
+    "expiryDate": "Ngày hết hạn",
+    "all": "Tất cả",
+    "clear": "Xóa",
+    "filterByTitle": "Lọc theo tiêu đề",
+    "noContractsFound": "Không tìm thấy hợp đồng nào."
+  },
+  "metrics": {
+    "active": "Đang hoạt động",
+    "pending": "Đang chờ",
+    "expiring": "Sắp hết hạn",
+    "drafts": "Bản nháp",
+    "rejected": "Bị từ chối",
+    "expired": "Đã hết hạn",
+    "noMetricsAvailable": "Không có số liệu nào."
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "edit": "Chỉnh sửa",
+    "approve": "Phê duyệt",
+    "reject": "Từ chối",
+    "back": "Quay lại",
+    "done": "Xong"
+  },
+  "noPendingRequests": "Không có yêu cầu nào đang chờ xử lý",
+  "approvalRequests": {
+    "title": "Tiêu đề",
+    "status": "Trạng thái",
+    "version": "Phiên bản",
+    "lastUpdated": "Cập nhật lần cuối",
+    "author": "Tác giả",
+    "expiryDate": "Ngày hết hạn"
+  },
+  "managePendingApprovalRequestsFromEditors": "Quản lý các yêu cầu phê duyệt đang chờ từ biên tập viên",
+  "currentlyNoApprovalRequestsWaitingForYourReview": "Hiện không có yêu cầu phê duyệt nào đang chờ bạn xem xét.",
+  "home": "Trang chủ",
+  "dashboard": {
+    "title": "Bảng điều khiển",
+    "approvalRequests": "Yêu cầu phê duyệt",
+    "searchFiles": "Tìm kiếm tệp hoặc thư mục...",
+    "searchContracts": "Tìm kiếm hợp đồng..."
+  },
+  "clear": "Xóa",
+  "contractTable": {
+    "title": "Tiêu đề",
+    "headerStatus": "Trạng thái",
+    "status": {
+      "expired": "Đã hết hạn",
+      "status": "Trạng thái",
+      "draft": "Nháp",
+      "approved": "Đã duyệt",
+      "pending": "Đang chờ",
+      "rejected": "Bị từ chối",
+      "expiring": "Sắp hết hạn"
+    },
+    "version": "Phiên bản",
+    "lastUpdated": "Cập nhật lần cuối",
+    "author": "Tác giả",
+    "expiryDate": "Ngày hết hạn"
+  },
+  "newContract": "Hợp đồng mới",
+  "createContract": "Tạo hợp đồng",
+  "edit": "Chỉnh sửa",
+  "save": "Lưu",
+  "cancel": "Hủy",
+  "delete": "Xóa",
+  "deleteContract": "Xóa hợp đồng",
+  "createFolder": "Tạo thư mục",
+  "contractTitle": "Tiêu đề hợp đồng",
+  "filterByTitle": "Lọc theo tiêu đề...",
+  "no_pending_approval_requests": "Không có yêu cầu phê duyệt nào đang chờ xử lý.",
+  "accessDenied": "Từ chối truy cập",
+  "noPermissionToViewApprovalRequests": "Bạn không có quyền xem các yêu cầu phê duyệt.",
+  "loadingApprovalRequests": "Đang tải các yêu cầu phê duyệt...",
+  "requestedBy": "Yêu cầu bởi"
+} 

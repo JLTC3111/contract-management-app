@@ -1,0 +1,120 @@
+{
+  "sidebar": {
+    "dashboard": "ダッシュボード",
+    "approvals": "承認",
+    "manual": "マニュアル",
+    "sendFeedback": "フィードバックを送信",
+    "changePassword": "パスワードを変更",
+    "profile": "プロフィール",
+    "signOut": "ログアウト",
+    "updateStatus": "ステータスを更新",
+    "home": "ホーム"
+  },
+  "buttons": {
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "edit": "編集",
+    "approve": "承認",
+    "reject": "却下",
+    "back": "戻る",
+    "newContract": "新しい契約",
+    "light": "ライトモード",
+    "dark": "ダークモード"
+  },
+  "headers": {
+    "userManual": "ユーザーマニュアル",
+    "changePassword": "パスワードを変更"
+  },
+  "status": {
+    "approved": "承認済み",
+    "pending": "保留中",
+    "draft": "下書き",
+    "rejected": "却下",
+    "expired": "期限切れ",
+    "expiring": "まもなく期限切れ"
+  },
+  "table": {
+    "title": "タイトル",
+    "status": "ステータス",
+    "version": "バージョン",
+    "lastUpdated": "最終更新日",
+    "author": "作成者",
+    "expiryDate": "有効期限",
+    "all": "すべて",
+    "clear": "クリア",
+    "filterByTitle": "タイトルで絞り込む",
+    "noContractsFound": "契約が見つかりません。"
+  },
+  "metrics": {
+    "active": "有効",
+    "pending": "保留中",
+    "expiring": "まもなく期限切れ",
+    "drafts": "下書き",
+    "rejected": "却下",
+    "expired": "期限切れ",
+    "noMetricsAvailable": "利用可能なメトリクスがありません。"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "edit": "編集",
+    "approve": "承認",
+    "reject": "却下",
+    "back": "戻る",
+    "done": "完了"
+  },
+  "noPendingRequests": "保留中のリクエストはありません",
+  "approvalRequests": {
+    "title": "タイトル",
+    "status": "ステータス",
+    "version": "バージョン",
+    "lastUpdated": "最終更新日",
+    "author": "作成者",
+    "expiryDate": "有効期限"
+  },
+  "managePendingApprovalRequestsFromEditors": "エディターからの保留中の承認リクエストを管理する",
+  "currentlyNoApprovalRequestsWaitingForYourReview": "現在、承認待ちのリクエストはありません。",
+  "home": "ホーム",
+  "dashboard": {
+    "title": "ダッシュボード",
+    "approvalRequests": "承認リクエスト",
+    "searchFiles": "ファイルまたはフォルダを検索...",
+    "searchContracts": "契約を検索..."
+  },
+  "clear": "クリア",
+  "contractTable": {
+    "title": "タイトル",
+    "status": {
+      "draft": "下書き",
+      "approved": "承認済み",
+      "pending": "保留中",
+      "rejected": "却下",
+      "expiring": "まもなく期限切れ"
+    },
+    "version": "バージョン",
+    "lastUpdated": "最終更新日",
+    "author": "作成者",
+    "expiryDate": "有効期限",
+    "headerStatus": "ステータス"
+  },
+  "newContract": "新規契約",
+  "createContract": "契約を作成",
+  "edit": "編集",
+  "save": "保存",
+  "cancel": "キャンセル",
+  "delete": "削除",
+  "deleteContract": "契約を削除",
+  "createFolder": "フォルダを作成",
+  "contractTitle": "契約タイトル",
+  "filterByTitle": "タイトルで絞り込む...",
+  "no_pending_approval_requests": "保留中の承認リクエストはありません。",
+  "accessDenied": "アクセス拒否",
+  "noPermissionToViewApprovalRequests": "承認リクエストを表示する権限がありません。",
+  "loadingApprovalRequests": "承認リクエストを読み込み中...",
+  "requestedBy": "リクエスト者"
+} 

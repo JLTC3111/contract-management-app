@@ -1,6 +1,6 @@
 #root {
   height:100%;
-  max-width: 1380px;
+  max-width: 1680px;
   margin: 0;
   padding: 0;
   text-align: center;
@@ -10,7 +10,6 @@ html, body {
   margin: 0;
   padding: 0;
 }
-
 
 .main-content {
   padding: 0;

@@ -7,6 +7,7 @@ import { useTheme } from '../hooks/useTheme';
 import { useUser } from '../hooks/useUser';
 import { Search, FilePenLine, CheckCircle } from 'lucide-react';
 import NotificationDropdown from '../components/NotificationDropdown';
+import { useTranslation } from 'react-i18next';
 
 
 const Dashboard = () => {
@@ -25,15 +26,16 @@ const Dashboard = () => {
   const searchRef = useRef();
   const metricsRef = useRef();
   const debounceTimeout = useRef();
+  const { t } = useTranslation();
   
 
   const metrics = [
-    { label: 'Active', count: contracts.filter(c => c.status === 'approved').length },
-    { label: 'Pending', count: contracts.filter(c => c.status === 'pending').length },
-    { label: 'Expiring Soon', count: contracts.filter(c => c.status === 'expiring').length },
-    { label: 'Drafts', count: contracts.filter(c => c.status === 'draft').length },
-    { label: 'Rejected', count: contracts.filter(c => c.status === 'rejected').length },
-    { label: 'Expired', count: contracts.filter(c => c.status === 'expired').length },
+    { label: t('dashboard.active', 'Active'), count: contracts.filter(c => c.status === 'approved').length },
+    { label: t('dashboard.pending', 'Pending'), count: contracts.filter(c => c.status === 'pending').length },
+    { label: t('dashboard.expiring', 'Expiring Soon'), count: contracts.filter(c => c.status === 'expiring').length },
+    { label: t('dashboard.drafts', 'Drafts'), count: contracts.filter(c => c.status === 'draft').length },
+    { label: t('dashboard.rejected', 'Rejected'), count: contracts.filter(c => c.status === 'rejected').length },
+    { label: t('dashboard.expired', 'Expired'), count: contracts.filter(c => c.status === 'expired').length },
   ];
 
   // Handle metric card clicks
@@ -268,7 +270,7 @@ const Dashboard = () => {
                   8px 8px 15px rgba(0,0,0,0.1)
                 `;
               }}
-              >Dashboard</h1>
+              >{t('dashboard.title', 'Dashboard')}</h1>
               <NotificationDropdown />
             </div>
             
@@ -296,7 +298,7 @@ const Dashboard = () => {
                     }}
                   >
                     <CheckCircle size={16} />
-                    Approval Requests
+                    {t('dashboard.approvalRequests', 'Approval Requests')}
                   </button>
                 )}
                 
@@ -314,7 +316,7 @@ const Dashboard = () => {
                   }}
                   onClick={() => navigate('/new')}
                 >
-                  + New Contract
+                  + {t('buttons.newContract')}
                 </button>
               </div>
             </div>
@@ -334,7 +336,7 @@ const Dashboard = () => {
                     <input
                       type="text"
                       className="file-folder-search-input"
-                      placeholder="Search files or folders..."
+                      placeholder={t('dashboard.searchFiles', 'Search files or folders...')}
                       value={searchTerm}
                       onChange={e => { setSearchTerm(e.target.value); setShowDropdown(true); }}
                       onFocus={() => setShowDropdown(true)}
@@ -416,7 +418,7 @@ const Dashboard = () => {
                     <input
                       type="text"
                       className="table-filter-input"
-                      placeholder="Search contracts..."
+                      placeholder={t('dashboard.searchContracts', 'Search contracts...')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       style={{

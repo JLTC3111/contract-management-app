@@ -1,0 +1,120 @@
+{
+  "sidebar": {
+    "dashboard": "แดชบอร์ด",
+    "approvals": "การอนุมัติ",
+    "manual": "คู่มือ",
+    "sendFeedback": "ส่งข้อเสนอแนะ",
+    "changePassword": "เปลี่ยนรหัสผ่าน",
+    "profile": "โปรไฟล์",
+    "signOut": "ออกจากระบบ",
+    "updateStatus": "อัปเดตสถานะ",
+    "home": "หน้าหลัก"
+  },
+  "buttons": {
+    "login": "เข้าสู่ระบบ",
+    "logout": "ออกจากระบบ",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "edit": "แก้ไข",
+    "approve": "อนุมัติ",
+    "reject": "ปฏิเสธ",
+    "back": "ย้อนกลับ",
+    "newContract": "สัญญาใหม่",
+    "light": "โหมดสว่าง",
+    "dark": "โหมดมืด"
+  },
+  "headers": {
+    "userManual": "คู่มือผู้ใช้",
+    "changePassword": "เปลี่ยนรหัสผ่าน"
+  },
+  "status": {
+    "approved": "อนุมัติแล้ว",
+    "pending": "รอดำเนินการ",
+    "draft": "ฉบับร่าง",
+    "rejected": "ถูกปฏิเสธ",
+    "expired": "หมดอายุ",
+    "expiring": "ใกล้หมดอายุ"
+  },
+  "table": {
+    "title": "ชื่อเรื่อง",
+    "status": "สถานะ",
+    "version": "เวอร์ชัน",
+    "lastUpdated": "อัปเดตล่าสุด",
+    "author": "ผู้เขียน",
+    "expiryDate": "วันหมดอายุ",
+    "all": "ทั้งหมด",
+    "clear": "ล้าง",
+    "filterByTitle": "กรองตามชื่อเรื่อง",
+    "noContractsFound": "ไม่พบสัญญา"
+  },
+  "metrics": {
+    "active": "ใช้งานอยู่",
+    "pending": "รอดำเนินการ",
+    "expiring": "ใกล้หมดอายุ",
+    "drafts": "ฉบับร่าง",
+    "rejected": "ถูกปฏิเสธ",
+    "expired": "หมดอายุ",
+    "noMetricsAvailable": "ไม่มีข้อมูลเมตริกส์"
+  },
+  "common": {
+    "loading": "กำลังโหลด...",
+    "error": "ข้อผิดพลาด",
+    "success": "สำเร็จ",
+    "cancel": "ยกเลิก",
+    "save": "บันทึก",
+    "edit": "แก้ไข",
+    "approve": "อนุมัติ",
+    "reject": "ปฏิเสธ",
+    "back": "ย้อนกลับ",
+    "done": "เสร็จสิ้น"
+  },
+  "noPendingRequests": "ไม่มีคำขอที่รอดำเนินการ",
+  "approvalRequests": {
+    "title": "ชื่อเรื่อง",
+    "status": "สถานะ",
+    "version": "เวอร์ชัน",
+    "lastUpdated": "อัปเดตล่าสุด",
+    "author": "ผู้เขียน",
+    "expiryDate": "วันหมดอายุ"
+  },
+  "managePendingApprovalRequestsFromEditors": "จัดการคำขออนุมัติที่รอดำเนินการจากบรรณาธิการ",
+  "currentlyNoApprovalRequestsWaitingForYourReview": "ขณะนี้ไม่มีคำขออนุมัติที่รอการตรวจสอบของคุณ",
+  "home": "หน้าหลัก",
+  "dashboard": {
+    "title": "แดชบอร์ด",
+    "approvalRequests": "คำขออนุมัติ",
+    "searchFiles": "ค้นหาไฟล์หรือโฟลเดอร์...",
+    "searchContracts": "ค้นหาสัญญา..."
+  },
+  "clear": "ล้าง",
+  "contractTable": {
+    "title": "ชื่อเรื่อง",
+    "status": {
+      "draft": "ฉบับร่าง",
+      "approved": "อนุมัติแล้ว",
+      "pending": "รอดำเนินการ",
+      "rejected": "ถูกปฏิเสธ",
+      "expiring": "ใกล้หมดอายุ"
+    },
+    "version": "เวอร์ชัน",
+    "lastUpdated": "อัปเดตล่าสุด",
+    "author": "ผู้เขียน",
+    "expiryDate": "วันหมดอายุ",
+    "headerStatus": "สถานะ"
+  },
+  "newContract": "สัญญาใหม่",
+  "createContract": "สร้างสัญญา",
+  "edit": "แก้ไข",
+  "save": "บันทึก",
+  "cancel": "ยกเลิก",
+  "delete": "ลบ",
+  "deleteContract": "ลบสัญญา",
+  "createFolder": "สร้างโฟลเดอร์",
+  "contractTitle": "ชื่อสัญญา",
+  "filterByTitle": "กรองตามชื่อเรื่อง...",
+  "no_pending_approval_requests": "ไม่มีคำขออนุมัติที่รอดำเนินการ",
+  "accessDenied": "ปฏิเสธการเข้าถึง",
+  "noPermissionToViewApprovalRequests": "คุณไม่มีสิทธิ์ดูคำขออนุมัติ",
+  "loadingApprovalRequests": "กำลังโหลดคำขออนุมัติ...",
+  "requestedBy": "ร้องขอโดย"
+} 

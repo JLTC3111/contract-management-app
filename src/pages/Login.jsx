@@ -4,6 +4,7 @@ import { supabase } from '../utils/supaBaseClient';
 import gsap from 'gsap';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -16,6 +17,14 @@ const Login = () => {
   const modelRef = useRef(null);
   const logoUrl = '/logoIcons/logo.png';
   const { darkMode, toggleDarkMode } = useTheme();
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 500);
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 500);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Typing animation for ''
   useEffect(() => {
@@ -71,7 +80,63 @@ const Login = () => {
       background: 'var(--bg)',
       padding: 'clamp(1rem, 4vw, 2rem)',
       gap: 'clamp(1rem, 4vw, 2rem)',
+      position: 'relative',
     }}>
+      {/* Theme Toggle Button for mobile - visually overlapping the card's top left by ~5px */}
+      {isMobile && (
+        <button
+          onClick={toggleDarkMode}
+          aria-label="Toggle theme"
+          style={{
+            position: 'absolute',
+            top: 'calc(50% - 210px - 5px)',
+            left: 'calc(52% - 200px + 5px)',
+            width: 40,
+            height: 28,
+            background: 'var(--card-bg)',
+            borderRadius: 14,
+            border: '1.5px solid var(--card-border)',
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            zIndex: 100,
+            outline: 'none',
+            padding: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <span
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: darkMode ? 18 : 4,
+              transform: 'translateY(-50%)',
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              background: 'var(--sidebar-hover-bg)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--text)',
+              fontSize: '1.1rem',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+              transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
+              zIndex: 2,
+            }}
+          >
+            {darkMode ? <Moon size={16} /> : <Sun size={16} />}
+          </span>
+          <span style={{ position: 'absolute', left: 6, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 12, zIndex: 1 }}>
+            <Sun size={12} />
+          </span>
+          <span style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 12, zIndex: 1 }}>
+            <Moon size={12} />
+          </span>
+        </button>
+      )}
       {/* Login Card */}
       <div
         ref={cardRef}
@@ -142,7 +207,7 @@ const Login = () => {
           <div>
             <input 
               type="email" 
-              placeholder="Email" 
+              placeholder={t('email')} 
               value={email}
               onChange={(e) => setEmail(e.target.value)} 
               required 
@@ -173,7 +238,7 @@ const Login = () => {
           <div>
             <input 
               type="password" 
-              placeholder="Password" 
+              placeholder={t('password')} 
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
               required 
@@ -218,7 +283,7 @@ const Login = () => {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            Log In
+            {t('login')}
           </button>
           
           {error && (
@@ -242,69 +307,71 @@ const Login = () => {
         ref={modelRef}
         style={{
           flex: 1,
-          minWidth: 320,
-          maxWidth: 480,
-          height: 400,
+          minWidth: isMobile ? 180 : 320,
+          maxWidth: isMobile ? 320 : 480,
+          height: isMobile ? 360 : 400,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
         }}
       >
-        {/* Theme Toggle Button (moved here) */}
-        <button
-          onClick={toggleDarkMode}
-          aria-label="Toggle theme"
-          style={{
-            position: 'absolute',
-            top: 18,
-            left: 18,
-            width: 54,
-            height: 32,
-            background: 'var(--card-bg)',
-            borderRadius: 16,
-            border: '1.5px solid var(--card-border)',
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer',
-            transition: 'background 0.2s',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-            zIndex: 10,
-            outline: 'none',
-            padding: 0,
-            overflow: 'hidden',
-          }}
-        >
-          <span
+        {/* Theme Toggle Button (desktop only, inside model area) */}
+        {!isMobile && (
+          <button
+            onClick={toggleDarkMode}
+            aria-label="Toggle theme"
             style={{
               position: 'absolute',
-              top: '50%',
-              left: darkMode ? 26 : 4,
-              transform: 'translateY(-50%)',
-              width: 24,
-              height: 24,
-              borderRadius: '50%',
-              background: 'var(--sidebar-hover-bg)',
+              top: 18,
+              left: 18,
+              width: 54,
+              height: 32,
+              background: 'var(--card-bg)',
+              borderRadius: 16,
+              border: '1.5px solid var(--card-border)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--text)',
-              fontSize: '1.2rem',
-              boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-              transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
-              zIndex: 2,
+              cursor: 'pointer',
+              transition: 'background 0.2s',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+              zIndex: 10,
+              outline: 'none',
+              padding: 0,
+              overflow: 'hidden',
             }}
           >
-            {darkMode ? <Moon size={18} /> : <Sun size={18} />}
-          </span>
-          {/* Show both icons, inactive one faint */}
-          <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
-            <Sun size={14} />
-          </span>
-          <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
-            <Moon size={14} />
-          </span>
-        </button>
+            <span
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: darkMode ? 26 : 4,
+                transform: 'translateY(-50%)',
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                background: 'var(--sidebar-hover-bg)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--text)',
+                fontSize: '1.2rem',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+                transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
+                zIndex: 2,
+              }}
+            >
+              {darkMode ? <Moon size={18} /> : <Sun size={18} />}
+            </span>
+            {/* Show both icons, inactive one faint */}
+            <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
+              <Sun size={14} />
+            </span>
+            <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
+              <Moon size={14} />
+            </span>
+          </button>
+        )}
         <model-viewer
           ref={modelViewerRef}
           src="/3d_models/robot.glb"
@@ -317,11 +384,10 @@ const Login = () => {
           onLoad={handleModelLoad}
           onError={handleModelError}
           style={{
-            width: '100%',
-            height: '100%',
+            width: isMobile ? '90%' : '100%',
+            height: isMobile ? '90%' : '100%',
             borderRadius: '12px',
             background: 'transparent',
-            
           }}
         />
       </div>

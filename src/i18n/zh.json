@@ -1,0 +1,120 @@
+{
+  "sidebar": {
+    "dashboard": "仪表板",
+    "approvals": "审批",
+    "manual": "手册",
+    "sendFeedback": "发送反馈",
+    "changePassword": "更改密码",
+    "profile": "个人资料",
+    "signOut": "退出登录",
+    "updateStatus": "更新状态",
+    "home": "首页"
+  },
+  "buttons": {
+    "login": "登录",
+    "logout": "退出登录",
+    "save": "保存",
+    "cancel": "取消",
+    "edit": "编辑",
+    "approve": "批准",
+    "reject": "拒绝",
+    "back": "返回",
+    "newContract": "新合同",
+    "light": "明亮模式",
+    "dark": "深色模式"
+  },
+  "headers": {
+    "userManual": "用户手册",
+    "changePassword": "更改密码"
+  },
+  "status": {
+    "approved": "已批准",
+    "pending": "待处理",
+    "draft": "草稿",
+    "rejected": "已拒绝",
+    "expired": "已过期",
+    "expiring": "即将过期"
+  },
+  "table": {
+    "title": "标题",
+    "status": "状态",
+    "version": "版本",
+    "lastUpdated": "最后更新",
+    "author": "作者",
+    "expiryDate": "到期日",
+    "all": "全部",
+    "clear": "清除",
+    "filterByTitle": "按标题筛选",
+    "noContractsFound": "未找到合同。"
+  },
+  "metrics": {
+    "active": "有效",
+    "pending": "待处理",
+    "expiring": "即将过期",
+    "drafts": "草稿",
+    "rejected": "已拒绝",
+    "expired": "已过期",
+    "noMetricsAvailable": "没有可用的指标。"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "save": "保存",
+    "edit": "编辑",
+    "approve": "批准",
+    "reject": "拒绝",
+    "back": "返回",
+    "done": "完成"
+  },
+  "noPendingRequests": "没有待处理的请求",
+  "approvalRequests": {
+    "title": "标题",
+    "status": "状态",
+    "version": "版本",
+    "lastUpdated": "最后更新",
+    "author": "作者",
+    "expiryDate": "到期日"
+  },
+  "managePendingApprovalRequestsFromEditors": "管理来自编辑的待处理审批请求",
+  "currentlyNoApprovalRequestsWaitingForYourReview": "当前没有等待您审核的审批请求。",
+  "home": "首页",
+  "dashboard": {
+    "title": "仪表板",
+    "approvalRequests": "审批请求",
+    "searchFiles": "搜索文件或文件夹...",
+    "searchContracts": "搜索合同..."
+  },
+  "clear": "清除",
+  "contractTable": {
+    "title": "标题",
+    "status": {
+      "draft": "草稿",
+      "approved": "已批准",
+      "pending": "待处理",
+      "rejected": "已拒绝",
+      "expiring": "即将到期"
+    },
+    "version": "版本",
+    "lastUpdated": "最后更新",
+    "author": "作者",
+    "expiryDate": "到期日期",
+    "headerStatus": "状态"
+  },
+  "newContract": "新合同",
+  "createContract": "创建合同",
+  "edit": "编辑",
+  "save": "保存",
+  "cancel": "取消",
+  "delete": "删除",
+  "deleteContract": "删除合同",
+  "createFolder": "创建文件夹",
+  "contractTitle": "合同标题",
+  "filterByTitle": "按标题筛选...",
+  "no_pending_approval_requests": "没有待处理的审批请求。",
+  "accessDenied": "拒绝访问",
+  "noPermissionToViewApprovalRequests": "您无权查看审批请求。",
+  "loadingApprovalRequests": "正在加载审批请求...",
+  "requestedBy": "请求人"
+} 

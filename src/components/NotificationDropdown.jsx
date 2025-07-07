@@ -5,6 +5,7 @@ import { useUser } from '../hooks/useUser';
 import { useTheme } from '../hooks/useTheme';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const NotificationDropdown = () => {
   const { user } = useUser();
@@ -17,6 +18,7 @@ const NotificationDropdown = () => {
   const [loading, setLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
+  const { t } = useTranslation();
 
   // Fetch approval requests for approver users
   const fetchNotifications = async () => {
@@ -323,7 +325,7 @@ const NotificationDropdown = () => {
               commentNotifications.length === 0 ? (
                 <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                   <MessageCircle size={24} style={{ marginBottom: '0.5rem' }} />
-                  <p>No new comments in the last 24 hours</p>
+                  <p>{t('no_new_comments_in_last_24_hours')}</p>
                 </div>
               ) : (
                 commentNotifications.map((comment) => (
@@ -347,7 +349,7 @@ const NotificationDropdown = () => {
                         {comment.contracts?.title || 'Unknown Contract'}
                       </h4>
                       <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                        Comment by: {comment.user_email}
+                        {t('comment_by')} {comment.user_email}
                       </p>
                       <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                         {new Date(comment.created_at).toLocaleString()}
@@ -357,7 +359,7 @@ const NotificationDropdown = () => {
                     {/* Comment Preview */}
                     <div style={{ marginBottom: '0.5rem' }}>
                       <p style={{ margin: 0, color: 'var(--text)', fontSize: '0.875rem' }}>
-                        <strong>Comment:</strong> {comment.comment.length > 100 ? comment.comment.substring(0, 100) + '...' : comment.comment}
+                        <strong>{t('comment')}:</strong> {comment.comment.length > 100 ? comment.comment.substring(0, 100) + '...' : comment.comment}
                       </p>
                     </div>
 
@@ -369,7 +371,7 @@ const NotificationDropdown = () => {
                       border: '1px solid var(--card-border)'
                     }}>
                       <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
-                        Click to view contract and full comment
+                        {t('click_to_view_contract_and_full_comment')}
                       </p>
                     </div>
                   </div>
@@ -378,19 +380,19 @@ const NotificationDropdown = () => {
             ) : user.role !== 'approver' && user.role !== 'admin' ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                 <Clock size={24} style={{ marginBottom: '0.5rem' }} />
-                <p>Approval notifications are only available for approver and admin users.</p>
+                <p>{t('approval_notifications_only_for_approver_and_admin_users')}</p>
                 <p style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>
-                  Current role: <strong>{user.role || 'No role assigned'}</strong>
+                  {t('current_role')}: <strong>{user.role || 'No role assigned'}</strong>
                 </p>
               </div>
             ) : loading ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                Loading notifications...
+                {t('loading_notifications')}
               </div>
             ) : notifications.length === 0 ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                 <Clock size={24} style={{ marginBottom: '0.5rem' }} />
-                <p>No pending approval requests</p>
+                <p>{t('no_pending_approval_requests')}</p>
               </div>
             ) : (
               notifications.map((notification) => (
@@ -408,7 +410,7 @@ const NotificationDropdown = () => {
                       {notification.contracts?.title || 'Unknown Contract'}
                     </h4>
                     <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                      Requested by: {notification.requester_email}
+                      {t('requested_by')} {notification.requester_email}
                     </p>
                     <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                       {new Date(notification.created_at).toLocaleString()}
@@ -418,7 +420,7 @@ const NotificationDropdown = () => {
                   {/* Message */}
                   <div style={{ marginBottom: '1rem' }}>
                     <p style={{ margin: 0, color: 'var(--text)' }}>
-                      <strong>Message:</strong> {notification.message}
+                      <strong>{t('message')}:</strong> {notification.message}
                     </p>
                   </div>
 
@@ -431,7 +433,7 @@ const NotificationDropdown = () => {
                     border: '1px solid var(--card-border)'
                   }}>
                     <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                      <strong>Default Response:</strong> "I have reviewed this contract and found it to be compliant with our standards. All terms and conditions have been verified and are acceptable for approval."
+                      <strong>{t('default_response')}:</strong> "I have reviewed this contract and found it to be compliant with our standards. All terms and conditions have been verified and are acceptable for approval."
                     </p>
                   </div>
 
@@ -453,7 +455,7 @@ const NotificationDropdown = () => {
                       }}
                     >
                       <Check size={14} />
-                      Approve
+                      {t('approve')}
                     </button>
                     <button
                       onClick={() => handleApprovalAction(notification.id, 'reject')}
@@ -471,7 +473,7 @@ const NotificationDropdown = () => {
                       }}
                     >
                       <X size={14} />
-                      Reject
+                      {t('reject')}
                     </button>
                   </div>
                 </div>

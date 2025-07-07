@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 const metricClassMap = {
   'Active': 'metric-approved',
   'Pending': 'metric-pending',
@@ -8,7 +10,9 @@ const metricClassMap = {
 };
 
 const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
-  if (!data || data.length === 0) return <p>No metrics available.</p>;
+  const { t } = useTranslation();
+
+  if (!data || data.length === 0) return <p>{t('no_metrics_available')}</p>;
 
   const handleMetricClick = (label) => {
     if (onMetricClick) {

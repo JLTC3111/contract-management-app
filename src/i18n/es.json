@@ -1,0 +1,119 @@
+{
+  "sidebar": {
+    "dashboard": "Panel de control",
+    "approvals": "Aprobaciones",
+    "manual": "Manual",
+    "sendFeedback": "Enviar comentarios",
+    "changePassword": "Cambiar contraseña",
+    "profile": "Perfil",
+    "signOut": "Cerrar sesión",
+    "updateStatus": "Actualizar estado",
+    "home": "Inicio"
+  },
+  "buttons": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "back": "Atrás",
+    "newContract": "Nuevo contrato",
+    "light": "Modo claro",
+    "dark": "Modo oscuro"
+  },
+  "headers": {
+    "userManual": "Manual de usuario",
+    "changePassword": "Cambiar contraseña"
+  },
+  "status": {
+    "approved": "Aprobado",
+    "pending": "Pendiente",
+    "draft": "Borrador",
+    "rejected": "Rechazado",
+    "expired": "Vencido",
+    "expiring": "Próximo a vencer"
+  },
+  "table": {
+    "title": "Título",
+    "status": "Estado",
+    "version": "Versión",
+    "lastUpdated": "Última actualización",
+    "author": "Autor",
+    "expiryDate": "Fecha de vencimiento",
+    "all": "Todos",
+    "clear": "Limpiar",
+    "filterByTitle": "Filtrar por título",
+    "noContractsFound": "No se encontraron contratos."
+  },
+  "metrics": {
+    "active": "Activo",
+    "pending": "Pendiente",
+    "expiring": "Próximo a vencer",
+    "drafts": "Borradores",
+    "rejected": "Rechazado",
+    "expired": "Vencido",
+    "noMetricsAvailable": "No hay métricas disponibles."
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "back": "Atrás",
+    "done": "Hecho"
+  },
+  "noPendingRequests": "No hay solicitudes pendientes",
+  "approvalRequests": {
+    "title": "Título",
+    "status": "Estado",
+    "version": "Versión",
+    "lastUpdated": "Última actualización",
+    "author": "Autor",
+    "expiryDate": "Fecha de vencimiento"
+  },
+  "managePendingApprovalRequestsFromEditors": "Gestionar solicitudes de aprobación pendientes de los editores",
+  "currentlyNoApprovalRequestsWaitingForYourReview": "Actualmente no hay solicitudes de aprobación esperando su revisión.",
+  "home": "Inicio",
+  "dashboard": {
+    "title": "Panel de control",
+    "approvalRequests": "Solicitudes de aprobación",
+    "searchFiles": "Buscar archivos o carpetas...",
+    "searchContracts": "Buscar contratos..."
+  },
+  "contractTable": {
+    "title": "Título",
+    "status": {
+      "draft": "Borrador",
+      "approved": "Aprobado",
+      "pending": "Pendiente",
+      "rejected": "Rechazado",
+      "expiring": "Próximo a vencer"
+    },
+    "version": "Versión",
+    "lastUpdated": "Última actualización",
+    "author": "Autor",
+    "expiryDate": "Fecha de vencimiento",
+    "headerStatus": "Estado"
+  },
+  "newContract": "Nuevo contrato",
+  "createContract": "Crear contrato",
+  "edit": "Editar",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "delete": "Eliminar",
+  "deleteContract": "Eliminar contrato",
+  "createFolder": "Crear carpeta",
+  "contractTitle": "Título del contrato",
+  "filterByTitle": "Filtrar por título...",
+  "no_pending_approval_requests": "No hay solicitudes de aprobación pendientes.",
+  "accessDenied": "Acceso denegado",
+  "noPermissionToViewApprovalRequests": "No tiene permiso para ver las solicitudes de aprobación.",
+  "loadingApprovalRequests": "Cargando solicitudes de aprobación...",
+  "requestedBy": "Solicitado por"
+} 

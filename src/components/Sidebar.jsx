@@ -25,12 +25,14 @@ import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
 import { useTheme } from '../hooks/useTheme';
 import './ContractTable.css';
+import { useTranslation } from 'react-i18next';
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useUser();
   const { darkMode, toggleDarkMode } = useTheme();
+  const { t } = useTranslation();
 
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
   const [profileOpen, setProfileOpen] = useState(() => localStorage.getItem('profileOpen') !== 'false');
@@ -40,6 +42,13 @@ const Sidebar = () => {
   });
   const [isResizing, setIsResizing] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 1024);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [passwordLoading, setPasswordLoading] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('collapsed', collapsed);
@@ -57,18 +66,60 @@ const Sidebar = () => {
   };
 
   const handleChangePassword = () => {
-    // For now, we'll show an alert. In a real app, this would open a modal or navigate to a password change page
-    alert('Change Password feature - This would typically open a password change modal or navigate to a settings page.');
+    setShowPasswordModal(true);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setPasswordError('');
+    setPasswordSuccess('');
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordError('All fields are required.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New passwords do not match.');
+      return;
+    }
+    setPasswordLoading(true);
+    try {
+      // Re-authenticate user (Supabase requires session)
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+      if (signInError) {
+        setPasswordError('Current password is incorrect.');
+        setPasswordLoading(false);
+        return;
+      }
+      // Update password
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) {
+        setPasswordError(error.message || 'Failed to update password.');
+      } else {
+        setPasswordSuccess('Password updated successfully!');
+        setShowPasswordModal(false);
+      }
+    } catch (err) {
+      setPasswordError('Unexpected error.');
+    } finally {
+      setPasswordLoading(false);
+    }
   };
 
   const handleReadManual = () => {
-    // Open the manual in a new tab or show a modal
-    window.open('https://docs.example.com/manual', '_blank');
+    navigate('/manual');
   };
 
   const handleSendFeedback = () => {
     // Open feedback form or email client
-    window.open('mailto:feedback@example.com?subject=Contract Management App Feedback', '_blank');
+    window.open('mailto:support@icue.vn?subject=Contract Management App Feedback', '_blank');
   };
 
   const handleMouseDown = (e) => {
@@ -202,7 +253,7 @@ const Sidebar = () => {
           }}>
             <SidebarButton
               icon={<HomeIcon size={18} />}
-              label="Home"
+              label={t('sidebar.home', 'Home')}
               path="/home"
               collapsed={collapsed || isMobile}
               currentPath={location.pathname}
@@ -210,7 +261,7 @@ const Sidebar = () => {
             />
             <SidebarButton
               icon={<LayoutDashboardIcon size={18} />}
-              label="Dashboard"
+              label={t('sidebar.dashboard', 'Dashboard')}
               path="/"
               collapsed={collapsed}
               currentPath={location.pathname}
@@ -218,7 +269,7 @@ const Sidebar = () => {
             />
             <SidebarButton
               icon={<ShieldCheckIcon size={18} />}
-              label="Approve"
+              label={t('sidebar.approvals', 'Approvals')}
               path="/contracts"
               collapsed={collapsed}
               currentPath={location.pathname}
@@ -226,7 +277,7 @@ const Sidebar = () => {
             />
             <SidebarButton
               icon={<RefreshCcwDotIcon size={18} />}
-              label="Update Status"
+              label={t('sidebar.updateStatus', 'Update Status')}
               collapsed={collapsed}
               onClick={async () => {
                 try {
@@ -253,7 +304,7 @@ const Sidebar = () => {
 
             <SidebarButton 
               icon={<UserIcon size={18} />}
-              label="Profile"
+              label={t('sidebar.profile', 'Profile')}
               collapsed={collapsed}
               toggleable
               isOpen={profileOpen}
@@ -281,45 +332,51 @@ const Sidebar = () => {
                   <SubMenu className="mobile-submenu-modal"
                     items={[
                       {
-                        label: 'Change Password',
+                        label: t('sidebar.changePassword'),
                         icon: <Settings size={14} style={{ marginRight: '-.5rem' }} />,
                         onClick: handleChangePassword,
                         style: { marginBottom: '1rem' },
                         isMobile: isMobile,
                       },
                       {
-                        label: 'Read Manual',
+                        label: t('sidebar.manual'),
                         icon: <BookOpen size={14} style={{ marginRight: '-.5rem' }} />,
                         onClick: handleReadManual,
                         style: { marginBottom: '1rem' },
                         isMobile: isMobile,
                       },
                       {
-                        label: 'Send Feedback',
+                        label: t('sidebar.sendFeedback'),
                         icon: <MessageSquare size={14} style={{ marginRight: '-.5rem' }} />,
                         onClick: handleSendFeedback,
                         isMobile: isMobile,
                       },
                     ]}
                   />
+                  
                 </motion.div>
               )}
             </AnimatePresence>
 
             <SidebarButton
               icon={darkMode ? <Sun size={18} /> : <Moon size={18} />}
-              label={darkMode ? 'Light Mode' : 'Dark Mode'}
+              label={darkMode ? t('buttons.light', 'Light Mode') : t('buttons.dark', 'Dark Mode')}
               collapsed={collapsed}
               onClick={toggleDarkMode}
             />
             <SidebarButton
               icon={<LogOutIcon size={18} />}
-              label="Sign Out"
+              label={t('sidebar.signOut', 'Sign Out')}
               collapsed={collapsed}
               onClick={handleLogout}
             />
           </div>
-
+          {user && (
+                    <div style={{ borderBottom: '1px solid var(--card-border)', padding: '.25rem .5rem', textAlign: 'center' }}>
+                      <span className="text-secondary" style={{ fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)' }}>{t('Logged in as')} <strong>{user.email}</strong></span>
+                      
+                    </div>
+            )}
           {!collapsed && user && !isMobile && (
             <div style={{ fontSize: '0.85rem', marginTop: '4rem', marginBottom: 'calc(1rem + 15px)', color: 'var(--sidebar-text)', textAlign: 'left', paddingLeft: '0.5rem' }}>
               <div><strong>Role:</strong> {user.role ?? 'unknown'}</div>
@@ -363,12 +420,12 @@ const Sidebar = () => {
             gap: '20px',
             left: 0,
             right: 0,
-            bottom: '38.5px',
+            bottom: '36.5px',
             zIndex: 100,
             background: 'var(--sidebar-submenu-bg)',
             boxShadow: darkMode
-            ? '0 2px 4px rgba(155, 0, 0, 0.8)'   // Dark mode shadow (lighter glow)
-            : '0 2px 4px rgba(0, 77, 110, 0.8)', // Light mode shadow
+            ? '0 1px 2px rgba(155, 0, 0, 0.8)'   // Dark mode shadow (lighter glow)
+            : '0 1px 2px rgba(0, 77, 110, 0.8)', // Light mode shadow
             padding: '1rem 0',
             display: 'flex',
             flexDirection: 'row',
@@ -379,21 +436,19 @@ const Sidebar = () => {
           <SubMenu
             items={[
               {
-                label: 'Password',
+                label: t('sidebar.changePassword'),
                 icon: <Settings size={14} style={{ marginRight: '-1rem' }} />,
                 onClick: handleChangePassword,
-                
                 isMobile: isMobile,
               },
               {
-                label: 'Manual',
+                label: t('sidebar.manual'),
                 icon: <BookOpen size={14} style={{ marginRight: '-1rem' }} />,
                 onClick: handleReadManual,
-               
                 isMobile: isMobile,
               },
               {
-                label: 'Feedback',
+                label: t('sidebar.sendFeedback'),
                 icon: <MessageSquare size={14} style={{ marginRight: '-1rem' }} />,
                 onClick: handleSendFeedback,
                 isMobile: isMobile,
@@ -401,6 +456,84 @@ const Sidebar = () => {
             ]}
           />
         </motion.div>
+      )}
+
+      {/* Password Change Modal */}
+      {showPasswordModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(0,0,0,0.25)',
+          zIndex: 2000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+          onClick={() => setShowPasswordModal(false)}
+        >
+          <form
+            onClick={e => e.stopPropagation()}
+            onSubmit={handlePasswordSubmit}
+            style={{
+              background: 'var(--card-bg)',
+              border: '1.5px solid var(--card-border)',
+              borderRadius: 12,
+              padding: '2rem',
+              minWidth: 320,
+              maxWidth: '90vw',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              zIndex: 2001,
+            }}
+          >
+            <h2 style={{ margin: 0, color: 'var(--text)' }}>{t('headers.changePassword')}</h2>
+            <input
+              type="password"
+              placeholder={t('sidebar.changePassword')}
+              value={currentPassword}
+              onChange={e => setCurrentPassword(e.target.value)}
+              style={{ padding: '0.5rem', borderRadius: 6, border: '1px solid var(--card-border)' }}
+              autoFocus
+            />
+            <input
+              type="password"
+              placeholder={t('sidebar.changePassword')}
+              value={newPassword}
+              onChange={e => setNewPassword(e.target.value)}
+              style={{ padding: '0.5rem', borderRadius: 6, border: '1px solid var(--card-border)' }}
+            />
+            <input
+              type="password"
+              placeholder={t('sidebar.changePassword')}
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              style={{ padding: '0.5rem', borderRadius: 6, border: '1px solid var(--card-border)' }}
+            />
+            {passwordError && <div style={{ color: '#ef4444', fontSize: '0.95rem' }}>{passwordError}</div>}
+            {passwordSuccess && <div style={{ color: '#10b981', fontSize: '0.95rem' }}>{passwordSuccess}</div>}
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+              <button
+                type="button"
+                onClick={() => setShowPasswordModal(false)}
+                style={{ background: '#eee', color: '#222', border: 'none', borderRadius: 6, padding: '0.5rem 1rem', cursor: 'pointer' }}
+              >
+                {t('buttons.cancel')}
+              </button>
+              <button
+                type="submit"
+                disabled={passwordLoading}
+                style={{ background: '#3b82f6', color: '#fff', border: 'none', borderRadius: 6, padding: '0.5rem 1rem', cursor: passwordLoading ? 'wait' : 'pointer' }}
+              >
+                {passwordLoading ? t('buttons.save') + '...' : t('buttons.save')}
+              </button>
+            </div>
+          </form>
+        </div>
       )}
     </>
   );

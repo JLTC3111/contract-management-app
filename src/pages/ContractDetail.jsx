@@ -7,6 +7,7 @@ import { supabase } from '../utils/supaBaseClient';
 import Approvals from '../components/Approvals';
 import { FolderTree } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ContractDetail = () => {
   const { user, loading: userLoading } = useUser(); // from context
@@ -27,6 +28,7 @@ const ContractDetail = () => {
   const [newFolderName, setNewFolderName] = useState('');
   const [currentPath, setCurrentPath] = useState('');
   const folderInputRef = useRef('');
+  const { t } = useTranslation();
   
 
 

@@ -6,7 +6,18 @@ import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
 import { Sun, Moon } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
+const LANGUAGES = [
+  { code: 'en', label: 'English', flag: '🇬🇧' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'ja', label: '日本語', flag: '🇯🇵' },
+  { code: 'th', label: 'ไทย', flag: '🇹🇭' },
+  { code: 'zh', label: '中文', flag: '🇨🇳' },
+  { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+];
 
 const Navbar = () => {
   const { user } = useUser();
@@ -18,6 +29,7 @@ const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef();
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 500);
+  const { t, i18n } = useTranslation();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -118,29 +130,32 @@ const Navbar = () => {
     }}>
       <h2 style={{ marginRight: 'clamp(0.5rem, 2vw, 1rem)', fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 'bold' }}>📁 Contract Manager</h2>
       
-      
       {user && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 2vw, 1.5rem)' }}>
-          <span className="text-secondary" style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)'}}>Logged in as <strong>{user.email}</strong></span>
-          <button
-            onClick={handleLogout}
+          {/* Language Switcher */}
+          <select
+            value={i18n.language}
+            onChange={e => i18n.changeLanguage(e.target.value)}
             style={{
-              backgroundColor: '#f87171',
-              color: '#fff',
-              border: 'none',
-              padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
+              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
               borderRadius: '6px',
+              border: '1.5px solid var(--card-border)',
+              background: 'var(--card-bg)',
+              color: 'var(--text)',
+              padding: '0.3rem 1.2rem 0.3rem 0.5rem',
+              marginRight: '0.5rem',
               cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontSize: 'clamp(0.75rem, 1.25vw, 1rem)',
-              fontWeight: 500,
+              appearance: 'none',
+              minWidth: 90,
             }}
+            aria-label="Select language"
           >
-            <LogOut size={16} />
-            Logout
-          </button>
+            {LANGUAGES.map(lang => (
+              <option key={lang.code} value={lang.code}>
+                {lang.flag} {lang.label}
+              </option>
+            ))}
+          </select>
           {!isMobile && (
           <div
         style={{

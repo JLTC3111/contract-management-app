@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import './ContractTable.css';
 
 const statusStyles = {
@@ -61,6 +62,7 @@ const highlight = (text, query) => {
 
 const ContractTable = ({ contracts, searchQuery = '' }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [filters, setFilters] = useState({
     title: '',
     status: '',
@@ -142,7 +144,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             className="clear-btn"
             onClick={() => setFilters(f => ({ ...f, [key]: '' }))}
           >
-            Clear
+            {t('clear')}
           </button>
         </div>
       </div>
@@ -155,7 +157,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
         <thead>
           <tr>
             <th style={{ position: 'relative' }}>
-              Title
+              {t('contractTable.title')}
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('title'); }}
                 style={{
@@ -189,14 +191,14 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   className="table-filter-input"
                   value={filters.title}
                   onChange={e => setFilters(f => ({ ...f, title: e.target.value }))}
-                  placeholder="Filter by title"
+                  placeholder={t('filterByTitle')}
                   style={{ width: 160 }}
                   autoFocus
                 />
               ))}
             </th>
             <th style={{ position: 'relative' }}>
-              Status
+              {t('contractTable.headerStatus')}
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('status'); }}
                 style={{
@@ -232,13 +234,13 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   style={{ width: 160 }}
                   autoFocus
                 >
-                  <option value="">All</option>
+                  <option value="">{t('all')}</option>
                   {uniqueStatuses.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
                 </select>
               ))}
             </th>
             <th style={{ position: 'relative' }}>
-              Version
+              {t('contractTable.version')}
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('version'); }}
                 style={{
@@ -274,13 +276,13 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   style={{ width: 160 }}
                   autoFocus
                 >
-                  <option value="">All</option>
+                  <option value="">{t('all')}</option>
                   {uniqueVersions.map(v => <option key={v} value={v}>{v}</option>)}
                 </select>
               ))}
             </th>
             <th style={{ position: 'relative' }}>
-              Last Updated
+              {t('contractTable.lastUpdated')}
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('updated'); }}
                 style={{
@@ -320,7 +322,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               ))}
             </th>
             <th style={{ position: 'relative' }}>
-              Author
+              {t('contractTable.author')}
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('author'); }}
                 style={{
@@ -356,13 +358,13 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   style={{ width: 160 }}
                   autoFocus
                 >
-                  <option value="">All</option>
+                  <option value="">{t('all')}</option>
                   {uniqueAuthors.map(a => <option key={a} value={a}>{a}</option>)}
                 </select>
               ))}
             </th>
             <th style={{ position: 'relative' }}>
-              Expiry Date
+              {t('contractTable.expiryDate')}
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('expiry'); }}
                 style={{
@@ -405,7 +407,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
         </thead>
         <tbody>
           {filtered.length === 0 ? (
-            <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>😢 No contracts found.</td></tr>
+            <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>😢 {t('contractTable.noContractsFound')}</td></tr>
           ) : filtered.map(contract => (
             <tr
               key={contract.id}
@@ -441,7 +443,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                       }}
                     >
                       <span>{style.icon}</span>
-                      {contract.status.charAt(0).toUpperCase() + contract.status.slice(1)}
+                      {t(`contractTable.status.${finalStatus}`)}
                       {finalStatus === 'expiring' && <span style={{ fontStyle: 'italic', marginLeft: 4 }}>(soon)</span>}
                     </span>
                   );

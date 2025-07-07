@@ -1,0 +1,119 @@
+{
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "approvals": "Approbations",
+    "manual": "Manuel",
+    "sendFeedback": "Envoyer des commentaires",
+    "changePassword": "Changer le mot de passe",
+    "profile": "Profil",
+    "signOut": "Déconnexion",
+    "updateStatus": "Mettre à jour le statut",
+    "home": "Accueil"
+  },
+  "buttons": {
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "edit": "Éditer",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "back": "Retour",
+    "newContract": "Nouveau contrat",
+    "light": "Mode clair",
+    "dark": "Mode sombre"
+  },
+  "headers": {
+    "userManual": "Manuel d'utilisateur",
+    "changePassword": "Changer le mot de passe"
+  },
+  "status": {
+    "approved": "Approuvé",
+    "pending": "En attente",
+    "draft": "Brouillon",
+    "rejected": "Rejeté",
+    "expired": "Expiré",
+    "expiring": "Expire bientôt"
+  },
+  "table": {
+    "title": "Titre",
+    "status": "Statut",
+    "version": "Version",
+    "lastUpdated": "Dernière mise à jour",
+    "author": "Auteur",
+    "expiryDate": "Date d'expiration",
+    "all": "Tous",
+    "clear": "Effacer",
+    "filterByTitle": "Filtrer par titre",
+    "noContractsFound": "Aucun contrat trouvé."
+  },
+  "metrics": {
+    "active": "Actif",
+    "pending": "En attente",
+    "expiring": "Expire bientôt",
+    "drafts": "Brouillons",
+    "rejected": "Rejeté",
+    "expired": "Expiré",
+    "noMetricsAvailable": "Aucune métrique disponible."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Éditer",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "back": "Retour",
+    "done": "Terminé"
+  },
+  "noPendingRequests": "Aucune demande en attente",
+  "approvalRequests": {
+    "title": "Titre",
+    "status": "Statut",
+    "version": "Version",
+    "lastUpdated": "Dernière mise à jour",
+    "author": "Auteur",
+    "expiryDate": "Date d'expiration"
+  },
+  "managePendingApprovalRequestsFromEditors": "Gérer les demandes d'approbation en attente des éditeurs",
+  "currentlyNoApprovalRequestsWaitingForYourReview": "Il n'y a actuellement aucune demande d'approbation en attente de votre examen.",
+  "home": "Accueil",
+  "dashboard": {
+    "title": "Tableau de bord",
+    "approvalRequests": "Demandes d'approbation",
+    "searchFiles": "Rechercher des fichiers ou dossiers...",
+    "searchContracts": "Rechercher des contrats..."
+  },
+  "contractTable": {
+    "title": "Titre",
+    "status": {
+      "draft": "Brouillon",
+      "approved": "Approuvé",
+      "pending": "En attente",
+      "rejected": "Rejeté",
+      "expiring": "Expire bientôt"
+    },
+    "version": "Version",
+    "lastUpdated": "Dernière mise à jour",
+    "author": "Auteur",
+    "expiryDate": "Date d'expiration",
+    "headerStatus": "Statut"
+  },
+  "newContract": "Nouveau contrat",
+  "createContract": "Créer un contrat",
+  "edit": "Éditer",
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "deleteContract": "Supprimer le contrat",
+  "createFolder": "Créer un dossier",
+  "contractTitle": "Titre du contrat",
+  "filterByTitle": "Filtrer par titre...",
+  "no_pending_approval_requests": "Aucune demande d'approbation en attente.",
+  "accessDenied": "Accès refusé",
+  "noPermissionToViewApprovalRequests": "Vous n'avez pas la permission de voir les demandes d'approbation.",
+  "loadingApprovalRequests": "Chargement des demandes d'approbation...",
+  "requestedBy": "Demandé par"
+} 
