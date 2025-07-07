@@ -193,20 +193,32 @@ button:disabled {
   }
   
   /* Submenu positioning for mobile */
-  .sidebar-container .submenu-container {
+  .mobile-submenu-modal .submenu-container {
+    display: flex !important;
+    gap: 20px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
     right: 0 !important;
     width: 100% !important;
     position: fixed !important;
-    bottom: 41px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    background-color: var(--sidebar-bg) !important;
-    border-top: 1px solid var(--border-color) !important;
+    background-color: var(--sidebar-submenu-bg) !important;
     z-index: 13 !important;
     max-height: 40px !important;
     overflow: hidden !important;
   }
-  
+  .mobile-submenu-modal .submenu-container ul {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
   .sidebar-container .submenu-container > div {
     overflow-x: auto !important;
     width: 100% !important;
@@ -238,16 +250,5 @@ button:disabled {
     width: 20px !important;
     height: 20px !important;
   }
-  
-  /* Override any inline styles from React component */
-  .sidebar-container .sidebar-button[style*="margin-bottom"] {
-    margin-bottom: 0 !important;
-  }
-  
-  /* Force vertical centering */
-  .sidebar-container .sidebar-button,
-  .sidebar-container .sidebar-button > div {
-    align-items: center !important;
-    justify-content: center !important;
-  }
+
 }

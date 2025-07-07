@@ -15,6 +15,7 @@
   --danger: #ef4444;
   --success: #10b981;
   --sidebar-bg: #f1f5f9;
+  --sidebar-submenu-bg: #fcf6f6;
   --sidebar-text: #1e293b;
   --input-bg: #fff;
   --input-border: #d1d5db;
@@ -36,6 +37,7 @@ body.dark {
   --danger: #f87171;
   --success: #34d399;
   --sidebar-bg: #111827;
+  --sidebar-submenu-bg: #171b22;
   --sidebar-text: #f1f5f9;
   --input-bg: #232b3b;
   --input-border: #334155;
