@@ -223,52 +223,11 @@ const Dashboard = () => {
                 fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
                 fontWeight: 'bold',
                 color: 'var(--text)',
-                textShadow: darkMode ? `
-                  2px 2px 0px rgba(255,255,255,0.3),
-                  4px 4px 0px rgba(255,255,255,0.2),
-                  6px 6px 0px rgba(255,255,255,0.1),
-                  8px 8px 15px rgba(255,255,255,0.1)
-                ` : `
-                  2px 2px 0px rgba(0,0,0,0.3),
-                  4px 4px 0px rgba(0,0,0,0.2),
-                  6px 6px 0px rgba(0,0,0,0.1),
-                  8px 8px 15px rgba(0,0,0,0.1)
-                `,
-                transform: 'perspective(500px) rotateX(5deg)',
-                transformStyle: 'preserve-3d',
                 letterSpacing: '2px',
                 margin: 0,
                 padding: 'clamp(0.25rem, 2vw, 0.5rem) 0',
                 transition: 'all 0.3s ease',
                 cursor: 'default'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'perspective(500px) rotateX(10deg) scale(1.05)';
-                e.currentTarget.style.textShadow = darkMode ? `
-                  3px 3px 0px rgba(255,255,255,0.4),
-                  6px 6px 0px rgba(255,255,255,0.3),
-                  9px 9px 0px rgba(255,255,255,0.2),
-                  12px 12px 20px rgba(255,255,255,0.15)
-                ` : `
-                  3px 3px 0px rgba(0,0,0,0.4),
-                  6px 6px 0px rgba(0,0,0,0.3),
-                  9px 9px 0px rgba(0,0,0,0.2),
-                  12px 12px 20px rgba(0,0,0,0.15)
-                `;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'perspective(500px) rotateX(5deg)';
-                e.currentTarget.style.textShadow = darkMode ? `
-                  2px 2px 0px rgba(255,255,255,0.3),
-                  4px 4px 0px rgba(255,255,255,0.2),
-                  6px 6px 0px rgba(255,255,255,0.1),
-                  8px 8px 15px rgba(255,255,255,0.1)
-                ` : `
-                  2px 2px 0px rgba(0,0,0,0.3),
-                  4px 4px 0px rgba(0,0,0,0.2),
-                  6px 6px 0px rgba(0,0,0,0.1),
-                  8px 8px 15px rgba(0,0,0,0.1)
-                `;
               }}
               >{t('dashboard.title', 'Dashboard')}</h1>
               <NotificationDropdown />

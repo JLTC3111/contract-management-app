@@ -371,10 +371,9 @@ const Sidebar = () => {
               onClick={handleLogout}
             />
           </div>
-          {user && (
+          {user && !isMobile && !collapsed && (
                     <div style={{ borderBottom: '1px solid var(--card-border)', padding: '.25rem .5rem', textAlign: 'center' }}>
                       <span className="text-secondary" style={{ fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)' }}>{t('Logged in as')} <strong>{user.email}</strong></span>
-                      
                     </div>
             )}
           {!collapsed && user && !isMobile && (

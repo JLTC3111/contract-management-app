@@ -112,105 +112,104 @@ const Navbar = () => {
   if (location.pathname === '/login') return null;
 
   return (
-    <nav style={{
-      backgroundColor: 'var(--card-bg)',
-      color: 'var(--text)',
-      padding: 'clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 4vw, 2rem)',
-      borderBottom: '1px solid var(--card-border)',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      position: 'sticky',
-      top: '0',
-      zIndex: 5,
-      boxShadow: darkMode
-      ? '0 2px 8px rgba(255, 255, 255, 0.8)'   // Dark mode shadow (lighter glow)
-      : '0 2px 8px rgba(0, 0, 0, 0.8)', // Light mode shadow
-      maxHeight: 'clamp(32px, 8vw, 48px)'
-    }}>
+    <nav
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        color: 'var(--text)',
+        padding: 'clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 4vw, 2rem)',
+        borderBottom: '1px solid var(--card-border)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'sticky',
+        top: '0',
+        zIndex: 5,
+        boxShadow: darkMode
+          ? '0 2px 8px rgba(255, 255, 255, 0.8)'
+          : '0 2px 8px rgba(0, 0, 0, 0.8)',
+        maxHeight: 'clamp(32px, 8vw, 48px)'
+      }}
+    >
+      {/* Left: App Title */}
       <h2 style={{ marginRight: 'clamp(0.5rem, 2vw, 1rem)', fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 'bold' }}>📁 Contract Manager</h2>
-      
-      {user && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.5rem, 2vw, 1.5rem)' }}>
-          {/* Language Switcher */}
-          <select
-            value={i18n.language}
-            onChange={e => i18n.changeLanguage(e.target.value)}
-            style={{
-              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-              borderRadius: '6px',
-              border: '1.5px solid var(--card-border)',
-              background: 'var(--card-bg)',
-              color: 'var(--text)',
-              padding: '0.3rem 1.2rem 0.3rem 0.5rem',
-              marginRight: '0.5rem',
-              cursor: 'pointer',
-              appearance: 'none',
-              minWidth: 90,
-            }}
-            aria-label="Select language"
-          >
-            {LANGUAGES.map(lang => (
-              <option key={lang.code} value={lang.code}>
-                {lang.flag} {lang.label}
-              </option>
-            ))}
-          </select>
-          {!isMobile && (
-          <div
-        style={{
-          position: 'sticky',
-          top: '15%',
-          left: '3.5%',
-          width: 'clamp(36px, 8vw, 54px)',
-          height: 'clamp(24px, 5vw, 32px)',
-          background: 'var(--card-bg)',
-          borderRadius: '16px',
-          border: '1.5px solid var(--card-border)',
-          display: 'flex',
-          alignItems: 'center',
-          cursor: 'pointer',
-          transition: 'background 0.2s',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-          zIndex: 10,
-          marginLeft: 'auto',
-        }}
-        onClick={toggleDarkMode}
-        aria-label="Toggle theme"
-      >
-        <span
+      {/* Center: Language Switcher (always visible) */}
+      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <select
+          value={i18n.language}
+          onChange={e => i18n.changeLanguage(e.target.value)}
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: darkMode ? '26px' : '4px',
-            transform: 'translateY(-50%)',
-            width: 'clamp(18px, 5vw, 24px)',
-            height: 'clamp(18px, 5vw, 24px)',
-            borderRadius: '50%',
-            background: 'var(--sidebar-hover-bg)',
+            fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
+            borderRadius: '6px',
+            border: '1.5px solid var(--card-border)',
+            background: 'var(--card-bg)',
+            color: 'var(--text)',
+            padding: '0.3rem 1.2rem 0.3rem 0.5rem',
+            marginRight: '0.5rem',
+            cursor: 'pointer',
+            appearance: 'none',
+            minWidth: 90,
+          }}
+          aria-label="Select language"
+        >
+          {LANGUAGES.map(lang => (
+            <option key={lang.code} value={lang.code}>
+              {lang.flag} {lang.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      {/* Right: Theme Toggle (always visible) */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <div
+          style={{
+            position: 'relative',
+            width: 'clamp(36px, 8vw, 54px)',
+            height: 'clamp(24px, 5vw, 32px)',
+            background: 'var(--card-bg)',
+            borderRadius: '16px',
+            border: '1.5px solid var(--card-border)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--text)',
-            fontSize: 'clamp(1rem, 3vw, 1.2rem)',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-            transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
-            zIndex: 2,
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            zIndex: 10,
+            marginLeft: 'auto',
           }}
+          onClick={toggleDarkMode}
+          aria-label="Toggle theme"
         >
-          {darkMode ? <Moon size={18} /> : <Sun size={18} />}
-            </span>
-            {/* Show both icons, inactive one faint */}
-            <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
-              <Sun size={14} />
-            </span>
-            <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
-              <Moon size={14} />
-            </span>
-          </div>
-          )}
+          <span
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: darkMode ? '26px' : '4px',
+              transform: 'translateY(-50%)',
+              width: 'clamp(18px, 5vw, 24px)',
+              height: 'clamp(18px, 5vw, 24px)',
+              borderRadius: '50%',
+              background: 'var(--sidebar-hover-bg)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--text)',
+              fontSize: 'clamp(1rem, 3vw, 1.2rem)',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+              transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
+              zIndex: 2,
+            }}
+          >
+            {darkMode ? <Moon size={18} /> : <Sun size={18} />}
+          </span>
+          {/* Show both icons, inactive one faint */}
+          <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
+            <Sun size={14} />
+          </span>
+          <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
+            <Moon size={14} />
+          </span>
         </div>
-      )}
+      </div>
     </nav>
   );
 };
