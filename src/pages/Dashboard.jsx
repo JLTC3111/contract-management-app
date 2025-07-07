@@ -11,6 +11,7 @@ import NotificationDropdown from '../components/NotificationDropdown';
 
 const Dashboard = () => {
   const [contracts, setContracts] = useState([]);
+  const [filteredContracts, setFilteredContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { darkMode } = useTheme();
@@ -20,7 +21,9 @@ const Dashboard = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(null);
   const searchRef = useRef();
+  const metricsRef = useRef();
   const debounceTimeout = useRef();
   
 
@@ -32,6 +35,48 @@ const Dashboard = () => {
     { label: 'Rejected', count: contracts.filter(c => c.status === 'rejected').length },
     { label: 'Expired', count: contracts.filter(c => c.status === 'expired').length },
   ];
+
+  // Handle metric card clicks
+  const handleMetricClick = (label) => {
+    if (activeFilter === label) {
+      // If clicking the same filter, clear it
+      setActiveFilter(null);
+      setFilteredContracts(contracts);
+    } else {
+      // Apply new filter
+      setActiveFilter(label);
+      const statusMap = {
+        'Active': 'approved',
+        'Pending': 'pending',
+        'Expiring Soon': 'expiring',
+        'Drafts': 'draft',
+        'Rejected': 'rejected',
+        'Expired': 'expired',
+      };
+      const status = statusMap[label];
+      const filtered = contracts.filter(c => c.status === status);
+      setFilteredContracts(filtered);
+    }
+  };
+
+  // Update filtered contracts when contracts change
+  useEffect(() => {
+    if (activeFilter) {
+      const statusMap = {
+        'Active': 'approved',
+        'Pending': 'pending',
+        'Expiring Soon': 'expiring',
+        'Drafts': 'draft',
+        'Rejected': 'rejected',
+        'Expired': 'expired',
+      };
+      const status = statusMap[activeFilter];
+      const filtered = contracts.filter(c => c.status === status);
+      setFilteredContracts(filtered);
+    } else {
+      setFilteredContracts(contracts);
+    }
+  }, [contracts, activeFilter]);
 
   // Helper: recursively list all files/folders under a base path
   async function listAllFilesRecursive(basePath) {
@@ -141,10 +186,16 @@ const Dashboard = () => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowDropdown(false);
       }
+      
+      // Clear filter if clicking outside metrics
+      if (activeFilter && metricsRef.current && !metricsRef.current.contains(e.target)) {
+        setActiveFilter(null);
+        setFilteredContracts(contracts);
+      }
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
+  }, [activeFilter, contracts]);
 
   return (
     <>
@@ -166,7 +217,58 @@ const Dashboard = () => {
         <div style={{ display: 'flex' }}>
           <main style={{ padding: '2rem', flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-              <h1>Dashboard</h1>
+              <h1 style={{
+                fontSize: '2.5rem',
+                fontWeight: 'bold',
+                color: 'var(--text)',
+                textShadow: darkMode ? `
+                  2px 2px 0px rgba(255,255,255,0.3),
+                  4px 4px 0px rgba(255,255,255,0.2),
+                  6px 6px 0px rgba(255,255,255,0.1),
+                  8px 8px 15px rgba(255,255,255,0.1)
+                ` : `
+                  2px 2px 0px rgba(0,0,0,0.3),
+                  4px 4px 0px rgba(0,0,0,0.2),
+                  6px 6px 0px rgba(0,0,0,0.1),
+                  8px 8px 15px rgba(0,0,0,0.1)
+                `,
+                transform: 'perspective(500px) rotateX(5deg)',
+                transformStyle: 'preserve-3d',
+                letterSpacing: '2px',
+                margin: 0,
+                padding: '0.5rem 0',
+                transition: 'all 0.3s ease',
+                cursor: 'default'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'perspective(500px) rotateX(10deg) scale(1.05)';
+                e.currentTarget.style.textShadow = darkMode ? `
+                  3px 3px 0px rgba(255,255,255,0.4),
+                  6px 6px 0px rgba(255,255,255,0.3),
+                  9px 9px 0px rgba(255,255,255,0.2),
+                  12px 12px 20px rgba(255,255,255,0.15)
+                ` : `
+                  3px 3px 0px rgba(0,0,0,0.4),
+                  6px 6px 0px rgba(0,0,0,0.3),
+                  9px 9px 0px rgba(0,0,0,0.2),
+                  12px 12px 20px rgba(0,0,0,0.15)
+                `;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'perspective(500px) rotateX(5deg)';
+                e.currentTarget.style.textShadow = darkMode ? `
+                  2px 2px 0px rgba(255,255,255,0.3),
+                  4px 4px 0px rgba(255,255,255,0.2),
+                  6px 6px 0px rgba(255,255,255,0.1),
+                  8px 8px 15px rgba(255,255,255,0.1)
+                ` : `
+                  2px 2px 0px rgba(0,0,0,0.3),
+                  4px 4px 0px rgba(0,0,0,0.2),
+                  6px 6px 0px rgba(0,0,0,0.1),
+                  8px 8px 15px rgba(0,0,0,0.1)
+                `;
+              }}
+              >Dashboard</h1>
               <NotificationDropdown />
             </div>
             
@@ -221,7 +323,9 @@ const Dashboard = () => {
               <p>Loading...</p>
             ) : (
               <>
-                <DashboardMetrics data={metrics} />
+                <div ref={metricsRef}>
+                  <DashboardMetrics data={metrics} onMetricClick={handleMetricClick} activeFilter={activeFilter} />
+                </div>
                 
                 {/* Search bars row - positioned above contract table */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', marginTop: '0.5rem' }}>
@@ -331,7 +435,7 @@ const Dashboard = () => {
                   </div>
                 </div>
                 
-                <ContractTable contracts={contracts} searchQuery={searchQuery} />
+                <ContractTable contracts={filteredContracts} searchQuery={searchQuery} />
               </>
             )}
           </main>

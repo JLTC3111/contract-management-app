@@ -231,10 +231,14 @@ const NotificationDropdown = () => {
           e.currentTarget.style.boxShadow = darkMode
             ? '0 4px 16px 0 rgba(255,255,255,0.25)'
             : '0 4px 16px 0 rgba(0,0,0,0.18)';
+          e.currentTarget.style.borderColor = darkMode ? '#60a5fa' : '#f97316';
+          e.currentTarget.style.animation = 'ziggle 0.4s ease-in-out';
         }}
         onMouseLeave={e => {
           e.currentTarget.style.background = 'var(--card-bg)';
           e.currentTarget.style.boxShadow = 'none';
+          e.currentTarget.style.borderColor = 'var(--card-border)';
+          e.currentTarget.style.animation = 'none';
         }}
       >
         <Bell 

@@ -198,11 +198,11 @@ nav {
 .metric-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-bottom: 9px solid #e5efff; /* Tailwind blue-500 */
+  border-bottom: 3px solid #e5efff; /* Tailwind blue-500 */
   padding: 3.5px;
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, border-bottom-width 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -217,11 +217,13 @@ body.dark .metric-card {
 
 body.dark .metric-card:hover {
   box-shadow: 0 6px 18px rgba(255,255,255,0.18);
+  border-bottom-width: 9px;
 }
 
 .metric-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  border-bottom-width: 9px;
 }
 
 .metric-card h4 {

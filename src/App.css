@@ -1,5 +1,3 @@
-
-
 #root {
   height:100%;
   max-width: 1380px;
@@ -19,6 +17,12 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.sidebar-container {
+  padding: 1rem;
+  display: grid;
+  align-Items: start;
 }
 
 @keyframes logo-spin {
@@ -61,4 +65,189 @@ button:disabled {
 
 .read-the-docs {
   color: #888;
+}
+
+/* Responsive Layout */
+@media (max-width: 1023px) {
+  .app-container {
+      grid-template-columns: 1fr !important;
+      flex-direction: column !important;
+      height: 100vh !important;
+      overflow: hidden !important;
+    }
+
+  /* Sidebar becomes bottom navigation */
+  .sidebar-container {
+    height: 36px !important;
+    width: 100% !important;
+    border-right: none !important;
+    border-top: 1px solid var(--card-border) !important;
+    background-color: var(--sidebar-bg) !important;
+    z-index: 11 !important;
+    transition: none !important; /* Disable transitions on mobile */
+    position: fixed !important;
+    top: unset !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: .5px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    overflow-x: auto !important;
+  }
+
+  .sidebar-container.collapsed {
+    width: 100% !important;
+  }
+  
+  /* Force full width on mobile regardless of collapsed state */
+  .sidebar-container[style*="width"] {
+    width: 100% !important;
+  }
+  
+  .main-content {
+    width: 100% !important;
+    padding: 1rem!important;
+    height: calc(100vh - 60px) !important;
+  }
+  
+  .content-area {
+    padding: 1em !important;
+    height: 100% !important;
+    overflow: auto !important;
+  }
+  
+  
+  /* Target the main content container (second div) */
+  .sidebar-container > div:nth-child(2) {
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    overflow-x: auto !important;
+    height: 100% !important;
+    width: 100% !important;
+    gap: 0 !important;
+  }
+  
+  /* Target the inner div that contains the buttons */
+  .sidebar-container > div:nth-child(2) > div:first-child {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    width: 100% !important;
+    height: 100% !important;
+    gap: 0 !important;
+  }
+  
+  .sidebar-container .sidebar-button {
+    height: 100% !important;
+    min-width: 30px !important;
+    flex: 1 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    align-self: stretch !important;
+  }
+  
+  .sidebar-container .sidebar-button > div {
+    justify-content: center !important;
+    padding-left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+  }
+  
+  .sidebar-container .sidebar-button span {
+    display: none !important;
+  }
+  
+  /* Don't hide the first button (chevron) on mobile */
+  .sidebar-container button:first-child {
+    display: none !important;
+  }
+  
+  /* Hide user role info on mobile */
+  .sidebar-container > div:nth-child(2) > div:last-child {
+    display: none !important;
+  }
+  
+  /* Ensure chevron button is visible on mobile */
+  .sidebar-container > div:first-child {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-width: 60px !important;
+    flex: 1 !important;
+    margin-bottom: 0 !important;
+  }
+  
+  /* Submenu positioning for mobile */
+  .sidebar-container .submenu-container {
+    right: 0 !important;
+    width: 100% !important;
+    position: fixed !important;
+    bottom: 41px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background-color: var(--sidebar-bg) !important;
+    border-top: 1px solid var(--border-color) !important;
+    z-index: 13 !important;
+    max-height: 40px !important;
+    overflow: hidden !important;
+  }
+  
+  .sidebar-container .submenu-container > div {
+    overflow-x: auto !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+  
+  .sidebar-container .submenu-container ul {
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .sidebar-container .submenu-container li {
+    display: inline-flex !important;
+    justify-content: center !important;
+    padding: 1em !important;
+    box-sizing: border-box !important;
+    width: auto !important;
+    height: 100% !important;
+  }
+  
+  /* Ensure proper spacing for mobile buttons */
+  .sidebar-container .sidebar-button svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  /* Override any inline styles from React component */
+  .sidebar-container .sidebar-button[style*="margin-bottom"] {
+    margin-bottom: 0 !important;
+  }
+  
+  /* Force vertical centering */
+  .sidebar-container .sidebar-button,
+  .sidebar-container .sidebar-button > div {
+    align-items: center !important;
+    justify-content: center !important;
+  }
 }

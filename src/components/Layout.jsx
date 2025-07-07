@@ -6,12 +6,12 @@ import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+    <div className="app-container" style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
       
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+      <div className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
         <NavBar />
-        <div style={{ flex: 1, overflow: 'auto', padding: '1rem' }}>
+        <div className="content-area" style={{ flex: 1, overflow: 'auto', padding: '1rem' }}>
           <Outlet />
         </div>
       </div>
