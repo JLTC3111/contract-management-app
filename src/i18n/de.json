@@ -109,7 +109,8 @@
       "approved": "Genehmigt",
       "pending": "Ausstehend",
       "rejected": "Abgelehnt",
-      "expiring": "Läuft bald ab"
+      "expiring": "Läuft bald ab",
+      "expired": "Abgelaufen"
     },
     "version": "Version",
     "lastUpdated": "Zuletzt aktualisiert",
@@ -238,5 +239,9 @@
     "feedback": "Feedback"
   },
   "newcontract.back": "Zurück",
-  "newcontract.done": "Fertig"
+  "newcontract.done": "Fertig",
+  "duplicate_error": "Fehler beim Überprüfen auf doppelte Verträge",
+  "duplicate_prompt": "Ein Vertrag mit diesem Titel existiert bereits. Bitte wählen Sie einen anderen Namen.",
+  "duplicate_error_short": "Fehler beim Speichern des Vertrags",
+  "upload_file_error": "Fehler beim Aktualisieren des Vertrags mit Datei"
 } 

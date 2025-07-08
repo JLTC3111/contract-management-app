@@ -1,13 +1,46 @@
 import FileUploader from '../components/FileUploader';
 import toast from 'react-hot-toast';
+import Approvals from '../components/Approvals';
 import { useUser} from '../hooks/useUser';
-import {  FolderOpenDot, FileText, ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
-import Approvals from '../components/Approvals';
+import { File, FileText, FileImage, ArrowLeft} from 'lucide-react'; 
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
+
+function getFileIcon(fileName) {
+  const ext = fileName.split('.').pop().toLowerCase();
+  const iconStyle = { marginRight: '2.5px', verticalAlign: 'middle' };
+  switch (ext) {
+    case 'pdf':
+      return <img width="20px" height="20px" src="/img/pdf.png" style={iconStyle} />
+    case 'doc':
+    case 'docx':
+      return <img width="20px" height="20px" src="/img/word.png" style={iconStyle} />
+    case 'xls':
+    case 'xlsx':
+      return <img width="20px" height="20px" src="/img/excel.png" style={iconStyle} />
+    case 'ppt':
+    case 'pptx':
+      return <img width="20px" height="20px" src="/img/powerpoint.png" style={iconStyle} />
+    case 'zip':
+    case 'rar':
+    case '7z':
+      return <img width="20px" height="20px" src="/img/zip.png" style={iconStyle} />
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+    case 'gif':
+    case 'bmp':
+    case 'svg':
+      return <img width="20px" height="20px" src="/img/image.png" style={iconStyle} />;
+    case 'txt':
+      return <img width="20px" height="20px" src="/img/txt.png" style={iconStyle} />;
+    default:
+      return <File size={20} color="#607d8b" style={iconStyle} />;
+  }
+}
 
 const ContractDetail = () => {
   const { user, loading: userLoading } = useUser(); // from context
@@ -649,7 +682,7 @@ return (
           )}
         </p>
   
-        <div style={{ marginTop: '1rem' }}>
+        <div style={{ marginTop: '1rem', textAlign: 'left' }}>
           
           <p>
           <strong>{t('contract_detail_author')}:</strong>{' '}
@@ -670,6 +703,7 @@ return (
           <FileUploader
             contract={contract}
             currentPath={currentPath}
+            align="left"
             onUploadComplete={(files) => {
               const latestFile = files?.[0];
               if (latestFile) {
@@ -762,7 +796,7 @@ return (
                 style={{
                   fontSize: '1.1rem',
                   cursor: isFolder ? 'pointer' : 'default',
-                  color: isFolder ? '#1d4ed8' : '#000',
+                  color: isFolder ? darkMode ? '#fff' : '#000' : darkMode ? '#fff' : '#000',
                   textDecoration: isFolder ? 'none' : 'none',
                 }}
                 onClick={() => {
@@ -778,7 +812,10 @@ return (
                   }
                 }}
               >
-                {isFolder ? <img width="13" height="14" src="/img/folder.png"/> : <FileText size={20} />} {fileName}
+                {isFolder
+                  ? <>📂 {fileName}</>
+                  : <>{getFileIcon(fileName)} {fileName}</>
+                }
               </span>
             </li>
             
@@ -832,14 +869,14 @@ return (
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: 'blue',
+                  color: darkMode ? 'rgb(159, 191, 255)' : 'rgb(0, 85, 255)',
                   textDecoration: 'none',
                   cursor: 'pointer',
                   padding: 0,
                   font: 'inherit'
                 }}
               >
-                📄 {fileName}
+                {getFileIcon(fileName)} {fileName}
               </button>
             ) : (
               <a
@@ -851,12 +888,14 @@ return (
                   }
                 }}
                 style={{
-                  color: '#0077cc',
+                  color: darkMode ? '#fff' : '#000',
                   textDecoration: 'none',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  display: 'flex', // <-- add this for icon+text alignment
+                  alignItems: 'center'
                 }}
               >
-                 {fileName}
+                {getFileIcon(fileName)} {fileName}
               </a>
             )}
           </li>

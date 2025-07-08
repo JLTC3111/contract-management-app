@@ -48,7 +48,8 @@ const Comment = ({ comment }) => (
       border: '1px solid var(--card-border)',
       borderRadius: '6px',
       marginBottom: '0.5rem',
-      background: 'var(--card-bg)'
+      background: 'var(--card-bg)',
+      textAlign: 'left' // <-- ensure left alignment for the whole comment box
     }}
   >
     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
@@ -57,7 +58,7 @@ const Comment = ({ comment }) => (
         {formatDate(comment.created_at)}
       </span>
     </div>
-    <p style={{ color: 'var(--text)', margin: 0 }}>{comment.comment}</p>
+    <p style={{ color: 'var(--text)', margin: 0, textAlign: 'left' }}>{comment.comment}</p>
   </div>
 );
 
@@ -230,7 +231,7 @@ const CommentSection = ({ contractId }) => {
             {loadingComments ? (
               <div style={{ 
                 display: 'flex', 
-                alignItems: 'center', 
+                alignItems: 'center',
                 gap: '0.5rem', 
                 padding: '1rem',
                 color: 'var(--text-secondary)'

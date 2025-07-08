@@ -110,7 +110,8 @@
       "approved": "已批准",
       "pending": "待处理",
       "rejected": "已拒绝",
-      "expiring": "即将到期"
+      "expiring": "即将到期",
+      "expired": "已过期"
     },
     "version": "版本",
     "lastUpdated": "最后更新",
@@ -239,5 +240,9 @@
     "feedback": "发送反馈"
   },
   "newcontract.back": "返回",
-  "newcontract.done": "完成"
+  "newcontract.done": "完成",
+  "duplicate_error": "检查重复合同时出错",
+  "duplicate_prompt": "已存在具有此标题的合同。请选择其他名称。",
+  "duplicate_error_short": "保存合同时出错",
+  "upload_file_error": "更新带有文件的合同时出错"
 } 

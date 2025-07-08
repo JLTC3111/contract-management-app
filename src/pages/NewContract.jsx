@@ -18,6 +18,20 @@ const NewContract = () => {
   const { darkMode } = useTheme();
   const handleCreateContract = async () => {
     if (!title) return alert('Title is required');
+    // Check for duplicate contract title (case-insensitive)
+    const { data: existing, error: fetchError } = await supabase
+      .from('contracts')
+      .select('id')
+      .ilike('title', title.trim());
+    if (fetchError) {
+      alert('Error checking for duplicate contract');
+      console.error(fetchError);
+      return;
+    }
+    if (existing && existing.length > 0) {
+      alert('A contract with this title already exists. Please choose a different name.');
+      return;
+    }
     // Insert contract without file info
     const { data, error } = await supabase.from('contracts').insert([
       {
@@ -58,7 +72,7 @@ const NewContract = () => {
   };
 
   return (
-    <div style={{width: '92.5%', border: '1px solid var(--card-border)', padding: 'clamp(1rem, 4vw, 1.5rem)', boxShadow: darkMode ? '0 2px 4px rgba(255, 255, 255, 0.25)' : '0 2px 4px rgba(0, 0, 0, 0.25)'}}>
+    <div style={{width: '91%', border: '1px solid var(--card-border)', padding: 'clamp(1rem, 4vw, 1.5rem)', boxShadow: darkMode ? '0 2px 4px rgba(255, 255, 255, 0.25)' : '0 2px 4px rgba(0, 0, 0, 0.25)'}}>
       {/* Back Button */}
       {!contract && (
         <div style={{ marginBottom: 'clamp(0.5rem, 3vw, 1rem)' }}>
@@ -81,7 +95,14 @@ const NewContract = () => {
       
       <h2 style={{fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>{t('newContract')}</h2>
       {!contract ? (
-        <><div style={{display:'flex', justifyContent:'center', flexWrap:'wrap', gap:'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)'}}>
+        <><div style={{
+          display:'flex',
+          justifyContent:'center',
+          flexWrap:'wrap',
+          gap:'clamp(0.5rem, 2vw, 1rem)',
+          marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
+          alignItems: 'center',
+        }}>
           <input 
             type="text"
             placeholder={t('contractTitle')}
@@ -98,6 +119,7 @@ const NewContract = () => {
               flex: 1,
               minWidth: 'clamp(120px, 30vw, 200px)',
               boxSizing: 'border-box',
+              minHeight: '44px',
             }}
           />
           <input
@@ -116,9 +138,12 @@ const NewContract = () => {
               flex: 1,
               minWidth: 'clamp(100px, 20vw, 160px)',
               boxSizing: 'border-box',
+              minHeight: '44px',
             }}
           />
-          <select value={status} onChange={(e) => setStatus(e.target.value)}
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
             style={{
               fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               padding: 'clamp(0.5rem, 2vw, 0.75rem)',
@@ -130,6 +155,7 @@ const NewContract = () => {
               flex: 1,
               minWidth: 'clamp(100px, 20vw, 160px)',
               boxSizing: 'border-box',
+              minHeight: '44px',
             }}
           >
             <option value="draft">{t('contractTable.status.draft')}</option>
@@ -139,34 +165,40 @@ const NewContract = () => {
             <option value="expiring">{t('contractTable.status.expiring')}</option>
             <option value="expired">{t('contractTable.status.expired')}</option>
           </select>
-          <button onClick={handleCreateContract} style={{
-            alignItems: 'center',
-            display: 'flex',
-            marginTop: '1rem',
-            justifyContent: 'center',
-            background: '#088eee',
-            color: '#fff',
-            padding: '0.5rem 1rem',
-            fontSize: '1rem',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            transition: 'background 0.2s',
-          }}
-          onMouseEnter={e => e.target.style.background = '#0369a1'}
-          onMouseLeave={e => e.target.style.background = '#088eee'}
+          <button onClick={handleCreateContract}
+            style={{
+              fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+              padding: 'clamp(0.5rem, 2vw, 0.75rem)',
+              borderRadius: '8px',
+              border: '1.5px solid var(--card-border)',
+              background: '#3b82f6',
+              color: '#fff',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              minWidth: 'clamp(100px, 20vw, 160px)',
+              boxSizing: 'border-box',
+              minHeight: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
             {t('createContract')}
           </button>
-          </div>
+        </div>
         </>
       ) : (
         <>
           <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{t('contractCreated')}</p>
-          <div style={{ marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
-            <FileUploader contract={contract} onUploadComplete={handleUploadComplete} />
-            {uploading && <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{t('updatingContract')}</p>}
-          </div>
+          {/* FileUploader - only show after contract is created */}
+          {contract && contract.id && (
+            <FileUploader
+              contract={contract}
+              currentPath={`uploads/${contract.id}`}
+              onUploadComplete={handleUploadComplete}
+            />
+          )}
+          {uploading && <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{t('updatingContract')}</p>}
           <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap:'wrap', gap: 'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
             <button
               onClick={() => navigate(-1)}

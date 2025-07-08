@@ -110,7 +110,8 @@
       "approved": "承認済み",
       "pending": "保留中",
       "rejected": "却下",
-      "expiring": "まもなく期限切れ"
+      "expiring": "まもなく期限切れ",
+      "expired": "期限切れ"
     },
     "version": "バージョン",
     "lastUpdated": "最終更新日",
@@ -239,5 +240,9 @@
     "feedback": "フィードバック"
   },
   "newcontract.back": "戻る",
-  "newcontract.done": "完了"
+  "newcontract.done": "完了",
+  "duplicate_error": "重複契約の確認中にエラーが発生しました",
+  "duplicate_prompt": "同じタイトルの契約が既に存在します。別の名前を選択してください。",
+  "duplicate_error_short": "契約の保存中にエラーが発生しました",
+  "upload_file_error": "ファイル付き契約の更新中にエラーが発生しました"
 } 

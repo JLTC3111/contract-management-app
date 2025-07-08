@@ -110,7 +110,8 @@
       "approved": "Approved",
       "pending": "Pending",
       "rejected": "Rejected",
-      "expiring": "Expiring Soon!"
+      "expiring": "Expiring Soon!",
+      "expired": "Expired"
     },
     "version": "Version",
     "lastUpdated": "Last Updated",
@@ -238,5 +239,9 @@
     "feedback": "Feedback"
   },
   "newcontract.back": "Back",
-  "newcontract.done": "Done"
+  "newcontract.done": "Done",
+  "duplicate_error": "Error checking for duplicate contract",
+  "duplicate_prompt": "A contract with this title already exists. Please choose a different name.",
+  "duplicate_error_short": "Error saving contract",
+  "upload_file_error": "Error updating contract with file"
 } 

@@ -109,7 +109,8 @@
       "approved": "Approuvé",
       "pending": "En attente",
       "rejected": "Rejeté",
-      "expiring": "Expire bientôt"
+      "expiring": "Expire bientôt",
+      "expired": "Expiré"
     },
     "version": "Version",
     "lastUpdated": "Dernière mise à jour",
@@ -238,5 +239,9 @@
     "feedback": "Commentaires"
   },
   "newcontract.back": "Retour",
-  "newcontract.done": "Terminé"
+  "newcontract.done": "Terminé",
+  "duplicate_error": "Erreur lors de la vérification des doublons de contrat",
+  "duplicate_prompt": "Un contrat avec ce titre existe déjà. Veuillez choisir un autre nom.",
+  "duplicate_error_short": "Erreur lors de l'enregistrement du contrat",
+  "upload_file_error": "Erreur lors de la mise à jour du contrat avec le fichier"
 } 

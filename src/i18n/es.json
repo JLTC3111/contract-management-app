@@ -109,7 +109,8 @@
       "approved": "Aprobado",
       "pending": "Pendiente",
       "rejected": "Rechazado",
-      "expiring": "Próximo a vencer"
+      "expiring": "Próximo a vencer",
+      "expired": "Expirado"
     },
     "version": "Versión",
     "lastUpdated": "Última actualización",
@@ -238,5 +239,9 @@
     "feedback": "Comentarios"
   },
   "newcontract.back": "Atrás",
-  "newcontract.done": "Hecho"
+  "newcontract.done": "Hecho",
+  "duplicate_error": "Error al comprobar contratos duplicados",
+  "duplicate_prompt": "Ya existe un contrato con este título. Por favor, elija otro nombre.",
+  "duplicate_error_short": "Error al guardar el contrato",
+  "upload_file_error": "Error al actualizar el contrato con el archivo"
 } 

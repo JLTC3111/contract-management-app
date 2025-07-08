@@ -11,7 +11,7 @@ const sanitizeFileName = (name) =>
     .replace(/\s+/g, '-')
     .replace(/[^a-zA-Z0-9.\-_]/g, '');
 
-const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath }) => {
+const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath, align = 'center' }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const fileInputRef = useRef();
   const { t } = useTranslation();
@@ -103,7 +103,12 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
   };
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: align === 'left' ? 'flex-start' : 'center',
+      justifyContent: 'center'
+    }}>
       <input
         type="file"
         multiple
@@ -119,6 +124,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
         style={{
           alignItems: 'center',
           display: 'flex',
+          marginBottom: '1rem',
           justifyContent: 'center',
           backgroundColor: 'var(--card-bg)', 
           color: 'var(--text)',

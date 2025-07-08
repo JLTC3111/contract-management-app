@@ -110,7 +110,8 @@
       "approved": "อนุมัติแล้ว",
       "pending": "รอดำเนินการ",
       "rejected": "ถูกปฏิเสธ",
-      "expiring": "ใกล้หมดอายุ"
+      "expiring": "ใกล้หมดอายุ",
+      "expired": "หมดอายุ"
     },
     "version": "เวอร์ชัน",
     "lastUpdated": "อัปเดตล่าสุด",
@@ -230,7 +231,11 @@
   "contract_detail_close_preview": "ปิดตัวอย่าง",
   "failed_to_upload": "อัปโหลดไม่สำเร็จ",
   "upload_error_for": "เกิดข้อผิดพลาดในการอัปโหลดสำหรับ",
-  "uploader_uploaded": "อัปโหลดแล้ว"
+  "uploader_uploaded": "อัปโหลดแล้ว",
+  "duplicate_error": "เกิดข้อผิดพลาดขณะตรวจสอบสัญญาที่ซ้ำกัน",
+  "duplicate_prompt": "มีสัญญาที่ใช้ชื่อนี้อยู่แล้ว กรุณาเลือกชื่ออื่น",
+  "duplicate_error_short": "เกิดข้อผิดพลาดขณะบันทึกสัญญา",
+  "upload_file_error": "เกิดข้อผิดพลาดขณะอัปเดตสัญญาพร้อมไฟล์"
 ,
   "sidebar_mobile": {
     "password": "เปลี่ยนรหัสผ่าน",

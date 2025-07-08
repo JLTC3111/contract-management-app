@@ -240,5 +240,9 @@
     "feedback": "Phản hồi"
   },
   "newcontract.back": "Quay lại",
-  "newcontract.done": "Xong"
+  "newcontract.done": "Xong",
+  "duplicate_error": "Lỗi khi kiểm tra hợp đồng trùng lặp",
+  "duplicate_prompt": "Đã tồn tại hợp đồng với tiêu đề này. Vui lòng chọn tên khác.",
+  "duplicate_error_short": "Lỗi khi lưu hợp đồng",
+  "upload_file_error": "Lỗi khi cập nhật hợp đồng với tệp tin"
 } 
