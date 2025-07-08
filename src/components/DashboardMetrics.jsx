@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 const metricClassMap = {
   'Active': 'metric-approved',
   'Pending': 'metric-pending',
-  'Expiring Soon': 'metric-expiring',
+  'Expiring': 'metric-expiring',
   'Drafts': 'metric-draft',
   'Rejected': 'metric-rejected',
   'Expired': 'metric-expired',
@@ -19,7 +19,7 @@ const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
       onMetricClick(label);
     }
   };
-
+  console.log('Metrics data:', data);
   return (
     <div className="dashboard-metrics">
       {data.map(({ label, count }) => {
@@ -33,8 +33,8 @@ const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
             }}
             onClick={() => handleMetricClick(label)}
           >
-            <h4 style={{ color: 'var(--text)' }}>{label}</h4>
-            <p style={{ color: 'var(--text)' }}>{count}</p>
+            <h4 style={{ color: 'var(--text)', fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)' }}>{t(`metrics.${label.toLowerCase()}`)}</h4>
+            <p style={{ color: 'var(--text)', fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)' }}>{count}</p>
           </div>
         );
       })}

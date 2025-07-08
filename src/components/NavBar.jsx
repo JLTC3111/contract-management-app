@@ -7,6 +7,7 @@ import { useTheme } from '../hooks/useTheme';
 import { Sun, Moon } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -28,7 +29,8 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchRef = useRef();
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 500);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 1024);
   const { t, i18n } = useTranslation();
 
   const handleLogout = async () => {
@@ -103,7 +105,7 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 500);
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -131,23 +133,83 @@ const Navbar = () => {
       }}
     >
       {/* Left: App Title */}
-      <h2 style={{ marginRight: 'clamp(0.5rem, 2vw, 1rem)', fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 'bold' }}>📁 Contract Manager</h2>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <h2 style={{ margin: 0, fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 'bold' }}>
+          📁 Contract Manager
+        </h2>
+        <div
+          style={{ position: 'relative', display: 'inline-block' }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <motion.img
+            onClick={() => window.location.href = 'https://icue.vn'}
+            src="/logoIcons/logo.png"
+            alt="Logo"
+            style={{
+              marginLeft: '.5rem',
+              height: '1.8rem',
+              width: 'auto',
+              borderRadius: '20px',
+              verticalAlign: 'middle',
+              display: 'inline-block',
+              objectFit: 'contain',
+              transition: 'all 0.3s ease-in-out',
+              filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))',
+              cursor: 'pointer',
+              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+              boxShadow: isHovered
+                ? darkMode
+                  ? '0 1px 2px rgba(255, 255, 255, 1.5)'
+                  : '0 1px 2px rgba(0, 0, 0, 1.5)'
+                : 'none',
+            }}
+          />
+
+          {isHovered && (
+            <motion.div
+              initial={{ opacity: 0, x:  15}}
+              animate={{ opacity: 1, x: 5}}
+              exit={{ opacity: 0, x: 15}}
+              transition={{ duration: 0.2 }}
+              style={{
+                position: 'absolute',
+                left: '120%',
+                top: '10%',
+                transform: 'translateX(-50%)',
+                backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                color: '#fff',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                pointerEvents: 'none',
+                whiteSpace: 'nowrap',
+                zIndex: 100,
+              }}
+            >
+              Visit ICUE!
+            </motion.div>
+          )}
+        </div>
+      </div>
       {/* Center: Language Switcher (always visible) */}
       <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <select
           value={i18n.language}
           onChange={e => i18n.changeLanguage(e.target.value)}
           style={{
-            fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
+            fontSize: 'clamp(0.7rem, 1.25vw, 0.95rem)',
             borderRadius: '6px',
             border: '1.5px solid var(--card-border)',
             background: 'var(--card-bg)',
             color: 'var(--text)',
-            padding: '0.3rem 1.2rem 0.3rem 0.5rem',
-            marginRight: '0.5rem',
+            padding: '0.3rem 0.5rem',
             cursor: 'pointer',
             appearance: 'none',
             minWidth: 90,
+            boxShadow: darkMode
+              ? '0 .5px 1px rgba(255, 255, 255, 0.3)'
+              : '0 .5px 1px rgba(0, 0, 0, 0.3)',
           }}
           aria-label="Select language"
         >
@@ -174,7 +236,7 @@ const Navbar = () => {
             transition: 'background 0.2s',
             boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
             zIndex: 10,
-            marginLeft: 'auto',
+            marginRight: isMobile ? '1.5rem' : 'auto',
           }}
           onClick={toggleDarkMode}
           aria-label="Toggle theme"
@@ -183,7 +245,7 @@ const Navbar = () => {
             style={{
               position: 'absolute',
               top: '50%',
-              left: darkMode ? '26px' : '4px',
+              left: darkMode ? '24px' : '6px',
               transform: 'translateY(-50%)',
               width: 'clamp(18px, 5vw, 24px)',
               height: 'clamp(18px, 5vw, 24px)',
@@ -200,13 +262,6 @@ const Navbar = () => {
             }}
           >
             {darkMode ? <Moon size={18} /> : <Sun size={18} />}
-          </span>
-          {/* Show both icons, inactive one faint */}
-          <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
-            <Sun size={14} />
-          </span>
-          <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
-            <Moon size={14} />
           </span>
         </div>
       </div>

@@ -33,7 +33,7 @@
     "draft": "Draft",
     "rejected": "Rejected",
     "expired": "Expired",
-    "expiring": "Expiring Soon"
+    "expiring": "Expiring"
   },
   "table": {
     "title": "Title",
@@ -50,7 +50,7 @@
   "metrics": {
     "active": "Active",
     "pending": "Pending",
-    "expiring": "Expiring Soon",
+    "expiring": "Expiring",
     "drafts": "Drafts",
     "rejected": "Rejected",
     "expired": "Expired",
@@ -94,7 +94,7 @@
       "approved": "Approved",
       "pending": "Pending",
       "rejected": "Rejected",
-      "expiring": "Expiring Soon"
+      "expiring": "Expiring Soon!"
     },
     "version": "Version",
     "lastUpdated": "Last Updated",
@@ -113,5 +113,11 @@
   "accessDenied": "Access Denied",
   "noPermissionToViewApprovalRequests": "You do not have permission to view approval requests.",
   "loadingApprovalRequests": "Loading approval requests...",
-  "requestedBy": "Requested by"
+  "requestedBy": "Requested by",
+  "default_response": "Default Response",
+  "message": "Message",
+  "contractDetails": "Contract Details",
+  "defaultApprovalResponse": "Default Approval Response",
+  "defaultApprovalResponseText": "I have reviewed this contract and found it to be compliant with our standards. All terms and conditions have been verified and are acceptable for approval.",
+  "requestMessage": "Request Message"
 } 

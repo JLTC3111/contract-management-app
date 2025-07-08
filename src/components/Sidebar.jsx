@@ -335,20 +335,17 @@ const Sidebar = () => {
                         label: t('sidebar.changePassword'),
                         icon: <Settings size={14} style={{ marginRight: '-.5rem' }} />,
                         onClick: handleChangePassword,
-                        style: { marginBottom: '1rem' },
                         isMobile: isMobile,
                       },
                       {
                         label: t('sidebar.manual'),
                         icon: <BookOpen size={14} style={{ marginRight: '-.5rem' }} />,
                         onClick: handleReadManual,
-                        style: { marginBottom: '1rem' },
                         isMobile: isMobile,
                       },
                       {
                         label: t('sidebar.sendFeedback'),
                         icon: <MessageSquare size={14} style={{ marginRight: '-.5rem' }} />,
-                        onClick: handleSendFeedback,
                         isMobile: isMobile,
                       },
                     ]}
@@ -416,15 +413,14 @@ const Sidebar = () => {
           className="mobile-submenu-modal"
           style={{
             position: 'fixed',
-            gap: '20px',
             left: 0,
             right: 0,
-            bottom: '36.5px',
-            zIndex: 100,
+            bottom: '41.75px',
+            zIndex: 9,
             background: 'var(--sidebar-submenu-bg)',
             boxShadow: darkMode
-            ? '0 1px 2px rgba(155, 0, 0, 0.8)'   // Dark mode shadow (lighter glow)
-            : '0 1px 2px rgba(0, 77, 110, 0.8)', // Light mode shadow
+              ? '0 6px 12px rgba(155, 0, 0, 1), 0 2px 8px rgb(255, 0, 0)'  
+              : '0 6px 12px rgba(0, 77, 110, 1), 0 2px 8px rgb(4, 0, 255)',
             padding: '1rem 0',
             display: 'flex',
             flexDirection: 'row',
@@ -588,15 +584,15 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
 
 const SubMenu = ({ items }) => {
   const { darkMode } = useTheme();
+  const isMobile = window.innerWidth < 1024;
   return (
     <div className="submenu-container">
       <ul style={{ marginTop: '-.5rem', marginLeft: '.25rem', marginBottom: '1rem', paddingLeft: '.25rem' }}>
-        {items.map(({ label, icon, onClick }) => (
+        {items.map(({ label, icon, onClick }, index) => (
           <li
             key={label}
             onClick={onClick}
             style={{
-          
               fontSize: '0.9rem',
               color: darkMode ? '#fff' : 'var(--sidebar-text)',
               padding: '0.25rem 0.5rem',
@@ -608,6 +604,7 @@ const SubMenu = ({ items }) => {
               transition: 'background 0.2s ease',
               justifyContent: 'flex-start',
               width: '100%',
+              borderBottom: !isMobile && index !== items.length - 1 ? '1px solid var(--card-border)' : 'none',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = darkMode ? '#232b3b' : '#e0e7ff';

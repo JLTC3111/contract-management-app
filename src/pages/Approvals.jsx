@@ -3,8 +3,8 @@ import { useUser } from '../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { Check, X, Clock, FileText, User, ArrowLeft } from 'lucide-react';
-import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import toast from 'react-hot-toast';
 
 const Approvals = () => {
   const { user } = useUser();

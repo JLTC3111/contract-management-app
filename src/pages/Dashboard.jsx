@@ -32,7 +32,7 @@ const Dashboard = () => {
   const metrics = [
     { label: t('dashboard.active', 'Active'), count: contracts.filter(c => c.status === 'approved').length },
     { label: t('dashboard.pending', 'Pending'), count: contracts.filter(c => c.status === 'pending').length },
-    { label: t('dashboard.expiring', 'Expiring Soon'), count: contracts.filter(c => c.status === 'expiring').length },
+    { label: t('dashboard.expiring', 'Expiring'), count: contracts.filter(c => c.status === 'expiring').length },
     { label: t('dashboard.drafts', 'Drafts'), count: contracts.filter(c => c.status === 'draft').length },
     { label: t('dashboard.rejected', 'Rejected'), count: contracts.filter(c => c.status === 'rejected').length },
     { label: t('dashboard.expired', 'Expired'), count: contracts.filter(c => c.status === 'expired').length },
@@ -50,7 +50,7 @@ const Dashboard = () => {
       const statusMap = {
         'Active': 'approved',
         'Pending': 'pending',
-        'Expiring Soon': 'expiring',
+        'Expiring': 'expiring',
         'Drafts': 'draft',
         'Rejected': 'rejected',
         'Expired': 'expired',
@@ -67,7 +67,7 @@ const Dashboard = () => {
       const statusMap = {
         'Active': 'approved',
         'Pending': 'pending',
-        'Expiring Soon': 'expiring',
+        'Expiring': 'expiring',
         'Drafts': 'draft',
         'Rejected': 'rejected',
         'Expired': 'expired',

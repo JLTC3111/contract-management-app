@@ -32,7 +32,7 @@ const statusStyles = {
   expiring: {
     color: '#92400e',
     backgroundColor: '#ffedd5',
-    icon: '⚠️',
+    icon: '',
   },
 };
 
@@ -43,10 +43,6 @@ const isExpiringSoon = (dateStr) => {
   const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
   return diffDays > 0 && diffDays <= 7; // within 7 days
 };
-
-const filterIcon = (
-  <svg width="16" height="16" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', marginLeft: 4, cursor: 'pointer' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
-);
 
 const getUnique = (arr, key) => Array.from(new Set(arr.map(c => c[key]).filter(Boolean)));
 
@@ -161,6 +157,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('title'); }}
                 style={{
+                  fontSize: 'clamp(0.6rem, 1.25vw, 0.75rem)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -202,6 +199,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('status'); }}
                 style={{
+                  fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -244,6 +242,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('version'); }}
                 style={{
+                  fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -326,6 +325,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('author'); }}
                 style={{
+                  fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -368,6 +368,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               <span
                 onClick={e => { e.stopPropagation(); handleFilterToggle('expiry'); }}
                 style={{
+                  fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -436,7 +437,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                         alignItems: 'center',
                         gap: '0.35rem',
                         fontWeight: 'bold',
-                        fontSize: '0.9rem',
+                        fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
                         padding: '0.25rem 0.5rem',
                         borderRadius: '6px',
                         ...style,
@@ -444,7 +445,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                     >
                       <span>{style.icon}</span>
                       {t(`contractTable.status.${finalStatus}`)}
-                      {finalStatus === 'expiring' && <span style={{ fontStyle: 'italic', marginLeft: 4 }}>(soon)</span>}
+                      {finalStatus === 'expiring'}
                     </span>
                   );
                 })()}
