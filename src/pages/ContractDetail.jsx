@@ -80,7 +80,29 @@ useEffect(() => {
         toast.error('Folder name cannot be empty.');
         return;
       }
-      const cleanName = newFolderName.trim().replace(/^\/+|\/+$/g, '');
+      // Block slashes, allow Unicode, but replace spaces with underscores
+      if (/[\\/]/.test(newFolderName)) {
+        toast.error('Folder name cannot contain slashes ("/" or "\\").');
+        return;
+      }
+      const cleanName = newFolderName
+        .trim()
+        .replace(/[\\/]/g, '') // Remove slashes
+        .replace(/\s+/g, '_') // Replace spaces with underscores
+        .normalize('NFD').replace(/[ -\u007F]/g, function(c) {
+          // ASCII chars, keep as is
+          return c;
+        }).replace(/[đĐ]/g, function(c) {
+          // Replace Vietnamese d with ASCII d
+          return c === 'đ' ? 'd' : 'D';
+        })
+        .replace(/[^a-zA-Z0-9_-]/g, '') // Remove all non-ASCII except _ and -
+        .replace(/^\/+|\/+$/g, '');
+
+      if (!cleanName) {
+        toast.error('Folder name must contain at least one English letter or number.');
+        return;
+      }
       const newFolderPath = `${currentPath}/${cleanName}/.keep`;
     
       const { error } = await supabase

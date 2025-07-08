@@ -236,5 +236,7 @@
     "password": "Passwort",
     "manual": "Handbuch",
     "feedback": "Feedback"
-  }
+  },
+  "newcontract.back": "Zurück",
+  "newcontract.done": "Fertig"
 } 

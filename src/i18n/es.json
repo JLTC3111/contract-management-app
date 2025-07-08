@@ -236,5 +236,7 @@
     "password": "Contraseña",
     "manual": "Manual",
     "feedback": "Comentarios"
-  }
+  },
+  "newcontract.back": "Atrás",
+  "newcontract.done": "Hecho"
 } 

@@ -236,5 +236,7 @@
     "password": "Password",
     "manual": "Manual",
     "feedback": "Feedback"
-  }
+  },
+  "newcontract.back": "Back",
+  "newcontract.done": "Done"
 } 

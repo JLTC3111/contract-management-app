@@ -116,9 +116,11 @@ const Navbar = () => {
   return (
     <nav
       style={{
+        width: '92.5%',
+        marginBottom: '1rem',
         backgroundColor: 'var(--card-bg)',
         color: 'var(--text)',
-        padding: 'clamp(0.5rem, 2vw, 1.5rem) clamp(1rem, 4vw, 2rem)',
+        padding: 'clamp(.5rem, 2vw, 1.5rem) clamp(.25rem, 2vw, 2rem)',
         borderBottom: '1px solid var(--card-border)',
         display: 'flex',
         justifyContent: 'space-between',
@@ -133,12 +135,12 @@ const Navbar = () => {
       }}
     >
       {/* Left: App Title */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <h2 style={{ margin: 0, fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 'bold' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <h2 style={{ fontSize: 'clamp(0.5rem, 1vw, 1.25rem)', fontWeight: 'bold' }}>
           📁 Contract Manager
         </h2>
         <div
-          style={{ position: 'relative', display: 'inline-block' }}
+          style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: '0.5rem' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -147,11 +149,11 @@ const Navbar = () => {
             src="/logoIcons/logo.png"
             alt="Logo"
             style={{
-              marginLeft: '.5rem',
-              height: '1.8rem',
+              
+              height: 'clamp(1rem, 1.5vw, 1.8rem)', // Responsive height
               width: 'auto',
               borderRadius: '20px',
-              verticalAlign: 'middle',
+              alignItems: 'center',
               display: 'inline-block',
               objectFit: 'contain',
               transition: 'all 0.3s ease-in-out',
@@ -193,8 +195,30 @@ const Navbar = () => {
         </div>
       </div>
       {/* Center: Language Switcher (always visible) */}
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', zIndex: 20 }}>
-        <div style={{ position: 'relative', minWidth: 150 }}>
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'relative',
+          zIndex: 20,
+          width: 'clamp(140px, 2.5vw, 220px)',
+          maxWidth: '45%',
+        }}
+      >
+        {/* Responsive width for mobile */}
+        <style>{`
+          @media (max-width: 500px) {
+            .navbar-lang-switcher {
+              
+              width: 140px !important;
+              min-width: 0 !important;
+              max-width: 90% !important;
+            }
+          }
+        `}</style>
+        <div className="navbar-lang-switcher" style={{ position: 'relative', minWidth: 150 }}>
           <button
             onClick={() => setShowDropdown((prev) => !prev)}
             aria-haspopup="listbox"
@@ -294,51 +318,60 @@ const Navbar = () => {
           )}
         </div>
       </div>
-      {/* Right: Theme Toggle (always visible) */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-        <div
-          style={{
-            position: 'relative',
-            width: 'clamp(36px, 8vw, 54px)',
-            height: 'clamp(24px, 5vw, 32px)',
-            background: 'var(--card-bg)',
-            borderRadius: '16px',
-            border: '1.5px solid var(--card-border)',
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer',
-            transition: 'background 0.2s',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-            zIndex: 10,
-            marginRight: isMobile ? '1.5rem' : 'auto',
-          }}
-          onClick={toggleDarkMode}
-          aria-label="Toggle theme"
-        >
-          <span
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: darkMode ? '24px' : '6px',
-              transform: 'translateY(-50%)',
-              width: 'clamp(18px, 5vw, 24px)',
-              height: 'clamp(18px, 5vw, 24px)',
-              borderRadius: '50%',
-              background: 'var(--sidebar-hover-bg)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--text)',
-              fontSize: 'clamp(1rem, 3vw, 1.2rem)',
-              boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-              transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
-              zIndex: 2,
-            }}
-          >
-            {darkMode ? <Moon size={18} /> : <Sun size={18} />}
-          </span>
-        </div>
-      </div>
+      {/* Right: Theme Toggle (responsive on mobile) */}
+<div
+  style={{
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginLeft: 'auto',
+    padding: isMobile ? '0.25rem' : '0.5rem',
+  }}
+>
+  <div
+    style={{
+      position: 'relative',
+      width: isMobile ? '42px' : 'clamp(38px, 8vw, 54px)',
+      height: isMobile ? '18px' : 'clamp(24px, 5vw, 32px)',
+      background: 'var(--card-bg)',
+      borderRadius: '16px',
+      border: '1.5px solid var(--card-border)',
+      display: 'flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+      transition: 'background 0.2s',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      zIndex: 10,
+      marginRight: isMobile ? '0' : 'auto',
+    }}
+    onClick={toggleDarkMode}
+    aria-label="Toggle theme"
+  >
+    <span
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: darkMode ? (isMobile ? '22px' : '25px') : '2px',
+        transform: 'translateY(-50%)',
+        width: isMobile ? '20px' : 'clamp(18px, 5vw, 24px)',
+        height: isMobile ? '20px' : 'clamp(18px, 5vw, 24px)',
+        borderRadius: '50%',
+        background: 'var(--sidebar-hover-bg)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'var(--text)',
+        fontSize: isMobile ? '1rem' : 'clamp(1rem, 3vw, 1.2rem)',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+        transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
+        zIndex: 2,
+      }}
+    >
+      {darkMode ? <Moon size={isMobile ? 12 : 18} /> : <Sun size={isMobile ? 12 : 18} />}
+    </span>
+  </div>
+</div>
+
     </nav>
   );
 };

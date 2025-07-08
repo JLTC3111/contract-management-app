@@ -238,5 +238,7 @@
     "password": "Mật khẩu",
     "manual": "Hướng dẫn",
     "feedback": "Phản hồi"
-  }
+  },
+  "newcontract.back": "Quay lại",
+  "newcontract.done": "Xong"
 } 

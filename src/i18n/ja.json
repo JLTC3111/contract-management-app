@@ -237,5 +237,7 @@
     "password": "パスワー",
     "manual": "マニュアル",
     "feedback": "フィードバック"
-  }
+  },
+  "newcontract.back": "戻る",
+  "newcontract.done": "完了"
 } 

@@ -237,5 +237,7 @@
     "password": "更改密码",
     "manual": "手册",
     "feedback": "发送反馈"
-  }
+  },
+  "newcontract.back": "返回",
+  "newcontract.done": "完成"
 } 

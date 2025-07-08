@@ -236,5 +236,7 @@
     "password": "Passe",
     "manual": "Manuel",
     "feedback": "Commentaires"
-  }
+  },
+  "newcontract.back": "Retour",
+  "newcontract.done": "Terminé"
 } 

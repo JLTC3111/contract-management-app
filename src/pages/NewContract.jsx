@@ -4,6 +4,7 @@ import { supabase } from '../utils/supaBaseClient';
 import FileUploader from '../components/FileUploader';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../hooks/useTheme';
 
 const NewContract = () => {
   const { t } = useTranslation();
@@ -14,7 +15,7 @@ const NewContract = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
-
+  const { darkMode } = useTheme();
   const handleCreateContract = async () => {
     if (!title) return alert('Title is required');
     // Insert contract without file info
@@ -57,37 +58,30 @@ const NewContract = () => {
   };
 
   return (
-    <div style={{ padding: 'clamp(1rem, 4vw, 1.5rem)'}}>
+    <div style={{width: '92.5%', border: '1px solid var(--card-border)', padding: 'clamp(1rem, 4vw, 1.5rem)', boxShadow: darkMode ? '0 2px 4px rgba(255, 255, 255, 0.25)' : '0 2px 4px rgba(0, 0, 0, 0.25)'}}>
       {/* Back Button */}
-      <div style={{ marginBottom: 'clamp(0.5rem, 3vw, 1rem)' }}>
-        <button
-          onClick={() => navigate('/')}
-          style={{
-            background: 'var(--card-bg)',
-            border: '1px solid var(--card-border)',
-            borderRadius: '6px',
-            padding: 'clamp(0.3rem, 2vw, 0.5rem)',
-            cursor: 'pointer',
+      {!contract && (
+        <div style={{ marginBottom: 'clamp(0.5rem, 3vw, 1rem)' }}>
+          <button onClick={() => navigate(-1)} style={{
+            padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--text)',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'var(--hover-bg)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'var(--card-bg)';
-          }}
-        >
-          <ArrowLeft size={20} />
-        </button>
-      </div>
+            gap: '0.5rem',
+            backgroundColor: '#ddd',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+          }}>
+            <ArrowLeft size={18} /> {t('newcontract.back')}
+          </button>
+        </div>
+      )}
       
-      <h2 style={{ fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>{t('newContract')}</h2>
+      <h2 style={{fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>{t('newContract')}</h2>
       {!contract ? (
-        <><div style={{display:'flex', flexWrap:'wrap', gap:'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)'}}>
+        <><div style={{display:'flex', justifyContent:'center', flexWrap:'wrap', gap:'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)'}}>
           <input 
             type="text"
             placeholder={t('contractTitle')}
@@ -138,14 +132,18 @@ const NewContract = () => {
               boxSizing: 'border-box',
             }}
           >
-            <option value="draft">{t('draft')}</option>
-            <option value="pending">{t('pending')}</option>
-            <option value="approved">{t('approved')}</option>
-            <option value="rejected">{t('rejected')}</option>
-            <option value="expiring">{t('expiring')}</option>
-            <option value="expired">{t('expired')}</option>
+            <option value="draft">{t('contractTable.status.draft')}</option>
+            <option value="pending">{t('contractTable.status.pending')}</option>
+            <option value="approved">{t('contractTable.status.approved')}</option>
+            <option value="rejected">{t('contractTable.status.rejected')}</option>
+            <option value="expiring">{t('contractTable.status.expiring')}</option>
+            <option value="expired">{t('contractTable.status.expired')}</option>
           </select>
           <button onClick={handleCreateContract} style={{
+            alignItems: 'center',
+            display: 'flex',
+            marginTop: '1rem',
+            justifyContent: 'center',
             background: '#088eee',
             color: '#fff',
             padding: '0.5rem 1rem',
@@ -169,7 +167,7 @@ const NewContract = () => {
             <FileUploader contract={contract} onUploadComplete={handleUploadComplete} />
             {uploading && <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{t('updatingContract')}</p>}
           </div>
-          <div style={{ display: 'flex', flexWrap:'wrap', gap: 'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap:'wrap', gap: 'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
             <button
               onClick={() => navigate(-1)}
               style={{
@@ -181,10 +179,11 @@ const NewContract = () => {
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
+                fontWeight: 'bold',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               }}
             >
-              <ArrowLeft size={18} /> {t('back')}
+              <ArrowLeft size={18} /> {t('newcontract.back')}
             </button>
             <button
               onClick={() => navigate('/')}
@@ -197,11 +196,11 @@ const NewContract = () => {
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
-                fontWeight: 'normal',
+                fontWeight: 'bold',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               }}
             >
-              {t('done')}
+              {t('newcontract.done')}
             </button>
           </div>
         </>

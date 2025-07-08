@@ -236,5 +236,7 @@
     "password": "เปลี่ยนรหัสผ่าน",
     "manual": "คู่มือ",
     "feedback": "ส่งความคิดเห็น"
-  }
+  },
+  "newcontract.back": "ย้อนกลับ",
+  "newcontract.done": "เสร็จสิ้น"
 } 
