@@ -1,13 +1,13 @@
 import FileUploader from '../components/FileUploader';
 import toast from 'react-hot-toast';
-import { useUser } from '../hooks/useUser';
-import { ArrowLeft } from 'lucide-react';
+import { useUser} from '../hooks/useUser';
+import {  FolderOpenDot, FileText, ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import Approvals from '../components/Approvals';
-import { FolderTree } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../hooks/useTheme';
 
 const ContractDetail = () => {
   const { user, loading: userLoading } = useUser(); // from context
@@ -29,7 +29,7 @@ const ContractDetail = () => {
   const [currentPath, setCurrentPath] = useState('');
   const folderInputRef = useRef('');
   const { t } = useTranslation();
-  
+  const { darkMode } = useTheme();
 
 
 useEffect(() => {
@@ -122,29 +122,21 @@ useEffect(() => {
     const renderBreadcrumb = () => {
       const parts = currentPath.split('/').filter(Boolean); // remove empty strings
       if (!contract?.id) return null; // or return a loading state
+      // Remove 'uploads' from the breadcrumb
+      const displayParts = parts[0] === 'uploads' ? parts.slice(1) : parts;
       return (
-        <div style={{ marginBottom: '1rem', fontSize: '1rem' }}>
-          <svg style={{ marginRight: '8px', marginBottom: '-4px', cursor: 'pointer'}} width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 19H14M2 19H10" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
-          <path d="M12 17V14" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
-          <circle cx="12" cy="19" r="2" stroke="#1C274C" strokeWidth="1.5"/>
-          <path d="M2 11C2 9.34315 3.34315 8 5 8H19C20.6569 8 22 9.34315 22 11C22 12.6569 20.6569 14 19 14H5C3.34315 14 2 12.6569 2 11Z" stroke="#1C274C" strokeWidth="1.5"/>
-          <path d="M2 5C2 3.34315 3.34315 2 5 2H19C20.6569 2 22 3.34315 22 5C22 6.65685 20.6569 8 19 8H5C3.34315 8 2 6.65685 2 5Z" stroke="#1C274C" strokeWidth="1.5"/>
-          <path d="M13 5L19 5" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
-          <path d="M13 11L19 11" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"/>
-          <circle cx="6" cy="5" r="1" fill="#1C274C"/>
-          <circle cx="6" cy="11" r="1" fill="#1C274C"/>
-          </svg>{''}
+        <div style={{marginLeft: '1rem', marginBottom: '1rem', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <img width="25" height="25" src="https://img.icons8.com/stickers/100/folder-tree.png" alt="folder-tree"/>{''}
 
-          {parts.map((part, index) => {
+          {displayParts.map((part, index) => {
             const isContractId = part === String(contract.id);
-            const isLast = index === parts.length - 1;
+            const isLast = index === displayParts.length - 1;
     
             const displayLabel = isContractId
-              ? `📄 ${contract.title || 'Contract'}`
+              ? ` ${contract.title || 'Contract'}`
               : part;
     
-            const pathSlice = parts.slice(0, index + 1).join('/');
+            const pathSlice = parts.slice(0, (parts[0] === 'uploads' ? 1 : 0) + index + 1).join('/');
     
             return (
               <span key={pathSlice}>
@@ -313,27 +305,6 @@ useEffect(() => {
   if (loading) return <p>Loading contract...</p>;
   if (!contract) return <p>Contract not found</p>;
   
-  const getDeleteLabel = () => {
-    if (selectedFiles.length === 0) return 'Delete';
-  
-    let folders = 0;
-    let filesCount = 0;
-  
-    for (const itemName of selectedFiles) {
-      const fileObj = files.find((f) => f.name === itemName);
-  
-      if (!fileObj || !fileObj.metadata?.mimetype) {
-        folders += 1;
-      } else {
-        filesCount += 1;
-      }
-    }
-  
-    if (folders > 0 && filesCount === 0) return `Delete Folder${folders > 1 ? 's' : ''}`;
-    if (filesCount > 0 && folders === 0) return `Delete File${filesCount > 1 ? 's' : ''}`;
-    return `Delete Item${selectedFiles.length > 1 ? 's' : ''}`;
-  };
-  
   const handleDeleteItems = async (filesToDelete = []) => {
     if (!Array.isArray(filesToDelete)) {
       filesToDelete = [filesToDelete];
@@ -356,17 +327,17 @@ useEffect(() => {
   
     let promptMessage = '';
     if (folders > 0 && filesCount === 0) {
-      promptMessage = `Delete ${folders} folder${folders > 1 ? 's' : ''}?`;
+      promptMessage = t('contract_detail_delete_folder') + (folders > 1 ? t('contract_detail_delete_folders') : '') + '?';
     } else if (filesCount > 0 && folders === 0) {
-      promptMessage = `Delete ${filesCount} file${filesCount > 1 ? 's' : ''}?`;
+      promptMessage = t('contract_detail_delete_file') + (filesCount > 1 ? t('contract_detail_delete_files') : '') + '?';
     } else {
-      promptMessage = `Delete ${filesToDelete.length} item${filesToDelete.length > 1 ? 's' : ''}?`;
+      promptMessage = t('contract_detail_delete_item') + (filesToDelete.length > 1 ? t('contract_detail_delete_items') : '') + '?';
     }
   
     const confirmed = confirm(
       filesToDelete.length > 0
         ? promptMessage
-        : 'Delete all files for this contract?'
+        : t('contract_detail_delete_all_files_for_this_contract') + '?'
     );
   
     if (!confirmed) return;
@@ -438,7 +409,7 @@ useEffect(() => {
   
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this contract and its file?')) return;
+    if (!confirm(t('contract_detail_delete_contract_and_file'))) return;
   
     try {
       // First, delete the file from Supabase Storage
@@ -448,7 +419,7 @@ useEffect(() => {
   
       if (fileError) {
         console.error('Error deleting file:', fileError.message);
-        alert('Failed to delete file from storage.');
+        alert(t('contract_detail_failed_to_delete_file_from_storage'));
         return;
       }
   
@@ -460,21 +431,21 @@ useEffect(() => {
   
       if (dbError) {
         console.error('Error deleting contract:', dbError.message);
-        alert('Failed to delete contract.');
+        alert(t('contract_detail_failed_to_delete_contract'));
         return;
       }
   
-      alert('Contract and file deleted successfully.');
+      alert(t('contract_detail_contract_and_file_deleted_successfully'));
       navigate('/');
     } catch (err) {
       console.error('Unexpected error during deletion:', err);
-      alert('Something went wrong.');
+      alert(t('contract_detail_something_went_wrong'));
     }
   };
   
 
 return (
-    <div style={{ width: 'clamp(280px, 95vw, 800px)', margin: '0 auto' }}>
+    <div style={{ width: 'clamp(280px, 95vw, 800px)', margin: '0 auto', border: '1px solid var(--card-border)', padding: '1rem' }}>
       {/* Back button in top-right when NOT editing */}
       {!editMode && canEdit && (
         <div
@@ -507,7 +478,7 @@ return (
               setNewFolderName('');
               setShowFolderInput(true);
             }}>
-            📁 Create Folder
+            📁 {t('create_folder')}
           </button>
 
     {showFolderInput && (
@@ -529,7 +500,7 @@ return (
               await handleCreateFolder(); // 👌 Works
             }
           }}
-          placeholder="Folder name (e.g. specs)"
+          placeholder={t('folder_name_example')}
           style={{
             padding: '0.4rem',
             borderRadius: '6px',
@@ -553,7 +524,7 @@ return (
             cursor: newFolderName.trim() ? 'pointer' : 'not-allowed',
           }}
         >
-          ➕ Add
+          ➕ {t('contract_detail_add')}
         </button>
       </div>
     )}
@@ -573,7 +544,7 @@ return (
               }}
               disabled={selectedFiles.length === 0}
           >
-              🗑️ {getDeleteLabel()} ({selectedFiles.length})
+              🗑️ {t('contract_detail_delete')} ({selectedFiles.length})
       </button>
     </div>)}
 
@@ -596,12 +567,12 @@ return (
               style={{ fontSize: 'clamp(1.1rem, 4vw, 2rem)' }}
             />
           ) : (
-            <span style={{ fontSize: 'clamp(1.1rem, 4vw, 2rem)' }}>{contract.title}</span>
+            <span style={{ fontSize: 'clamp(1.1rem, 3vw, 1.8rem)' }}>{contract.title}</span>
           )}
         </h2>
   
         <p>
-          <strong>Status:</strong>{' '}
+          <strong>{t('contract_detail_status')}:</strong>{' '}
           {editMode ? (
             <select
               className="table-filter-input"
@@ -609,12 +580,12 @@ return (
               onChange={(e) => handleChange('status', e.target.value)}
               style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}
             >
-              <option value="draft">Draft</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="expiring">Expiring Soon</option>
-              <option value="expired">Expired</option>
+              <option value="draft">{t('contract_detail_draft')}</option>
+              <option value="pending">{t('contract_detail_pending')}</option>
+              <option value="approved">{t('contract_detail_approved')}</option>
+              <option value="rejected">{t('contract_detail_rejected')}</option>
+              <option value="expiring">{t('contract_detail_expiring')}</option>
+              <option value="expired">{t('contract_detail_expired')}</option>
             </select>
           ) : (
             contract.status
@@ -622,7 +593,7 @@ return (
         </p>
   
         <p>
-          <strong>Version:</strong>{' '}
+          <strong>{t('contract_detail_version')}:</strong>{' '}
           {editMode ? (
             <input
               className="table-filter-input"
@@ -637,12 +608,12 @@ return (
         </p>
   
         <p>
-          <strong>Last Updated:</strong>{' '}
+          <strong>{t('contract_detail_last_updated')}:</strong>{' '}
           <span style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>{new Date(contract.updated_at).toLocaleString()}</span>
         </p>
   
         <p>
-          <strong>Expiry Date:</strong>{' '}
+          <strong>{t('contract_detail_expiry_date')}:</strong>{' '}
           {editMode ? (
             <input
               className="table-filter-input"
@@ -659,7 +630,7 @@ return (
         <div style={{ marginTop: '1rem' }}>
           
           <p>
-          <strong>Author:</strong>{' '}
+          <strong>{t('contract_detail_author')}:</strong>{' '}
           {editMode ? (
             <input
               className="table-filter-input"
@@ -726,7 +697,7 @@ return (
           marginBottom: '1rem',
         }}
       >
-        🔙 Prev Folder
+        🔙 {t('contract_detail_prev_folder')}
       </button>
     )}
     
@@ -735,21 +706,21 @@ return (
         const isFolder = !file.metadata?.mimetype;
         const fileName = file.name;
         const filePath = fileName; // relative to currentPath
-
         const isChecked = selectedFiles.includes(filePath);
         
         // ✅ Handle folder items
         if (isFolder) {
           return (
             <li
-        key={fileName}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          padding: '0.25rem 0',
-        }}>
-        {/* Checkbox to select file/folder */}
+            key={fileName}
+            style={{
+              marginLeft: '2rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.25rem 0',
+            }}>
+            {/* Checkbox to select file/folder */}
               <input
                 type="checkbox"
                 checked={isChecked}
@@ -767,9 +738,10 @@ return (
               {/* Name and click-to-open if folder */}
               <span
                 style={{
+                  fontSize: '1.1rem',
                   cursor: isFolder ? 'pointer' : 'default',
                   color: isFolder ? '#1d4ed8' : '#000',
-                  textDecoration: isFolder ? 'underline' : 'none',
+                  textDecoration: isFolder ? 'none' : 'none',
                 }}
                 onClick={() => {
                   if (isFolder) {
@@ -784,18 +756,19 @@ return (
                   }
                 }}
               >
-                {isFolder ? '📁' : '📄'} {fileName}
+                {isFolder ? <img width="13" height="14" src="/img/folder.png"/> : <FileText size={20} />} {fileName}
               </span>
             </li>
             
           );
+          
         }
 
-        // ✅ Handle file items
-        const publicUrl = supabase
-          .storage
-          .from('contracts')
-          .getPublicUrl(`${currentPath}/${fileName}`).data.publicUrl;
+    // 📄 File section   
+    const publicUrl = supabase
+        .storage
+        .from('contracts')
+        .getPublicUrl(`${currentPath}/${fileName}`).data.publicUrl;
 
         const isPdf = fileName.toLowerCase().endsWith('.pdf');
         const isSelected = selectedFiles.includes(fileName);
@@ -804,6 +777,7 @@ return (
           <li
             key={fileName}
             style={{
+              marginLeft: '2rem',
               display: 'flex',
               alignItems: 'center',
               gap: '1rem',
@@ -837,7 +811,7 @@ return (
                   background: 'none',
                   border: 'none',
                   color: 'blue',
-                  textDecoration: 'underline',
+                  textDecoration: 'none',
                   cursor: 'pointer',
                   padding: 0,
                   font: 'inherit'
@@ -856,7 +830,7 @@ return (
                 }}
                 style={{
                   color: '#0077cc',
-                  textDecoration: 'underline',
+                  textDecoration: 'none',
                   cursor: 'pointer'
                 }}
               >
@@ -872,6 +846,7 @@ return (
     {previewUrl && previewType === 'pdf' && (
       <div
         style={{
+          marginRight: '5rem',
           marginTop: '2rem',
           opacity: 1,
           transition: 'opacity 0.4s ease-in-out',
@@ -881,15 +856,15 @@ return (
           src={previewUrl}
           title="PDF Preview"
           width="100%"
-          height="500px"
+          height="600px"
           style={{ border: '1px solid #ccc', borderRadius: '8px' }}
         />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
           <button
             onClick={() => setPreviewUrl(null)}
             style={{
-              backgroundColor: '#ef4444',
-              color: '#fff',
+              backgroundColor: darkMode ? '#fff' : '#000',
+              color: darkMode ? '#000' : '#fff',
               border: 'none',
               padding: '0.5rem 1rem',
               borderRadius: '6px',
@@ -897,7 +872,7 @@ return (
               transition: 'background-color 0.3s ease',
             }}
           >
-            ❌ Close Preview
+            ❌ {t('contract_detail_close_preview')}
           </button>
         </div>
       </div>
@@ -930,7 +905,7 @@ return (
                   cursor: 'pointer',
                 }}
               >
-                💾 Save
+                💾 {t('contract_detail_save')}
               </button>
               <button
                 onClick={() => setEditMode(false)}
@@ -943,7 +918,7 @@ return (
                   cursor: 'pointer',
                 }}
               >
-                Cancel
+                {t('contract_detail_cancel')}
               </button>
               <button
                 onClick={handleDelete}
@@ -956,13 +931,14 @@ return (
                   cursor: 'pointer',
                 }}
               >
-                ❌ Delete Contract
+                ❌ {t('contract_detail_delete')}
               </button>
             </>
           ) : (
             <button
               onClick={() => setEditMode(true)}
               style={{
+                alignItems: 'center',
                 backgroundColor: '#3b82f6',
                 color: '#fff',
                 border: 'none',
@@ -972,7 +948,7 @@ return (
                 marginLeft: '3%',
               }}
             >
-              ✏️ Edit
+              {t('contract_detail_edit')}
             </button>
            
           )}

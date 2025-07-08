@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { MessageCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 
 // Centralized Supabase insert helper
@@ -67,7 +68,7 @@ const CommentSection = ({ contractId }) => {
   const [comments, setComments] = useState([]);
   const [loadingComments, setLoadingComments] = useState(false);
   const [submittingComment, setSubmittingComment] = useState(false);
-
+  const { t } = useTranslation();
   // Fetch comments for this contract
   const fetchComments = async () => {
     setLoadingComments(true);
@@ -154,11 +155,11 @@ const CommentSection = ({ contractId }) => {
   }
 
   return (
-    <div>
+    <div style={{ padding: '1rem', borderRadius: '6px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
         <button
           onClick={() => setShowCommentSection(!showCommentSection)}
-          aria-label={showCommentSection ? 'Hide comments' : 'Show comments'}
+          aria-label={showCommentSection ? t('hide_comments') : t('show_comments')}
           style={{
             background: 'none',
             border: 'none',
@@ -168,7 +169,7 @@ const CommentSection = ({ contractId }) => {
             textDecoration: 'underline'
           }}
         >
-          {showCommentSection ? 'Hide' : 'Show'} Comments
+          {showCommentSection ? t('hide') : t('show')} {t('comments')}
         </button>
       </div>
 
@@ -183,13 +184,13 @@ const CommentSection = ({ contractId }) => {
             marginBottom: '1rem'
           }}>
             <label htmlFor="comment-text" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text)' }}>
-              Add a comment:
+              {t('add_a_comment')}:
             </label>
             <textarea
               id="comment-text"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Add a comment..."
+              placeholder={t('add_a_comment')}
               aria-label="Comment text"
               style={{
                 width: '100%',
@@ -220,7 +221,7 @@ const CommentSection = ({ contractId }) => {
               }}
             >
               {submittingComment ? <LoadingSpinner size={14} /> : null}
-              {submittingComment ? 'Posting...' : '💬 Post Comment'}
+              {submittingComment ? t('posting') : '💬 ' + t('post_comment')}
             </button>
           </div>
 
@@ -235,7 +236,7 @@ const CommentSection = ({ contractId }) => {
                 color: 'var(--text-secondary)'
               }}>
                 <LoadingSpinner size={16} />
-                Loading comments...
+                {t('loading_comments')}
               </div>
             ) : comments.length > 0 ? (
               <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
@@ -244,7 +245,7 @@ const CommentSection = ({ contractId }) => {
                 ))}
               </div>
             ) : (
-              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>No comments yet. Be the first to comment!</p>
+              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>{t('no_comments_yet')} {t('be_the_first_to_comment')}</p>
             )}
           </div>
         </div>

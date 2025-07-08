@@ -106,12 +106,12 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
     return null;
   }
     return (
-    <div style={{ marginBottom: '2rem' }}>
+    <div style={{borderRadius: '6px', padding: '1rem', margin: '0 auto', marginBottom: '.5rem' }}>
       {!showForm ? (
         <button
           onClick={() => setShowForm(true)}
           disabled={hasPendingRequest}
-          aria-label={hasPendingRequest ? t('Approval already pending') : t('Send approval request')}
+          aria-label={hasPendingRequest ? t('approval_already_pending') : t('send_approval_request')}
           style={{
             backgroundColor: hasPendingRequest ? '#e5e7eb' : '#3b82f6',
             color: hasPendingRequest ? '#6b7280' : '#fff',
@@ -122,7 +122,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
             opacity: hasPendingRequest ? 0.6 : 1,
           }}
         >
-          📤 {t('Send Approval Request')}
+          {t('send_approval_request')}
         </button>
       ) : (
         <div style={{ 
@@ -132,16 +132,16 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
           border: '1px solid var(--card-border)'
         }}>
           <label htmlFor="approval-message" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text)' }}>
-            {t('Approval Message:')}
+            {t('approval_message')}
           </label>
           <textarea
             id="approval-message"
             value={approvalMessage}
             onChange={(e) => setApprovalMessage(e.target.value)}
-            placeholder={t('Enter your message for the approval request...')}
-            aria-label={t('Approval request message')}
+            placeholder={t('enter_your_message_for_the_approval_request')}
+            aria-label={t('approval_request_message')}
             style={{
-              width: '100%',
+              width: '90%',
               minHeight: '80px',
               padding: '0.5rem',
               borderRadius: '4px',
@@ -156,7 +156,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
             <button
               onClick={handleSubmitApprovalRequest}
               disabled={submitting || !approvalMessage.trim()}
-              aria-label={submitting ? t('Sending approval request...') : t('Send approval request')}
+              aria-label={submitting ? t('sending_approval_request') : t('send_approval_request')}
               style={{
                 backgroundColor: submitting || !approvalMessage.trim() ? '#e5e7eb' : '#10b981',
                 color: submitting || !approvalMessage.trim() ? '#6b7280' : '#fff',
@@ -170,14 +170,14 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
               }}
             >
               {submitting ? <LoadingSpinner size={14} /> : null}
-              {submitting ? t('Sending...') : t('📤 Send Request')}
+              {submitting ? t('sending') : t('send_request')}
             </button>
             <button
               onClick={() => {
                 setShowForm(false);
                 setApprovalMessage('');
               }}
-              aria-label={t('Cancel approval request')}
+              aria-label={t('cancel_approval_request')}
               style={{
                 backgroundColor: '#e5e7eb',
                 color: '#374151',
@@ -187,7 +187,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
                 cursor: 'pointer',
               }}
             >
-              {t('Cancel')}
+              {t('ac_cancel')}
             </button>
           </div>
         </div>

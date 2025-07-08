@@ -145,7 +145,21 @@ const NewContract = () => {
             <option value="expiring">{t('expiring')}</option>
             <option value="expired">{t('expired')}</option>
           </select>
-          <button onClick={handleCreateContract} style={{ background:'#ddd', fontSize: 'clamp(0.95rem, 2vw, 1rem)', padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)', borderRadius: '6px' }}>{t('createContract')}</button>
+          <button onClick={handleCreateContract} style={{
+            background: '#088eee',
+            color: '#fff',
+            padding: '0.5rem 1rem',
+            fontSize: '1rem',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={e => e.target.style.background = '#0369a1'}
+          onMouseLeave={e => e.target.style.background = '#088eee'}
+          >
+            {t('createContract')}
+          </button>
           </div>
         </>
       ) : (

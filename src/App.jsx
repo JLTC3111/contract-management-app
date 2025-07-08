@@ -5,7 +5,7 @@ import ContractDetail from './pages/ContractDetail';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import NewContract from './pages/NewContract';
-import Approvals from './pages/Approvals';
+import ApprovalsBoard from './pages/ApprovalsBoard';
 import ManualViewer from './components/ManualViewer';
 
 import Layout from './components/Layout'; // 👈 Add this
@@ -28,7 +28,8 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/new" element={<NewContract />} />
           <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
-          <Route path="/approvals" element={<Approvals />} />
+          <Route path="/approvals" element={<ApprovalsBoard />} />
+          <Route path="/approvals/:id" element={<ApprovalsBoard />} />
         </Route>
 
         {/* Manual route outside sidebar layout */}

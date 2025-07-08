@@ -11,7 +11,7 @@ import {
   ChevronDown,
   ChevronUp,
   UserIcon,
-  Check,
+  UserLock,
   BookOpen,
   Moon,
   Sun,
@@ -64,7 +64,7 @@ const Sidebar = () => {
       navigate('/login');
     }
   };
-
+  const [isHovered, setIsHovered] = useState(false);
   const handleChangePassword = () => {
     setShowPasswordModal(true);
     setCurrentPassword('');
@@ -205,7 +205,7 @@ const Sidebar = () => {
           flexWrap: isMobile ? 'wrap' : 'nowrap',
           borderTop: isMobile ? '1px solid var(--card-border)' : undefined,
           borderRight: isMobile ? 'none' : undefined,
-          padding: isMobile ? '0' : undefined,
+          padding: isMobile ? '0' : '1.25rem',
           overflow: isMobile ? 'visible' : 'auto',
         }}
       >
@@ -251,14 +251,47 @@ const Sidebar = () => {
             overflow: isMobile ? 'visible' : 'auto',
             paddingTop: isMobile ? '0' : '1rem'
           }}>
-            <SidebarButton
-              icon={<HomeIcon size={18} />}
-              label={t('sidebar.home', 'Home')}
-              path="/home"
-              collapsed={collapsed || isMobile}
-              currentPath={location.pathname}
-              onClick={() => window.location.href = 'https://icue.vn'}
-            />
+            
+          <div
+              style={{ position: 'relative', display: 'inline-block' }}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <SidebarButton
+                icon={<HomeIcon size={18} />}
+                label={t('sidebar.home', 'Home')}
+                path="/home"
+                collapsed={collapsed || isMobile}
+                currentPath={location.pathname}
+                onClick={() => window.location.href = 'https://icue.vn'}
+              />
+              <AnimatePresence>
+                {isHovered && !isMobile && !collapsed && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 5 }}
+                    exit={{ opacity: 0, x: 15 }}
+                    transition={{ duration: 0.2 }}
+                    style={{
+                      position: 'absolute',
+                      left: '105%',
+                      top: '15%',
+                      transform: 'translateY(-50%)',
+                      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                      color: '#fff',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '0.75rem',
+                      pointerEvents: 'auto',
+                      whiteSpace: 'nowrap',
+                      zIndex: 100,
+                    }}
+                  >
+                    ICUE.VN!
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <SidebarButton
               icon={<LayoutDashboardIcon size={18} />}
               label={t('sidebar.dashboard', 'Dashboard')}
@@ -303,7 +336,7 @@ const Sidebar = () => {
             />
 
             <SidebarButton 
-              icon={<UserIcon size={18} />}
+              icon={<UserLock size={18} />}
               label={t('sidebar.profile', 'Profile')}
               collapsed={collapsed}
               toggleable
@@ -369,20 +402,72 @@ const Sidebar = () => {
             />
           </div>
           {user && !isMobile && !collapsed && (
-                    <div style={{ borderBottom: '1px solid var(--card-border)', padding: '.25rem .5rem', textAlign: 'center' }}>
-                      <span className="text-secondary" style={{ fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)' }}>{t('Logged in as')} <strong>{user.email}</strong></span>
-                    </div>
-            )}
-          {!collapsed && user && !isMobile && (
-            <div style={{ fontSize: '0.85rem', marginTop: '4rem', marginBottom: 'calc(1rem + 15px)', color: 'var(--sidebar-text)', textAlign: 'left', paddingLeft: '0.5rem' }}>
-              <div><strong>Role:</strong> {user.role ?? 'unknown'}</div>
-              <div style={{ fontSize: '0.8rem', color: darkMode ? '#9ca3af' : '#64748b', marginTop: '0.25rem' }}>
-                {roleDescriptions[user.role] || 'Role not recognized.'}
-              </div>
+            <div
+              style={{
+                border: '1px solid var(--card-border)',
+                padding: '0.25rem 0.5rem',
+                textAlign: 'left',
+                boxShadow: darkMode
+                  ? '0 2px 4px rgba(255, 255, 255, 0.25)'
+                  : '0 2px 4px rgba(0, 0, 0, 0.25)',
+                borderRadius: '12px',
+                backgroundColor: 'var(--special-card-bg)',
+                transition: 'box-shadow 0.3s ease-in-out'
+              }}
+            >
+              <span
+                className="text-secondary"
+                style={{
+                  fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
+                  display: 'inline-block',
+                }}
+              >
+                <span>
+                 {t('sidebar.logged_in_as')}
+                </span>{' '}
+                <strong>{user.email}</strong>
+              </span>
             </div>
           )}
-        </div>
-        
+
+          {!collapsed && user && !isMobile && (
+            <div
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = darkMode
+                  ? '0 4px 12px rgba(255, 255, 255, 0.1)'
+                  : '0 4px 12px rgba(0, 0, 0, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+              style={{
+                fontSize: '0.85rem',
+                marginTop: '4rem',
+                marginBottom: 'calc(1rem + 15px)',
+                color: 'var(--sidebar-text)',
+                textAlign: 'left',
+                padding: '0.75rem',
+                paddingLeft: '0.75rem',
+                borderRadius: '8px',
+                transition: 'box-shadow 0.3s ease-in-out',
+                backgroundColor: 'var(--card-bg)',
+              }}
+            >
+              <div>
+                <strong>{t('sidebar.role')}:</strong>{' '}
+                {t(`sidebar.role_label.${user.role}`, user.role ?? 'unknown')}
+              </div>
+              <div
+                style={{
+                  fontSize: '0.8rem',
+                  color: darkMode ? '#9ca3af' : '#64748b',
+                  marginTop: '0.25rem',
+                }}
+              >
+                {t(`sidebar.role_description.${user.role}`, roleDescriptions[user.role] || 'Role not recognized.')}
+              </div>
+            </div>
+          )}   </div>
         
         {/* Resize Handle */}
         {!collapsed && !isMobile && (
@@ -426,24 +511,27 @@ const Sidebar = () => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: '1rem',
           }}
         >
-          <SubMenu
+          <SubMenu className="mobile-submenu-subitems"
             items={[
               {
-                label: t('sidebar.changePassword'),
+                label: t('sidebar_mobile.password'),
                 icon: <Settings size={14} style={{ marginRight: '-1rem' }} />,
                 onClick: handleChangePassword,
                 isMobile: isMobile,
+                
               },
               {
-                label: t('sidebar.manual'),
+                label: t('sidebar_mobile.manual'),
                 icon: <BookOpen size={14} style={{ marginRight: '-1rem' }} />,
                 onClick: handleReadManual,
                 isMobile: isMobile,
+                
               },
               {
-                label: t('sidebar.sendFeedback'),
+                label: t('sidebar_mobile.feedback'),
                 icon: <MessageSquare size={14} style={{ marginRight: '-1rem' }} />,
                 onClick: handleSendFeedback,
                 isMobile: isMobile,
@@ -534,7 +622,7 @@ const Sidebar = () => {
   );
 };
 
-const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, toggleable, isOpen, onToggle }) => {
+const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, toggleable, isOpen, onToggle, ...rest }) => {
   const isActive = path && currentPath.startsWith(path);
   const isMobile = window.innerWidth < 1024;
   
@@ -542,6 +630,7 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
     <div
       className="sidebar-button"
       onClick={toggleable ? onToggle : onClick}
+      {...rest} // <-- This will forward onMouseEnter/onMouseLeave etc.
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -587,7 +676,15 @@ const SubMenu = ({ items }) => {
   const isMobile = window.innerWidth < 1024;
   return (
     <div className="submenu-container">
-      <ul style={{ marginTop: '-.5rem', marginLeft: '.25rem', marginBottom: '1rem', paddingLeft: '.25rem' }}>
+      <ul style={{
+        marginTop: '-.5rem',
+        marginLeft: '.25rem',
+        marginBottom: '1rem',
+        paddingLeft: '.25rem',
+        display: isMobile ? 'flex' : undefined,
+        flexDirection: isMobile ? 'row' : undefined,
+        gap: isMobile ? '10px' : undefined
+      }}>
         {items.map(({ label, icon, onClick }, index) => (
           <li
             key={label}

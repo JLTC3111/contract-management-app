@@ -301,9 +301,10 @@ const NotificationDropdown = () => {
               alignItems: 'center',
             }}
           >
-            <h3 style={{ margin: 0, color: 'var(--text)', fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}>
-              {user.role === 'editor' ? 'Notifications' : 'Approval Requests'}
-            </h3>
+           <h3 style={{ margin: 0, color: 'var(--text)', fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}>
+             {user.role === 'editor' ? t('bell_notifications') : t('bell_headers')}
+           </h3>
+
             <button
               onClick={handleCloseDropdown}
               style={{
@@ -325,7 +326,7 @@ const NotificationDropdown = () => {
               commentNotifications.length === 0 ? (
                 <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                   <MessageCircle size={24} style={{ marginBottom: '0.5rem' }} />
-                  <p>{t('no_new_comments_in_last_24_hours')}</p>
+                  <p>{t('bell_no_new_comments_in_last_24_hours')}</p>
                 </div>
               ) : (
                 commentNotifications.map((comment) => (
@@ -392,7 +393,7 @@ const NotificationDropdown = () => {
             ) : notifications.length === 0 ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                 <Clock size={24} style={{ marginBottom: '0.5rem' }} />
-                <p>{t('no_pending_approval_requests')}</p>
+                <p>{t('bell_no_pending_approval_requests')}</p>
               </div>
             ) : (
               notifications.map((notification) => (
@@ -410,7 +411,7 @@ const NotificationDropdown = () => {
                       {notification.contracts?.title || 'Unknown Contract'}
                     </h4>
                     <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                      {t('requested_by')} {notification.requester_email}
+                      {t('bell_requested_by')} {notification.requester_email}
                     </p>
                     <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                       {new Date(notification.created_at).toLocaleString()}
@@ -433,47 +434,67 @@ const NotificationDropdown = () => {
                     border: '1px solid var(--card-border)'
                   }}>
                     <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                      <strong>{t('default_response')}:</strong> "I have reviewed this contract and found it to be compliant with our standards. All terms and conditions have been verified and are acceptable for approval."
+                      <strong>{t('bell_default_response')}:</strong>{t('bell_default_response_message')}
                     </p>
                   </div>
 
                   {/* Action Buttons */}
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button
+                  <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between' }}>
+                    <button className="btn-hover-effect"
                       onClick={() => handleApprovalAction(notification.id, 'approve')}
                       style={{
                         background: '#10b981',
                         color: 'white',
                         border: 'none',
-                        padding: '0.5rem 1rem',
+                        padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
                         borderRadius: '6px',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.25rem',
                         fontSize: '0.875rem',
+                        fontWeight: '500',
+                        transition: 'background 0.2s',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.boxShadow = darkMode 
+                          ? '0 2px 4px rgba(255,255,255,0.75)' 
+                          : '0 2px 4px rgba(0,0,0,0.45)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     >
                       <Check size={14} />
-                      {t('approve')}
+                      {t('bell_approve')}
                     </button>
-                    <button
+                    <button className="btn-hover-effect"
                       onClick={() => handleApprovalAction(notification.id, 'reject')}
                       style={{
                         background: '#ef4444',
                         color: 'white',
                         border: 'none',
-                        padding: '0.5rem 1rem',
+                        padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
                         borderRadius: '6px',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.25rem',
                         fontSize: '0.875rem',
+                        fontWeight: '500',
+                        transition: 'background 0.2s',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.boxShadow = darkMode 
+                          ? '0 2px 4px rgba(255,255,255,0.75)' 
+                          : '0 2px 4px rgba(0,0,0,0.45)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                     >
                       <X size={14} />
-                      {t('reject')}
+                      {t('bell_reject')}
                     </button>
                   </div>
                 </div>

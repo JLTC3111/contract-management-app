@@ -13,6 +13,8 @@
   --hover-bg: #f9f9ff;
   --primary: #3b82f6;
   --danger: #ef4444;
+  --special-card-bg: #fffcfc;
+  --special-card-border: #323232;
   --success: #10b981;
   --sidebar-bg: #f1f5f9;
   --sidebar-submenu-bg: #fcf6f6;
@@ -35,6 +37,8 @@ body.dark {
   --hover-bg: #232b3b;
   --primary: #60a5fa;
   --danger: #f87171;
+  --special-card-bg: #181e29;
+  --special-card-border: #fbfbfb;
   --success: #34d399;
   --sidebar-bg: #111827;
   --sidebar-submenu-bg: #171b22;

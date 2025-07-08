@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import toast from 'react-hot-toast';
-
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '../hooks/useTheme';
+import { Loader2, Upload, Check, X, UploadCloud } from 'lucide-react';
 
 const sanitizeFileName = (name) =>
   name.normalize("NFD")
@@ -12,11 +14,11 @@ const sanitizeFileName = (name) =>
 const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath }) => {
   const [uploadProgress, setUploadProgress] = useState({});
   const fileInputRef = useRef();
-  
+  const { t } = useTranslation();
   const handleUpload = async (event) => {
     const files = event.target?.files;
     if (!files || files.length === 0) {
-      toast.error('Please select at least one file to upload.');
+      toast.error(t('please_select_at_least_one_file_to_upload'));
       return;
     }
 
@@ -37,7 +39,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
 
       if (signedUrlError) {
         console.error('Error getting signed URL:', signedUrlError);
-        toast.error(`❌ Failed to upload ${file.name}`);
+        toast.error(`❌ ${t('failed_to_upload')} ${file.name}`);
         continue;
       }
 
@@ -64,7 +66,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
             type: file.type,
           });
       
-          toast.success(`✅ ${file.name} uploaded!`);
+          toast.success(`${file.name} ${t('uploader_uploaded')}!`);
       
           const { error: updateError } = await supabase
             .from('contracts')
@@ -73,7 +75,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
       
           if (updateError) {
             console.error('Error saving file path to DB:', updateError.message);
-            toast.error(`⚠️ File uploaded but DB not updated`);
+            toast.error(`⚠️ ${t('file_uploaded_but_db_not_updated')}`);
           }
       
           // ✅ Immediately refresh the file list UI
@@ -81,13 +83,13 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
       
         } else {
           console.error(`Failed to upload ${file.name}:`, xhr.responseText);
-          toast.error(`❌ Failed to upload ${file.name}`);
+          toast.error(`❌ ${t('failed_to_upload')} ${file.name}`);
         }
       };
       
 
       xhr.onerror = () => {
-        toast.error(`❌ Upload error for ${file.name}`);
+        toast.error(`❌ ${t('upload_error_for')} ${file.name}`);
       };
 
       xhr.send(file); // Send after events are wired up
@@ -129,7 +131,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
         onMouseOver={(e) => (e.target.style.backgroundColor = 'rgba(15, 225, 33, 0.1)')} // Tailwind "blue-600"
         onMouseOut={(e) => (e.target.style.backgroundColor = '#ddd')}
       >
-        ⬆️ UPLOAD FILE
+        <UploadCloud size={20} /> {t('upload_file')}
       </button>
 
       {Object.entries(uploadProgress).map(([filename, progress]) => (
@@ -153,17 +155,12 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
             </div>
           </div>
 
-        {/* ✅ Green checkmark when complete */}
+        
         {progress === 100 && (
           <div
             style={{
-              border: '1px solid blue',
-              marginTop: '24px',
-              width: '18px',
-              height: '18px',
-              borderRadius: '50%',
-              background: 'linear-gradient(90deg,rgb(255, 252, 173),rgb(0, 255, 30))',
               display: 'flex',
+              marginTop: '24px',
               justifyContent: 'center',
               alignItems: 'center',
               color: '#000',
@@ -172,7 +169,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
             }}
             title="Upload complete"
           >
-            ✓
+
           </div>
               )}
             </div>

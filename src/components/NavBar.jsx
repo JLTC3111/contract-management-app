@@ -187,38 +187,112 @@ const Navbar = () => {
                 zIndex: 100,
               }}
             >
-              Visit ICUE!
+              Visit iCUE!
             </motion.div>
           )}
         </div>
       </div>
       {/* Center: Language Switcher (always visible) */}
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <select
-          value={i18n.language}
-          onChange={e => i18n.changeLanguage(e.target.value)}
-          style={{
-            fontSize: 'clamp(0.7rem, 1.25vw, 0.95rem)',
-            borderRadius: '6px',
-            border: '1.5px solid var(--card-border)',
-            background: 'var(--card-bg)',
-            color: 'var(--text)',
-            padding: '0.3rem 0.5rem',
-            cursor: 'pointer',
-            appearance: 'none',
-            minWidth: 90,
-            boxShadow: darkMode
-              ? '0 .5px 1px rgba(255, 255, 255, 0.3)'
-              : '0 .5px 1px rgba(0, 0, 0, 0.3)',
-          }}
-          aria-label="Select language"
-        >
-          {LANGUAGES.map(lang => (
-            <option key={lang.code} value={lang.code}>
-              {lang.flag} {lang.label}
-            </option>
-          ))}
-        </select>
+      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', zIndex: 20 }}>
+        <div style={{ position: 'relative', minWidth: 150 }}>
+          <button
+            onClick={() => setShowDropdown((prev) => !prev)}
+            aria-haspopup="listbox"
+            aria-expanded={showDropdown}
+            style={{
+              fontSize: 'clamp(0.65rem, 1vw, 0.95rem)',
+              borderRadius: '6px',
+              border: '1.5px solid var(--card-border)',
+              background: 'var(--card-bg)',
+              color: 'var(--text)',
+              padding: '0.3rem 0.5rem',
+              cursor: 'pointer',
+              minWidth: 90,
+              width: '100%',
+              textAlign: 'left',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              boxShadow: darkMode
+                ? '0 .5px 1px rgba(255, 255, 255, 0.3)'
+                : '0 .5px 1px rgba(0, 0, 0, 0.3)',
+              position: 'relative',
+              zIndex: 21,
+            }}
+          >
+            <span>
+              {LANGUAGES.find(l => l.code === i18n.language)?.flag} {LANGUAGES.find(l => l.code === i18n.language)?.label}
+            </span>
+            <span style={{ marginLeft: 8, fontSize: 12, opacity: 0.7 }}>▼</span>
+          </button>
+          <AnimatePresence>
+            {showDropdown && (
+              <motion.ul
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  position: 'absolute',
+                  top: '110%',
+                  left: 0,
+                  width: '100%',
+                  background: 'var(--card-bg)',
+                  border: '1.5px solid var(--card-border)',
+                  borderRadius: '6px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.10)',
+                  zIndex: 22,
+                  margin: 0,
+                  padding: 0,
+                  listStyle: 'none',
+                  overflow: 'hidden',
+                }}
+                role="listbox"
+                aria-activedescendant={i18n.language}
+              >
+                {LANGUAGES.map(lang => (
+                  <li
+                    key={lang.code}
+                    role="option"
+                    aria-selected={i18n.language === lang.code}
+                    tabIndex={0}
+                    onClick={() => {
+                      i18n.changeLanguage(lang.code);
+                      setShowDropdown(false);
+                    }}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        i18n.changeLanguage(lang.code);
+                        setShowDropdown(false);
+                      }
+                    }}
+                    style={{
+                      padding: '0.5rem 1rem',
+                      cursor: 'pointer',
+                      background: i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)',
+                      color: 'var(--text)',
+                      fontWeight: i18n.language === lang.code ? 600 : 400,
+                      borderBottom: '1px solid var(--card-border)',
+                      outline: 'none',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'}
+                    onMouseLeave={e => e.currentTarget.style.background = i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)'}
+                  >
+                    <span style={{ marginRight: 8 }}>{lang.flag}</span> {lang.label}
+                  </li>
+                ))}
+              </motion.ul>
+            )}
+          </AnimatePresence>
+          {/* Click outside to close */}
+          {showDropdown && (
+            <div
+              style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 }}
+              onClick={() => setShowDropdown(false)}
+              tabIndex={-1}
+            />
+          )}
+        </div>
       </div>
       {/* Right: Theme Toggle (always visible) */}
       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
