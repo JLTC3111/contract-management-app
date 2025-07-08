@@ -1,6 +1,8 @@
 import FileUploader from '../components/FileUploader';
 import toast from 'react-hot-toast';
 import Approvals from '../components/Approvals';
+import ExcelPreview from '../components/ExcelPreview';
+import DocxPreview from '../components/DocxPreview';
 import { useUser} from '../hooks/useUser';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
@@ -63,6 +65,7 @@ const ContractDetail = () => {
   const folderInputRef = useRef('');
   const { t } = useTranslation();
   const { darkMode } = useTheme();
+  const [hoveredFile, setHoveredFile] = useState(null);
 
 
 useEffect(() => {
@@ -830,80 +833,124 @@ return (
         .getPublicUrl(`${currentPath}/${fileName}`).data.publicUrl;
 
         const isPdf = fileName.toLowerCase().endsWith('.pdf');
+        const isExcel = fileName.toLowerCase().endsWith('.xlsx') || fileName.toLowerCase().endsWith('.xls');
+        const isDocx = fileName.toLowerCase().endsWith('.docx');
+        const isPptx = fileName.toLowerCase().endsWith('.pptx') || fileName.toLowerCase().endsWith('.ppt');
+        const isImage = /\.(png|jpe?g|gif|bmp|webp|svg)$/i.test(fileName);
         const isSelected = selectedFiles.includes(fileName);
 
-        return (
-          <li
-            key={fileName}
-            style={{
-              marginLeft: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              padding: '0.25rem 0.5rem',
-              borderRadius: '6px',
-              background: highlightedFiles.includes(fileName)
-                ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))'
-                : 'transparent',
-              transition: 'background-color 0.6s ease',
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={() => {
-                setSelectedFiles(prev =>
-                  isSelected
-                    ? prev.filter(name => name !== fileName)
-                    : [...prev, fileName]
-                );
-              }}
-            />
+        let hoverColor = undefined;
+        if (isDocx) hoverColor = '#283c82'; // dark blue
+        else if (isExcel) hoverColor = '#22c55e'; // green
+        else if (isPptx) hoverColor = '#f59e42'; // orange
+        else if (isPdf) hoverColor = '#f87171'; // light red
+        else if (isImage) hoverColor = '#67e8f9'; // light cyan
 
-            {isPdf ? (
+        const baseColor = darkMode ? '#fff' : '#000';
+        const style = {
+          background: 'none',
+          border: 'none',
+          color: hoveredFile === fileName && hoverColor ? hoverColor : baseColor,
+          textDecoration: 'none',
+          cursor: 'pointer',
+          padding: 0,
+          font: 'inherit',
+          display: 'flex',
+          alignItems: 'center',
+          transition: 'color 0.2s',
+        };
+
+        if (isPdf) {
+          return (
+            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+              <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
               <button
-                onClick={() => {
-                  setPreviewUrl(publicUrl);
-                  setPreviewType('pdf');
-                }}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: darkMode ? 'rgb(159, 191, 255)' : 'rgb(0, 85, 255)',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  font: 'inherit'
-                }}
+                onClick={() => { setPreviewUrl(publicUrl); setPreviewType('pdf'); }}
+                style={style}
+                onMouseEnter={() => setHoveredFile(fileName)}
+                onMouseLeave={() => setHoveredFile(null)}
               >
                 {getFileIcon(fileName)} {fileName}
               </button>
-            ) : (
+            </li>
+          );
+        } else if (isExcel) {
+          return (
+            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+              <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
+              <button
+                onClick={() => { setPreviewUrl(publicUrl); setPreviewType('excel'); }}
+                style={style}
+                onMouseEnter={() => setHoveredFile(fileName)}
+                onMouseLeave={() => setHoveredFile(null)}
+              >
+                {getFileIcon(fileName)} {fileName}
+              </button>
+            </li>
+          );
+        } else if (isDocx) {
+          return (
+            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+              <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
+              <button
+                onClick={() => { setPreviewUrl(publicUrl); setPreviewType('docx'); }}
+                style={style}
+                onMouseEnter={() => setHoveredFile(fileName)}
+                onMouseLeave={() => setHoveredFile(null)}
+              >
+                {getFileIcon(fileName)} {fileName}
+              </button>
+            </li>
+          );
+        } else if (isPptx) {
+          return (
+            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+              <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
+              <button
+                onClick={() => { setPreviewUrl(publicUrl); setPreviewType('pptx'); }}
+                style={style}
+                onMouseEnter={() => setHoveredFile(fileName)}
+                onMouseLeave={() => setHoveredFile(null)}
+              >
+                {getFileIcon(fileName)} {fileName}
+              </button>
+            </li>
+          );
+        } else if (isImage) {
+          return (
+            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+              <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
+              <button
+                onClick={() => { setPreviewUrl(publicUrl); setPreviewType('image'); }}
+                style={style}
+                onMouseEnter={() => setHoveredFile(fileName)}
+                onMouseLeave={() => setHoveredFile(null)}
+              >
+                {getFileIcon(fileName)} {fileName}
+              </button>
+            </li>
+          );
+        } else {
+          return (
+            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+              <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
               <a
                 href={publicUrl}
                 download
-                onClick={(e) => {
-                  if (!window.confirm(`Download "${fileName}"?`)) {
-                    e.preventDefault();
-                  }
-                }}
-                style={{
-                  color: darkMode ? '#fff' : '#000',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  display: 'flex', // <-- add this for icon+text alignment
-                  alignItems: 'center'
-                }}
+                onClick={(e) => { if (!window.confirm(`Download "${fileName}"?`)) { e.preventDefault(); } }}
+                style={style}
+                onMouseEnter={() => setHoveredFile(fileName)}
+                onMouseLeave={() => setHoveredFile(null)}
               >
                 {getFileIcon(fileName)} {fileName}
               </a>
-            )}
-          </li>
-        );
+            </li>
+          );
+        }
       })}
     </ul>
 
-    {/* PDF Previewer */}
+    {/* PDF/Excel/DOCX Previewer */}
     {previewUrl && previewType === 'pdf' && (
       <div
         style={{
@@ -920,6 +967,48 @@ return (
           height="600px"
           style={{ border: '1px solid #ccc', borderRadius: '8px' }}
         />
+        <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+          <button
+            onClick={() => setPreviewUrl(null)}
+            style={{
+              backgroundColor: darkMode ? '#fff' : '#000',
+              color: darkMode ? '#000' : '#fff',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease',
+            }}
+          >
+            ❌ {t('contract_detail_close_preview')}
+          </button>
+        </div>
+      </div>
+    )}
+    {previewUrl && previewType === 'excel' && (
+      <div style={{ marginTop: '2rem', width: '95%' }}>
+        <ExcelPreview fileUrl={previewUrl} />
+        <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+          <button
+            onClick={() => setPreviewUrl(null)}
+            style={{
+              backgroundColor: darkMode ? '#fff' : '#000',
+              color: darkMode ? '#000' : '#fff',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease',
+            }}
+          >
+            ❌ {t('contract_detail_close_preview')}
+          </button>
+        </div>
+      </div>
+    )}
+    {previewUrl && previewType === 'docx' && (
+      <div style={{ marginTop: '2rem', width: '95%' }}>
+        <DocxPreview fileUrl={previewUrl} />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
           <button
             onClick={() => setPreviewUrl(null)}
