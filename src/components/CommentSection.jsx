@@ -40,31 +40,99 @@ const LoadingSpinner = ({ size = 16 }) => (
   <Loader2 size={size} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
 );
 
-// Individual comment component
-const Comment = ({ comment }) => (
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--card-border)',
-      borderRadius: '6px',
-      marginBottom: '0.5rem',
-      background: 'var(--card-bg)',
-      textAlign: 'left' // <-- ensure left alignment for the whole comment box
-    }}
-  >
-    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-      <strong style={{ color: 'var(--text)' }}>{comment.user_email}</strong>
-      <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-        {formatDate(comment.created_at)}
-      </span>
+// Style constants
+const loadingStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.5rem',
+  padding: '1rem',
+  color: 'var(--text-secondary)'
+};
+
+const commentContainerStyle = {
+  maxHeight: '300px',
+  overflowY: 'auto'
+};
+
+const commentBoxStyle = {
+  marginBottom: '1rem',
+  padding: '0.75rem',
+  borderRadius: '8px',
+  background: 'var(--card-bg)',
+  border: '1.5px solid var(--card-border)',
+  textAlign: 'left',
+  transition: 'box-shadow 0.2s, background 0.2s',
+  boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
+};
+
+const commentHeaderStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between'
+};
+
+const commentTextStyle = {
+  marginTop: 8,
+  whiteSpace: 'pre-wrap'
+};
+
+const deleteButtonStyle = {
+  marginLeft: 'auto',
+  marginTop: 8,
+  float: 'right',
+  background: '#ef4444',
+  color: '#fff'
+};
+
+// Component to display individual comment
+const CommentItem = ({ comment, user, onDelete, t }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <div
+      style={{
+        ...commentBoxStyle,
+        background: isHovered ? 'var(--hover-bg)' : 'var(--card-bg)',
+        boxShadow: isHovered ? '0 4px 16px rgba(59,130,246,0.10)' : commentBoxStyle.boxShadow,
+        borderColor: isHovered ? 'var(--primary)' : 'var(--card-border)'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Header */}
+      <div style={commentHeaderStyle}>
+        <span style={{ fontWeight: 600 }}>{comment.user_email}</span>
+        <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+          {formatDate(comment.created_at)}
+        </span>
+      </div>
+
+      {/* Comment Text */}
+      <div style={commentTextStyle}>{comment.comment}</div>
+
+      {/* Delete Button Below */}
+      {user && comment.user_id === user.id && (
+        <div style={{ marginTop: '0.75rem', display: 'flex', justifyContent: 'flex-start' }}>
+          <button
+            className="btn-hover-effect"
+            style={{
+              background: '#ef4444',
+              color: '#fff',
+              padding: '0.35rem 0.75rem',
+              borderRadius: '6px',
+            }}
+            onClick={() => onDelete(comment.id)}
+          >
+            {t('delete', 'Delete')}
+          </button>
+        </div>
+      )}
     </div>
-    <p style={{ color: 'var(--text)', margin: 0, textAlign: 'left' }}>{comment.comment}</p>
-  </div>
-);
+  );
+};
 
 const CommentSection = ({ contractId }) => {
   const { user } = useUser();
-  const [showCommentSection, setShowCommentSection] = useState(false);
+  const [showCommentSection, setShowCommentSection] = useState(true); // Show comments by default
   const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState([]);
   const [loadingComments, setLoadingComments] = useState(false);
@@ -141,6 +209,20 @@ const CommentSection = ({ contractId }) => {
       setCommentText(newComment.comment);
     } finally {
       setSubmittingComment(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    if (!window.confirm(t('delete_comment_confirm', 'Are you sure you want to delete this comment?'))) return;
+    const { error } = await supabase
+      .from('contract_comments')
+      .delete()
+      .eq('id', commentId);
+    if (!error) {
+      setComments(prev => prev.filter(c => c.id !== commentId));
+      toast.success(t('comment_deleted', 'Comment deleted!'));
+    } else {
+      toast.error(t('failed_to_delete_comment', 'Failed to delete comment.'));
     }
   };
 
@@ -228,25 +310,31 @@ const CommentSection = ({ contractId }) => {
 
           {/* Display Comments */}
           <div>
-            {loadingComments ? (
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center',
-                gap: '0.5rem', 
-                padding: '1rem',
-                color: 'var(--text-secondary)'
-              }}>
+            {loadingComments && (
+              <div style={loadingStyle}>
                 <LoadingSpinner size={16} />
                 {t('loading_comments')}
               </div>
-            ) : comments.length > 0 ? (
-              <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+            )}
+
+            {!loadingComments && comments.length > 0 && (
+              <div style={commentContainerStyle}>
                 {comments.map((comment) => (
-                  <Comment key={comment.id} comment={comment} />
+                  <CommentItem
+                    key={comment.id}
+                    comment={comment}
+                    user={user}
+                    onDelete={handleDeleteComment}
+                    t={t}
+                  />
                 ))}
               </div>
-            ) : (
-              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>{t('no_comments_yet')} {t('be_the_first_to_comment')}</p>
+            )}
+
+            {!loadingComments && comments.length === 0 && (
+              <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                {t('no_comments_yet')} {t('be_the_first_to_comment')}
+              </p>
             )}
           </div>
         </div>

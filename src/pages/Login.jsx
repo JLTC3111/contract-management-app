@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import gsap from 'gsap';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [typedText, setTypedText] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const modelViewerRef = useRef(null);
   const cardRef = useRef(null);
   const modelRef = useRef(null);
@@ -218,7 +219,7 @@ const Login = () => {
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                background: 'var(--card-bg)',
+                background: 'transparent',
                 color: 'var(--text)',
                 outline: 'none',
                 transition: 'all 0.2s ease',
@@ -234,10 +235,9 @@ const Login = () => {
               }}
             />
           </div>
-          
-          <div>
+          <div style={{ position: 'relative', width: '100%' }}>
             <input 
-              type="password" 
+              type={showPassword ? 'text' : 'password'}
               placeholder={t('password')} 
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
@@ -249,7 +249,7 @@ const Login = () => {
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                background: 'var(--card-bg)',
+                background: 'transparent',
                 color: 'var(--text)',
                 outline: 'none',
                 transition: 'all 0.2s ease',
@@ -264,6 +264,31 @@ const Login = () => {
                 e.target.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)';
               }}
             />
+            <button
+              type="button"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              onClick={() => setShowPassword((v) => !v)}
+              style={{
+                position: 'absolute',
+                right: '2.5%',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                margin: 0,
+                color: 'var(--text-secondary)',
+                zIndex: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+              }}
+              tabIndex={0}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
           
           <button 

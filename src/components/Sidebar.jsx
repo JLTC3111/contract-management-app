@@ -472,23 +472,8 @@ const Sidebar = () => {
         {/* Resize Handle */}
         {!collapsed && !isMobile && (
           <div
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              width: '4px',
-              height: '100%',
-              cursor: 'col-resize',
-              backgroundColor: 'transparent',
-              zIndex: 10,
-            }}
+            className="sidebar-resize-handle"
             onMouseDown={handleMouseDown}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--sidebar-hover-bg, #e0e7ff)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
           />
         )}
       </div>

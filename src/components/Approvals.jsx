@@ -1,6 +1,5 @@
 import { useUser } from '../hooks/useUser';
 import ApprovalRequestForm from './ApprovalRequestForm';
-import CommentSection from './CommentSection';
 import { useTheme } from '../hooks/useTheme';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -53,7 +52,6 @@ const Approvals = ({ contractId, contract, onStatusUpdate }) => {
       )}
 
       {/* Comments Section */}
-      <CommentSection contractId={contractId} />
     </div>
   );
 };

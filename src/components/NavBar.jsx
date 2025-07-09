@@ -136,7 +136,7 @@ const Navbar = () => {
     >
       {/* Left: App Title */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <h2 style={{ fontSize: 'clamp(0.5rem, 1vw, 1.25rem)', fontWeight: 'bold' }}>
+        <h2 style={{ fontSize: 'clamp(0.5rem, 1.5vw, 1.25rem)', fontWeight: 'bold' }}>
           📁 Contract Manager
         </h2>
         <div
@@ -333,7 +333,7 @@ const Navbar = () => {
       position: 'relative',
       width: isMobile ? '42px' : 'clamp(38px, 8vw, 54px)',
       height: isMobile ? '18px' : 'clamp(24px, 5vw, 32px)',
-      background: 'var(--card-bg)',
+      background: 'var(--card-bg)', // changed from var(--sidebar-hover-bg)
       borderRadius: '16px',
       border: '1.5px solid var(--card-border)',
       display: 'flex',
@@ -356,7 +356,7 @@ const Navbar = () => {
         width: isMobile ? '20px' : 'clamp(18px, 5vw, 24px)',
         height: isMobile ? '20px' : 'clamp(18px, 5vw, 24px)',
         borderRadius: '50%',
-        background: 'var(--sidebar-hover-bg)',
+        background: 'var(--theme-toggle-bg)', // changed from var(--sidebar-hover-bg)
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -367,7 +367,7 @@ const Navbar = () => {
         zIndex: 2,
       }}
     >
-      {darkMode ? <Moon size={isMobile ? 12 : 18} /> : <Sun size={isMobile ? 12 : 18} />}
+      {darkMode ? <Moon size={isMobile ? 12 : 20} /> : <Sun size={isMobile ? 12 : 18} />}
     </span>
   </div>
 </div>

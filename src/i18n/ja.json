@@ -80,9 +80,89 @@
     "save": "保存",
     "edit": "編集",
     "approve": "承認",
-    "reject": "却下",
+    "reject": "拒否",
     "back": "戻る",
-    "done": "完了"
+    "done": "完了",
+    "permissions": "権限",
+    "actions": "アクション"
+  },
+  "manual": {
+    "loading": "マニュアルを読み込み中...",
+    "missingTranslation": "お使いの言語のマニュアルがありません。英語またはデフォルトを表示します。",
+    "error": {
+      "title": "マニュアルエラー",
+      "message": "申し訳ございませんが、マニュアルの読み込み中にエラーが発生しました。後でもう一度お試しください。",
+      "fallback": "以下をお試しください：",
+      "loading": "マニュアルの読み込みエラー。もう一度お試しください。",
+      "refresh": "ページを更新",
+      "connection": "インターネット接続を確認",
+      "support": "問題が続く場合はサポートにお問い合わせください"
+    },
+    "title": "契約管理アプリマニュアル",
+    "intro": "ICUE(VN)契約管理アプリへようこそ！このガイドでは、主要な機能とその効果的な使用方法をご案内します。",
+    "homeDashboard": {
+      "title": "🛖 ホームとダッシュボード",
+      "home": "ICUE.VNホームページにリダイレクトします。",
+      "dashboard": "概要統計、最近の契約更新、クイックアクションを表示できるメインエリア。"
+    },
+    "approvals": {
+      "title": "🛡️ 承認",
+      "approveTab": "承認待ちの契約を表示します。",
+      "actions": {
+        "requestApproval": "編集者/管理者は、カスタムメッセージ付きで契約の承認をリクエストできます。",
+        "approveContract": "管理者/承認者は契約をレビューして承認できます。",
+        "comment": "契約にフィードバックやディスカッションノートを追加。"
+      }
+    },
+    "statusUpdate": {
+      "title": "🔄 ステータス更新",
+      "trigger": "設定されたルール（例：期限や条件）に基づいて契約ステータスを自動更新するバックグラウンドジョブを実行。",
+      "accessibleVia": "サイドバーボタン「ステータス更新」からアクセス可能"
+    },
+    "profile": {
+      "title": "👤 プロフィールメニュー",
+      "changePassword": "パスワードリセットプロセスを開始。",
+      "readManual": "このユーザーマニュアルを開く。",
+      "sendFeedback": "アイデアの共有やバグの報告のためのフォーム（またはmailto）を開く。"
+    },
+    "sidebar": {
+      "title": "🔍 サイドバーナビゲーション",
+      "collapsible": "折りたたみと展開状態を切り替え。",
+      "mobile": "1024px未満の画面では、サイドバーが下部に行レイアウトで表示されます。"
+    },
+    "roles": {
+      "title": "🛠️ 役割と権限",
+      "columns": {
+        "role": "役割",
+        "permissions": "権限"
+      },
+      "table": {
+        "admin": "完全アクセス：契約の作成、編集、削除、承認、コメント。",
+        "editor": "契約の作成、編集、削除は可能ですが、承認はできません。",
+        "approver": "契約の表示と承認は可能ですが、編集はできません。",
+        "viewer": "すべての契約データへの読み取り専用アクセス。"
+      }
+    },
+    "comments": {
+      "title": "📄 コメントとコラボレーション",
+      "inline": "契約詳細にインラインコメントを追加。",
+      "timestamps": "すべてのコメントにタイムスタンプが付き、アクセス権のある他のユーザーに表示されます。"
+    },
+    "limitations": {
+      "title": "⚠️ 既知の制限",
+      "approvalDisabled": "契約が既に承認待ちの場合、承認リクエストボタンは無効になります。",
+      "rls": "コメントと承認はSupabase Row Level Security (RLS)によって制限されています。"
+    },
+    "tips": {
+      "title": "🚀 ヒントとショートカット",
+      "sidebarTip": "画面スペースを節約するために折りたたみモードでサイドバーを使用。",
+      "cronTip": "手動追跡を避けるためにステータスクロン更新を使用。",
+      "manualTip": "マニュアルとフィードバックオプションを使用してエクスペリエンスを向上。"
+    },
+    "footer": {
+      "thanks": "契約管理をお楽しみください！📍",
+      "contact": "ご質問やサポートが必要な場合は、dev@icue.vn"
+    }
   },
   "noPendingRequests": "保留中のリクエストはありません",
   "approvalRequests": {
@@ -266,5 +346,8 @@
   "approval_board_saving": "保存中...",
   "approval_board_save": "保存",
   "approval_board_cancel": "キャンセル",
-  "approval_board_edit": "編集"
+  "approval_board_edit": "編集",
+  "delete_comment_confirm": "このコメントを削除してもよろしいですか？",
+  "comment_deleted": "コメントが削除されました！",
+  "failed_to_delete_comment": "コメントの削除に失敗しました。"
 } 

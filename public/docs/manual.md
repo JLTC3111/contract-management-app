@@ -1,86 +1,82 @@
-**Contract Manager App Manual**
+# {{t('manual.title')}}
 
-Welcome to the Contract Manager App for PeaceCord! This guide will walk you through the key features and how to use them effectively.
-
----
-
-### 🏠 Home & Dashboard
-
-* **Home**: Redirects to ICUE.VN homepage.
-* **Dashboard**: The main area where you can view summary stats, recent contract updates, and quick actions.
+{{t('manual.intro')}}
 
 ---
 
-### ✅ Approvals
+### {{t('manual.homeDashboard.title')}}
 
-* **Approve Tab**: Displays contracts awaiting approval.
-* **Actions Available**:
-
-  * **Request Approval**: Editors/Admins can request approval for a contract with a custom message.
-  * **Approve Contract**: Admins/Approvers can review and approve contracts.
-  * **Comment on Contracts**: Add feedback or discussion notes to a contract.
+- {{t('manual.homeDashboard.home')}}
+- {{t('manual.homeDashboard.dashboard')}}
 
 ---
 
-### 🔄 Update Status
+### {{t('manual.approvals.title')}}
 
-* **Trigger Status Cron**: Runs a background job to auto-update contract statuses based on set rules (e.g., deadlines or conditions).
-* Accessible via the sidebar button "Update Status"
-
----
-
-### 👤 Profile Menu
-
-Click the **Profile** button in the sidebar to reveal:
-
-* **Change Password**: Initiates the password reset flow.
-* **Read Manual**: Opens this user manual.
-* **Send Feedback**: Opens a form (or mailto) to share ideas or report bugs.
+- {{t('manual.approvals.approveTab')}}
+- **{{t('manual.approvals.actions.requestApproval')}}**
+- **{{t('manual.approvals.actions.approveContract')}}**
+- **{{t('manual.approvals.actions.comment')}}**
 
 ---
 
-### 🔍 Sidebar Navigation
+### {{t('manual.statusUpdate.title')}}
 
-* **Collapsible Sidebar**: Toggle between collapsed and expanded states.
-* **Mobile Mode**: On screens smaller than 1024px, the sidebar appears at the bottom in a row layout.
-
----
-
-### ✨ Roles & Permissions
-
-| Role     | Permissions                                                           |
-| -------- | --------------------------------------------------------------------- |
-| Admin    | Full access: create, edit, delete, approve, and comment on contracts. |
-| Editor   | Can create, edit, and delete contracts, but not approve them.         |
-| Approver | Can view and approve contracts but cannot edit.                       |
-| Viewer   | Read-only access to all contract data.                                |
+- {{t('manual.statusUpdate.trigger')}}
+- {{t('manual.statusUpdate.accessibleVia')}}
 
 ---
 
-### 📄 Commenting & Collaboration
+### {{t('manual.profile.title')}}
 
-* Add inline comments on contract details.
-* All comments are timestamped and visible to others with access.
-
----
-
-### ⚠️ Known Limitations
-
-* Approval request button is disabled if the contract is already pending.
-* Comments and approvals are restricted via Supabase Row Level Security (RLS).
+- {{t('manual.profile.changePassword')}}
+- {{t('manual.profile.readManual')}}
+- {{t('manual.profile.sendFeedback')}}
 
 ---
 
-### 🚀 Tips & Shortcuts
+### {{t('manual.sidebar.title')}}
 
-* Use the sidebar in collapsed mode to save screen space.
-* Use the status cron update to avoid manual tracking.
-* Use the manual and feedback options to improve your experience.
-
----
-
-Happy Contracting! 📍
+- {{t('manual.sidebar.collapsible')}}
+- {{t('manual.sidebar.mobile')}}
 
 ---
 
-For questions or help, contact the PeaceCord team or open the Help section in the app.
+### {{t('manual.roles.title')}}
+
+| {{t('manual.roles.columns.role')}} | {{t('manual.roles.columns.permissions')}} |
+|----------------------------|--------------------------------------------------|
+| Admin                      | {{t('manual.roles.table.admin')}}               |
+| Editor                     | {{t('manual.roles.table.editor')}}              |
+| Approver                   | {{t('manual.roles.table.approver')}}            |
+| Viewer                     | {{t('manual.roles.table.viewer')}}              |
+
+---
+
+### {{t('manual.comments.title')}}
+
+- {{t('manual.comments.inline')}}
+- {{t('manual.comments.timestamps')}}
+
+---
+
+### {{t('manual.limitations.title')}}
+
+- {{t('manual.limitations.approvalDisabled')}}
+- {{t('manual.limitations.rls')}}
+
+---
+
+### {{t('manual.tips.title')}}
+
+- {{t('manual.tips.sidebarTip')}}
+- {{t('manual.tips.cronTip')}}
+- {{t('manual.tips.manualTip')}}
+
+---
+
+{{t('manual.footer.thanks')}}
+
+---
+
+{{t('manual.footer.contact')}}

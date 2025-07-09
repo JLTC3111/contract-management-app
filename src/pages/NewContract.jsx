@@ -5,9 +5,11 @@ import FileUploader from '../components/FileUploader';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
+import { useUser } from '../hooks/useUser';
 
 const NewContract = () => {
   const { t } = useTranslation();
+  const { user } = useUser();
   const [title, setTitle] = useState('');
   const [status, setStatus] = useState('draft');
   const [version, setVersion] = useState('v1.0');
@@ -16,6 +18,16 @@ const NewContract = () => {
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   const { darkMode } = useTheme();
+
+  if (user && (user.role === 'viewer' || user.role === 'approver')) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+        <h2>{t('accessDenied', 'Access Denied')}</h2>
+        <p>{t('no_permission_create_contract')}</p>
+      </div>
+    );
+  }
+
   const handleCreateContract = async () => {
     if (!title) return alert('Title is required');
     // Check for duplicate contract title (case-insensitive)
@@ -24,12 +36,12 @@ const NewContract = () => {
       .select('id')
       .ilike('title', title.trim());
     if (fetchError) {
-      alert('Error checking for duplicate contract');
+      alert(t('duplicate_error'));
       console.error(fetchError);
       return;
     }
     if (existing && existing.length > 0) {
-      alert('A contract with this title already exists. Please choose a different name.');
+      alert(t('duplicate_prompt'));
       return;
     }
     // Insert contract without file info
@@ -43,7 +55,7 @@ const NewContract = () => {
     ]).select().single();
 
     if (error) {
-      alert('Error saving contract');
+      alert('duplicate_error_short');
       console.error(error);
     } else {
       setContract(data); // Save the created contract (with id)
@@ -64,7 +76,7 @@ const NewContract = () => {
     }).eq('id', Number(contract.id));
     setUploading(false);
     if (error) {
-      alert('Error updating contract with file');
+      alert(t('upload_file_error'));
       console.error(error);
     } else {
       navigate('/');
@@ -95,14 +107,17 @@ const NewContract = () => {
       
       <h2 style={{fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>{t('newContract')}</h2>
       {!contract ? (
-        <><div style={{
-          display:'flex',
-          justifyContent:'center',
-          flexWrap:'wrap',
-          gap:'clamp(0.5rem, 2vw, 1rem)',
-          marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
-          alignItems: 'center',
-        }}>
+        <form
+          onSubmit={e => { e.preventDefault(); handleCreateContract(); }}
+          style={{
+            display:'flex',
+            justifyContent:'center',
+            flexWrap:'wrap',
+            gap:'clamp(0.5rem, 2vw, 1rem)',
+            marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
+            alignItems: 'center',
+          }}
+        >
           <input 
             type="text"
             placeholder={t('contractTitle')}
@@ -165,7 +180,7 @@ const NewContract = () => {
             <option value="expiring">{t('contractTable.status.expiring')}</option>
             <option value="expired">{t('contractTable.status.expired')}</option>
           </select>
-          <button onClick={handleCreateContract}
+          <button type="submit"
             style={{
               fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               padding: 'clamp(0.5rem, 2vw, 0.75rem)',
@@ -185,8 +200,7 @@ const NewContract = () => {
           >
             {t('createContract')}
           </button>
-        </div>
-        </>
+        </form>
       ) : (
         <>
           <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{t('contractCreated')}</p>
@@ -219,6 +233,7 @@ const NewContract = () => {
             </button>
             <button
               onClick={() => navigate('/')}
+              onKeyDown={e => { if (e.key === 'Enter') navigate('/'); }}
               style={{
                 padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
                 display: 'flex',
@@ -231,6 +246,7 @@ const NewContract = () => {
                 fontWeight: 'bold',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               }}
+              tabIndex={0}
             >
               {t('newcontract.done')}
             </button>

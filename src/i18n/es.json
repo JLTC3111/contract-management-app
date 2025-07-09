@@ -82,7 +82,87 @@
     "approve": "Aprobar",
     "reject": "Rechazar",
     "back": "Atrás",
-    "done": "Hecho"
+    "done": "Hecho",
+    "permissions": "Permisos",
+    "actions": "Acciones"
+  },
+  "manual": {
+    "loading": "Cargando manual...",
+    "missingTranslation": "No hay manual disponible en su idioma. Mostrando inglés o predeterminado.",
+    "error": {
+      "title": "Error del manual",
+      "message": "Lo sentimos, hubo un error al cargar el manual. Por favor, inténtelo de nuevo más tarde.",
+      "fallback": "Puede intentar:",
+      "loading": "Error al cargar el manual. Por favor, inténtelo de nuevo.",
+      "refresh": "Actualizar la página",
+      "connection": "Verificar su conexión a internet",
+      "support": "Contactar soporte si el problema persiste"
+    },
+    "title": "Manual de la aplicación de gestión de contratos",
+    "intro": "¡Bienvenido a la aplicación de gestión de contratos para ICUE(VN)! Esta guía le llevará a través de las características principales y cómo usarlas efectivamente.",
+    "homeDashboard": {
+      "title": "🛖 Inicio y Panel de control",
+      "home": "Redirige a la página de inicio de ICUE.VN.",
+      "dashboard": "El área principal donde puede ver estadísticas resumidas, actualizaciones recientes de contratos y acciones rápidas."
+    },
+    "approvals": {
+      "title": "🛡️ Aprobaciones",
+      "approveTab": "Muestra contratos pendientes de aprobación.",
+      "actions": {
+        "requestApproval": "Los editores/administradores pueden solicitar aprobación para un contrato con un mensaje personalizado.",
+        "approveContract": "Los administradores/aprobadores pueden revisar y aprobar contratos.",
+        "comment": "Agregar comentarios o notas de discusión a un contrato."
+      }
+    },
+    "statusUpdate": {
+      "title": "🔄 Actualizar estado",
+      "trigger": "Ejecuta un trabajo en segundo plano para actualizar automáticamente los estados de los contratos basándose en reglas establecidas (ej. fechas límite o condiciones).",
+      "accessibleVia": "Accesible a través del botón de la barra lateral \"Actualizar estado\""
+    },
+    "profile": {
+      "title": "👤 Menú de perfil",
+      "changePassword": "Inicia el flujo de restablecimiento de contraseña.",
+      "readManual": "Abre este manual de usuario.",
+      "sendFeedback": "Abre un formulario (o mailto) para compartir ideas o reportar errores."
+    },
+    "sidebar": {
+      "title": "🔍 Navegación de barra lateral",
+      "collapsible": "Alternar entre estados colapsado y expandido.",
+      "mobile": "En pantallas menores a 1024px, la barra lateral aparece en la parte inferior en un diseño de fila."
+    },
+    "roles": {
+      "title": "🛠️ Roles y permisos",
+      "columns": {
+        "role": "Rol",
+        "permissions": "Permisos"
+      },
+      "table": {
+        "admin": "Acceso completo: crear, editar, eliminar, aprobar y comentar contratos.",
+        "editor": "Puede crear, editar y eliminar contratos, pero no aprobarlos.",
+        "approver": "Puede ver y aprobar contratos pero no puede editar.",
+        "viewer": "Acceso de solo lectura a todos los datos de contratos."
+      }
+    },
+    "comments": {
+      "title": "📄 Comentarios y colaboración",
+      "inline": "Agregar comentarios en línea a los detalles del contrato.",
+      "timestamps": "Todos los comentarios tienen marcas de tiempo y son visibles para otros con acceso."
+    },
+    "limitations": {
+      "title": "⚠️ Limitaciones conocidas",
+      "approvalDisabled": "El botón de solicitud de aprobación está deshabilitado si el contrato ya está pendiente.",
+      "rls": "Los comentarios y aprobaciones están restringidos a través de Supabase Row Level Security (RLS)."
+    },
+    "tips": {
+      "title": "🚀 Consejos y atajos",
+      "sidebarTip": "Use la barra lateral en modo colapsado para ahorrar espacio en pantalla.",
+      "cronTip": "Use la actualización cron de estado para evitar el seguimiento manual.",
+      "manualTip": "Use las opciones de manual y comentarios para mejorar su experiencia."
+    },
+    "footer": {
+      "thanks": "¡Feliz gestión de contratos! 📍",
+      "contact": "Para preguntas o ayuda, contacte dev@icue.vn"
+    }
   },
   "noPendingRequests": "No hay solicitudes pendientes",
   "approvalRequests": {
@@ -265,5 +345,8 @@
   "approval_board_saving": "Guardando...",
   "approval_board_save": "Guardar",
   "approval_board_cancel": "Cancelar",
-  "approval_board_edit": "Editar"
+  "approval_board_edit": "Editar",
+  "delete_comment_confirm": "¿Está seguro de que desea eliminar este comentario?",
+  "comment_deleted": "¡Comentario eliminado!",
+  "failed_to_delete_comment": "No se pudo eliminar el comentario."
 } 

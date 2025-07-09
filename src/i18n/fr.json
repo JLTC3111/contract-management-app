@@ -78,11 +78,91 @@
     "success": "Succès",
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "edit": "Éditer",
+    "edit": "Modifier",
     "approve": "Approuver",
     "reject": "Rejeter",
     "back": "Retour",
-    "done": "Terminé"
+    "done": "Terminé",
+    "permissions": "Permissions",
+    "actions": "Actions"
+  },
+  "manual": {
+    "loading": "Chargement du manuel...",
+    "missingTranslation": "Aucun manuel disponible dans votre langue. Affichage en anglais ou par défaut.",
+    "error": {
+      "title": "Erreur du manuel",
+      "message": "Désolé, une erreur s'est produite lors du chargement du manuel. Veuillez réessayer plus tard.",
+      "fallback": "Vous pouvez essayer :",
+      "loading": "Erreur lors du chargement du manuel. Veuillez réessayer.",
+      "refresh": "Actualiser la page",
+      "connection": "Vérifier votre connexion internet",
+      "support": "Contacter le support si le problème persiste"
+    },
+    "title": "Manuel de l'application de gestion des contrats",
+    "intro": "Bienvenue dans l'application de gestion des contrats pour ICUE(VN) ! Ce guide vous accompagnera à travers les fonctionnalités principales et comment les utiliser efficacement.",
+    "homeDashboard": {
+      "title": "🛖 Accueil et Tableau de bord",
+      "home": "Redirige vers la page d'accueil ICUE.VN.",
+      "dashboard": "La zone principale où vous pouvez voir les statistiques récapitulatives, les mises à jour récentes des contrats et les actions rapides."
+    },
+    "approvals": {
+      "title": "🛡️ Approbations",
+      "approveTab": "Affiche les contrats en attente d'approbation.",
+      "actions": {
+        "requestApproval": "Les éditeurs/administrateurs peuvent demander une approbation pour un contrat avec un message personnalisé.",
+        "approveContract": "Les administrateurs/approbateurs peuvent examiner et approuver les contrats.",
+        "comment": "Ajouter des commentaires ou des notes de discussion à un contrat."
+      }
+    },
+    "statusUpdate": {
+      "title": "🔄 Mise à jour du statut",
+      "trigger": "Exécute un travail en arrière-plan pour mettre à jour automatiquement les statuts des contrats basés sur des règles établies (ex. échéances ou conditions).",
+      "accessibleVia": "Accessible via le bouton de la barre latérale \"Mise à jour du statut\""
+    },
+    "profile": {
+      "title": "👤 Menu du profil",
+      "changePassword": "Initie le processus de réinitialisation du mot de passe.",
+      "readManual": "Ouvre ce manuel utilisateur.",
+      "sendFeedback": "Ouvre un formulaire (ou mailto) pour partager des idées ou signaler des bugs."
+    },
+    "sidebar": {
+      "title": "🔍 Navigation de la barre latérale",
+      "collapsible": "Basculer entre les états réduit et étendu.",
+      "mobile": "Sur les écrans de moins de 1024px, la barre latérale apparaît en bas dans une disposition en ligne."
+    },
+    "roles": {
+      "title": "🛠️ Rôles et permissions",
+      "columns": {
+        "role": "Rôle",
+        "permissions": "Permissions"
+      },
+      "table": {
+        "admin": "Accès complet : créer, modifier, supprimer, approuver et commenter les contrats.",
+        "editor": "Peut créer, modifier et supprimer des contrats, mais ne peut pas les approuver.",
+        "approver": "Peut voir et approuver les contrats mais ne peut pas modifier.",
+        "viewer": "Accès en lecture seule à toutes les données de contrats."
+      }
+    },
+    "comments": {
+      "title": "📄 Commentaires et collaboration",
+      "inline": "Ajouter des commentaires en ligne aux détails du contrat.",
+      "timestamps": "Tous les commentaires ont des horodatages et sont visibles pour les autres ayant accès."
+    },
+    "limitations": {
+      "title": "⚠️ Limitations connues",
+      "approvalDisabled": "Le bouton de demande d'approbation est désactivé si le contrat est déjà en attente.",
+      "rls": "Les commentaires et approbations sont restreints via Supabase Row Level Security (RLS)."
+    },
+    "tips": {
+      "title": "🚀 Conseils et raccourcis",
+      "sidebarTip": "Utilisez la barre latérale en mode réduit pour économiser l'espace d'écran.",
+      "cronTip": "Utilisez la mise à jour cron du statut pour éviter le suivi manuel.",
+      "manualTip": "Utilisez les options de manuel et de commentaires pour améliorer votre expérience."
+    },
+    "footer": {
+      "thanks": "Bonne gestion des contrats ! 📍",
+      "contact": "Pour des questions ou de l'aide, contactez dev@icue.vn"
+    }
   },
   "noPendingRequests": "Aucune demande en attente",
   "approvalRequests": {
@@ -265,5 +345,8 @@
   "approval_board_saving": "Enregistrement...",
   "approval_board_save": "Enregistrer",
   "approval_board_cancel": "Annuler",
-  "approval_board_edit": "Modifier"
+  "approval_board_edit": "Modifier",
+  "delete_comment_confirm": "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
+  "comment_deleted": "Commentaire supprimé !",
+  "failed_to_delete_comment": "Échec de la suppression du commentaire."
 } 

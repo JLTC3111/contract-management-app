@@ -62,6 +62,15 @@ button:disabled {
   cursor: wait;
 }
 
+button,
+a,
+input,
+select,
+textarea,
+.magnify-target {
+  cursor: zoom-in !important;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -164,6 +173,7 @@ button:disabled {
     display: flex !important;
     align-items: center !important;
     align-self: stretch !important;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
   }
   
   .sidebar-container .sidebar-button > div {
@@ -253,6 +263,14 @@ button:disabled {
     box-sizing: border-box !important;
     width: auto !important;
     height: 100% !important;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+  }
+  .sidebar-container .submenu-container li:hover, .sidebar-container .submenu-container li:focus {
+    background: var(--card-bg);
+    color: var(--sidebar-active-text, #1e3a8a);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transform: scale(1.05);
+    outline: none;
   }
   
   /* Ensure proper spacing for mobile buttons */

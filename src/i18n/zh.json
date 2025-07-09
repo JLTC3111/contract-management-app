@@ -82,7 +82,87 @@
     "approve": "批准",
     "reject": "拒绝",
     "back": "返回",
-    "done": "完成"
+    "done": "完成",
+    "permissions": "权限",
+    "actions": "操作"
+  },
+  "manual": {
+    "loading": "正在加载手册...",
+    "missingTranslation": "没有您语言的手册。显示英文或默认语言。",
+    "error": {
+      "title": "手册错误",
+      "message": "抱歉，加载手册时出现错误。请稍后再试。",
+      "fallback": "您可以尝试：",
+      "loading": "加载手册时出错。请重试。",
+      "refresh": "刷新页面",
+      "connection": "检查网络连接",
+      "support": "如果问题持续存在，请联系支持"
+    },
+    "title": "合同管理应用手册",
+    "intro": "欢迎使用ICUE(VN)合同管理应用！本指南将带您了解主要功能及其有效使用方法。",
+    "homeDashboard": {
+      "title": "🛖 首页和仪表板",
+      "home": "重定向到ICUE.VN首页。",
+      "dashboard": "主要区域，您可以查看摘要统计、最近的合同更新和快速操作。"
+    },
+    "approvals": {
+      "title": " 审批",
+      "approveTab": "显示等待审批的合同。",
+      "actions": {
+        "requestApproval": "编辑/管理员可以为合同请求带有自定义消息的审批。",
+        "approveContract": "管理员/审批人可以审查和批准合同。",
+        "comment": "为合同添加反馈或讨论注释。"
+      }
+    },
+    "statusUpdate": {
+      "title": "🔄 更新状态",
+      "trigger": "运行后台作业，根据设定的规则自动更新合同状态（例如，截止日期或条件）。",
+      "accessibleVia": "可通过侧边栏按钮\"更新状态\"访问"
+    },
+    "profile": {
+      "title": "👤 个人资料菜单",
+      "changePassword": "启动密码重置流程。",
+      "readManual": "打开此用户手册。",
+      "sendFeedback": "打开表单（或mailto）分享想法或报告错误。"
+    },
+    "sidebar": {
+      "title": "🔍 侧边栏导航",
+      "collapsible": "在折叠和展开状态之间切换。",
+      "mobile": "在小于1024px的屏幕上，侧边栏出现在底部的行布局中。"
+    },
+    "roles": {
+      "title": "🛠️ 角色和权限",
+      "columns": {
+        "role": "角色",
+        "permissions": "权限"
+      },
+      "table": {
+        "admin": "完全访问：创建、编辑、删除、批准和评论合同。",
+        "editor": "可以创建、编辑和删除合同，但不能批准。",
+        "approver": "可以查看和批准合同，但不能编辑。",
+        "viewer": "对所有合同数据的只读访问。"
+      }
+    },
+    "comments": {
+      "title": "📄 评论和协作",
+      "inline": "为合同详情添加内联评论。",
+      "timestamps": "所有评论都有时间戳，对有权访问的其他人可见。"
+    },
+    "limitations": {
+      "title": "⚠️ 已知限制",
+      "approvalDisabled": "如果合同已待审批，则审批请求按钮被禁用。",
+      "rls": "评论和审批通过Supabase行级安全性(RLS)进行限制。"
+    },
+    "tips": {
+      "title": "🚀 提示和快捷方式",
+      "sidebarTip": "使用折叠模式的侧边栏来节省屏幕空间。",
+      "cronTip": "使用状态cron更新来避免手动跟踪。",
+      "manualTip": "使用手册和反馈选项来改善您的体验。"
+    },
+    "footer": {
+      "thanks": "祝您合同管理愉快！📍",
+      "contact": "如有问题或需要帮助，请联系 dev@icue.vn"
+    }
   },
   "noPendingRequests": "没有待处理的请求",
   "approvalRequests": {
@@ -266,5 +346,8 @@
   "approval_board_saving": "保存中...",
   "approval_board_save": "保存",
   "approval_board_cancel": "取消",
-  "approval_board_edit": "编辑"
+  "approval_board_edit": "编辑",
+  "delete_comment_confirm": "您确定要删除此评论吗？",
+  "comment_deleted": "评论已删除！",
+  "failed_to_delete_comment": "删除评论失败。"
 } 

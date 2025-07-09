@@ -50,7 +50,75 @@
       "title": "Handbuch-Fehler",
       "message": "Entschuldigung, beim Laden des Handbuchs ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
       "fallback": "Sie können versuchen:",
-      "loading": "Fehler beim Laden des Handbuchs. Bitte versuchen Sie es erneut."
+      "loading": "Fehler beim Laden des Handbuchs. Bitte versuchen Sie es erneut.",
+      "refresh": "Die Seite neu laden",
+      "connection": "Ihre Internetverbindung überprüfen",
+      "support": "Den Support kontaktieren, wenn das Problem weiterhin besteht"
+    },
+    "title": "Vertragsmanager-App Handbuch",
+    "intro": "Willkommen zur Vertragsmanager-App für ICUE(VN)! Diese Anleitung führt Sie durch die wichtigsten Funktionen und deren effektive Nutzung.",
+    "homeDashboard": {
+      "title": "🛖 Startseite & Dashboard",
+      "home": "Leitet zur ICUE.VN Startseite weiter.",
+      "dashboard": "Der Hauptbereich, wo Sie Zusammenfassungsstatistiken, aktuelle Vertragsaktualisierungen und Schnellaktionen anzeigen können."
+    },
+    "approvals": {
+      "title": "🛡️ Genehmigungen",
+      "approveTab": "Zeigt Verträge an, die auf Genehmigung warten.",
+      "actions": {
+        "requestApproval": "Editoren/Admins können eine Genehmigung für einen Vertrag mit einer benutzerdefinierten Nachricht anfordern.",
+        "approveContract": "Admins/Genehmiger können Verträge prüfen und genehmigen.",
+        "comment": "Feedback oder Diskussionsnotizen zu einem Vertrag hinzufügen."
+      }
+    },
+    "statusUpdate": {
+      "title": "🔄 Status aktualisieren",
+      "trigger": "Führt einen Hintergrundjob aus, um Vertragsstatus automatisch basierend auf festgelegten Regeln zu aktualisieren (z.B. Fristen oder Bedingungen).",
+      "accessibleVia": "Zugänglich über die Sidebar-Schaltfläche \"Status aktualisieren\""
+    },
+    "profile": {
+      "title": "👤 Profil-Menü",
+      "changePassword": "Initiiert den Passwort-Reset-Prozess.",
+      "readManual": "Öffnet dieses Benutzerhandbuch.",
+      "sendFeedback": "Öffnet ein Formular (oder mailto), um Ideen zu teilen oder Fehler zu melden."
+    },
+    "sidebar": {
+      "title": "🔍 Sidebar-Navigation",
+      "collapsible": "Zwischen eingeklapptem und ausgeklapptem Zustand wechseln.",
+      "mobile": "Auf Bildschirmen kleiner als 1024px erscheint die Sidebar am unteren Rand in einer Zeilenanordnung."
+    },
+    "roles": {
+      "title": "🛠️ Rollen & Berechtigungen",
+      "columns": {
+        "role": "Rolle",
+        "permissions": "Berechtigungen"
+      },
+      "table": {
+        "admin": "Voller Zugriff: Verträge erstellen, bearbeiten, löschen, genehmigen und kommentieren.",
+        "editor": "Kann Verträge erstellen, bearbeiten und löschen, aber nicht genehmigen.",
+        "approver": "Kann Verträge anzeigen und genehmigen, aber nicht bearbeiten.",
+        "viewer": "Nur Lesezugriff auf alle Vertragsdaten."
+      }
+    },
+    "comments": {
+      "title": "📄 Kommentieren & Zusammenarbeit",
+      "inline": "Inline-Kommentare zu Vertragsdetails hinzufügen.",
+      "timestamps": "Alle Kommentare sind zeitstempelmarkiert und für andere mit Zugriff sichtbar."
+    },
+    "limitations": {
+      "title": "⚠️ Bekannte Einschränkungen",
+      "approvalDisabled": "Genehmigungsanfrage-Schaltfläche ist deaktiviert, wenn der Vertrag bereits ausstehend ist.",
+      "rls": "Kommentare und Genehmigungen sind über Supabase Row Level Security (RLS) eingeschränkt."
+    },
+    "tips": {
+      "title": "🚀 Tipps & Shortcuts",
+      "sidebarTip": "Verwenden Sie die Sidebar im eingeklappten Modus, um Bildschirmplatz zu sparen.",
+      "cronTip": "Verwenden Sie die Status-Cron-Aktualisierung, um manuelles Tracking zu vermeiden.",
+      "manualTip": "Verwenden Sie das Handbuch und Feedback-Optionen, um Ihre Erfahrung zu verbessern."
+    },
+    "footer": {
+      "thanks": "Viel Erfolg beim Vertragsmanagement! 📍",
+      "contact": "Bei Fragen oder Hilfe kontaktieren Sie das dev@icue.vn"
     }
   },
   "status": {
@@ -92,7 +160,9 @@
     "approve": "Genehmigen",
     "reject": "Ablehnen",
     "back": "Zurück",
-    "done": "Fertig"
+    "done": "Fertig",
+    "permissions": "Berechtigungen",
+    "actions": "Aktionen"
   },
   "noPendingRequests": "Keine ausstehenden Anfragen",
   "approvalRequests": {
@@ -275,5 +345,9 @@
   "approval_board_saving": "Wird gespeichert...",
   "approval_board_save": "Speichern",
   "approval_board_cancel": "Abbrechen",
-  "approval_board_edit": "Bearbeiten"
+  "approval_board_edit": "Bearbeiten",
+  "bell_no_new_comments_in_last_24_hours": "Keine neuen Kommentare in den letzten 24 Stunden",
+  "delete_comment_confirm": "Möchten Sie diesen Kommentar wirklich löschen?",
+  "comment_deleted": "Kommentar gelöscht!",
+  "failed_to_delete_comment": "Kommentar konnte nicht gelöscht werden."
 } 

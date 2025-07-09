@@ -22,9 +22,10 @@
   --input-bg: #fff;
   --input-border: #d1d5db;
   --text-secondary: #555;
-  --sidebar-hover-bg: #e6f0fa;
+  --sidebar-hover-bg: linear-gradient(to bottom, #e0f7fa 0%, #00056e 100%); /* light cyan gradient */
   --sidebar-active-bg: #fefeff;
   --sidebar-active-text: #1e3a8a;
+  --theme-toggle-bg: linear-gradient(to bottom, #e0f7fa 0%, #b2ebf2 100%);
   --fancy-btn-border: #fbf3e7;
   --fancy-btn-shadow: 0 1.5px 4px rgba(0,0,0,0.15);
 }
@@ -46,9 +47,10 @@ body.dark {
   --input-bg: #232b3b;
   --input-border: #334155;
   --text-secondary: #ffffff;
-  --sidebar-hover-bg: #232b3b;
+  --sidebar-hover-bg: linear-gradient(to bottom, #bea3ff 0%, #fbc2eb 100%); /* light purple gradient */
   --sidebar-active-bg: #334155;
   --sidebar-active-text: #fff;
+  --theme-toggle-bg: linear-gradient(to bottom, #dbff65 0%, #030045 100%);
   --fancy-btn-border: #60a5fa;
   --fancy-btn-shadow: 0 1px 2px rgba(96,165,250,0.45);
 }
@@ -119,6 +121,38 @@ button:focus-visible {
 .sidebar a:hover, .sidebar a:focus {
   color: #000 !important;
 }
+
+.sidebar-resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  background-color: transparent;
+  z-index: 10;
+  transition: background 0.2s;
+}
+.sidebar-resize-handle:hover {
+  background: var(--sidebar-hover-bg, #e0e7ff);
+}
+
+.theme-toggle-bg {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  background-color: transparent;
+  z-index: 10;
+  transition: background 0.2s;
+}
+.theme-toggle-bg:hover {
+  background: var(--theme-toggle-bg, #e0e7ff);
+}
+
+
 
 .contract-table {
   width: 100%;

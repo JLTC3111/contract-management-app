@@ -12,6 +12,15 @@ import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import JSZip from 'jszip';
+import CommentSection from '../components/CommentSection';
+
+// Function to extract original file name from stored name (removes timestamp prefix)
+function getOriginalFileName(storedFileName) {
+  // Pattern: timestamp-originalname.ext
+  // Example: 2024-01-15T10-30-45-123Z-document.pdf -> document.pdf
+  const match = storedFileName.match(/^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z-(.+)$/);
+  return match ? match[1] : storedFileName;
+}
 
 function getFileIcon(fileName) {
   const ext = fileName.split('.').pop().toLowerCase();
@@ -738,7 +747,7 @@ return (
         }}
         disabled={selectedFiles.length === 0}
       >
-      <svg width="20px" height="20px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48">
+      <svg width="20px" height="20px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 48 48">
           <g fill={selectedFiles.length === 0 ? "#1565C0" : "#ffffff"}>
               <polygon points="24,37.1 13,24 35,24"/>
               <rect x="20" y="4" width="8" height="4"/>
@@ -794,19 +803,35 @@ return (
         <p>
           <strong>{t('contract_detail_status')}:</strong>{' '}
           {editMode ? (
-            <select
-              className="table-filter-input"
-              value={updated.status}
-              onChange={(e) => handleChange('status', e.target.value)}
-              style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}
-            >
-              <option value="draft">{t('contract_detail_draft')}</option>
-              <option value="pending">{t('contract_detail_pending')}</option>
-              <option value="approved">{t('contract_detail_approved')}</option>
-              <option value="rejected">{t('contract_detail_rejected')}</option>
-              <option value="expiring">{t('contract_detail_expiring')}</option>
-              <option value="expired">{t('contract_detail_expired')}</option>
-            </select>
+            <>
+              <select
+                className="table-filter-input"
+                value={updated.status}
+                onChange={(e) => handleChange('status', e.target.value)}
+                style={{
+                  fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+                  background: updated.status === 'pending' && user.role === 'editor' ? '#e5e7eb' : undefined,
+                  color: updated.status === 'pending' && user.role === 'editor' ? '#888' : undefined,
+                  cursor: updated.status === 'pending' && user.role === 'editor' ? 'not-allowed' : undefined,
+                  pointerEvents: updated.status === 'pending' && user.role === 'editor' ? 'none' : undefined,
+                  opacity: updated.status === 'pending' && user.role === 'editor' ? 0.7 : 1,
+                }}
+                disabled={updated.status === 'pending' && user.role === 'editor'}
+                title={updated.status === 'pending' && user.role === 'editor' ? t('status_locked_pending') : ''}
+              >
+                <option value="draft">{t('contract_detail_draft')}</option>
+                <option value="pending">{t('contract_detail_pending')}</option>
+                <option value="approved">{t('contract_detail_approved')}</option>
+                <option value="rejected">{t('contract_detail_rejected')}</option>
+                <option value="expiring">{t('contract_detail_expiring')}</option>
+                <option value="expired">{t('contract_detail_expired')}</option>
+              </select>
+              {updated.status === 'pending' && user.role === 'editor' && (
+                <span style={{ color: '#888', fontSize: '0.95em', marginLeft: '0.5rem' }}>
+                  {t('status_locked_pending')}
+                </span>
+              )}
+            </>
           ) : (
             contract.status
           )}
@@ -926,6 +951,7 @@ return (
       {files.filter(file => file.name !== '.keep').map((file) => {
         const isFolder = !file.metadata?.mimetype;
         const fileName = file.name;
+        const originalFileName = getOriginalFileName(fileName);
         const filePath = fileName; // relative to currentPath
         const isChecked = selectedFiles.includes(filePath);
         
@@ -990,8 +1016,8 @@ return (
                 }}
               >
                 {isFolder
-                  ? <>📂 {fileName}</>
-                  : <>{getFileIcon(fileName)} {fileName}</>
+                  ? <>📂 {originalFileName}</>
+                  : <>{getFileIcon(fileName)} {originalFileName}</>
                 }
               </span>
             </li>
@@ -1017,12 +1043,57 @@ return (
         let hoverColor = undefined;
         let hoverStyle = {};
         
-        if (isDocx) hoverColor = '#283c82'; // dark blue
-        else if (isExcel) hoverColor = '#22c55e'; // green
-        else if (isPptx) hoverColor = '#f59e42'; // orange
-        else if (isPdf) hoverColor = '#f87171'; // light red
-        else if (isImage) hoverColor = '#67e8f9'; // light cyan
-        else if (isArchive) {
+        if (isDocx) {
+          hoverColor = '#283c82'; // dark blue
+          hoverStyle = {
+            background: 'linear-gradient(90deg,rgb(255, 255, 255), #1e40af, #1d4ed8)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundSize: '200% 100%',
+            animation: 'gradient-shift 2s ease-in-out infinite',
+          };
+        } else if (isExcel) {
+          hoverColor = '#22c55e'; // green
+          hoverStyle = {
+            background: 'linear-gradient(90deg,rgb(221, 255, 233), #16a34a,rgb(0, 90, 42))',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundSize: '200% 100%',
+            animation: 'gradient-shift 2s ease-in-out infinite',
+          };
+        } else if (isPptx) {
+          hoverColor = '#f59e42'; // orange
+          hoverStyle = {
+            background: 'linear-gradient(90deg,rgb(255, 234, 212), #ea580c,rgb(132, 66, 0))',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundSize: '200% 100%',
+            animation: 'gradient-shift 2s ease-in-out infinite',
+          };
+        } else if (isPdf) {
+          hoverColor = '#f87171'; // light red
+          hoverStyle = {
+            background: 'linear-gradient(90deg,rgb(255, 198, 198), #ef4444,rgb(123, 19, 0))',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundSize: '200% 100%',
+            animation: 'gradient-shift 2s ease-in-out infinite',
+          };
+        } else if (isImage) {
+          hoverColor = '#67e8f9'; // light cyan
+          hoverStyle = {
+            background: 'linear-gradient(90deg,rgb(188, 242, 249), #22d3ee,rgb(0, 62, 93))',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundSize: '200% 100%',
+            animation: 'gradient-shift 2s ease-in-out infinite',
+          };
+        } else if (isArchive) {
           // Gradient effect for archive files
           hoverStyle = {
             background: 'linear-gradient(90deg, #ef4444, #3b82f6, #f59e0b)',
@@ -1046,7 +1117,7 @@ return (
           display: 'flex',
           alignItems: 'center',
           transition: 'color 0.2s',
-          ...(hoveredFile === fileName && isArchive ? hoverStyle : {}),
+          ...(hoveredFile === fileName ? hoverStyle : {}),
         };
 
         if (isPdf) {
@@ -1059,7 +1130,7 @@ return (
                 onMouseEnter={() => setHoveredFile(fileName)}
                 onMouseLeave={() => setHoveredFile(null)}
               >
-                {getFileIcon(fileName)} {fileName}
+                {getFileIcon(fileName)} {originalFileName}
               </button>
             </li>
           );
@@ -1073,7 +1144,7 @@ return (
                 onMouseEnter={() => setHoveredFile(fileName)}
                 onMouseLeave={() => setHoveredFile(null)}
               >
-                {getFileIcon(fileName)} {fileName}
+                {getFileIcon(fileName)} {originalFileName}
               </button>
             </li>
           );
@@ -1087,7 +1158,7 @@ return (
                 onMouseEnter={() => setHoveredFile(fileName)}
                 onMouseLeave={() => setHoveredFile(null)}
               >
-                {getFileIcon(fileName)} {fileName}
+                {getFileIcon(fileName)} {originalFileName}
               </button>
             </li>
           );
@@ -1098,12 +1169,12 @@ return (
               <a
                 href={publicUrl}
                 download
-                onClick={(e) => { if (!window.confirm(`Download "${fileName}"?`)) { e.preventDefault(); } }}
+                onClick={(e) => { if (!window.confirm(`Download "${originalFileName}"?`)) { e.preventDefault(); } }}
                 style={style}
                 onMouseEnter={() => setHoveredFile(fileName)}
                 onMouseLeave={() => setHoveredFile(null)}
               >
-                {getFileIcon(fileName)} {fileName}
+                {getFileIcon(fileName)} {originalFileName}
               </a>
             </li>
           );
@@ -1117,7 +1188,7 @@ return (
                 onMouseEnter={() => setHoveredFile(fileName)}
                 onMouseLeave={() => setHoveredFile(null)}
               >
-                {getFileIcon(fileName)} {fileName}
+                {getFileIcon(fileName)} {originalFileName}
               </button>
             </li>
           );
@@ -1128,12 +1199,12 @@ return (
               <a
                 href={publicUrl}
                 download
-                onClick={(e) => { if (!window.confirm(`Download "${fileName}"?`)) { e.preventDefault(); } }}
+                onClick={(e) => { if (!window.confirm(`Download "${originalFileName}"?`)) { e.preventDefault(); } }}
                 style={style}
                 onMouseEnter={() => setHoveredFile(fileName)}
                 onMouseLeave={() => setHoveredFile(null)}
               >
-                {getFileIcon(fileName)} {fileName}
+                {getFileIcon(fileName)} {originalFileName}
               </a>
             </li>
           );
@@ -1244,12 +1315,21 @@ return (
 
     {/* Approvals Component for Admin/Editor */}
     {!editMode && (
-          <Approvals 
-            contractId={contractId} 
-            contract={contract} 
-            onStatusUpdate={handleStatusUpdate}
-          />
-        )}
+      ['admin', 'editor'].includes(user.role) && (
+        <Approvals 
+          contractId={contractId} 
+          contract={contract} 
+          onStatusUpdate={handleStatusUpdate}
+        />
+      )
+    )}
+
+    {/* Comments Section: Always visible for all roles */}
+    {!editMode && (
+      <div style={{ marginTop: '2rem' }}>
+        <CommentSection contractId={contractId} />
+      </div>
+    )}
 
 {/* Admin/editor-only controls - Approvers cannot edit */}
     {['admin', 'editor'].includes(user.role) && (

@@ -19,7 +19,7 @@ const ManualViewer = () => {
         setNotFound(false);
         
         try {
-          // Try to fetch the manual file
+          // Try to fetch the manual template file
           console.log('Trying to fetch: /docs/manual.md');
           const res = await fetch('/docs/manual.md');
           console.log(`Response status: ${res.status}, ok: ${res.ok}`);
@@ -34,97 +34,105 @@ const ManualViewer = () => {
               console.error('Received HTML instead of markdown');
               throw new Error('Received HTML instead of markdown');
             }
-            setContent(text);
+            
+            // Parse the template and replace {{t('key')}} placeholders with translations
+            const parseTemplate = (template) => {
+              return template.replace(/\{\{t\('([^']+)'\)\}\}/g, (match, key) => {
+                return t(key);
+              });
+            };
+            
+            const processedContent = parseTemplate(text);
+            setContent(processedContent);
             setLoading(false);
           } else {
             // If fetch fails, use embedded manual content as fallback
             console.log('Using embedded manual content as fallback');
-            const embeddedManual = `**Contract Manager App Manual**
+            const embeddedManual = `# ${t('manual.title', 'Contract Manager App Manual')}
 
-Welcome to the Contract Manager App for ICUE(VN)! This guide will walk you through the key features and how to use them effectively.
-
----
-
-### 🏠 Home & Dashboard
-
-* **Home**: Redirects to ICUE.VN homepage.
-* **Dashboard**: The main area where you can view summary stats, recent contract updates, and quick actions.
+${t('manual.intro', 'Welcome to the Contract Manager App for ICUE(VN)! This guide will walk you through the key features and how to use them effectively.')}
 
 ---
 
-### ✅ Approvals
+### ${t('manual.homeDashboard.title', '🛖 Home & Dashboard')}
 
-* **Approve Tab**: Displays contracts awaiting approval.
-* **Actions Available**:
-
-  * **Request Approval**: Editors/Admins can request approval for a contract with a custom message.
-  * **Approve Contract**: Admins/Approvers can review and approve contracts.
-  * **Comment on Contracts**: Add feedback or discussion notes to a contract.
+- **${t('sidebar.home', 'Home')}**: ${t('manual.homeDashboard.home', 'Redirects to ICUE.VN homepage.')}
+- **${t('sidebar.dashboard', 'Dashboard')}**: ${t('manual.homeDashboard.dashboard', 'The main area where you can view summary stats, recent contract updates, and quick actions.')}
 
 ---
 
-### 🔄 Update Status
+### ${t('manual.approvals.title', '🛡️ Approvals')}
 
-* **Trigger Status Cron**: Runs a background job to auto-update contract statuses based on set rules (e.g., deadlines or conditions).
-* Accessible via the sidebar button "Update Status"
-
----
-
-### 👤 Profile Menu
-
-Click the **Profile** button in the sidebar to reveal:
-
-* **Change Password**: Initiates the password reset flow.
-* **Read Manual**: Opens this user manual.
-* **Send Feedback**: Opens a form (or mailto) to share ideas or report bugs.
+- **${t('sidebar.approvals', 'Approvals')}**: ${t('manual.approvals.approveTab', 'Displays contracts awaiting approval.')}
+- **${t('common.actions', 'Actions')}**:
+  - **${t('send_approval_request', 'Request Approval')}**: ${t('manual.approvals.actions.requestApproval', 'Editors/Admins can request approval for a contract with a custom message.')}
+  - **${t('approval_board_approve', 'Approve Contract')}**: ${t('manual.approvals.actions.approveContract', 'Admins/Approvers can review and approve contracts.')}
+  - **${t('comments', 'Comment on Contracts')}**: ${t('manual.approvals.actions.comment', 'Add feedback or discussion notes to a contract.')}
 
 ---
 
-### 🔍 Sidebar Navigation
+### ${t('manual.statusUpdate.title', '🔄 Update Status')}
 
-* **Collapsible Sidebar**: Toggle between collapsed and expanded states.
-* **Mobile Mode**: On screens smaller than 1024px, the sidebar appears at the bottom in a row layout.
+- **${t('sidebar.updateStatus', 'Update Status')}**: ${t('manual.statusUpdate.trigger', 'Runs a background job to auto-update contract statuses based on set rules (e.g., deadlines or conditions).')}
+- ${t('manual.statusUpdate.accessibleVia', 'Accessible via the sidebar button "Update Status"')}
 
 ---
 
-### ✨ Roles & Permissions
+### ${t('manual.profile.title', '👤 Profile Menu')}
 
-| Role     | Permissions                                                           |
+${t('sidebar.profile', 'Profile')} ${t('common.actions', 'Actions')}:
+
+- **${t('sidebar.changePassword', 'Change Password')}**: ${t('manual.profile.changePassword', 'Initiates the password reset flow.')}
+- **${t('sidebar.manual', 'Read Manual')}**: ${t('manual.profile.readManual', 'Opens this user manual.')}
+- **${t('sidebar.sendFeedback', 'Send Feedback')}**: ${t('manual.profile.sendFeedback', 'Opens a form (or mailto) to share ideas or report bugs.')}
+
+---
+
+### ${t('manual.sidebar.title', '🔍 Sidebar Navigation')}
+
+- **${t('manual.sidebar.collapsible', 'Collapsible Sidebar: Toggle between collapsed and expanded states.')}**
+- **${t('manual.sidebar.mobile', 'Mobile Mode: On screens smaller than 1024px, the sidebar appears at the bottom in a row layout.')}**
+
+---
+
+### ${t('manual.roles.title', '🛠️ Roles & Permissions')}
+
+| ${t('sidebar.role', 'Role')} | ${t('common.permissions', 'Permissions')} |
 | -------- | --------------------------------------------------------------------- |
-| Admin    | Full access: create, edit, delete, approve, and comment on contracts. |
-| Editor   | Can create, edit, and delete contracts, but not approve them.         |
-| Approver | Can view and approve contracts but cannot edit.                       |
-| Viewer   | Read-only access to all contract data.                                |
+| ${t('sidebar.role_label.admin', 'Admin')} | ${t('sidebar.role_description.admin', 'Full access: create, edit, delete, approve, and comment on contracts.')} |
+| ${t('sidebar.role_label.editor', 'Editor')} | ${t('sidebar.role_description.editor', 'Can create, edit, and delete contracts, but not approve them.')} |
+| ${t('sidebar.role_label.approver', 'Approver')} | ${t('sidebar.role_description.approver', 'Can view and approve contracts but cannot edit.')} |
+| ${t('sidebar.role_label.viewer', 'Viewer')} | ${t('sidebar.role_description.viewer', 'Read-only access to all contract data.')} |
 
 ---
 
-### 📄 Commenting & Collaboration
+### ${t('manual.comments.title', '📄 Commenting & Collaboration')}
 
-* Add inline comments on contract details.
-* All comments are timestamped and visible to others with access.
-
----
-
-### ⚠️ Known Limitations
-
-* Approval request button is disabled if the contract is already pending.
-* Comments and approvals are restricted via Supabase Row Level Security (RLS).
+- ${t('manual.comments.inline', 'Add inline comments on contract details.')}
+- ${t('manual.comments.timestamps', 'All comments are timestamped and visible to others with access.')}
 
 ---
 
-### 🚀 Tips & Shortcuts
+### ${t('manual.limitations.title', '⚠️ Known Limitations')}
 
-* Use the sidebar in collapsed mode to save screen space.
-* Use the status cron update to avoid manual tracking.
-* Use the manual and feedback options to improve your experience.
-
----
-
-Happy Contracting! 📍
+- ${t('manual.limitations.approvalDisabled', 'Approval request button is disabled if the contract is already pending.')}
+- ${t('manual.limitations.rls', 'Comments and approvals are restricted via Supabase Row Level Security (RLS).')}
 
 ---
 
-For questions or help, contact the PeaceCord team or open the Help section in the app.`;
+### ${t('manual.tips.title', '🚀 Tips & Shortcuts')}
+
+- ${t('manual.tips.sidebarTip', 'Use the sidebar in collapsed mode to save screen space.')}
+- ${t('manual.tips.cronTip', 'Use the status cron update to avoid manual tracking.')}
+- ${t('manual.tips.manualTip', 'Use the manual and feedback options to improve your experience.')}
+
+---
+
+${t('manual.footer.thanks', 'Happy Contracting! 📍')}
+
+---
+
+${t('manual.footer.contact', 'For questions or help, contact dev@icue.vn')}`;
             
             setContent(embeddedManual);
             setNotFound(true);
@@ -137,17 +145,17 @@ For questions or help, contact the PeaceCord team or open the Help section in th
 
 ${t('manual.error.message', 'Sorry, there was an error loading the manual. Please try again later.')}
 
-**Error Details:** ${err.message}
+**${t('common.error', 'Error')} Details:** ${err.message}
 
 ${t('manual.error.fallback', 'You can try:')}
-- Refreshing the page
-- Checking your internet connection
-- Contacting support if the problem persists`);
+- ${t('manual.error.refresh', 'Refreshing the page')}
+- ${t('manual.error.connection', 'Checking your internet connection')}
+- ${t('manual.error.support', 'Contacting support if the problem persists')}`);
           setLoading(false);
         }
       };
       loadManual();
-    }, [t]);
+    }, [t, i18n.language]);
   
     return (
       <div style={{ padding: '2rem', maxWidth: '800px', margin: 'auto' }}>
@@ -210,13 +218,46 @@ ${t('manual.error.fallback', 'You can try:')}
         )}
         
         {!loading && (
-          <div style={{ 
-            backgroundColor: '#f9fafb',
-            padding: '1.5rem',
-            borderRadius: '8px',
-            border: '1px solid #e5e7eb'
-          }}>
-            <ReactMarkdown>{content}</ReactMarkdown>
+          <div
+            style={{
+              backgroundColor: 'var(--manual-bg, var(--card-bg))',
+              color: 'var(--manual-text, var(--text))',
+              padding: '1.5rem',
+              borderRadius: '8px',
+              border: '1px solid var(--card-border)',
+              transition: 'background 0.2s, color 0.2s',
+            }}
+          >
+            <style>{`
+              :root {
+                --manual-bg: #f9fafb;
+                --manual-text: #1e293b;
+              }
+              body.dark {
+                --manual-bg: #181e29;
+                --manual-text: #fff;
+              }
+              .manual-markdown h1, .manual-markdown h2, .manual-markdown h3, .manual-markdown h4, .manual-markdown h5, .manual-markdown h6 {
+                color: var(--manual-text);
+              }
+              .manual-markdown code, .manual-markdown pre {
+                background: var(--card-bg);
+                color: var(--manual-text);
+              }
+              .manual-markdown table {
+                background: var(--manual-bg);
+                color: var(--manual-text);
+                border-collapse: collapse;
+                width: 100%;
+              }
+              .manual-markdown th, .manual-markdown td {
+                border: 1px solid var(--card-border);
+                padding: 0.5em 1em;
+              }
+            `}</style>
+            <div className="manual-markdown">
+              <ReactMarkdown>{content}</ReactMarkdown>
+            </div>
           </div>
         )}
       </div>
