@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import Approvals from '../components/Approvals';
 import ExcelPreview from '../components/ExcelPreview';
 import DocxPreview from '../components/DocxPreview';
+import ImagePreview from '../components/ImagePreview';
 import { useUser} from '../hooks/useUser';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
@@ -10,6 +11,7 @@ import { File, FileText, FileImage, ArrowLeft} from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
+import JSZip from 'jszip';
 
 function getFileIcon(fileName) {
   const ext = fileName.split('.').pop().toLowerCase();
@@ -36,6 +38,11 @@ function getFileIcon(fileName) {
     case 'gif':
     case 'bmp':
     case 'svg':
+    case 'webp':
+    case 'tiff':
+    case 'tif':
+    case 'ico':
+    case 'avif':
       return <img width="20px" height="20px" src="/img/image.png" style={iconStyle} />;
     case 'txt':
       return <img width="20px" height="20px" src="/img/txt.png" style={iconStyle} />;
@@ -466,6 +473,120 @@ useEffect(() => {
   };
   
 
+  const handleDownloadItems = async (filesToDownload = []) => {
+    if (!Array.isArray(filesToDownload)) {
+      filesToDownload = [filesToDownload];
+    }
+
+    if (filesToDownload.length === 0) {
+      toast.error('No files selected for download.');
+      return;
+    }
+
+    const folder = `uploads/${contract.id}`;
+    const zip = new JSZip();
+
+    try {
+      toast.loading(`📦 ${t('contract_detail_creating_zip')}`, { id: 'download-progress' });
+
+      // Collect all files to download
+      const filesToProcess = [];
+
+      for (const itemName of filesToDownload) {
+        const fileObj = files.find((f) => f.name === itemName);
+        if (!fileObj) continue;
+
+        const isFolder = !fileObj.metadata?.mimetype;
+        
+        if (isFolder) {
+          // For folders, recursively get all files
+          const allPaths = await getAllPathsInFolder(`${folder}/${itemName}`);
+          
+          for (const filePath of allPaths) {
+            if (filePath.endsWith('/.keep')) continue; // Skip .keep files
+            
+            const fileName = filePath.split('/').pop();
+            const relativePath = filePath.replace(`${folder}/`, ''); // Remove base path for zip structure
+            
+            filesToProcess.push({
+              path: filePath,
+              name: fileName,
+              zipPath: relativePath,
+              isFolder: false
+            });
+          }
+        } else {
+          // For individual files
+          const relativePath = `${itemName}`;
+          
+          filesToProcess.push({
+            path: `${folder}/${itemName}`,
+            name: itemName,
+            zipPath: relativePath,
+            isFolder: false
+          });
+        }
+      }
+
+      // Download and add files to zip
+      let processedCount = 0;
+      const totalFiles = filesToProcess.length;
+
+      for (const fileInfo of filesToProcess) {
+        try {
+          // Get the file data from Supabase
+          const { data: fileData, error: downloadError } = await supabase.storage
+            .from('contracts')
+            .download(fileInfo.path);
+
+          if (downloadError) {
+            console.error(`Error downloading ${fileInfo.name}:`, downloadError);
+            continue; // Skip this file but continue with others
+          }
+
+          // Add file to zip
+          zip.file(fileInfo.zipPath, fileData);
+          processedCount++;
+
+          // Update progress
+          if (totalFiles > 5) { // Only show progress for larger downloads
+            toast.loading(`📦 ${t('contract_detail_processing_files', { count: processedCount, total: totalFiles })}`, { id: 'download-progress' });
+          }
+        } catch (fileError) {
+          console.error(`Error processing ${fileInfo.name}:`, fileError);
+          continue; // Skip this file but continue with others
+        }
+      }
+
+      if (processedCount === 0) {
+        toast.error(`❌ ${t('contract_detail_no_files_downloaded')}`, { id: 'download-progress' });
+        return;
+      }
+
+      // Generate zip file
+      toast.loading(`📦 ${t('contract_detail_generating_zip')}`, { id: 'download-progress' });
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+
+      // Create download link
+      const url = URL.createObjectURL(zipBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'icuefiles.zip';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up
+      URL.revokeObjectURL(url);
+
+      toast.success(`📥 ${t('contract_detail_downloaded_zip', { count: processedCount })}`, { id: 'download-progress' });
+    } catch (err) {
+      console.error('Download error:', err);
+      toast.error(`❌ ${t('contract_detail_failed_zip')}`, { id: 'download-progress' });
+    }
+  };
+
   const handleDelete = async () => {
     if (!confirm(t('contract_detail_delete_contract_and_file'))) return;
   
@@ -504,6 +625,17 @@ useEffect(() => {
 
 return (
     <div style={{ width: 'clamp(280px, 95vw, 800px)', margin: '0 auto', border: '1px solid var(--card-border)', padding: '1rem' }}>
+      {/* CSS Animation for gradient effect */}
+      <style>
+        {`
+          @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+        `}
+      </style>
+      
       {/* Back button in top-right when NOT editing */}
       {!editMode && canEdit && (
         <div
@@ -531,7 +663,7 @@ return (
             <ArrowLeft size={20} /> 
           </button>
           
-          <button
+          <button className="btn-hover-effect"
             onClick={() => {
               setNewFolderName('');
               setShowFolderInput(true);
@@ -566,7 +698,7 @@ return (
             minWidth: '150px',
           }}
         />
-        <button
+        <button className="btn-hover-effect"
           type="button"
           disabled={!newFolderName.trim()}
           onClick={async () => {
@@ -587,7 +719,34 @@ return (
       </div>
     )}
 
-      <button 
+      <button className="btn-hover-effect"
+        onClick={() => handleDownloadItems(selectedFiles)}
+        style={{
+          backgroundColor: selectedFiles.length === 0 ? '#eee' : 'rgba(1, 82, 255, 0.8)',
+          color: selectedFiles.length === 0 ? '#999' : '#fff',
+          padding: '0.5rem 1rem',
+          border: 'none',
+          borderRadius: '6px',
+          cursor: selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
+          filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
+          opacity: selectedFiles.length === 0 ? 0.6 : 1,
+          transition: 'all 0.2s ease',
+          marginRight: '0.5rem',
+        }}
+        disabled={selectedFiles.length === 0}
+      >
+      <svg width="20px" height="20px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48">
+          <g fill="#1565C0">
+              <polygon points="24,37.1 13,24 35,24"/>
+              <rect x="20" y="4" width="8" height="4"/>
+              <rect x="20" y="10" width="8" height="4"/>
+              <rect x="20" y="16" width="8" height="11"/>
+              <rect x="6" y="40" width="36" height="4"/>
+          </g>
+      </svg> 
+      {t('contract_detail_download')} ({selectedFiles.length})
+      </button>
+      <button className="btn-hover-effect"
         onClick={() => handleDeleteItems(selectedFiles)}
           style={{
                 backgroundColor: selectedFiles.length === 0 ? '#eee' : '#ddd',
@@ -801,6 +960,8 @@ return (
                   cursor: isFolder ? 'pointer' : 'default',
                   color: isFolder ? darkMode ? '#fff' : '#000' : darkMode ? '#fff' : '#000',
                   textDecoration: isFolder ? 'none' : 'none',
+                  fontWeight: 'normal',
+                  transition: 'font-weight 0.2s ease',
                 }}
                 onClick={() => {
                   if (isFolder) {
@@ -812,6 +973,16 @@ return (
                     const newPath = `${currentPath}/${fileName}`;
                     setCurrentPath(newPath);
                     listFiles(newPath);
+                  }
+                }}
+                onMouseEnter={(e) => {
+                  if (isFolder) {
+                    e.currentTarget.style.fontWeight = 'bold';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (isFolder) {
+                    e.currentTarget.style.fontWeight = 'normal';
                   }
                 }}
               >
@@ -836,15 +1007,29 @@ return (
         const isExcel = fileName.toLowerCase().endsWith('.xlsx') || fileName.toLowerCase().endsWith('.xls');
         const isDocx = fileName.toLowerCase().endsWith('.docx');
         const isPptx = fileName.toLowerCase().endsWith('.pptx') || fileName.toLowerCase().endsWith('.ppt');
-        const isImage = /\.(png|jpe?g|gif|bmp|webp|svg)$/i.test(fileName);
+        const isImage = /\.(png|jpe?g|gif|bmp|webp|svg|tiff?|ico|avif)$/i.test(fileName);
+        const isArchive = /\.(zip|7z|rar)$/i.test(fileName);
         const isSelected = selectedFiles.includes(fileName);
 
         let hoverColor = undefined;
+        let hoverStyle = {};
+        
         if (isDocx) hoverColor = '#283c82'; // dark blue
         else if (isExcel) hoverColor = '#22c55e'; // green
         else if (isPptx) hoverColor = '#f59e42'; // orange
         else if (isPdf) hoverColor = '#f87171'; // light red
         else if (isImage) hoverColor = '#67e8f9'; // light cyan
+        else if (isArchive) {
+          // Gradient effect for archive files
+          hoverStyle = {
+            background: 'linear-gradient(90deg, #ef4444, #3b82f6, #f59e0b)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundSize: '200% 100%',
+            animation: 'gradient-shift 2s ease-in-out infinite',
+          };
+        }
 
         const baseColor = darkMode ? '#fff' : '#000';
         const style = {
@@ -858,6 +1043,7 @@ return (
           display: 'flex',
           alignItems: 'center',
           transition: 'color 0.2s',
+          ...(hoveredFile === fileName && isArchive ? hoverStyle : {}),
         };
 
         if (isPdf) {
@@ -906,14 +1092,16 @@ return (
           return (
             <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
               <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
-              <button
-                onClick={() => { setPreviewUrl(publicUrl); setPreviewType('pptx'); }}
+              <a
+                href={publicUrl}
+                download
+                onClick={(e) => { if (!window.confirm(`Download "${fileName}"?`)) { e.preventDefault(); } }}
                 style={style}
                 onMouseEnter={() => setHoveredFile(fileName)}
                 onMouseLeave={() => setHoveredFile(null)}
               >
                 {getFileIcon(fileName)} {fileName}
-              </button>
+              </a>
             </li>
           );
         } else if (isImage) {
@@ -1009,6 +1197,27 @@ return (
     {previewUrl && previewType === 'docx' && (
       <div style={{ marginTop: '2rem', width: '95%' }}>
         <DocxPreview fileUrl={previewUrl} />
+        <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+          <button
+            onClick={() => setPreviewUrl(null)}
+            style={{
+              backgroundColor: darkMode ? '#fff' : '#000',
+              color: darkMode ? '#000' : '#fff',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease',
+            }}
+          >
+            ❌ {t('contract_detail_close_preview')}
+          </button>
+        </div>
+      </div>
+    )}
+    {previewUrl && previewType === 'image' && (
+      <div style={{ marginTop: '2rem', width: '95%' }}>
+        <ImagePreview fileUrl={previewUrl} />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
           <button
             onClick={() => setPreviewUrl(null)}

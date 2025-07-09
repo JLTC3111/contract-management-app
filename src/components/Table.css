@@ -301,5 +301,5 @@ body.dark .file-folder-search-input:focus {
 
 .btn-hover-effect:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(3, 74, 228, 0.15);
 }

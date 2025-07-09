@@ -1,40 +1,48 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-// Note: Most browsers do not natively support .heic images for preview.
-// For HEIC, you would need to use a conversion library like heic2any.
-
-const ImagePreview = () => {
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
-
-  function handleFileChange(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setImagePreviewUrl(url);
-    }
+const ImagePreview = ({ fileUrl }) => {
+  if (!fileUrl) {
+    return <div>No image URL provided</div>;
   }
 
   return (
-    <div>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        style={{ marginBottom: '1rem' }}
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center',
+      padding: '1rem',
+      background: 'var(--card-bg)',
+      border: '1px solid var(--card-border)',
+      borderRadius: '8px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+    }}>
+      <img
+        src={fileUrl}
+        alt="Image Preview"
+        style={{
+          maxWidth: '100%',
+          maxHeight: '600px',
+          borderRadius: '8px',
+          objectFit: 'contain',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        }}
+        onError={(e) => {
+          console.error('Failed to load image:', fileUrl);
+          e.target.style.display = 'none';
+          e.target.nextSibling.style.display = 'block';
+        }}
       />
-      {imagePreviewUrl && (
-        <img
-          src={imagePreviewUrl}
-          alt="Preview"
-          style={{
-            maxWidth: '100%',
-            maxHeight: 400,
-            borderRadius: 8,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-            border: '1px solid #e5e7eb',
-          }}
-        />
-      )}
+      <div 
+        style={{ 
+          display: 'none', 
+          textAlign: 'center', 
+          color: 'var(--text-secondary)',
+          padding: '2rem'
+        }}
+      >
+        <p>Failed to load image</p>
+        <p style={{ fontSize: '0.875rem' }}>The image may be corrupted or in an unsupported format.</p>
+      </div>
     </div>
   );
 };
