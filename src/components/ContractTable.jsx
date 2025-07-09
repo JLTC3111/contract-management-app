@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import './ContractTable.css';
+import './Table.css';
 
 const statusStyles = {
   approved: {

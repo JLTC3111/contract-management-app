@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
-import { Check, X, Clock, FileText, User, ArrowLeft } from 'lucide-react';
+import { Check, X, Clock, FileText, User, ArrowLeft, Edit, Save, X as CancelIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
@@ -17,6 +17,11 @@ const Approvals = () => {
   const { id } = useParams();
   const [request, setRequest] = useState(null);
   const { darkMode } = useTheme();
+  
+  // Edit state
+  const [editingRequestId, setEditingRequestId] = useState(null);
+  const [editedMessage, setEditedMessage] = useState('');
+  const [saving, setSaving] = useState(false);
   
   useEffect(() => {
     const fetchRequest = async () => {
@@ -112,7 +117,7 @@ const Approvals = () => {
 
       if (requestError) {
         console.error('Error updating approval request:', requestError);
-        toast.error('Failed to update approval request');
+        toast.error(t('failed_to_update_approval_request'));
         return;
       }
 
@@ -130,9 +135,9 @@ const Approvals = () => {
 
         if (contractError) {
           console.error('Error updating contract status:', contractError);
-          toast.error('Approval action completed but failed to update contract status');
+          toast.error(t('approval_action_completed_but_failed_to_update_contract_status'));
         } else {
-          toast.success(`Contract ${action === 'approve' ? 'approved' : 'rejected'} successfully!`);
+          toast.success(t('contract_approval_action_completed_successfully'));
         }
       }
 
@@ -140,8 +145,57 @@ const Approvals = () => {
       fetchApprovalRequests();
     } catch (err) {
       console.error('Error handling approval action:', err);
-      toast.error('Failed to process approval action');
+      toast.error(t('failed_to_process_approval_action'));
     }
+  };
+
+  // Handle edit message
+  const handleEditMessage = (requestId, currentResponse) => {
+    setEditingRequestId(requestId);
+    setEditedMessage(currentResponse || t('defaultApprovalResponseText'));
+  };
+
+  // Handle save edited message
+  const handleSaveMessage = async (requestId) => {
+    if (!editedMessage.trim()) {
+      toast.error(t('response_message_cannot_be_empty'));
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from('contract_approval_requests')
+        .update({ 
+          approval_response: editedMessage.trim(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', requestId);
+
+      if (error) {
+        console.error('Error updating approval response:', error);
+        toast.error(t('failed_to_update_approval_response'));
+        return;
+      }
+
+      toast.success(t('approval_response_updated_successfully'));
+      setEditingRequestId(null);
+      setEditedMessage('');
+      
+      // Refresh the list to show updated response
+      fetchApprovalRequests();
+    } catch (err) {
+      console.error('Error saving approval response:', err);
+      toast.error(t('failed_to_save_approval_response'));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Handle cancel edit
+  const handleCancelEdit = () => {
+    setEditingRequestId(null);
+    setEditedMessage('');
   };
 
   useEffect(() => {
@@ -152,8 +206,8 @@ const Approvals = () => {
   if (!user || (user.role !== 'admin' && user.role !== 'approver')) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <h2>{t('accessDenied')}</h2>
-        <p>{t('noPermissionToViewApprovalRequests')}</p>
+        <h2>{t('access_denied')}</h2>
+        <p>{t('no_permission_to_view_approval_requests')}</p>
       </div>
     );
   }
@@ -235,7 +289,7 @@ const Approvals = () => {
           color: 'var(--text-secondary)'
         }}>
           <Clock size={24} style={{ marginRight: '0.5rem' }} />
-          {t('loadingApprovalRequests')}
+          {t('loading_approval_requests')}
         </div>
       ) : approvalRequests.length === 0 ? (
         <div style={{ 
@@ -334,12 +388,110 @@ const Approvals = () => {
                 marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
                 border: '1px solid var(--card-border)'
               }}>
-                <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-                  <strong>{t('defaultApprovalResponse')}:</strong>
-                </p>
-                <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem', fontStyle: 'italic' }}>
-                  "{t('defaultApprovalResponseText')}"
-                </p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                    <strong>{t('defaultApprovalResponse')}:</strong>
+                  </p>
+                  {(user?.role === 'admin' || user?.role === 'approver') && (
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      {editingRequestId === request.id ? (
+                        <>
+                          <button className="btn-hover-effect"
+                            onClick={() => handleSaveMessage(request.id)}
+                            disabled={saving}
+                            style={{
+                              background: '#10b981',
+                              color: 'white',
+                              border: 'none',
+                              padding: '0.25rem 0.5rem',
+                              borderRadius: '4px',
+                              cursor: saving ? 'not-allowed' : 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.25rem',
+                              fontSize: '0.75rem',
+                              opacity: saving ? 0.6 : 1,
+                            }}
+                          >
+                            <Save size={12} />
+                            {saving ? t('approval_board_saving') : t('approval_board_save')}
+                          </button>
+                          <button className="btn-hover-effect"
+                            onClick={handleCancelEdit}
+                            disabled={saving}
+                            style={{
+                              background: '#6b7280',
+                              color: 'white',
+                              border: 'none',
+                              padding: '0.25rem 0.5rem',
+                              borderRadius: '4px',
+                              cursor: saving ? 'not-allowed' : 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.25rem',
+                              fontSize: '0.75rem',
+                              opacity: saving ? 0.6 : 1,
+                            }}
+                          >
+                            <CancelIcon size={12} />
+                            {t('approval_board_cancel')}
+                          </button>
+                        </>
+                      ) : (
+                        <button className="btn-hover-effect"
+                          onClick={() => handleEditMessage(request.id, request.approval_response)}
+                          style={{
+                            background: '#3b82f6',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.25rem 0.5rem',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            fontSize: '0.75rem',
+                          }}
+                        >
+                          <Edit size={12} />
+                          {t('approval_board_edit')}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
+                {editingRequestId === request.id ? (
+                  <div style={{
+                    background: 'var(--hover-bg)',
+                    padding: 'clamp(0.5rem, 2vw, 1rem)',
+                    borderRadius: '6px',
+                    border: '1px solid var(--card-border)',
+                  }}>
+                    <textarea
+                      value={editedMessage}
+                      onChange={(e) => setEditedMessage(e.target.value)}
+                      style={{
+                        width: '100%',
+                        minHeight: '100px',
+                        padding: '0.5rem',
+                        border: '1px solid var(--card-border)',
+                        borderRadius: '4px',
+                        background: 'var(--card-bg)',
+                        color: 'var(--text)',
+                        fontSize: '0.875rem',
+                        fontFamily: 'inherit',
+                        resize: 'vertical',
+                        outline: 'none',
+                      }}
+                      placeholder="Enter your approval response message..."
+                    />
+                  </div>
+                ) : (
+                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem', fontStyle: 'italic' }}>
+                    "{request.approval_response || t('defaultApprovalResponseText')}"
+                  </p>
+                )}
               </div>
 
               {/* Action Buttons */}

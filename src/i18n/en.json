@@ -135,7 +135,7 @@
   "message": "Message",
   "contractDetails": "Contract Details",
   "defaultApprovalResponse": "Default Approval Response",
-  "defaultApprovalResponseText": "I have reviewed this contract and found it to be compliant with our standards. All terms and conditions have been verified and are acceptable for approval.",
+  "defaultApprovalResponseText": "Request is being viewed. Please wait for approval response in the next 24 hours. Thank you! 👍",
   "requestMessage": "Request Message",
   "pending": "Pending",
   "updated": "Updated",
@@ -231,8 +231,7 @@
   "contract_detail_close_preview": "Close Preview",
   "failed_to_upload": "Failed to upload.",
   "upload_error_for": "Upload error for",
-  "uploader_uploaded": "uploaded"
-  ,
+  "uploader_uploaded": "uploaded",
   "sidebar_mobile": {
     "password": "Password",
     "manual": "Manual",
@@ -243,5 +242,20 @@
   "duplicate_error": "Error checking for duplicate contract",
   "duplicate_prompt": "A contract with this title already exists. Please choose a different name.",
   "duplicate_error_short": "Error saving contract",
-  "upload_file_error": "Error updating contract with file"
+  "upload_file_error": "Error updating contract with file",
+  "failed_to_update_approval_request": "Failed to update approval request",
+  "approval_action_completed_but_failed_to_update_contract_status": "Approval action completed but failed to update contract status",
+  "contract_approval_action_completed_successfully": "Contract approval action completed successfully!",
+  "failed_to_process_approval_action": "Failed to process approval action",
+  "response_message_cannot_be_empty": "Response message cannot be empty",
+  "failed_to_update_approval_response": "Failed to update approval response",
+  "approval_response_updated_successfully": "Approval response updated successfully!",
+  "failed_to_save_approval_response": "Failed to save approval response",
+  "access_denied": "Access Denied",
+  "no_permission_to_view_approval_requests": "You do not have permission to view approval requests",
+  "loading_approval_requests": "Loading approval requests...",
+  "approval_board_saving": "Saving...",
+  "approval_board_save": "Save",
+  "approval_board_cancel": "Cancel",
+  "approval_board_edit": "Edit"
 } 

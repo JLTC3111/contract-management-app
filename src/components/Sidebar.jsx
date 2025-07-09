@@ -24,7 +24,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
 import { useTheme } from '../hooks/useTheme';
-import './ContractTable.css';
+import './Table.css';
 import { useTranslation } from 'react-i18next';
 
 const Sidebar = () => {
