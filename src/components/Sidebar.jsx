@@ -511,7 +511,7 @@ const Sidebar = () => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '1rem',
+            gap: '.25rem',
           }}
         >
           <SubMenu className="mobile-submenu-subitems"

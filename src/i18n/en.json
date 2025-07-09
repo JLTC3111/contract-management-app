@@ -43,6 +43,16 @@
     "userManual": "User Manual",
     "changePassword": "Change Password"
   },
+  "manual": {
+    "loading": "Loading manual...",
+    "missingTranslation": "No manual available in your language. Showing English or default.",
+    "error": {
+      "title": "Manual Error",
+      "message": "Sorry, there was an error loading the manual. Please try again later.",
+      "fallback": "You can try:",
+      "loading": "Error loading manual. Please try again."
+    }
+  },
   "status": {
     "approved": "Approved",
     "pending": "Pending",

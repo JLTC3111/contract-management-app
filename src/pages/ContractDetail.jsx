@@ -732,11 +732,14 @@ return (
           opacity: selectedFiles.length === 0 ? 0.6 : 1,
           transition: 'all 0.2s ease',
           marginRight: '0.5rem',
+          alignItems: 'center',
+          display: 'flex',
+          gap: '0.5rem',
         }}
         disabled={selectedFiles.length === 0}
       >
       <svg width="20px" height="20px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 48 48">
-          <g fill="#1565C0">
+          <g fill={selectedFiles.length === 0 ? "#1565C0" : "#ffffff"}>
               <polygon points="24,37.1 13,24 35,24"/>
               <rect x="20" y="4" width="8" height="4"/>
               <rect x="20" y="10" width="8" height="4"/>

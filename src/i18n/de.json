@@ -43,6 +43,16 @@
     "userManual": "Benutzerhandbuch",
     "changePassword": "Passwort ändern"
   },
+  "manual": {
+    "loading": "Handbuch wird geladen...",
+    "missingTranslation": "Kein Handbuch in Ihrer Sprache verfügbar. Zeige Englisch oder Standard.",
+    "error": {
+      "title": "Handbuch-Fehler",
+      "message": "Entschuldigung, beim Laden des Handbuchs ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+      "fallback": "Sie können versuchen:",
+      "loading": "Fehler beim Laden des Handbuchs. Bitte versuchen Sie es erneut."
+    }
+  },
   "status": {
     "approved": "Genehmigt",
     "pending": "Ausstehend",

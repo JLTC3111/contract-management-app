@@ -204,7 +204,7 @@ button:disabled {
   /* Submenu positioning for mobile */
   .mobile-submenu-modal .submenu-container {
     display: flex !important;
-    gap: 20px !important;
+    gap: 5px !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
