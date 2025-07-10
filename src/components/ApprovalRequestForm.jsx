@@ -120,7 +120,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
     return (
     <div ref={rootRef} style={{borderRadius: '6px', padding: '1rem', margin: '0 auto', marginBottom: '.5rem' }}>
       {!showForm ? (
-        <button
+        <button className="btn-hover-effect"
           onClick={() => setShowForm(true)}
           disabled={hasPendingRequest}
           aria-label={hasPendingRequest ? t('approval_already_pending') : t('send_approval_request')}
@@ -165,7 +165,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
             }}
           />
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button
+            <button className="btn-hover-effect"
               onClick={handleSubmitApprovalRequest}
               disabled={submitting || !approvalMessage.trim()}
               aria-label={submitting ? t('sending_approval_request') : t('send_approval_request')}
@@ -184,7 +184,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
               {submitting ? <LoadingSpinner size={14} /> : null}
               {submitting ? t('sending') : t('send_request')}
             </button>
-            <button
+            <button className="btn-hover-effect"
               onClick={() => {
                 setShowForm(false);
                 setApprovalMessage('');
