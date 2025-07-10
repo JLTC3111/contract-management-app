@@ -360,5 +360,7 @@
     "noResults": "ไม่พบผลลัพธ์",
     "languageSelector": "เลือกภาษา",
     "themeToggle": "สลับธีม"
-  }
+  },
+  "no_permission_create_contract": "คุณไม่มีสิทธิ์ในการสร้างสัญญาใหม่",
+  "sidebar.visitIcueTooltip": "เยี่ยมชม iCUE!"
 } 

@@ -368,5 +368,7 @@
     "noResults": "未找到结果",
     "languageSelector": "选择语言",
     "themeToggle": "切换主题"
-  }
+  },
+  "no_permission_create_contract": "您没有权限创建新合同。",
+  "sidebar.visitIcueTooltip": "访问 iCUE!"
 } 

@@ -25,7 +25,8 @@
       "approver": "Can review and approve contracts. No editing access.",
       "viewer": "Read-only access to all contracts.",
       "unknown": "Role not recognized."
-    }
+    },
+    "visitIcueTooltip": "Visit iCUE!"
   },
   "buttons": {
     "login": "Log In",

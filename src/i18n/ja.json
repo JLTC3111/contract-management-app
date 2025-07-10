@@ -368,5 +368,7 @@
     "noResults": "結果が見つかりません",
     "languageSelector": "言語を選択",
     "themeToggle": "テーマを切り替え"
-  }
+  },
+  "no_permission_create_contract": "新しい契約を作成する権限がありません。",
+  "sidebar.visitIcueTooltip": "iCUEを訪問!"
 } 

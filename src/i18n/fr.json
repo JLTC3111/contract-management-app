@@ -367,5 +367,7 @@
     "noResults": "Aucun résultat trouvé",
     "languageSelector": "Sélectionner la langue",
     "themeToggle": "Basculer le thème"
-  }
+  },
+  "no_permission_create_contract": "Vous n'avez pas la permission de créer de nouveaux contrats.",
+  "sidebar.visitIcueTooltip": "Visiter iCUE!"
 } 

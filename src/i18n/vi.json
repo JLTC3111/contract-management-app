@@ -368,5 +368,7 @@
     "noResults": "Không tìm thấy kết quả",
     "languageSelector": "Chọn ngôn ngữ",
     "themeToggle": "Chuyển đổi giao diện"
-  }
+  },
+  "no_permission_create_contract": "Bạn không có quyền tạo hợp đồng mới.",
+  "sidebar.visitIcueTooltip": "Truy cập iCUE!"
 } 

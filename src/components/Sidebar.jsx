@@ -323,7 +323,7 @@ const Sidebar = () => {
                       zIndex: 100,
                     }}
                   >
-                    {t('sidebar.visitIcue')}
+                    {t('sidebar.visitIcueTooltip')}
                   </motion.div>
                 )}
               </AnimatePresence>
