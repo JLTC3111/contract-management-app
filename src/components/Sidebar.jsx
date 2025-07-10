@@ -287,7 +287,7 @@ const Sidebar = () => {
                       zIndex: 100,
                     }}
                   >
-                    ICUE.VN!
+                    {t('sidebar.visitIcue')}
                   </motion.div>
                 )}
               </AnimatePresence>

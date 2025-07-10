@@ -281,7 +281,7 @@ const Dashboard = () => {
             </div>
             
             {loading ? (
-              <p>Loading...</p>
+              <p>{t('dashboard.loading')}</p>
             ) : (
               <>
                 <div ref={metricsRef}>
@@ -336,7 +336,7 @@ const Dashboard = () => {
                                 <FilePenLine size={16} color="#cbd5e1" fill="#e5e7eb" />
                               </span>
                             </span>
-                            Searching...
+                            {t('dashboard.searching')}
                           </div>
                         )}
                         {!searchLoading && searchResults.length > 0 && searchResults.map((result, idx) => (
@@ -365,7 +365,7 @@ const Dashboard = () => {
                         ))}
                         {!searchLoading && searchResults.length === 0 && (
                           <div style={{ padding: '0.5rem 1rem', color: 'var(--text-secondary)' }}>
-                            No results found.
+                            {t('dashboard.noResultsFound')}
                           </div>
                         )}
                       </div>

@@ -39,6 +39,17 @@
     "light": "明亮模式",
     "dark": "深色模式"
   },
+  "login": {
+    "title": "合同管理器",
+    "email": "邮箱",
+    "password": "密码",
+    "showPassword": "显示密码",
+    "hidePassword": "隐藏密码",
+    "loginButton": "登录",
+    "error": "登录失败。请检查您的凭据。",
+    "loading": "加载中...",
+    "languageSelector": "选择语言"
+  },
   "headers": {
     "userManual": "用户手册",
     "changePassword": "更改密码"
@@ -349,5 +360,13 @@
   "approval_board_edit": "编辑",
   "delete_comment_confirm": "您确定要删除此评论吗？",
   "comment_deleted": "评论已删除！",
-  "failed_to_delete_comment": "删除评论失败。"
+  "failed_to_delete_comment": "删除评论失败。",
+  "navbar": {
+    "title": "📁 合同管理器",
+    "visitIcue": "访问 iCUE！",
+    "searchPlaceholder": "搜索文件或文件夹...",
+    "noResults": "未找到结果",
+    "languageSelector": "选择语言",
+    "themeToggle": "切换主题"
+  }
 } 

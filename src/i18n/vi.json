@@ -39,6 +39,17 @@
     "light": "Chế độ sáng",
     "dark": "Chế độ tối"
   },
+  "login": {
+    "title": "Quản Lý Hợp Đồng",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "showPassword": "Hiển thị mật khẩu",
+    "hidePassword": "Ẩn mật khẩu",
+    "loginButton": "Đăng nhập",
+    "error": "Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.",
+    "loading": "Đang tải...",
+    "languageSelector": "Chọn ngôn ngữ"
+  },
   "headers": {
     "userManual": "Hướng dẫn sử dụng",
     "changePassword": "Đổi mật khẩu"
@@ -208,7 +219,7 @@
   "delete": "Xóa",
   "deleteContract": "Xóa hợp đồng",
   "createFolder": "Tạo thư mục",
-  "contractTitle": "Tiêu đề hợp đồng",
+  "contractTitle": "Quản Lý Hợp Đồng",
   "filterByTitle": "Lọc theo tiêu đề...",
   "no_pending_approval_requests": "Không có yêu cầu phê duyệt nào đang chờ xử lý.",
   "accessDenied": "Từ chối truy cập",
@@ -349,5 +360,13 @@
   "approval_board_edit": "Chỉnh sửa",
   "delete_comment_confirm": "Bạn có chắc chắn muốn xóa bình luận này không?",
   "comment_deleted": "Đã xóa bình luận!",
-  "failed_to_delete_comment": "Xóa bình luận thất bại."
+  "failed_to_delete_comment": "Xóa bình luận thất bại.",
+  "navbar": {
+    "title": "📁 Quản Lý Hợp Đồng",
+    "visitIcue": "Truy cập iCUE!",
+    "searchPlaceholder": "Tìm kiếm tệp hoặc thư mục...",
+    "noResults": "Không tìm thấy kết quả",
+    "languageSelector": "Chọn ngôn ngữ",
+    "themeToggle": "Chuyển đổi giao diện"
+  }
 } 

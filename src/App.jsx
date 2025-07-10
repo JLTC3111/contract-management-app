@@ -11,8 +11,11 @@ import Layout from './components/Layout'; // 👈 Add this
 import './index.css';
 import './App.css';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const { t } = useTranslation();
+  
   useEffect(() => {
     // Remove any old magnifier
     let old = document.getElementById('custom-magnifier');
@@ -78,7 +81,7 @@ function App() {
 
   const { user, loading } = useUser();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>{t('common.loading')}</p>;
   if (!user) return <Login />;
 
   return (

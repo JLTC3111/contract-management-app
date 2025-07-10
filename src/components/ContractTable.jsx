@@ -418,7 +418,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               }}
               onClick={() => navigate(`/contracts/${contract.id}`)}
             >
-              <td>{highlight(contract.title || 'Untitled Contract', searchQuery)}</td>
+              <td>{highlight(contract.title || t('contractTable.untitledContract'), searchQuery)}</td>
               <td>
                 {(() => {
                   const rawStatus = contract.status?.toLowerCase();

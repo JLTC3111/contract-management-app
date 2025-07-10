@@ -10,6 +10,7 @@
   --text: #1e293b;
   --card-bg: #f3f3f3;
   --card-border: #e5e7eb;
+  --eye-icon: #1500a0;
   --hover-bg: #f9f9ff;
   --primary: #3b82f6;
   --danger: #ef4444;
@@ -35,6 +36,7 @@ body.dark {
   --text: #fff;
   --card-bg: #181e29;
   --card-border: #334155;
+  --eye-icon: #000000;
   --hover-bg: #232b3b;
   --primary: #60a5fa;
   --danger: #f87171;
@@ -151,8 +153,6 @@ button:focus-visible {
 .theme-toggle-bg:hover {
   background: var(--theme-toggle-bg, #e0e7ff);
 }
-
-
 
 .contract-table {
   width: 100%;

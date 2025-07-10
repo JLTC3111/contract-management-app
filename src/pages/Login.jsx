@@ -5,6 +5,18 @@ import gsap from 'gsap';
 import { Sun, Moon, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const LANGUAGES = [
+  { code: 'en', label: 'English', flag: '🇬🇧' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'ja', label: '日本語', flag: '🇯🇵' },
+  { code: 'th', label: 'ไทย', flag: '🇹🇭' },
+  { code: 'zh', label: '中文', flag: '🇨🇳' },
+  { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+];
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,13 +25,14 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [typedText, setTypedText] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const modelViewerRef = useRef(null);
   const cardRef = useRef(null);
   const modelRef = useRef(null);
   const logoUrl = '/logoIcons/logo.png';
   const { darkMode, toggleDarkMode } = useTheme();
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 500);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 500);
@@ -27,9 +40,9 @@ const Login = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Typing animation for ''
+  // Typing animation for title
   useEffect(() => {
-    const text = 'Contract Manager';
+    const text = t('login.title');
     let i = 0;
     setTypedText('');
     const interval = setInterval(() => {
@@ -41,7 +54,7 @@ const Login = () => {
       }
     }, 110);
     return () => clearInterval(interval);
-  }, []);
+  }, [t]);
 
   // GSAP slide-in animation
   useEffect(() => {
@@ -117,7 +130,7 @@ const Login = () => {
               width: 20,
               height: 20,
               borderRadius: '50%',
-              background: 'var(--sidebar-hover-bg)',
+              background: 'var(--theme-toggle-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -130,12 +143,7 @@ const Login = () => {
           >
             {darkMode ? <Moon size={16} /> : <Sun size={16} />}
           </span>
-          <span style={{ position: 'absolute', left: 6, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 12, zIndex: 1 }}>
-            <Sun size={12} />
-          </span>
-          <span style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 12, zIndex: 1 }}>
-            <Moon size={12} />
-          </span>
+        
         </button>
       )}
       {/* Login Card */}
@@ -182,11 +190,13 @@ const Login = () => {
             }}>|</span>
           )}
           {/* Show logo after typing is done */}
-          {typedText === 'Contract Manager' && (
-            <img
+          {typedText === t('login.title') && (
+            <img 
+              onClick={() => window.location.href = 'https://icue.vn'}
               src={logoUrl}
               alt="Logo"
               style={{
+                cursor: 'pointer',
                 height: '2.2rem',
                 width: 'auto',
                 marginLeft: '0.5rem',
@@ -199,8 +209,125 @@ const Login = () => {
           )}
         </h2>
         
+        {/* Language Switcher */}
+        <div style={{ 
+          position: 'relative', 
+          width: '100%', 
+          marginBottom: '1rem',
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
+          <div style={{ position: 'relative', minWidth: 120 }}>
+            <button
+              onClick={() => setShowLanguageDropdown((prev) => !prev)}
+              aria-haspopup="listbox"
+              aria-expanded={showLanguageDropdown}
+              title={t('login.languageSelector')}
+              style={{
+                fontSize: 'clamp(0.75rem, 2vw, 0.9rem)',
+                borderRadius: '8px',
+                border: '1.5px solid var(--card-border)',
+                background: 'var(--card-bg)',
+                color: 'var(--text)',
+                padding: '0.5rem 0.75rem',
+                cursor: 'pointer',
+                minWidth: 100,
+                width: '100%',
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                transition: 'all 0.2s ease',
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = 'var(--primary)';
+                e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = 'var(--card-border)';
+                e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+              }}
+            >
+              <span>
+                {LANGUAGES.find(l => l.code === i18n.language)?.flag} {LANGUAGES.find(l => l.code === i18n.language)?.label}
+              </span>
+              <span style={{ marginLeft: 8, fontSize: 12, opacity: 0.7 }}>▼</span>
+            </button>
+            <AnimatePresence>
+              {showLanguageDropdown && (
+                <motion.ul
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    position: 'absolute',
+                    top: '110%',
+                    left: 0,
+                    width: '100%',
+                    background: 'var(--card-bg)',
+                    border: '1.5px solid var(--card-border)',
+                    borderRadius: '8px',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                    zIndex: 22,
+                    margin: 0,
+                    padding: 0,
+                    listStyle: 'none',
+                    overflow: 'hidden',
+                  }}
+                  role="listbox"
+                  aria-activedescendant={i18n.language}
+                >
+                  {LANGUAGES.map(lang => (
+                    <li
+                      key={lang.code}
+                      role="option"
+                      aria-selected={i18n.language === lang.code}
+                      tabIndex={0}
+                      onClick={() => {
+                        i18n.changeLanguage(lang.code);
+                        setShowLanguageDropdown(false);
+                      }}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          i18n.changeLanguage(lang.code);
+                          setShowLanguageDropdown(false);
+                        }
+                      }}
+                      style={{
+                        padding: '0.6rem 1rem',
+                        cursor: 'pointer',
+                        background: i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)',
+                        color: 'var(--text)',
+                        fontWeight: i18n.language === lang.code ? 600 : 400,
+                        borderBottom: '1px solid var(--card-border)',
+                        outline: 'none',
+                        transition: 'background 0.2s ease',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'}
+                      onMouseLeave={e => e.currentTarget.style.background = i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)'}
+                    >
+                      <span style={{ marginRight: 8 }}>{lang.flag}</span> {lang.label}
+                    </li>
+                  ))}
+                </motion.ul>
+              )}
+            </AnimatePresence>
+            {/* Click outside to close */}
+            {showLanguageDropdown && (
+              <div
+                style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 }}
+                onClick={() => setShowLanguageDropdown(false)}
+                tabIndex={-1}
+              />
+            )}
+          </div>
+        </div>
+        
         <form onSubmit={handleLogin} style={{ 
           display: 'flex', 
+          background: 'transparent',
           flexDirection: 'column', 
           gap: '1.5rem',
           width: '100%',
@@ -208,7 +335,7 @@ const Login = () => {
           <div>
             <input 
               type="email" 
-              placeholder={t('email')} 
+              placeholder={t('login.email')} 
               value={email}
               onChange={(e) => setEmail(e.target.value)} 
               required 
@@ -219,7 +346,7 @@ const Login = () => {
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                background: 'transparent',
+                
                 color: 'var(--text)',
                 outline: 'none',
                 transition: 'all 0.2s ease',
@@ -238,7 +365,7 @@ const Login = () => {
           <div style={{ position: 'relative', width: '100%' }}>
             <input 
               type={showPassword ? 'text' : 'password'}
-              placeholder={t('password')} 
+              placeholder={t('login.password')} 
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
               required 
@@ -249,7 +376,7 @@ const Login = () => {
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                background: 'transparent',
+                
                 color: 'var(--text)',
                 outline: 'none',
                 transition: 'all 0.2s ease',
@@ -266,7 +393,7 @@ const Login = () => {
             />
             <button
               type="button"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? t('login.hidePassword') : t('login.showPassword')}
               onClick={() => setShowPassword((v) => !v)}
               style={{
                 position: 'absolute',
@@ -278,7 +405,7 @@ const Login = () => {
                 cursor: 'pointer',
                 padding: 0,
                 margin: 0,
-                color: 'var(--text-secondary)',
+                color: 'var(--eye-icon)',
                 zIndex: 2,
                 display: 'flex',
                 alignItems: 'center',
@@ -308,7 +435,7 @@ const Login = () => {
               e.target.style.transform = 'translateY(0)';
             }}
           >
-            {t('login')}
+            {t('login.loginButton')}
           </button>
           
           {error && (
@@ -321,7 +448,7 @@ const Login = () => {
               fontSize: '0.9rem',
               textAlign: 'center',
             }}>
-              {error}
+              {t('login.error')}
             </div>
           )}
         </form>
@@ -375,7 +502,7 @@ const Login = () => {
                 width: 24,
                 height: 24,
                 borderRadius: '50%',
-                background: 'var(--sidebar-hover-bg)',
+                background: 'var(--theme-toggle-bg)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

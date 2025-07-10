@@ -137,7 +137,7 @@ const Navbar = () => {
       {/* Left: App Title */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <h2 style={{ fontSize: 'clamp(0.5rem, 1.5vw, 1.25rem)', fontWeight: 'bold' }}>
-          📁 Contract Manager
+          {t('navbar.title')}
         </h2>
         <div
           style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: '0.5rem' }}
@@ -189,7 +189,7 @@ const Navbar = () => {
                 zIndex: 100,
               }}
             >
-              Visit iCUE!
+              {t('navbar.visitIcue')}
             </motion.div>
           )}
         </div>
@@ -223,6 +223,7 @@ const Navbar = () => {
             onClick={() => setShowDropdown((prev) => !prev)}
             aria-haspopup="listbox"
             aria-expanded={showDropdown}
+            title={t('navbar.languageSelector')}
             style={{
               fontSize: 'clamp(0.65rem, 1vw, 0.95rem)',
               borderRadius: '6px',
@@ -345,7 +346,7 @@ const Navbar = () => {
       marginRight: isMobile ? '0' : 'auto',
     }}
     onClick={toggleDarkMode}
-    aria-label="Toggle theme"
+    aria-label={t('navbar.themeToggle')}
   >
     <span
       style={{

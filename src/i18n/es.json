@@ -39,6 +39,17 @@
     "light": "Modo claro",
     "dark": "Modo oscuro"
   },
+  "login": {
+    "title": "Gestor de Contratos",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "loginButton": "Iniciar sesión",
+    "error": "Error de inicio de sesión. Por favor, verifique sus credenciales.",
+    "loading": "Cargando...",
+    "languageSelector": "Seleccionar idioma"
+  },
   "headers": {
     "userManual": "Manual de usuario",
     "changePassword": "Cambiar contraseña"
@@ -348,5 +359,13 @@
   "approval_board_edit": "Editar",
   "delete_comment_confirm": "¿Está seguro de que desea eliminar este comentario?",
   "comment_deleted": "¡Comentario eliminado!",
-  "failed_to_delete_comment": "No se pudo eliminar el comentario."
+  "failed_to_delete_comment": "No se pudo eliminar el comentario.",
+  "navbar": {
+    "title": "📁 Gestor de Contratos",
+    "visitIcue": "¡Visitar iCUE!",
+    "searchPlaceholder": "Buscar archivos o carpetas...",
+    "noResults": "No se encontraron resultados",
+    "languageSelector": "Seleccionar idioma",
+    "themeToggle": "Cambiar tema"
+  }
 } 

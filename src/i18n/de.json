@@ -39,6 +39,17 @@
     "light": "Heller Modus",
     "dark": "Dunkler Modus"
   },
+  "login": {
+    "title": "Vertragsmanager",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort ausblenden",
+    "loginButton": "Anmelden",
+    "error": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.",
+    "loading": "Lädt...",
+    "languageSelector": "Sprache auswählen"
+  },
   "headers": {
     "userManual": "Benutzerhandbuch",
     "changePassword": "Passwort ändern"
@@ -349,5 +360,13 @@
   "bell_no_new_comments_in_last_24_hours": "Keine neuen Kommentare in den letzten 24 Stunden",
   "delete_comment_confirm": "Möchten Sie diesen Kommentar wirklich löschen?",
   "comment_deleted": "Kommentar gelöscht!",
-  "failed_to_delete_comment": "Kommentar konnte nicht gelöscht werden."
+  "failed_to_delete_comment": "Kommentar konnte nicht gelöscht werden.",
+  "navbar": {
+    "title": "📁 Vertragsmanager",
+    "visitIcue": "iCUE besuchen!",
+    "searchPlaceholder": "Dateien oder Ordner suchen...",
+    "noResults": "Keine Ergebnisse gefunden",
+    "languageSelector": "Sprache auswählen",
+    "themeToggle": "Theme umschalten"
+  }
 } 

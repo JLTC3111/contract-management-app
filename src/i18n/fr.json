@@ -39,6 +39,17 @@
     "light": "Mode clair",
     "dark": "Mode sombre"
   },
+  "login": {
+    "title": "Gestionnaire de Contrats",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "loginButton": "Connexion",
+    "error": "Échec de la connexion. Veuillez vérifier vos identifiants.",
+    "loading": "Chargement...",
+    "languageSelector": "Sélectionner la langue"
+  },
   "headers": {
     "userManual": "Manuel d'utilisateur",
     "changePassword": "Changer le mot de passe"
@@ -348,5 +359,13 @@
   "approval_board_edit": "Modifier",
   "delete_comment_confirm": "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
   "comment_deleted": "Commentaire supprimé !",
-  "failed_to_delete_comment": "Échec de la suppression du commentaire."
+  "failed_to_delete_comment": "Échec de la suppression du commentaire.",
+  "navbar": {
+    "title": "📁 Gestionnaire de Contrats",
+    "visitIcue": "Visiter iCUE !",
+    "searchPlaceholder": "Rechercher des fichiers ou dossiers...",
+    "noResults": "Aucun résultat trouvé",
+    "languageSelector": "Sélectionner la langue",
+    "themeToggle": "Basculer le thème"
+  }
 } 
