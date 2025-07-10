@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { gsap } from 'gsap';
 import './Table.css';
 
 const statusStyles = {
@@ -70,6 +71,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
   const [openFilters, setOpenFilters] = useState({});
   const [closingFilter, setClosingFilter] = useState(null);
   const popoverRefs = useRef({});
+  const tbodyRef = useRef();
 
   // Close popover on outside click
   document.onclick = (e) => {
@@ -102,6 +104,30 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
   const uniqueVersions = getUnique(contracts, 'version');
   const uniqueAuthors = getUnique(contracts, 'author');
   const uniqueStatuses = getUnique(contracts, 'status');
+
+  // GSAP Animation for table rows
+  useEffect(() => {
+    if (tbodyRef.current && filtered.length > 0) {
+      // Set initial state for all rows
+      gsap.set(tbodyRef.current.children, {
+        opacity: 0,
+        x: -50
+      });
+
+      // Animate rows with stagger effect
+      gsap.fromTo(
+        tbodyRef.current.children,
+        { opacity: 0, x: -50 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.6,
+          stagger: 0.15,
+          ease: "power2.out"
+        }
+      );
+    }
+  }, [filtered]); // Re-run animation when filtered data changes
 
   // Popover for each column
   const handleFilterToggle = (key) => {
@@ -406,7 +432,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody ref={tbodyRef}>
           {filtered.length === 0 ? (
             <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>😢 {t('contractTable.noContractsFound')}</td></tr>
           ) : filtered.map(contract => (
@@ -414,7 +440,6 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               key={contract.id}
               style={{
                 cursor: 'pointer',
-                transition: 'background 0.3s ease, box-shadow 0.3s, transform 0.3s',
               }}
               onClick={() => navigate(`/contracts/${contract.id}`)}
             >

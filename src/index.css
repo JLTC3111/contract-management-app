@@ -441,6 +441,11 @@ body.dark .dashboard-metrics .metric-expired:hover {
   50% { opacity: 0; }
 }
 
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
 /* Fancy button style for clear/login */
 .fancy-btn {
   display: block;

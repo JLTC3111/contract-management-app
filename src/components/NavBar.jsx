@@ -8,6 +8,7 @@ import { Sun, Moon } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
+import { gsap } from 'gsap';
 
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -32,6 +33,15 @@ const Navbar = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 1024);
   const { t, i18n } = useTranslation();
+  
+  // Refs for animations
+  const navbarRef = useRef();
+  const titleRef = useRef();
+  const logoRef = useRef();
+  const langSwitcherRef = useRef();
+  const themeToggleRef = useRef();
+  const [titleText, setTitleText] = useState('');
+  const [logoVisible, setLogoVisible] = useState(false);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -110,11 +120,73 @@ const Navbar = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // GSAP Animations
+  useEffect(() => {
+    if (!navbarRef.current) return;
+
+    // Initial state - navbar off-screen to the right
+    gsap.set(navbarRef.current, {
+      x: 50,
+      opacity: 0
+    });
+
+    // Initial state for other elements
+    gsap.set([langSwitcherRef.current, themeToggleRef.current], {
+      opacity: 0,
+      y: 20
+    });
+
+    // Animate navbar sliding in from the right with fade
+    const tl = gsap.timeline();
+    tl.to(navbarRef.current, {
+      x: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: "power2.out"
+    });
+
+    // Start typing animation for title after navbar animation
+    tl.call(() => {
+      const fullTitle = t('navbar.title');
+      let currentIndex = 0;
+      
+      const typeInterval = setInterval(() => {
+        if (currentIndex <= fullTitle.length) {
+          setTitleText(fullTitle.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          clearInterval(typeInterval);
+          // Show logo after title typing is complete
+          setLogoVisible(true);
+        }
+      }, 100);
+    }, [], 0.3);
+
+    // Animate logo appearance
+    tl.to(logoRef.current, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.5,
+      ease: "back.out(1.7)"
+    }, 0.8);
+
+    // Animate language switcher and theme toggle
+    tl.to([langSwitcherRef.current, themeToggleRef.current], {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: "power2.out",
+      stagger: 0.1
+    }, 1.0);
+
+  }, [t]);
+
   // Don't show on login page
   if (location.pathname === '/login') return null;
 
   return (
     <nav
+      ref={navbarRef}
       style={{
         width: '92.5%',
         marginBottom: '1rem',
@@ -136,11 +208,41 @@ const Navbar = () => {
     >
       {/* Left: App Title */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <h2 style={{ fontSize: 'clamp(0.5rem, 1.5vw, 1.25rem)', fontWeight: 'bold' }}>
-          {t('navbar.title')}
+        <h2 
+          ref={titleRef}
+          style={{ 
+            fontSize: 'clamp(0.5rem, 1.5vw, 1.25rem)', 
+            fontWeight: 'bold',
+            minHeight: '1.5em',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          {titleText}
+          {titleText.length < t('navbar.title').length && (
+            <span 
+              style={{ 
+                display: 'inline-block',
+                width: '2px',
+                height: '1.2em',
+                backgroundColor: 'var(--text)',
+                marginLeft: '2px',
+                animation: 'blink 1s infinite'
+              }}
+            />
+          )}
         </h2>
         <div
-          style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: '0.5rem' }}
+          ref={logoRef}
+          style={{ 
+            position: 'relative', 
+            display: 'flex', 
+            alignItems: 'center', 
+            marginLeft: '0.5rem',
+            opacity: logoVisible ? 1 : 0,
+            transform: logoVisible ? 'scale(1)' : 'scale(0.8)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease'
+          }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -149,7 +251,6 @@ const Navbar = () => {
             src="/logoIcons/logo.png"
             alt="Logo"
             style={{
-              
               height: 'clamp(1rem, 1.5vw, 1.8rem)', // Responsive height
               width: 'auto',
               borderRadius: '20px',
@@ -196,6 +297,7 @@ const Navbar = () => {
       </div>
       {/* Center: Language Switcher (always visible) */}
       <div
+        ref={langSwitcherRef}
         style={{
           flex: 1,
           display: 'flex',
@@ -321,6 +423,7 @@ const Navbar = () => {
       </div>
       {/* Right: Theme Toggle (responsive on mobile) */}
 <div
+  ref={themeToggleRef}
   style={{
     display: 'flex',
     justifyContent: 'flex-end',

@@ -97,11 +97,19 @@ body.dark .clear-btn:hover, body.dark .clear-btn:focus {
   border-collapse: collapse;
 }
 
+.contract-table-wrapper tbody tr {
+  transition: all 0.3s ease;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--card-border);
+}
+
 .contract-table-wrapper tbody tr:hover {
-  background: var(--hover-bg);
-  box-shadow: 0 .5px 6px rgba(0,0,0,0.45);
-  transform: scale(1.02);
-  transition: background 0.75s, box-shadow 0.75s, transform 0.75s;
+  background: var(--hover-bg) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-1px) scale(1.01) !important;
+  border-radius: 8px !important;
+  margin: 2px 0 !important;
+  transition: all 0.3s ease !important;
 }
 
 /* Header row hover effect */
@@ -114,8 +122,8 @@ body.dark .clear-btn:hover, body.dark .clear-btn:focus {
 
 /* Dark mode specific hover effect with white box-shadow */
 body.dark .contract-table-wrapper tbody tr:hover {
-  box-shadow: 0 .5px 6px rgba(255,255,255,0.45);
-  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15) !important;
+  transform: translateY(-1px) scale(1.01) !important;
 }
 
 /* Dark mode header row hover effect */
