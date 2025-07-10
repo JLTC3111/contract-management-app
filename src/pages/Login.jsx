@@ -103,8 +103,8 @@ const Login = () => {
           aria-label="Toggle theme"
           style={{
             position: 'absolute',
-            top: 'calc(50% - 210px - 5px)',
-            left: 'calc(52% - 200px + 5px)',
+            top: 'calc(50% - 210px + 10px)',
+            left: 'calc(55% - 210px + 50px)',
             width: 40,
             height: 28,
             background: 'var(--card-bg)',
@@ -150,12 +150,13 @@ const Login = () => {
       <div
         ref={cardRef}
         style={{
+          flex: 1,
           background: 'var(--card-bg)',
           border: '1.5px solid var(--card-border)',
           borderRadius: '12px',
-          padding: 'clamp(1rem, 4vw, 2.5rem)',
-          width: '100%',
-          maxWidth: 'clamp(280px, 95vw, 550px)',
+          padding: 'clamp(0.75rem, 2vw, 1.5rem)',
+          width: isMobile ? '100%' : '100%',
+          maxWidth: isMobile ? '100%' : 'clamp(280px, 95vw, 550px)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
           transition: 'all 0.3s ease',
           display: 'flex',
@@ -458,10 +459,10 @@ const Login = () => {
         ref={modelRef}
         style={{
           flex: 1,
-          minWidth: isMobile ? 180 : 320,
-          maxWidth: isMobile ? 320 : 480,
-          height: isMobile ? 360 : 400,
-          display: 'flex',
+          minWidth: isMobile ? 0 : 320,
+          maxWidth: isMobile ? 0 : 480,
+          height: isMobile ? 0 : 400,
+          display: isMobile ? 'none' : 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
@@ -523,7 +524,8 @@ const Login = () => {
             </span>
           </button>
         )}
-        {/*<model-viewer
+        <model-viewer
+          id="robot"
           ref={modelViewerRef}
           src="/3d_models/robot.glb"
           alt="Robot 3D Model"
@@ -535,12 +537,14 @@ const Login = () => {
           onLoad={handleModelLoad}
           onError={handleModelError}
           style={{
+            display: isMobile ? 'none' : 'block',
             width: isMobile ? '90%' : '100%',
             height: isMobile ? '90%' : '100%',
             borderRadius: '12px',
             background: 'transparent',
+            border: '1px solid red', // <-- Add this line
           }}
-        />*/}
+        />
       </div>
     </div>
   );
