@@ -446,6 +446,32 @@ body.dark .dashboard-metrics .metric-expired:hover {
   to { width: 100%; }
 }
 
+/* Enhanced Sidebar Hover Effects */
+.sidebar-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.sidebar-button:hover::before {
+  left: 100%;
+}
+
+/* Smooth transitions for all sidebar elements */
+.sidebar-container * {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Fancy button style for clear/login */
 .fancy-btn {
   display: block;

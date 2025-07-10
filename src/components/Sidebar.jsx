@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
@@ -24,6 +24,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
 import { useTheme } from '../hooks/useTheme';
+import { gsap } from 'gsap';
 import './Table.css';
 import { useTranslation } from 'react-i18next';
 
@@ -33,6 +34,7 @@ const Sidebar = () => {
   const { user } = useUser();
   const { darkMode, toggleDarkMode } = useTheme();
   const { t } = useTranslation();
+  const sidebarRef = useRef();
 
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
   const [profileOpen, setProfileOpen] = useState(() => localStorage.getItem('profileOpen') !== 'false');
@@ -175,6 +177,26 @@ const Sidebar = () => {
     }
   }, [isMobile]);
 
+  // GSAP Animation for sidebar entrance
+  useEffect(() => {
+    if (sidebarRef.current) {
+      // Set initial state - sidebar off-screen to the right
+      gsap.set(sidebarRef.current, {
+        x: 100,
+        opacity: 0
+      });
+
+      // Animate sidebar sliding in from the right with fade
+      gsap.to(sidebarRef.current, {
+        x: 0,
+        opacity: 1,
+        duration: 1.0,
+        ease: "power2.out",
+        delay: 0.2 // Slight delay after navbar animation
+      });
+    }
+  }, []); // Only run once on mount
+
   const roleDescriptions = {
     admin: 'Full access: create, edit, approve, comment and delete contracts.',
     editor: 'Can create, edit and delete contracts but not approve.',
@@ -185,6 +207,7 @@ const Sidebar = () => {
   return (
     <>
       <div
+        ref={sidebarRef}
         className={`sidebar-container ${collapsed ? 'collapsed' : ''}`}
         style={{
           display: 'flex',
@@ -223,12 +246,22 @@ const Sidebar = () => {
                 border: 'none',
                 cursor: 'pointer',
                 color: 'var(--sidebar-text)',
-                borderRadius: '6px',
-                transition: 'background 0.2s',
+                borderRadius: '8px',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 padding: '0.5rem',
+                transform: 'scale(1)',
+                boxShadow: 'none',
               }}
-              onMouseEnter={e => e.currentTarget.style.background = 'var(--sidebar-hover-bg)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'none'}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'var(--sidebar-hover-bg)';
+                e.currentTarget.style.transform = 'scale(1.1)';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'none';
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
             >
               {collapsed ? <ChevronsRight size={22} /> : <ChevronsLeft size={22} />}
             </button>
@@ -631,16 +664,31 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
         cursor: 'pointer',
         marginBottom: isMobile ? '0' : '1rem',
         marginRight: isMobile ? '0.5rem' : '0',
-        width: isMobile ? 'auto' : '100%',
-        padding: isMobile ? '0.5rem' : '0.5rem 0',
-        borderRadius: '6px',
+        width: isMobile ? 'auto' : 'fit-content',
+        maxWidth: isMobile ? 'auto' : 'calc(100% - 1rem)',
+        padding: isMobile ? '0.5rem' : '0.5rem 0.75rem',
+        borderRadius: '8px',
         backgroundColor: isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent',
         color: isActive ? 'var(--sidebar-active-text,rgb(220, 229, 254))' : undefined,
         fontWeight: isActive ? 'bold' : 'normal',
-        transition: 'background 0.2s ease',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        transform: 'translateX(0)',
+        boxShadow: 'none',
+        position: 'relative',
+        overflow: 'hidden',
       }}
-      onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--sidebar-hover-bg, #e0e7ff)'}
-      onMouseLeave={e => e.currentTarget.style.backgroundColor = isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent'}
+      onMouseEnter={e => {
+        e.currentTarget.style.backgroundColor = 'var(--sidebar-hover-bg, #e0e7ff)';
+        e.currentTarget.style.transform = 'translateX(4px) scale(1.02)';
+        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+        e.currentTarget.style.borderRadius = '10px';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.backgroundColor = isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent';
+        e.currentTarget.style.transform = 'translateX(0) scale(1)';
+        e.currentTarget.style.boxShadow = 'none';
+        e.currentTarget.style.borderRadius = '8px';
+      }}
     >
       <div
         style={{
@@ -648,8 +696,8 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
           alignItems: 'center',
           gap: collapsed || isMobile ? 0 : '0.5rem',
           justifyContent: collapsed || isMobile ? 'center' : 'flex-start',
-          width: '100%',
-          paddingLeft: isMobile ? '0' : '0.5rem',
+          width: 'fit-content',
+          paddingLeft: isMobile ? '0' : '0',
         }}
       >
         {icon}
@@ -691,18 +739,27 @@ const SubMenu = ({ items }) => {
               display: 'flex',
               alignItems: 'center',
               gap: '1.5rem',
-              transition: 'background 0.2s ease',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               justifyContent: 'flex-start',
-              width: '100%',
+              width: 'fit-content',
+              maxWidth: 'calc(100% - 0.5rem)',
               borderBottom: !isMobile && index !== items.length - 1 ? '1px solid var(--card-border)' : 'none',
+              transform: 'translateX(0) scale(1)',
+              boxShadow: 'none',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = darkMode ? '#232b3b' : '#e0e7ff';
               e.currentTarget.style.color = darkMode ? '#fff' : '#000';
+              e.currentTarget.style.transform = 'translateX(4px) scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+              e.currentTarget.style.borderRadius = '6px';
             }}
             onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = 'transparent';
               e.currentTarget.style.color = darkMode ? '#fff' : 'var(--sidebar-text)';
+              e.currentTarget.style.transform = 'translateX(0) scale(1)';
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderRadius = '4px';
             }}
           >
             {icon}
