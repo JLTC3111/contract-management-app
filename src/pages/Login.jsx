@@ -87,12 +87,13 @@ const Login = () => {
 
   return (
     <div style={{
+      width: '85vw',
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       background: 'var(--bg)',
-      padding: 'clamp(1rem, 4vw, 2rem)',
+      padding: isMobile ? '2rem' : 'clamp(1rem, 4vw, 2rem)',
       gap: 'clamp(1rem, 4vw, 2rem)',
       position: 'relative',
     }}>
@@ -103,8 +104,8 @@ const Login = () => {
           aria-label="Toggle theme"
           style={{
             position: 'absolute',
-            top: 'calc(50% - 210px + 10px)',
-            left: 'calc(55% - 210px + 50px)',
+            top: 'calc(50% - 210px + 5px)',
+            left: 'calc(50% - 210px + 1.5px)',
             width: 40,
             height: 28,
             background: 'var(--card-bg)',
@@ -155,8 +156,9 @@ const Login = () => {
           border: '1.5px solid var(--card-border)',
           borderRadius: '12px',
           padding: 'clamp(0.75rem, 2vw, 1.5rem)',
-          width: isMobile ? '100%' : '100%',
-          maxWidth: isMobile ? '100%' : 'clamp(280px, 95vw, 550px)',
+          width: '100%',
+          maxWidth: isMobile ? '100vw' : 'clamp(280px, 95vw, 550px)',
+          boxSizing: 'border-box',
           boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
           transition: 'all 0.3s ease',
           display: 'flex',
@@ -542,7 +544,6 @@ const Login = () => {
             height: isMobile ? '90%' : '100%',
             borderRadius: '12px',
             background: 'transparent',
-            border: '1px solid red', // <-- Add this line
           }}
         />
       </div>
