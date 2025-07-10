@@ -7,13 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import toast from 'react-hot-toast';
+import React, { useRef } from 'react';
 
 const Approvals = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   const [approvalRequests, setApprovalRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const [request, setRequest] = useState(null);
   const { darkMode } = useTheme();
@@ -22,7 +23,9 @@ const Approvals = () => {
   const [editingRequestId, setEditingRequestId] = useState(null);
   const [editedMessage, setEditedMessage] = useState('');
   const [saving, setSaving] = useState(false);
-  
+
+  const lastDefaultApprovalResponseTextRef = useRef(t('defaultApprovalResponseText'));
+
   useEffect(() => {
     const fetchRequest = async () => {
       const { data, error } = await supabase
@@ -201,6 +204,19 @@ const Approvals = () => {
   useEffect(() => {
     fetchApprovalRequests();
   }, [user]);
+
+  useEffect(() => {
+    // If editing and the message matches the previous default, update to new translation
+    if (
+      editingRequestId !== null &&
+      editedMessage === lastDefaultApprovalResponseTextRef.current
+    ) {
+      setEditedMessage(t('defaultApprovalResponseText'));
+    }
+    // Always update the ref to the latest translation
+    lastDefaultApprovalResponseTextRef.current = t('defaultApprovalResponseText');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language, editingRequestId]);
 
   // Don't show for non-admin/approver users
   if (!user || (user.role !== 'admin' && user.role !== 'approver')) {
