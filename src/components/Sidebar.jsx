@@ -37,7 +37,7 @@ const Sidebar = () => {
   const sidebarRef = useRef();
 
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
-  const [profileOpen, setProfileOpen] = useState(() => localStorage.getItem('profileOpen') !== 'false');
+  const [profileOpen, setProfileOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(() => {
     const saved = localStorage.getItem('sidebarWidth');
     return saved ? parseInt(saved) : 380;
@@ -195,7 +195,7 @@ const Sidebar = () => {
         delay: 0.2 // Slight delay after navbar animation
       });
     }
-  }, []); // Only run once on mount
+  }, [isMobile]); // Re-run if mobile/desktop changes
 
   const roleDescriptions = {
     admin: 'Full access: create, edit, approve, comment and delete contracts.',

@@ -9,6 +9,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { File, FileText, FileImage, ArrowLeft} from 'lucide-react'; 
 import { useEffect, useState, useRef } from 'react';
+import gsap from 'gsap';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import JSZip from 'jszip';
@@ -82,6 +83,10 @@ const ContractDetail = () => {
   const { t } = useTranslation();
   const { darkMode } = useTheme();
   const [hoveredFile, setHoveredFile] = useState(null);
+  const headerRef = useRef(null);
+  const infoRefs = useRef([]);
+  const fileListRef = useRef(null);
+  const fileItemRefs = useRef([]);
 
 
 useEffect(() => {
@@ -380,6 +385,42 @@ useEffect(() => {
 
   const isPDF = updated.file_type === 'application/pdf';
 
+  useEffect(() => {
+    if (!loading && contract && headerRef.current && infoRefs.current.length) {
+      gsap.fromTo(
+        headerRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
+      );
+      gsap.fromTo(
+        infoRefs.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2, delay: 0.1 }
+      );
+    }
+  }, [loading, contract]);
+
+  useEffect(() => {
+    if (fileItemRefs.current && fileItemRefs.current.length > 0) {
+      gsap.fromTo(
+        fileItemRefs.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2 }
+      );
+    }
+  }, [files, currentPath]);
+
+  useEffect(() => {
+    const buttons = document.querySelectorAll('.btn-hover-effect');
+    if (buttons.length > 0) {
+      gsap.fromTo(
+        buttons,
+        { opacity: 0 },
+        { opacity: 1, duration: .25, stagger: 0.15, ease: 'power2.out' }
+      );
+    }
+  }, [editMode, showFolderInput, files, currentPath, contract]);
+
   if (userLoading) return <p>Loading user...</p>;
   if (!user) return <p>User not available</p>;
   if (loading) return <p>Loading contract...</p>;
@@ -661,7 +702,7 @@ return (
             padding: '.5rem',
           }}
         >
-        <button
+        <button className="btn-hover-effect"
             onClick={() => navigate(-1)}
             style={{
               padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
@@ -669,13 +710,13 @@ return (
               alignItems: 'center',
               gap: '0.5rem',
               margin:0,
-              backgroundColor: '#ddd',
+              backgroundColor: darkMode ? '#fff' : 'transparent',
               border: 'none',
               borderRadius: '12px',
               cursor: 'pointer',
             }}
           >
-            <ArrowLeft size={20} /> 
+            <ArrowLeft size={26} /> 
           </button>
           
           <button className="btn-hover-effect"
@@ -803,7 +844,7 @@ return (
         marginLeft: '0',
         marginRight: 'auto'
       }}>
-        <h2>
+        <h2 ref={headerRef}>
           {editMode ? (
             <input
               className="table-filter-input"
@@ -817,7 +858,7 @@ return (
           )}
         </h2>
   
-        <p>
+        <p ref={el => infoRefs.current[0] = el}>
           <strong>{t('contract_detail_status')}:</strong>{' '}
           {editMode ? (
             <>
@@ -854,7 +895,7 @@ return (
           )}
         </p>
   
-        <p>
+        <p ref={el => infoRefs.current[1] = el}>
           <strong>{t('contract_detail_version')}:</strong>{' '}
           {editMode ? (
             <input
@@ -869,12 +910,12 @@ return (
           )}
         </p>
   
-        <p>
+        <p ref={el => infoRefs.current[2] = el}>
           <strong>{t('contract_detail_last_updated')}:</strong>{' '}
           <span style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>{new Date(contract.updated_at).toLocaleString()}</span>
         </p>
   
-        <p>
+        <p ref={el => infoRefs.current[3] = el}>
           <strong>{t('contract_detail_expiry_date')}:</strong>{' '}
           {editMode ? (
             <input
@@ -890,8 +931,7 @@ return (
         </p>
   
         <div style={{ marginTop: '1rem', textAlign: 'left' }}>
-          
-          <p>
+          <p ref={el => infoRefs.current[4] = el}>
           <strong>{t('contract_detail_author')}:</strong>{' '}
           {editMode ? (
             <input
@@ -964,8 +1004,8 @@ return (
       </button>
     )}
     
-    <ul style={{ listStyle: 'none', padding: 0 }}>
-      {files.filter(file => file.name !== '.keep').map((file) => {
+    <ul ref={fileListRef} style={{ listStyle: 'none', padding: 0 }}>
+      {files.filter(file => file.name !== '.keep').map((file, idx) => {
         const isFolder = !file.metadata?.mimetype;
         const fileName = file.name;
         const originalFileName = getOriginalFileName(fileName);
@@ -976,14 +1016,15 @@ return (
         if (isFolder) {
           return (
             <li
-            key={fileName}
-            style={{
-              marginLeft: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.25rem 0',
-            }}>
+              key={fileName}
+              ref={el => fileItemRefs.current[idx] = el}
+              style={{
+                marginLeft: '2rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.25rem 0',
+              }}>
             {/* Checkbox to select file/folder */}
               <input
                 type="checkbox"
@@ -1139,7 +1180,7 @@ return (
 
         if (isPdf) {
           return (
-            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+            <li ref={el => fileItemRefs.current[idx] = el} key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
               <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
               <button
                 onClick={() => { setPreviewUrl(publicUrl); setPreviewType('pdf'); }}
@@ -1153,7 +1194,7 @@ return (
           );
         } else if (isExcel) {
           return (
-            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+            <li ref={el => fileItemRefs.current[idx] = el} key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
               <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
               <button
                 onClick={() => { setPreviewUrl(publicUrl); setPreviewType('excel'); }}
@@ -1167,7 +1208,7 @@ return (
           );
         } else if (isDocx) {
           return (
-            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+            <li ref={el => fileItemRefs.current[idx] = el} key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
               <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
               <button
                 onClick={() => { setPreviewUrl(publicUrl); setPreviewType('docx'); }}
@@ -1181,7 +1222,7 @@ return (
           );
         } else if (isPptx) {
           return (
-            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+            <li ref={el => fileItemRefs.current[idx] = el} key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
               <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
               <a
                 href={publicUrl}
@@ -1197,7 +1238,7 @@ return (
           );
         } else if (isImage) {
           return (
-            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+            <li ref={el => fileItemRefs.current[idx] = el} key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
               <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
               <button
                 onClick={() => { setPreviewUrl(publicUrl); setPreviewType('image'); }}
@@ -1211,7 +1252,7 @@ return (
           );
         } else {
           return (
-            <li key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
+            <li ref={el => fileItemRefs.current[idx] = el} key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
               <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
               <a
                 href={publicUrl}

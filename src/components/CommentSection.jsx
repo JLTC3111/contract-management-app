@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
@@ -138,6 +138,18 @@ const CommentSection = ({ contractId }) => {
   const [loadingComments, setLoadingComments] = useState(false);
   const [submittingComment, setSubmittingComment] = useState(false);
   const { t } = useTranslation();
+  const rootRef = useRef(null);
+  useEffect(() => {
+    if (rootRef.current) {
+      import('gsap').then(({ default: gsap }) => {
+        gsap.fromTo(
+          rootRef.current,
+          { x: 80, scale: 0.95, opacity: 0 },
+          { x: 0, scale: 1, opacity: 1, duration: 2.5, ease: 'back.out(1.7)' }
+        );
+      });
+    }
+  }, []);
   // Fetch comments for this contract
   const fetchComments = async () => {
     setLoadingComments(true);
@@ -238,9 +250,9 @@ const CommentSection = ({ contractId }) => {
   }
 
   return (
-    <div style={{ padding: '1rem', borderRadius: '6px' }}>
+    <div ref={rootRef} style={{ padding: '1rem', borderRadius: '6px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-        <button
+        <button className="btn-hover-effect"
           onClick={() => setShowCommentSection(!showCommentSection)}
           aria-label={showCommentSection ? t('hide_comments') : t('show_comments')}
           style={{

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Send, Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
@@ -31,6 +31,18 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
   const [approvalMessage, setApprovalMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const { t } = useTranslation();
+  const rootRef = useRef(null);
+  useEffect(() => {
+    if (rootRef.current) {
+      import('gsap').then(({ default: gsap }) => {
+        gsap.fromTo(
+          rootRef.current,
+          { x: 80, scale: 0.95, opacity: 0 },
+          { x: 0, scale: 1, opacity: 1, duration: 2.5, ease: 'back.out(1.7)' }
+        );
+      });
+    }
+  }, []);
 
   // Check if user already has a pending approval request
   const hasPendingRequest = contract.status === 'pending';
@@ -106,7 +118,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
     return null;
   }
     return (
-    <div style={{borderRadius: '6px', padding: '1rem', margin: '0 auto', marginBottom: '.5rem' }}>
+    <div ref={rootRef} style={{borderRadius: '6px', padding: '1rem', margin: '0 auto', marginBottom: '.5rem' }}>
       {!showForm ? (
         <button
           onClick={() => setShowForm(true)}
