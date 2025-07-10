@@ -105,7 +105,7 @@ const Login = () => {
           style={{
             position: 'absolute',
             top: 'calc(50% - 210px + 5px)',
-            left: 'calc(50% - 210px + 1.5px)',
+            left: 'calc(50% - 210px + 25px)',
             width: 40,
             height: 28,
             background: 'var(--card-bg)',
@@ -458,17 +458,21 @@ const Login = () => {
 
       {/* 3D Model */}
       <div
-        ref={modelRef}
-        style={{
-          flex: 1,
-          minWidth: isMobile ? 0 : 320,
-          maxWidth: isMobile ? 0 : 480,
-          height: isMobile ? 0 : 400,
-          display: isMobile ? 'none' : 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-        }}
+       ref={modelRef}
+       style={{
+         position: 'absolute',
+         top: 0,
+         left: 0,
+         right: 0,
+         margin: 'auto',
+         minWidth: isMobile ? 180 : 320,
+         maxWidth: isMobile ? 320 : 480,
+         height: isMobile ? 300 : 400,
+         display: isMobile ? 'block' : 'flex',
+         alignItems: 'center',
+         justifyContent: 'center',
+       }}
+       
       >
         {/* Theme Toggle Button (desktop only, inside model area) */}
         {!isMobile && (
@@ -515,14 +519,42 @@ const Login = () => {
                 zIndex: 2,
               }}
             >
+            {/* Active icon (centered) */}
+            <span>
               {darkMode ? <Moon size={18} /> : <Sun size={18} />}
             </span>
-            {/* Show both icons, inactive one faint */}
-            <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: !darkMode ? '#facc15' : 'var(--text-secondary)', opacity: !darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
+
+            {/* Inactive Sun icon (left side) */}
+            <span
+              style={{
+                position: 'absolute',
+                left: 8,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: !darkMode ? '#facc15' : 'var(--text-secondary)',
+                opacity: !darkMode ? 0.7 : 0.3,
+                fontSize: 14,
+                zIndex: 1,
+              }}
+            >
               <Sun size={14} />
             </span>
-            <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: darkMode ? '#60a5fa' : 'var(--text-secondary)', opacity: darkMode ? 0.7 : 0.3, fontSize: 14, zIndex: 1 }}>
+
+            {/* Inactive Moon icon (right side) */}
+            <span
+              style={{
+                position: 'absolute',
+                right: 8,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: darkMode ? '#60a5fa' : 'var(--text-secondary)',
+                opacity: darkMode ? 0.7 : 0.3,
+                fontSize: 14,
+                zIndex: 1,
+              }}
+            >
               <Moon size={14} />
+            </span>
             </span>
           </button>
         )}
@@ -539,7 +571,7 @@ const Login = () => {
           onLoad={handleModelLoad}
           onError={handleModelError}
           style={{
-            display: isMobile ? 'none' : 'block',
+            display: isMobile ? 'block' : 'block',
             width: isMobile ? '90%' : '100%',
             height: isMobile ? '90%' : '100%',
             borderRadius: '12px',
