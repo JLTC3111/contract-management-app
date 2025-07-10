@@ -13,6 +13,7 @@
   --chevron-hover-bg: #e0e7ff;
   --eye-icon: #1500a0;
   --hover-bg: #f9f9ff;
+  --login-input-text: #1e293b;
   --primary: #3b82f6;
   --danger: #ef4444;
   --special-card-bg: #fffcfc;
@@ -53,6 +54,7 @@ body.dark {
   --chevron-hover-bg: #3766ff;
   --eye-icon: #000000;
   --hover-bg: #232b3b;
+  --login-input-text: #000000;
   --primary: #60a5fa;
   --danger: #f87171;
   --special-card-bg: #181e29;

@@ -346,8 +346,7 @@ const Login = () => {
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                
-                color: 'var(--text)',
+                color: 'var(--login-input-text)',
                 outline: 'none',
                 transition: 'all 0.2s ease',
                 boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
@@ -376,8 +375,7 @@ const Login = () => {
                 border: '1.5px solid var(--card-border)',
                 borderRadius: '8px',
                 fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                
-                color: 'var(--text)',
+                color: 'var(--login-input-text)',
                 outline: 'none',
                 transition: 'all 0.2s ease',
                 boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
