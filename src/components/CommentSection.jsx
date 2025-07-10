@@ -300,6 +300,7 @@ const CommentSection = ({ contractId }) => {
               }}
             />
             <button
+              className="btn-hover-effect"
               onClick={handleSubmitComment}
               disabled={submittingComment || !commentText.trim()}
               aria-label={submittingComment ? 'Posting comment...' : 'Post comment'}

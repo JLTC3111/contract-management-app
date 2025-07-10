@@ -1288,7 +1288,7 @@ return (
           style={{ border: '1px solid #ccc', borderRadius: '8px' }}
         />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-          <button
+          <button className="btn-hover-effect"
             onClick={() => setPreviewUrl(null)}
             style={{
               backgroundColor: darkMode ? '#fff' : '#000',
@@ -1309,7 +1309,7 @@ return (
       <div style={{ marginTop: '2rem', width: '95%' }}>
         <ExcelPreview fileUrl={previewUrl} />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-          <button
+          <button className="btn-hover-effect"
             onClick={() => setPreviewUrl(null)}
             style={{
               backgroundColor: darkMode ? '#fff' : '#000',
@@ -1330,7 +1330,7 @@ return (
       <div style={{ marginTop: '2rem', width: '95%' }}>
         <DocxPreview fileUrl={previewUrl} />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-          <button
+          <button className="btn-hover-effect"
             onClick={() => setPreviewUrl(null)}
             style={{
               backgroundColor: darkMode ? '#fff' : '#000',
@@ -1351,7 +1351,7 @@ return (
       <div style={{ marginTop: '2rem', width: '95%' }}>
         <ImagePreview fileUrl={previewUrl} />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-          <button
+          <button className="btn-hover-effect"
             onClick={() => setPreviewUrl(null)}
             style={{
               backgroundColor: darkMode ? '#fff' : '#000',
@@ -1394,7 +1394,7 @@ return (
         <div style={{marginLeft: '2rem', marginTop: '2rem', display: 'flex', gap: '0.5rem' }}>
           {editMode ? (
             <>
-              <button
+              <button className="btn-hover-effect"
                 onClick={handleSave}
                 style={{
                   backgroundColor: '#3b82f6',
@@ -1407,7 +1407,7 @@ return (
               >
                 💾 {t('contract_detail_save')}
               </button>
-              <button
+              <button className="btn-hover-effect"
                 onClick={() => setEditMode(false)}
                 style={{
                   backgroundColor: '#e5e7eb',
@@ -1420,7 +1420,7 @@ return (
               >
                 {t('contract_detail_cancel')}
               </button>
-              <button
+              <button className="btn-hover-effect"
                 onClick={handleDelete}
                 style={{
                   backgroundColor: '#000',
@@ -1435,7 +1435,7 @@ return (
               </button>
             </>
           ) : (
-            <button
+            <button className="btn-hover-effect"
               onClick={() => setEditMode(true)}
               style={{
                 alignItems: 'center',
