@@ -155,7 +155,7 @@ const Login = () => {
           borderRadius: '12px',
           padding: 'clamp(1rem, 4vw, 2.5rem)',
           width: '100%',
-          maxWidth: 'clamp(280px, 90vw, 400px)',
+          maxWidth: 'clamp(280px, 95vw, 550px)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
           transition: 'all 0.3s ease',
           display: 'flex',
