@@ -31,11 +31,15 @@ const Login = () => {
   const modelRef = useRef(null);
   const logoUrl = '/logoIcons/logo.png';
   const { darkMode, toggleDarkMode } = useTheme();
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 500);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 767);
+  const [aspectRatio, setAspectRatio] = useState(window.innerWidth / window.innerHeight);
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 500);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767);
+      setAspectRatio(window.innerWidth / window.innerHeight);
+    };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -104,7 +108,7 @@ const Login = () => {
           aria-label="Toggle theme"
           style={{
             position: 'absolute',
-            top: 'calc(50% - 210px + 5px)',
+            top: 'calc(50% - 210px + 10px)',
             left: 'calc(50% - 210px + 25px)',
             width: 40,
             height: 28,
@@ -166,6 +170,7 @@ const Login = () => {
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
+          marginTop: '15vh', // <-- Add this line
         }}
       >
         <h2 style={{
@@ -468,7 +473,7 @@ const Login = () => {
          minWidth: isMobile ? 180 : 320,
          maxWidth: isMobile ? 320 : 480,
          height: isMobile ? 300 : 400,
-         display: isMobile ? 'block' : 'flex',
+         display: isMobile && aspectRatio > 0.72 ? 'none' : (isMobile ? 'block' : 'flex'),
          alignItems: 'center',
          justifyContent: 'center',
        }}
