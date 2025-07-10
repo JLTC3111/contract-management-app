@@ -689,6 +689,18 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
         position: 'relative',
         overflow: 'hidden',
       }}
+      onMouseEnter={e => {
+        e.currentTarget.style.backgroundColor = 'var(--sidebar-hover-bg, #e0e7ff)';
+        e.currentTarget.style.transform = 'translateX(4px) scale(1.02)';
+        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+        e.currentTarget.style.borderRadius = '10px';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.backgroundColor = isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent';
+        e.currentTarget.style.transform = 'translateX(0) scale(1)';
+        e.currentTarget.style.boxShadow = 'none';
+        e.currentTarget.style.borderRadius = '8px';
+      }}
     >
       <div
         style={{
