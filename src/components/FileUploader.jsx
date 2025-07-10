@@ -120,6 +120,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
         Uploading to: <code>{currentPath || `uploads/${contract.id}`}</code>
      </p>*/}
      <button
+        className="btn-hover-effect"
         onClick={() => fileInputRef.current.click()}
         style={{
           alignItems: 'center',

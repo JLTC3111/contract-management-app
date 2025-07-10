@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import FileUploader from '../components/FileUploader';
@@ -18,6 +18,35 @@ const NewContract = () => {
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   const { darkMode } = useTheme();
+  const headerRef = useRef(null);
+  const formRef = useRef(null);
+  const buttonRefs = useRef([]);
+
+  useEffect(() => {
+    import('gsap').then(({ default: gsap }) => {
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current,
+          { y: -40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+        );
+      }
+      if (formRef.current) {
+        gsap.fromTo(
+          formRef.current,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.15 }
+        );
+      }
+      if (buttonRefs.current) {
+        gsap.fromTo(
+          buttonRefs.current,
+          { x: 30, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out', stagger: 0.08, delay: 0.3 }
+        );
+      }
+    });
+  }, []);
 
   if (user && (user.role === 'viewer' || user.role === 'approver')) {
     return (
@@ -88,26 +117,31 @@ const NewContract = () => {
       {/* Back Button */}
       {!contract && (
         <div style={{ marginBottom: 'clamp(0.5rem, 3vw, 1rem)' }}>
-          <button onClick={() => navigate(-1)} style={{
-            padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            backgroundColor: '#ddd',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-          }}>
+          <button
+            ref={el => buttonRefs.current[0] = el}
+            className="btn-hover-effect"
+            onClick={() => navigate(-1)}
+            style={{
+              padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              backgroundColor: '#ddd',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+            }}
+          >
             <ArrowLeft size={18} /> {t('newcontract.back')}
           </button>
         </div>
       )}
-      
-      <h2 style={{fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>{t('newContract')}</h2>
+      <h2 ref={headerRef} style={{fontSize: 'clamp(1.2rem, 5vw, 2rem)', marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>{t('newContract')}</h2>
       {!contract ? (
         <form
+          ref={formRef}
           onSubmit={e => { e.preventDefault(); handleCreateContract(); }}
           style={{
             display:'flex',
@@ -180,7 +214,10 @@ const NewContract = () => {
             <option value="expiring">{t('contractTable.status.expiring')}</option>
             <option value="expired">{t('contractTable.status.expired')}</option>
           </select>
-          <button type="submit"
+          <button
+            ref={el => buttonRefs.current[1] = el}
+            className="btn-hover-effect"
+            type="submit"
             style={{
               fontSize: 'clamp(0.95rem, 2vw, 1rem)',
               padding: 'clamp(0.5rem, 2vw, 0.75rem)',
@@ -215,6 +252,7 @@ const NewContract = () => {
           {uploading && <p style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{t('updatingContract')}</p>}
           <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap:'wrap', gap: 'clamp(0.5rem, 2vw, 1rem)', marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
             <button
+              className="btn-hover-effect"
               onClick={() => navigate(-1)}
               style={{
                 padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
@@ -232,6 +270,7 @@ const NewContract = () => {
               <ArrowLeft size={18} /> {t('newcontract.back')}
             </button>
             <button
+              className="btn-hover-effect"
               onClick={() => navigate('/')}
               onKeyDown={e => { if (e.key === 'Enter') navigate('/'); }}
               style={{
