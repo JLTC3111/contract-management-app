@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
@@ -37,7 +37,7 @@ const Sidebar = () => {
   const sidebarRef = useRef();
 
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
-  const [profileOpen, setProfileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(() => localStorage.getItem('profileOpen') !== 'false');
   const [sidebarWidth, setSidebarWidth] = useState(() => {
     const saved = localStorage.getItem('sidebarWidth');
     return saved ? parseInt(saved) : 380;
@@ -377,6 +377,14 @@ const Sidebar = () => {
               collapsed={collapsed}
               toggleable
               isOpen={profileOpen}
+              onClick={() => {
+                if (collapsed) {
+                  setCollapsed(false);
+                  setProfileOpen(true);
+                } else {
+                  setProfileOpen(!profileOpen);
+                }
+              }}
               onToggle={() => {
                 // If sidebar is collapsed, expand it first, then open profile
                 if (collapsed) {
@@ -649,14 +657,18 @@ const Sidebar = () => {
 };
 
 const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, toggleable, isOpen, onToggle, ...rest }) => {
-  const isActive = path && currentPath.startsWith(path);
+  let isActive = false;
+  if (path === '/') {
+    isActive = currentPath === '/';
+  } else if (path) {
+    isActive = currentPath.startsWith(path);
+  }
   const isMobile = window.innerWidth < 1024;
   
   return (
     <div
       className="sidebar-button"
-      onClick={toggleable ? onToggle : onClick}
-      {...rest} // <-- This will forward onMouseEnter/onMouseLeave etc.
+      {...rest}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -671,23 +683,11 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
         backgroundColor: isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent',
         color: isActive ? 'var(--sidebar-active-text,rgb(220, 229, 254))' : undefined,
         fontWeight: isActive ? 'bold' : 'normal',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
         transform: 'translateX(0)',
         boxShadow: 'none',
         position: 'relative',
         overflow: 'hidden',
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.backgroundColor = 'var(--sidebar-hover-bg, #e0e7ff)';
-        e.currentTarget.style.transform = 'translateX(4px) scale(1.02)';
-        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-        e.currentTarget.style.borderRadius = '10px';
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.backgroundColor = isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent';
-        e.currentTarget.style.transform = 'translateX(0) scale(1)';
-        e.currentTarget.style.boxShadow = 'none';
-        e.currentTarget.style.borderRadius = '8px';
       }}
     >
       <div
@@ -698,13 +698,15 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
           justifyContent: collapsed || isMobile ? 'center' : 'flex-start',
           width: 'fit-content',
           paddingLeft: isMobile ? '0' : '0',
+          flex: 1,
         }}
+        onClick={onClick}
       >
         {icon}
         {(!collapsed && !isMobile) && <span>{label}</span>}
       </div>
       {!collapsed && toggleable && (
-        <div style={{ marginRight: '0.25rem' }}>
+        <div style={{ marginRight: '0.25rem', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={e => { e.stopPropagation(); onToggle && onToggle(); }}>
           {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </div>
       )}
@@ -715,20 +717,47 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
 const SubMenu = ({ items }) => {
   const { darkMode } = useTheme();
   const isMobile = window.innerWidth < 1024;
+  const containerRef = useRef(null);
+  const itemRefs = useRef([]);
+  // Reset refs before rendering
+  itemRefs.current = [];
+  // Use useCallback for stable ref assignment
+  const setItemRef = useCallback((el, idx) => {
+    if (el) itemRefs.current[idx] = el;
+  }, []);
+  useEffect(() => {
+    if (containerRef.current) {
+      import('gsap').then(({ default: gsap }) => {
+        gsap.fromTo(
+          containerRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+        );
+        if (itemRefs.current.length) {
+          gsap.fromTo(
+            itemRefs.current,
+            { opacity: 0, x: 20 },
+            { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1, delay: 0.1 }
+          );
+        }
+      });
+    }
+  }, [items.length]);
   return (
-    <div className="submenu-container">
+    <div className="submenu-container" ref={containerRef}>
       <ul style={{
         marginTop: '-.5rem',
         marginLeft: '.25rem',
         marginBottom: '1rem',
         paddingLeft: '.25rem',
-        display: isMobile ? 'flex' : undefined,
-        flexDirection: isMobile ? 'row' : undefined,
-        gap: isMobile ? '10px' : undefined
+        ...(
+          isMobile && { display: 'flex', flexDirection: 'row', gap: '10px' }
+        )
       }}>
         {items.map(({ label, icon, onClick }, index) => (
           <li
-            key={label}
+            key={`${label}-${index}`}
+            ref={el => setItemRef(el, index)}
             onClick={onClick}
             style={{
               fontSize: '0.9rem',
@@ -739,7 +768,7 @@ const SubMenu = ({ items }) => {
               display: 'flex',
               alignItems: 'center',
               gap: '1.5rem',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              transition: 'transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
               justifyContent: 'flex-start',
               width: 'fit-content',
               maxWidth: 'calc(100% - 0.5rem)',
