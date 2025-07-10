@@ -86,23 +86,29 @@ const ContractDetail = () => {
 
 useEffect(() => {
     if (showFolderInput) {
-      requestAnimationFrame(() => {
+      // Use a small delay to ensure the input is rendered
+      const timer = setTimeout(() => {
         if (folderInputRef.current) {
           console.log("Focusing input");
           folderInputRef.current.focus();
+          // Select all text if there's any
+          folderInputRef.current.select();
         } else {
           console.warn("Input not available yet!");
         }
-      });
+      }, 10);
+      
+      return () => clearTimeout(timer);
     }
   }, [showFolderInput]);
 
-useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         showFolderInput &&
         folderInputRef.current &&
-        !folderInputRef.current.contains(event.target)
+        !folderInputRef.current.contains(event.target) &&
+        !event.target.closest('.create-folder-container')
       ) {
         setNewFolderName('');
         setShowFolderInput(false);
@@ -682,7 +688,7 @@ return (
 
     {showFolderInput && (
       <div
-        ref={folderInputRef} // ✅ apply ref here instead of the <input>
+        className="create-folder-container"
         style={{
           marginTop: '.25rem',
           marginLeft: '.5rem',
@@ -691,6 +697,7 @@ return (
         }}
       >
         <input
+          ref={folderInputRef}
           type="text"
           value={newFolderName}
           onChange={(e) => setNewFolderName(e.target.value)}
@@ -705,6 +712,16 @@ return (
             borderRadius: '6px',
             border: '1px solid #ccc',
             minWidth: '150px',
+            outline: 'none',
+            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = '#3b82f6';
+            e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.2)';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = '#ccc';
+            e.target.style.boxShadow = 'none';
           }}
         />
         <button className="btn-hover-effect"

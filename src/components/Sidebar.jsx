@@ -65,6 +65,7 @@ const Sidebar = () => {
     }
   };
   const [isHovered, setIsHovered] = useState(false);
+  const [isResizeHandleHovered, setIsResizeHandleHovered] = useState(false);
   const handleChangePassword = () => {
     setShowPasswordModal(true);
     setCurrentPassword('');
@@ -141,6 +142,8 @@ const Sidebar = () => {
 
   const handleMouseUp = () => {
     setIsResizing(false);
+    // Keep the hover effect if the mouse is still over the handle
+    // The onMouseLeave will handle clearing it if the mouse moves away
   };
 
   useEffect(() => {
@@ -474,6 +477,11 @@ const Sidebar = () => {
           <div
             className="sidebar-resize-handle"
             onMouseDown={handleMouseDown}
+            onMouseEnter={() => setIsResizeHandleHovered(true)}
+            onMouseLeave={() => !isResizing && setIsResizeHandleHovered(false)}
+            style={{
+              background: (isResizeHandleHovered || isResizing) ? 'var(--sidebar-hover-bg, #e0e7ff)' : 'transparent'
+            }}
           />
         )}
       </div>

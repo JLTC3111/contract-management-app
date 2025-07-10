@@ -23,7 +23,20 @@
   --input-bg: #fff;
   --input-border: #d1d5db;
   --text-secondary: #555;
-  --sidebar-hover-bg: linear-gradient(to bottom, #e0f7fa 0%, #00056e 100%); /* light cyan gradient */
+  --sidebar-hover-bg: linear-gradient(
+    to bottom,
+    #ffa500 0%,     /* bright orange */
+    #e69500 10%,    /* deeper orange */
+    #cc8400 20%,    /* golden brown */
+    #b36b00 30%,    /* rich amber */
+    #994d00 40%,    /* burnt orange */
+    #803300 50%,    /* dark brownish orange */
+    #662200 60%,    /* brown */
+    #4d1a0d 70%,    /* very dark reddish-brown */
+    #331111 80%,    /* almost black with a hint of red */
+    #1a1a1a 90%,    /* charcoal */
+    #000000 100%    /* true black */
+  );
   --sidebar-active-bg: #fefeff;
   --sidebar-active-text: #1e3a8a;
   --theme-toggle-bg: linear-gradient(to bottom, #e0f7fa 0%, #b2ebf2 100%);
@@ -120,24 +133,19 @@ button:focus-visible {
   text-decoration: none;
   margin-bottom: 1.5rem;
 }
-.sidebar a:hover, .sidebar a:focus {
-  color: #000 !important;
-}
 
 .sidebar-resize-handle {
   position: absolute;
   right: 0;
   top: 0;
-  width: 4px;
+  width: 3px;
   height: 100%;
   cursor: col-resize;
   background-color: transparent;
   z-index: 10;
   transition: background 0.2s;
 }
-.sidebar-resize-handle:hover {
-  background: var(--sidebar-hover-bg, #e0e7ff);
-}
+/* Hover effect is now handled by inline styles in the component */
 
 .theme-toggle-bg {
   position: absolute;
