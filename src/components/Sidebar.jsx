@@ -253,7 +253,7 @@ const Sidebar = () => {
                 boxShadow: 'none',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = 'var(--sidebar-hover-bg)';
+                e.currentTarget.style.background = 'var(--chevron-hover-bg)';
                 e.currentTarget.style.transform = 'scale(1.1)';
                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
               }}
@@ -400,10 +400,10 @@ const Sidebar = () => {
               {!collapsed && profileOpen && !isMobile && (
                 <motion.div
                   key="profile-submenu"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.5 }}
+                  initial={{ opacity: 0, maxHeight: 0 }}
+                  animate={{ opacity: 1, maxHeight: 300 }} // Pick a reasonable max
+                  exit={{ opacity: 0, maxHeight: 0 }}
+                  transition={{ duration: 0.05, ease: 'easeOut' }}
                   style={{ overflow: 'hidden' }}
                 >
                   <SubMenu className="mobile-submenu-modal"
