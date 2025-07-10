@@ -23,6 +23,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
       return;
     }
 
+    
     const uploads = [];
 
     for (const file of files) {
