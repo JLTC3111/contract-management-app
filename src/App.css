@@ -62,15 +62,6 @@ button:disabled {
   cursor: wait;
 }
 
-button,
-a,
-input,
-select,
-textarea,
-.magnify-target {
-  cursor: zoom-in !important;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;

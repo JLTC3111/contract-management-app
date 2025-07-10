@@ -224,7 +224,7 @@ const Login = () => {
               aria-expanded={showLanguageDropdown}
               title={t('login.languageSelector')}
               style={{
-                fontSize: 'clamp(0.75rem, 2vw, 0.9rem)',
+                fontSize: 'clamp(0.675rem, 2.5vw, 0.925rem)',
                 borderRadius: '8px',
                 border: '1.5px solid var(--card-border)',
                 background: 'var(--card-bg)',
@@ -296,6 +296,7 @@ const Login = () => {
                         }
                       }}
                       style={{
+                        fontSize: 'clamp(0.675rem, 2.5vw, 0.925rem)',
                         padding: '0.6rem 1rem',
                         cursor: 'pointer',
                         background: i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)',

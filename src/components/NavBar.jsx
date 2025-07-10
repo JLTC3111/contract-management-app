@@ -327,7 +327,7 @@ const Navbar = () => {
             aria-expanded={showDropdown}
             title={t('navbar.languageSelector')}
             style={{
-              fontSize: 'clamp(0.65rem, 1vw, 0.95rem)',
+              fontSize: 'clamp(0.65rem, 2.5vw, 0.925rem)',
               borderRadius: '6px',
               border: '1.5px solid var(--card-border)',
               background: 'var(--card-bg)',
@@ -394,6 +394,7 @@ const Navbar = () => {
                       }
                     }}
                     style={{
+                      fontSize: 'clamp(0.65rem, 2.5vw, 0.925rem)',
                       padding: '0.5rem 1rem',
                       cursor: 'pointer',
                       background: i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)',
