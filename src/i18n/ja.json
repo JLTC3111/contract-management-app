@@ -195,6 +195,8 @@
   },
   "clear": "クリア",
   "contractTable": {
+    "all": "すべて",
+    "clear": "クリア",
     "title": "タイトル",
     "status": {
       "draft": "下書き",

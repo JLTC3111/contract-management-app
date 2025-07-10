@@ -232,7 +232,9 @@
     "lastUpdated": "Last Updated",
     "author": "Author",
     "expiryDate": "Expiry Date",
-    "headerStatus": "Status"
+    "headerStatus": "Status",
+    "all": "All",
+    "clear": "Clear"
   },
   "newContract": "New Contract",
   "createContract": "Create Contract",

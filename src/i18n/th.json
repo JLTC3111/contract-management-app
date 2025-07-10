@@ -208,7 +208,9 @@
     "lastUpdated": "อัปเดตล่าสุด",
     "author": "ผู้เขียน",
     "expiryDate": "วันหมดอายุ",
-    "headerStatus": "สถานะ"
+    "headerStatus": "สถานะ",
+    "all": "ทั้งหมด",
+    "clear": "ล้าง"
   },
   "newContract": "สัญญาใหม่",
   "createContract": "สร้างสัญญา",

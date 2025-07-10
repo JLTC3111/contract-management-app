@@ -14,6 +14,7 @@
   --eye-icon: #1500a0;
   --hover-bg: #f9f9ff;
   --login-input-text: #1e293b;
+  --btn-hover-preview: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   --primary: #3b82f6;
   --danger: #ef4444;
   --special-card-bg: #fffcfc;
@@ -55,8 +56,9 @@ body.dark {
   --eye-icon: #000000;
   --hover-bg: #232b3b;
   --login-input-text: #000000;
+  --btn-hover-preview: linear-gradient(90deg, transparent, rgba(232, 232, 232, 0.5), transparent);
   --primary: #60a5fa;
-  --danger: #f87171;
+  --danger: #f87171;  
   --special-card-bg: #181e29;
   --special-card-border: #fbfbfb;
   --success: #34d399;

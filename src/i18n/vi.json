@@ -194,6 +194,7 @@
     "searchContracts": "Tìm kiếm hợp đồng..."
   },
   "clear": "Xóa",
+  
   "contractTable": {
     "title": "Tiêu đề",
     "headerStatus": "Trạng thái",
@@ -209,7 +210,9 @@
     "version": "Phiên bản",
     "lastUpdated": "Cập nhật lần cuối",
     "author": "Tác giả",
-    "expiryDate": "Ngày hết hạn"
+    "expiryDate": "Ngày hết hạn",
+    "all": "Tất cả",
+    "clear": "Xóa"
   },
   "newContract": "Hợp đồng mới",
   "createContract": "Tạo hợp đồng",

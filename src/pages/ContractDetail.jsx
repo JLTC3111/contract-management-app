@@ -1288,7 +1288,7 @@ return (
           style={{ border: '1px solid #ccc', borderRadius: '8px' }}
         />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-          <button className="btn-hover-effect"
+          <button className="btn-hover-preview"
             onClick={() => setPreviewUrl(null)}
             style={{
               backgroundColor: darkMode ? '#fff' : '#000',
@@ -1309,7 +1309,7 @@ return (
       <div style={{ marginTop: '2rem', width: '95%' }}>
         <ExcelPreview fileUrl={previewUrl} />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-          <button className="btn-hover-effect"
+          <button className="btn-hover-preview"
             onClick={() => setPreviewUrl(null)}
             style={{
               backgroundColor: darkMode ? '#fff' : '#000',
@@ -1330,7 +1330,7 @@ return (
       <div style={{ marginTop: '2rem', width: '95%' }}>
         <DocxPreview fileUrl={previewUrl} />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-          <button className="btn-hover-effect"
+          <button className="btn-hover-preview"
             onClick={() => setPreviewUrl(null)}
             style={{
               backgroundColor: darkMode ? '#fff' : '#000',
@@ -1351,7 +1351,7 @@ return (
       <div style={{ marginTop: '2rem', width: '95%' }}>
         <ImagePreview fileUrl={previewUrl} />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-          <button className="btn-hover-effect"
+          <button className="btn-hover-preview"
             onClick={() => setPreviewUrl(null)}
             style={{
               backgroundColor: darkMode ? '#fff' : '#000',

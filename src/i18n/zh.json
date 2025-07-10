@@ -208,7 +208,9 @@
     "lastUpdated": "最后更新",
     "author": "作者",
     "expiryDate": "到期日期",
-    "headerStatus": "状态"
+    "headerStatus": "状态",
+    "all": "全部",
+    "clear": "清除"
   },
   "newContract": "新合同",
   "createContract": "创建合同",

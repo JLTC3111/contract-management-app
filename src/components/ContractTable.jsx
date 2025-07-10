@@ -166,7 +166,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
             className="clear-btn"
             onClick={() => setFilters(f => ({ ...f, [key]: '' }))}
           >
-            {t('clear')}
+            {t('contractTable.clear')}
           </button>
         </div>
       </div>
@@ -258,7 +258,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   style={{ width: 160 }}
                   autoFocus
                 >
-                  <option value="">{t('all')}</option>
+                  <option value="">{t('contractTable.all')}</option>
                   {uniqueStatuses.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
                 </select>
               ))}
@@ -301,7 +301,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   style={{ width: 160 }}
                   autoFocus
                 >
-                  <option value="">{t('all')}</option>
+                  <option value="">{t('contractTable.all')}</option>
                   {uniqueVersions.map(v => <option key={v} value={v}>{v}</option>)}
                 </select>
               ))}
@@ -384,7 +384,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   style={{ width: 160 }}
                   autoFocus
                 >
-                  <option value="">{t('all')}</option>
+                  <option value="">{t('contractTable.all')}</option>
                   {uniqueAuthors.map(a => <option key={a} value={a}>{a}</option>)}
                 </select>
               ))}

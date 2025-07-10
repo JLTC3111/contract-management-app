@@ -207,7 +207,9 @@
     "lastUpdated": "Zuletzt aktualisiert",
     "author": "Autor",
     "expiryDate": "Ablaufdatum",
-    "headerStatus": "Status"
+    "headerStatus": "Status",
+    "all": "Alle",
+    "clear": "Löschen"
   },
   "newContract": "Neuer Vertrag",
   "createContract": "Vertrag erstellen",
