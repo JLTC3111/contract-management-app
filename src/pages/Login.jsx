@@ -523,7 +523,7 @@ const Login = () => {
             </span>
           </button>
         )}
-        <model-viewer
+        {/*<model-viewer
           ref={modelViewerRef}
           src="/3d_models/robot.glb"
           alt="Robot 3D Model"
@@ -540,7 +540,7 @@ const Login = () => {
             borderRadius: '12px',
             background: 'transparent',
           }}
-        />
+        />*/}
       </div>
     </div>
   );
