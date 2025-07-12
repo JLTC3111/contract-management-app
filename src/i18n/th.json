@@ -221,6 +221,7 @@
   "deleteContract": "ลบสัญญา",
   "createFolder": "สร้างโฟลเดอร์",
   "upload_file": "อัปโหลดไฟล์",
+  "file_upload_supported_formats": "รองรับ: ไฟล์ Office, PDF, รูปภาพ, ไฟล์ข้อความ, ไฟล์บีบอัด (สูงสุด 50MB)",
   "contractTitle": "ชื่อสัญญา",
   "filterByTitle": "กรองตามชื่อเรื่อง...",
   "no_pending_approval_requests": "ไม่มีคำขออนุมัติที่รอดำเนินการ",

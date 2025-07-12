@@ -336,6 +336,7 @@
   "updatingContract": "Đang cập nhật hợp đồng...",
   "create_folder": "Tạo thư mục",
   "upload_file": "Tải Lên",
+  "file_upload_supported_formats": "Hỗ trợ: Tệp Office, PDF, Hình ảnh, Tệp văn bản, Tệp nén (tối đa 50MB)",
   "contract_detail_close_preview": "Đóng",
   "failed_to_upload": "Tải lên thất bại.",
   "upload_error_for": "Lỗi tải lên cho",

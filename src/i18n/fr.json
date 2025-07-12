@@ -333,6 +333,7 @@
   "updatingContract": "Mise à jour du contrat...",
   "create_folder": "Créer un dossier",
   "upload_file": "Téléverser un fichier",
+  "file_upload_supported_formats": "Pris en charge : fichiers Office, PDF, Images, fichiers texte, Archives (max 50MB)",
   "contract_detail_close_preview": "Fermer l'aperçu",
   "failed_to_upload": "Échec du téléchargement.",
   "upload_error_for": "Erreur de téléchargement pour",

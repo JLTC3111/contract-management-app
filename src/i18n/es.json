@@ -319,6 +319,7 @@
   "updatingContract": "Actualizando contrato...",
   "create_folder": "Crear carpeta",
   "upload_file": "Subir archivo",
+  "file_upload_supported_formats": "Soportado: archivos de Office, PDF, Imágenes, archivos de texto, Archivos (máx. 50MB)",
   "contract_detail_close_preview": "Cerrar vista previa",
   "failed_to_upload": "Error al subir.",
   "upload_error_for": "Error de carga para",

@@ -191,7 +191,8 @@ body.dark .file-folder-search-input:focus {
 }
 
 /* Hide default calendar icon for date input (cross-browser best effort) */
-.input-date-custom::-webkit-calendar-picker-indicator {
+.input-date-custom::-webkit-calendar-picker-indicator,
+.table-filter-input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
   display: none;
 }

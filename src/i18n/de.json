@@ -333,6 +333,7 @@
   "updatingContract": "Vertrag wird aktualisiert...",
   "create_folder": "Ordner erstellen",
   "upload_file": "Datei hochladen",
+  "file_upload_supported_formats": "Unterstützt: Office-Dateien, PDF, Bilder, Textdateien, Archive (max. 50MB)",
   "contract_detail_close_preview": "Vorschau schließen",
   "failed_to_upload": "Hochladen fehlgeschlagen.",
   "upload_error_for": "Fehler beim Hochladen für",

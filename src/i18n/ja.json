@@ -334,6 +334,7 @@
   "updatingContract": "契約を更新中...",
   "create_folder": "フォルダを作成",
   "upload_file": "ファイルをアップロード",
+  "file_upload_supported_formats": "対応形式：Officeファイル、PDF、画像、テキストファイル、アーカイブ（最大50MB）",
   "contract_detail_close_preview": "プレビューを閉じる",
   "failed_to_upload": "アップロードに失敗しました。",
   "upload_error_for": "アップロードエラー：",

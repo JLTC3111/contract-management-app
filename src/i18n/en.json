@@ -360,6 +360,7 @@
   "updatingContract": "Updating contract...",
   "create_folder": "Create Folder",
   "upload_file": "Upload File",
+  "file_upload_supported_formats": "Supported: Office files, PDF, Images, Text files, Archives (max 50MB)",
   "contract_detail_close_preview": "Close Preview",
   "failed_to_upload": "Failed to upload.",
   "upload_error_for": "Upload error for",

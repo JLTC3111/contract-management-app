@@ -235,7 +235,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
         marginBottom: '1rem',
         maxWidth: '300px'
       }}>
-        Supported: Office files, PDF, Images, Text files, Archives (max 50MB)
+        {t('file_upload_supported_formats')}
       </div>
 
       {Object.entries(uploadProgress).map(([filename, progress]) => (

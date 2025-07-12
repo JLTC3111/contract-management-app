@@ -334,6 +334,7 @@
   "updatingContract": "正在更新合同...",
   "create_folder": "创建文件夹",
   "upload_file": "上传文件",
+  "file_upload_supported_formats": "支持：Office文件、PDF、图片、文本文件、压缩文件（最大50MB）",
   "contract_detail_close_preview": "关闭预览",
   "failed_to_upload": "上传失败。",
   "upload_error_for": "上传错误：",
