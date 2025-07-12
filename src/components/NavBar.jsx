@@ -200,11 +200,18 @@ const Navbar = () => {
         position: 'sticky',
         top: '0',
         zIndex: 5,
-        boxShadow: darkMode
-          ? '0 2px 8px rgba(255, 255, 255, 0.8)'
-          : '0 2px 8px rgba(0, 0, 0, 0.8)',
+        transition: 'box-shadow 0.3s ease',
+        boxShadow: isHovered
+          ? darkMode
+            ? '0 4px 16px rgba(255, 255, 255, 0.8)'
+            : '0 4px 16px rgba(0, 0, 0, 0.8)'
+          : darkMode
+            ? '0 2px 8px rgba(138, 138, 138, 0.8)'
+            : '0 2px 8px rgba(133, 133, 133, 0.8)',
         maxHeight: 'clamp(32px, 8vw, 48px)'
       }}
+      onMouseEnter={() => setIsHovered(true)} 
+      onMouseLeave={() => setIsHovered(false)} 
     >
       {/* Left: App Title */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
