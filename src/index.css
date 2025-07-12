@@ -20,7 +20,6 @@
   --special-card-bg: #fffcfc;
   --special-card-border: #323232;
   --success: #10b981;
-  --test: #ddffe2;
   --sidebar-bg: #f1f5f9;
   --sidebar-submenu-bg: #fcf6f6;
   --sidebar-text: #1e293b;
@@ -262,16 +261,19 @@ button:focus-visible {
 .metric-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-bottom: 3px solid #e5efff; /* Tailwind blue-500 */
+  border-left: 3px solid #e5efff; 
   padding: 3.5px;
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-  transition: transform 0.2s ease, border-bottom-width 0.2s ease;
+  transition: transform 0.3s ease, border-left-width 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 50px;
+  min-height: 30px;
+  max-height: 85px;
+  width: clamp(60px, 15vw, 160px);
+  aspect-ratio: 1.75 / 1;
   text-align: center;
 }
 
@@ -281,88 +283,82 @@ body.dark .metric-card {
 
 body.dark .metric-card:hover {
   box-shadow: 0 6px 18px rgba(255,255,255,0.18);
-  border-bottom-width: 12px;
+  border-left-width: 12px;
 }
 
 .metric-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-10px);
   box-shadow: 0 6px 18px rgba(0,0,0,0.6);
-  border-bottom-width: 12px;
+  border-left-width: 12px;
 }
 
 .metric-card h4 {
-  font-size: 1rem;
   color: var(--text);
   margin-bottom: 0.3rem;
 }
 
 .metric-card p {
-  font-size: 1.25rem;
-  font-weight: 700;
   color: var(--text);
   margin: 0;
 }
 
 .metric-rejected:hover {
-  border-bottom-color: #350000;
+  border-left-color: #350000;
 }
 
 .metric-draft:hover {
-  border-bottom-color: #61f7c5; /* blue-500 */
+  border-left-color: #61f7c5; /* blue-500 */
 }
 
 .metric-pending:hover {
-  border-bottom-color: #facc15; /* yellow-400 */
+  border-left-color: #facc15; /* yellow-400 */
 }
 
 .metric-expiring:hover {
-  border-bottom-color: #f97316; /* orange-500 */
+  border-left-color: #f97316; /* orange-500 */
 }
 
 .metric-expired:hover {
-  border-bottom-color: #ef4444; /* red-500 */
+  border-left-color: #ef4444; /* red-500 */
 }
 
 .metric-approved:hover {
-  border-bottom-color: #3b82f6; /* green-500 */
+  border-left-color: #3b82f6; /* green-500 */
 }
 
 .metric-approved:hover {
-  border-bottom-color: #60a5fa !important;
+  border-left-color: #60a5fa !important;
 }
 .metric-pending:hover {
-  border-bottom-color: #fde68a !important;
+  border-left-color: #fde68a !important;
 }
 .metric-expiring:hover {
-  border-bottom-color: #fdba74 !important;
+  border-left-color: #fdba74 !important;
 }
 .metric-draft:hover {
-  border-bottom-color: #6ee7b7 !important;
+  border-left-color: #6ee7b7 !important;
 }
 .metric-rejected:hover {
-  border-bottom-color: #fca5a5 !important;
+  border-left-color: #fca5a5 !important;
 }
 .metric-expired:hover {
-  border-bottom-color: #f87171 !important;
+  border-left-color: #f87171 !important;
 }
 
 body.dark .dashboard-metrics .metric-approved:hover {
-  border-bottom-color: #60a5fa !important;
-}
-body.dark .dashboard-metrics .metric-pending:hover {
-  border-bottom-color: #fde68a !important;
+    border-left-color: #60a5fa !important
 }
 body.dark .dashboard-metrics .metric-expiring:hover {
-  border-bottom-color: #fdba74 !important;
+  border-left-color: #fdba74 !important;
 }
 body.dark .dashboard-metrics .metric-draft:hover {
-  border-bottom-color: #6ee7b7 !important;
+  border-left-color: #6ee7b7 !important;
 }
 body.dark .dashboard-metrics .metric-rejected:hover {
-  border-bottom-color: #fca5a5 !important;
+  border-left-color: #fca5a5 !important;
 }
 body.dark .dashboard-metrics .metric-expired:hover {
-  border-bottom-color: #f87171 !important;
+  border-left-color: #f87171 !important;
 }
 
 .text-secondary {
@@ -531,7 +527,8 @@ body.dark .dashboard-metrics .metric-expired:hover {
     padding: 1rem;
   }
   .metric-card {
-    min-width: 120px;
+    width: clamp(80px, 12vw, 160px);
+    aspect-ratio: 1.5 / 1;
     padding: 0.5rem;
   }
 }
@@ -541,7 +538,8 @@ body.dark .dashboard-metrics .metric-expired:hover {
     padding: 0.5rem;
   }
   .metric-card {
-    min-width: 90px;
+    width: clamp(60px, 10vw, 120px);
+    aspect-ratio: 1.5 / 1;
     padding: 0.25rem;
   }
   h1, h2, h3 {
