@@ -139,7 +139,7 @@ body.dark .contract-table-wrapper thead tr:hover {
 }
 @media (max-width: 600px) {
   .contract-table, .contract-table th, .contract-table td {
-    font-size: clamp(0.8rem, 4vw, 0.95rem);
+    font-size: clamp(0.6rem, 3vw, 0.75rem);
   }
   .contract-table-wrapper {
     overflow-x: auto;
@@ -153,7 +153,7 @@ body.dark .contract-table-wrapper thead tr:hover {
 
 @media (max-width: 499px) {
   .contract-table, .contract-table th, .contract-table td {
-    font-size: clamp(0.6rem, 2.5vw, 0.75rem);
+    font-size: clamp(0.55rem, 2.5vw, 0.7rem);
   }
   .contract-table-wrapper {
     overflow-x: auto;

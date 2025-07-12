@@ -262,7 +262,7 @@ button:focus-visible {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-left: 3px solid #e5efff; 
-  padding: 3.5px;
+  padding: 2.5px;
   border-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   transition: transform 0.3s ease, border-left-width 0.3s ease;
@@ -270,10 +270,9 @@ button:focus-visible {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 30px;
-  max-height: 85px;
-  width: clamp(80px, 15vw, 160px);
-  aspect-ratio: 1.75 / 1;
+  height: clamp(30px, 10vw, 85px);
+  width: clamp(80px, 12vw, 180px);
+  aspect-ratio: 1.95 / 1;
   text-align: center;
 }
 
