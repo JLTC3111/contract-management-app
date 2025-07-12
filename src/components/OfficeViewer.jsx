@@ -79,7 +79,7 @@ const OfficeViewer = ({ fileUrl, fileType, fileName }) => {
         alignItems: 'center'
       }}>
         <button
-          className="btn-hover-effect"
+          className="btn-hover-preview"
           onClick={() => setViewMode('online')}
           style={{
             padding: '0.5rem 1rem',
@@ -94,7 +94,7 @@ const OfficeViewer = ({ fileUrl, fileType, fileName }) => {
           {t('buttons.microsoftOffice')}
         </button>
         <button
-          className="btn-hover-effect"
+          className="btn-hover-preview"
           onClick={() => setViewMode('google')}
           style={{
             padding: '0.5rem 1rem',

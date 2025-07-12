@@ -708,148 +708,160 @@ return (
         `}
       </style>
       
-      {/* Back button in top-right when NOT editing */}
-      {!editMode && canEdit && (
+      {/* All buttons in a single row */}
+      {!editMode && user && (
         <div
           style={{
-            gap: '10px',
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             padding: '.5rem',
           }}
         >
-        <button className="btn-hover-effect"
-            onClick={() => navigate(-1)}
-            style={{
-              padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              margin:0,
-              backgroundColor: darkMode ? '#fff' : 'transparent',
-              border: 'none',
-              borderRadius: '12px',
-              cursor: 'pointer',
-            }}
-          >
-            <ArrowLeft size={26} /> 
-          </button>
-          
-          <button className="btn-hover-effect"
-            onClick={() => {
-              setNewFolderName('');
-              setShowFolderInput(true);
-            }}>
-            📁 {t('create_folder')}
-          </button>
-
-    {showFolderInput && (
-      <div
-        className="create-folder-container"
-        style={{
-          marginTop: '.25rem',
-          marginLeft: '.5rem',
-          display: 'flex',
-          gap: '0.5rem',
-        }}
-      >
-        <input
-          ref={folderInputRef}
-          type="text"
-          value={newFolderName}
-          onChange={(e) => setNewFolderName(e.target.value)}
-          onKeyDown={async (e) => {
-            if (e.key === 'Enter') {
-              await handleCreateFolder(); // 👌 Works
-            }
-          }}
-          placeholder={t('folder_name_example')}
-          style={{
-            padding: '0.4rem',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            minWidth: '150px',
-            outline: 'none',
-            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-          }}
-          onFocus={(e) => {
-            e.target.style.borderColor = '#3b82f6';
-            e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.2)';
-          }}
-          onBlur={(e) => {
-            e.target.style.borderColor = '#ccc';
-            e.target.style.boxShadow = 'none';
-          }}
-        />
-        <button className="btn-hover-effect"
-          type="button"
-          disabled={!newFolderName.trim()}
-          onClick={async () => {
-            console.log("Add button clicked!");
-            await handleCreateFolder();
-          }}
-          style={{
-            backgroundColor: newFolderName.trim() ? '#3b82f6' : '#ccc',
-            color: '#fff',
-            border: 'none',
-            padding: '0.5rem 1rem',
-            borderRadius: '6px',
-            cursor: newFolderName.trim() ? 'pointer' : 'not-allowed',
-          }}
-        >
-          ➕ {t('contract_detail_add')}
-        </button>
-      </div>
-    )}
-
-      <button className="btn-hover-effect"
-        onClick={() => handleDownloadItems(selectedFiles)}
-        style={{
-          backgroundColor: selectedFiles.length === 0 ? '#eee' : 'rgba(1, 82, 255, 0.8)',
-          color: selectedFiles.length === 0 ? '#999' : '#fff',
-          padding: '0.5rem 1rem',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
-          filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
-          opacity: selectedFiles.length === 0 ? 0.6 : 1,
-          transition: 'all 0.2s ease',
-          marginRight: '0.5rem',
-          alignItems: 'center',
-          display: 'flex',
-          gap: '0.5rem',
-        }}
-        disabled={selectedFiles.length === 0}
-      >
-      <svg width="20px" height="20px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 48 48">
-          <g fill={selectedFiles.length === 0 ? "#1565C0" : "#ffffff"}>
-              <polygon points="24,37.1 13,24 35,24"/>
-              <rect x="20" y="4" width="8" height="4"/>
-              <rect x="20" y="10" width="8" height="4"/>
-              <rect x="20" y="16" width="8" height="11"/>
-              <rect x="6" y="40" width="36" height="4"/>
-          </g>
-      </svg> 
-      {t('contract_detail_download')} ({selectedFiles.length})
-      </button>
-      <button className="btn-hover-effect"
-        onClick={() => handleDeleteItems(selectedFiles)}
-          style={{
-                backgroundColor: selectedFiles.length === 0 ? '#eee' : '#ddd',
-                color: selectedFiles.length === 0 ? '#999' : '#000',
-                padding: '0.5rem 1rem',
+          {/* Left side - Back and Download buttons */}
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            {/* Back button */}
+            <button className="btn-hover-preview"
+              onClick={() => navigate(-1)}
+              style={{
+                padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                margin: 0,
+                backgroundColor: darkMode ? '#fff' : 'transparent',
                 border: 'none',
-                borderRadius: '6px',
-                cursor: selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
-                filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
-                opacity: selectedFiles.length === 0 ? 0.6 : 1,
-                transition: 'all 0.2s ease',
+                borderRadius: '12px',
+                cursor: 'pointer',
               }}
-              disabled={selectedFiles.length === 0}
-          >
-              🗑️ {t('contract_detail_delete')} ({selectedFiles.length})
-      </button>
-    </div>)}
+            >
+              <ArrowLeft size={26} /> 
+            </button>
+
+            {/* Download button - next to back button (visible to admins, editors, and approver users) */}
+            {['admin', 'editor', 'approver'].includes(user.role) && (
+              <button className="btn-hover-effect"
+                onClick={() => handleDownloadItems(selectedFiles)}
+                style={{
+                  backgroundColor: selectedFiles.length === 0 ? '#eee' : 'rgba(1, 82, 255, 0.8)',
+                  color: selectedFiles.length === 0 ? '#999' : '#fff',
+                  padding: '0.5rem 1rem',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
+                  filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
+                  opacity: selectedFiles.length === 0 ? 0.6 : 1,
+                  transition: 'all 0.2s ease',
+                  alignItems: 'center',
+                  display: 'flex',
+                  gap: '0.5rem',
+                }}
+                disabled={selectedFiles.length === 0}
+              >
+                <svg width="20px" height="20px" viewBox="0 0 48 48" version="1" xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 48 48">
+                  <g fill={selectedFiles.length === 0 ? "#1565C0" : "#ffffff"}>
+                    <polygon points="24,37.1 13,24 35,24"/>
+                    <rect x="20" y="4" width="8" height="4"/>
+                    <rect x="20" y="10" width="8" height="4"/>
+                    <rect x="20" y="16" width="8" height="11"/>
+                    <rect x="6" y="40" width="36" height="4"/>
+                  </g>
+                </svg> 
+                {t('contract_detail_download')} ({selectedFiles.length})
+              </button>
+            )}
+          </div>
+
+          {/* Right side - Create Folder and Delete buttons (visible only to admins and editors) */}
+          {canEdit && (
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <button className="btn-hover-effect"
+                onClick={() => {
+                  setNewFolderName('');
+                  setShowFolderInput(true);
+                }}>
+                📁 {t('create_folder')}
+              </button>
+
+              {showFolderInput && (
+                <div
+                  className="create-folder-container"
+                  style={{
+                    display: 'flex',
+                    gap: '0.5rem',
+                    alignItems: 'center',
+                  }}
+                >
+                  <input
+                    ref={folderInputRef}
+                    type="text"
+                    value={newFolderName}
+                    onChange={(e) => setNewFolderName(e.target.value)}
+                    onKeyDown={async (e) => {
+                      if (e.key === 'Enter') {
+                        await handleCreateFolder(); // 👌 Works
+                      }
+                    }}
+                    placeholder={t('folder_name_example')}
+                    style={{
+                      padding: '0.4rem',
+                      borderRadius: '6px',
+                      border: '1px solid #ccc',
+                      minWidth: '150px',
+                      outline: 'none',
+                      transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#3b82f6';
+                      e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.2)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#ccc';
+                      e.target.style.boxShadow = 'none';
+                    }}
+                  />
+                  <button className="btn-hover-effect"
+                    type="button"
+                    disabled={!newFolderName.trim()}
+                    onClick={async () => {
+                      console.log("Add button clicked!");
+                      await handleCreateFolder();
+                    }}
+                    style={{
+                      backgroundColor: newFolderName.trim() ? '#3b82f6' : '#ccc',
+                      color: '#fff',
+                      border: 'none',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '6px',
+                      cursor: newFolderName.trim() ? 'pointer' : 'not-allowed',
+                    }}
+                  >
+                    ➕ {t('contract_detail_add')}
+                  </button>
+                </div>
+              )}
+
+              <button className="btn-hover-effect"
+                onClick={() => handleDeleteItems(selectedFiles)}
+                style={{
+                  backgroundColor: selectedFiles.length === 0 ? '#eee' : '#ddd',
+                  color: selectedFiles.length === 0 ? '#999' : '#000',
+                  padding: '0.5rem 1rem',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: selectedFiles.length === 0 ? 'not-allowed' : 'pointer',
+                  filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
+                  opacity: selectedFiles.length === 0 ? 0.6 : 1,
+                  transition: 'all 0.2s ease',
+                }}
+                disabled={selectedFiles.length === 0}
+              >
+                🗑️ {t('contract_detail_delete')} ({selectedFiles.length})
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Main content - Full width, aligned to far left */}
       <div style={{ 
