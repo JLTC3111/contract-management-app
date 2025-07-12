@@ -218,7 +218,7 @@ const Navbar = () => {
         <h2 
           ref={titleRef}
           style={{ 
-            fontSize: 'clamp(0.5rem, 1.5vw, 1.25rem)', 
+            fontSize: 'clamp(0.75rem, 1.5vw, 1.25rem)', 
             fontWeight: 'bold',
             minHeight: '1.5em',
             display: 'flex',
@@ -258,7 +258,7 @@ const Navbar = () => {
             src="/logoIcons/logo.png"
             alt="Logo"
             style={{
-              height: 'clamp(1rem, 1.5vw, 1.8rem)', // Responsive height
+              height: 'clamp(1.15rem, 4.5vw, 1.8rem)', // Responsive height
               width: 'auto',
               borderRadius: '20px',
               alignItems: 'center',
