@@ -66,8 +66,8 @@ const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
             }}
             onClick={() => handleMetricClick(label)}
           >
-            <h4 style={{ color: 'var(--text)', fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)' }}>{t(`metrics.${label.toLowerCase()}`)}</h4>
-            <p style={{ color: 'var(--text)', fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)' }}>{count}</p>
+            <h4 style={{ color: 'var(--text)', fontSize: 'clamp(0.7rem, 5vw, 1.25rem)' }}>{t(`metrics.${label.toLowerCase()}`)}</h4>
+            <p style={{ color: 'var(--text)', fontSize: 'clamp(0.7rem, 5vw, 1.25rem)' }}>{count}</p>
           </div>
         );
       })}

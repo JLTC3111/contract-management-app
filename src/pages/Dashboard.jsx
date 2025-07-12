@@ -47,16 +47,31 @@ const Dashboard = () => {
     } else {
       // Apply new filter
       setActiveFilter(label);
-      const statusMap = {
-        'Active': 'approved',
-        'Pending': 'pending',
-        'Expiring': 'expiring',
-        'Drafts': 'draft',
-        'Rejected': 'rejected',
-        'Expired': 'expired',
-      };
-      const status = statusMap[label];
-      const filtered = contracts.filter(c => c.status === status);
+      
+      let filtered;
+      if (label === 'Expiring') {
+        // For expiring, filter approved contracts that are expiring soon
+        filtered = contracts.filter(c => {
+          if (c.status !== 'approved') return false;
+          if (!c.expiry_date) return false;
+          const expiry = new Date(c.expiry_date);
+          const now = new Date();
+          const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
+          return diffDays > 0 && diffDays <= 7; // within 7 days
+        });
+      } else {
+        // For other statuses, use direct status matching
+        const statusMap = {
+          'Active': 'approved',
+          'Pending': 'pending',
+          'Drafts': 'draft',
+          'Rejected': 'rejected',
+          'Expired': 'expired',
+        };
+        const status = statusMap[label];
+        filtered = contracts.filter(c => c.status === status);
+      }
+      
       setFilteredContracts(filtered);
     }
   };
@@ -64,16 +79,29 @@ const Dashboard = () => {
   // Update filtered contracts when contracts change
   useEffect(() => {
     if (activeFilter) {
-      const statusMap = {
-        'Active': 'approved',
-        'Pending': 'pending',
-        'Expiring': 'expiring',
-        'Drafts': 'draft',
-        'Rejected': 'rejected',
-        'Expired': 'expired',
-      };
-      const status = statusMap[activeFilter];
-      const filtered = contracts.filter(c => c.status === status);
+      let filtered;
+      if (activeFilter === 'Expiring') {
+        // For expiring, filter approved contracts that are expiring soon
+        filtered = contracts.filter(c => {
+          if (c.status !== 'approved') return false;
+          if (!c.expiry_date) return false;
+          const expiry = new Date(c.expiry_date);
+          const now = new Date();
+          const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
+          return diffDays > 0 && diffDays <= 7; // within 7 days
+        });
+      } else {
+        // For other statuses, use direct status matching
+        const statusMap = {
+          'Active': 'approved',
+          'Pending': 'pending',
+          'Drafts': 'draft',
+          'Rejected': 'rejected',
+          'Expired': 'expired',
+        };
+        const status = statusMap[activeFilter];
+        filtered = contracts.filter(c => c.status === status);
+      }
       setFilteredContracts(filtered);
     } else {
       setFilteredContracts(contracts);
@@ -189,10 +217,21 @@ const Dashboard = () => {
         setShowDropdown(false);
       }
       
-      // Clear filter if clicking outside metrics
+      // Clear filter if clicking outside metrics, but not on contract table
       if (activeFilter && metricsRef.current && !metricsRef.current.contains(e.target)) {
-        setActiveFilter(null);
-        setFilteredContracts(contracts);
+        // Check if the click is on the contract table or its children
+        const isClickOnTable = e.target.closest('.contract-table-wrapper') || 
+                              e.target.closest('.contract-table') ||
+                              e.target.closest('table') ||
+                              e.target.closest('tbody') ||
+                              e.target.closest('tr') ||
+                              e.target.closest('td') ||
+                              e.target.closest('th');
+        
+        if (!isClickOnTable) {
+          setActiveFilter(null);
+          setFilteredContracts(contracts);
+        }
       }
     };
     document.addEventListener('mousedown', handleClick);

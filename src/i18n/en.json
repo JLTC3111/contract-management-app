@@ -39,7 +39,9 @@
     "back": "Back",
     "newContract": "New Contract",
     "light": "Light Mode",
-    "dark": "Dark Mode"
+    "dark": "Dark Mode",
+    "microsoftOffice": "Microsoft Office",
+    "googleDocs": "Google Docs"
   },
   "login": {
     "title": "Contract Manager",
@@ -270,6 +272,9 @@
   "bell_default_response_message": "Request is being viewed. Please wait for approval response in the next 24 hours. Thank you! 👍",
   "bell_notifications": "Notifications",
   "bell_headers": "Approval Request",
+  "approval_status_updates": "Approval Status Updates",
+  "response": "Response",
+  "click_to_view_contract": "Click to view contract",
   "bell_approve": "Approve",
   "bell_reject": "Reject",
   "unknown_contract": "Unknown Contract",
@@ -291,6 +296,7 @@
   "add_a_comment": "Add a comment",
   "posting": "Posting...",
   "post_comment": "Post comment",
+  "please_enter_comment": "Please enter a comment",
   "loading_comments": "Loading comments...",
   "no_comments_yet": "No comments yet.",
   "be_the_first_to_comment": "Be the first to comment!",
@@ -375,6 +381,7 @@
   "failed_to_update_approval_response": "Failed to update approval response",
   "approval_response_updated_successfully": "Approval response updated successfully!",
   "failed_to_save_approval_response": "Failed to save approval response",
+  "failed_to_submit_approval_request": "Failed to submit approval request",
   "access_denied": "Access Denied",
   "no_permission_to_view_approval_requests": "You do not have permission to view approval requests",
   "loading_approval_requests": "Loading approval requests...",
@@ -382,6 +389,7 @@
   "approval_board_save": "Save",
   "approval_board_cancel": "Cancel",
   "approval_board_edit": "Edit",
+  "approval_board_placeholder": "Enter your approval response message...",
   "no_permission_create_contract": "You do not have permission to create new contracts.",
   "status_locked_pending": "Status is locked while contract is pending approval.",
   "forms": {

@@ -26,10 +26,31 @@ const Approvals = () => {
 
   const lastDefaultApprovalResponseTextRef = useRef(t('defaultApprovalResponseText'));
 
+  // Handle keyboard shortcuts for save and cancel buttons
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (editingRequestId && editedMessage.trim() && !saving) {
+          handleSaveMessage(editingRequestId);
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        if (editingRequestId && !saving) {
+          handleCancelEdit();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [editingRequestId, editedMessage, saving]);
+
   const headerRef = useRef(null);
   const cardRefs = useRef([]);
   const buttonRefs = useRef([]);
   const editRefs = useRef([]);
+  const textareaRef = useRef(null);
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -537,6 +558,7 @@ const Approvals = () => {
                     }}
                   >
                     <textarea
+                      ref={textareaRef}
                       value={editedMessage}
                       onChange={(e) => setEditedMessage(e.target.value)}
                       style={{
@@ -552,7 +574,7 @@ const Approvals = () => {
                         resize: 'vertical',
                         outline: 'none',
                       }}
-                      placeholder="Enter your approval response message..."
+                      placeholder={t('approval_board_placeholder')}
                     />
                   </div>
                 ) : (

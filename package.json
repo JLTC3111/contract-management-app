@@ -23,18 +23,13 @@
     "i18next": "^25.3.1",
     "jszip": "^3.10.1",
     "lucide-react": "^0.523.0",
-    "mammoth": "^1.9.1",
-    "pptxgenjs": "^4.0.1",
-    "pptxjs": "^0.0.0",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.5.2",
     "react-i18next": "^15.6.0",
     "react-markdown": "^10.1.0",
-    "react-router-dom": "^7.6.2",
-    "react-table": "^7.8.0",
-    "xlsx": "^0.18.5"
+    "react-router-dom": "^7.6.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

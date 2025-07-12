@@ -139,6 +139,7 @@ const CommentSection = ({ contractId }) => {
   const [submittingComment, setSubmittingComment] = useState(false);
   const { t } = useTranslation();
   const rootRef = useRef(null);
+  const textareaRef = useRef(null);
   useEffect(() => {
     if (rootRef.current) {
       import('gsap').then(({ default: gsap }) => {
@@ -179,10 +180,25 @@ const CommentSection = ({ contractId }) => {
     }
   };
 
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (commentText.trim() && !submittingComment) {
+          handleSubmitComment();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [commentText, submittingComment]);
+
   // Submit comment with optimistic update
   const handleSubmitComment = async () => {
     if (!commentText.trim()) {
-      toast.error('Please enter a comment');
+      toast.error(t('please_enter_comment'));
       return;
     }
 
@@ -282,6 +298,7 @@ const CommentSection = ({ contractId }) => {
               {t('add_a_comment')}:
             </label>
             <textarea
+              ref={textareaRef}
               id="comment-text"
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}

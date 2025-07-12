@@ -32,6 +32,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
   const [submitting, setSubmitting] = useState(false);
   const { t } = useTranslation();
   const rootRef = useRef(null);
+  const textareaRef = useRef(null);
   useEffect(() => {
     if (rootRef.current) {
       import('gsap').then(({ default: gsap }) => {
@@ -46,6 +47,21 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
 
   // Check if user already has a pending approval request
   const hasPendingRequest = contract.status === 'pending';
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (approvalMessage.trim() && !submitting && !hasPendingRequest) {
+          handleSubmitApprovalRequest();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [approvalMessage, submitting, hasPendingRequest]);
 
   // Submit approval request with better error handling
   const handleSubmitApprovalRequest = async () => {
@@ -107,7 +123,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
       } else if (err.message?.includes('permission')) {
         toast.error(t('Permission denied. Please check your access rights.'));
       } else {
-        toast.error(t(`Failed to submit approval request: ${err.message || err.details || 'Database error'}`));
+        toast.error(t('failed_to_submit_approval_request') + `: ${err.message || err.details || 'Database error'}`);
       }
     } finally {
       setSubmitting(false);
@@ -147,6 +163,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
             {t('approval_message')}
           </label>
           <textarea
+            ref={textareaRef}
             id="approval-message"
             value={approvalMessage}
             onChange={(e) => setApprovalMessage(e.target.value)}

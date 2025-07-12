@@ -1,15 +1,19 @@
 import FileUploader from '../components/FileUploader';
 import toast from 'react-hot-toast';
 import Approvals from '../components/Approvals';
-import ExcelPreview from '../components/ExcelPreview';
-import DocxPreview from '../components/DocxPreview';
 import ImagePreview from '../components/ImagePreview';
+import OfficeViewer from '../components/OfficeViewer';
 import { useUser} from '../hooks/useUser';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { File, FileText, FileImage, ArrowLeft} from 'lucide-react'; 
 import { useEffect, useState, useRef } from 'react';
 import gsap from 'gsap';
+
+// Ensure GSAP is properly initialized
+if (typeof window !== 'undefined' && !window.gsap) {
+  window.gsap = gsap;
+}
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import JSZip from 'jszip';
@@ -386,38 +390,50 @@ useEffect(() => {
   const isPDF = updated.file_type === 'application/pdf';
 
   useEffect(() => {
-    if (!loading && contract && headerRef.current && infoRefs.current.length) {
-      gsap.fromTo(
-        headerRef.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
-      );
-      gsap.fromTo(
-        infoRefs.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2, delay: 0.1 }
-      );
+    if (!loading && contract && headerRef.current && infoRefs.current.length && gsap) {
+      try {
+        gsap.fromTo(
+          headerRef.current,
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
+        );
+        gsap.fromTo(
+          infoRefs.current,
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2, delay: 0.1 }
+        );
+      } catch (error) {
+        console.warn('GSAP animation error:', error);
+      }
     }
   }, [loading, contract]);
 
   useEffect(() => {
-    if (fileItemRefs.current && fileItemRefs.current.length > 0) {
-      gsap.fromTo(
-        fileItemRefs.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2 }
-      );
+    if (fileItemRefs.current && fileItemRefs.current.length > 0 && gsap) {
+      try {
+        gsap.fromTo(
+          fileItemRefs.current,
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2 }
+        );
+      } catch (error) {
+        console.warn('GSAP animation error:', error);
+      }
     }
   }, [files, currentPath]);
 
   useEffect(() => {
     const buttons = document.querySelectorAll('.btn-hover-effect');
-    if (buttons.length > 0) {
-      gsap.fromTo(
-        buttons,
-        { opacity: 0 },
-        { opacity: 1, duration: .25, stagger: 0.15, ease: 'power2.out' }
-      );
+    if (buttons.length > 0 && gsap) {
+      try {
+        gsap.fromTo(
+          buttons,
+          { opacity: 0 },
+          { opacity: 1, duration: .25, stagger: 0.15, ease: 'power2.out' }
+        );
+      } catch (error) {
+        console.warn('GSAP animation error:', error);
+      }
     }
   }, [editMode, showFolderInput, files, currentPath, contract]);
 
@@ -1224,16 +1240,14 @@ return (
           return (
             <li ref={el => fileItemRefs.current[idx] = el} key={fileName} style={{ marginLeft: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.25rem 0.5rem', borderRadius: '6px', background: highlightedFiles.includes(fileName) ? 'linear-gradient(90deg, rgba(0, 178, 255, 0.15), rgba(0, 255, 178, 0.1))' : 'transparent', transition: 'background-color 0.6s ease', }}>
               <input type="checkbox" checked={isSelected} onChange={() => { setSelectedFiles(prev => isSelected ? prev.filter(name => name !== fileName) : [...prev, fileName]); }} />
-              <a
-                href={publicUrl}
-                download
-                onClick={(e) => { if (!window.confirm(`Download "${originalFileName}"?`)) { e.preventDefault(); } }}
+              <button
+                onClick={() => { setPreviewUrl(publicUrl); setPreviewType('pptx'); }}
                 style={style}
                 onMouseEnter={() => setHoveredFile(fileName)}
                 onMouseLeave={() => setHoveredFile(null)}
               >
                 {getFileIcon(fileName)} {originalFileName}
-              </a>
+              </button>
             </li>
           );
         } else if (isImage) {
@@ -1307,7 +1321,11 @@ return (
     )}
     {previewUrl && previewType === 'excel' && (
       <div style={{ marginTop: '2rem', width: '95%' }}>
-        <ExcelPreview fileUrl={previewUrl} />
+        <OfficeViewer 
+          fileUrl={previewUrl} 
+          fileType="xlsx" 
+          fileName="excel-file.xlsx" 
+        />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
           <button className="btn-hover-preview"
             onClick={() => setPreviewUrl(null)}
@@ -1328,7 +1346,36 @@ return (
     )}
     {previewUrl && previewType === 'docx' && (
       <div style={{ marginTop: '2rem', width: '95%' }}>
-        <DocxPreview fileUrl={previewUrl} />
+        <OfficeViewer 
+          fileUrl={previewUrl} 
+          fileType="docx" 
+          fileName="document.docx" 
+        />
+        <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+          <button className="btn-hover-preview"
+            onClick={() => setPreviewUrl(null)}
+            style={{
+              backgroundColor: darkMode ? '#fff' : '#000',
+              color: darkMode ? '#000' : '#fff',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease',
+            }}
+          >
+            ❌ {t('contract_detail_close_preview')}
+          </button>
+        </div>
+      </div>
+    )}
+    {previewUrl && previewType === 'pptx' && (
+      <div style={{ marginTop: '2rem', width: '95%' }}>
+        <OfficeViewer 
+          fileUrl={previewUrl} 
+          fileType="pptx" 
+          fileName="presentation.pptx" 
+        />
         <div style={{ marginTop: '1rem', textAlign: 'right' }}>
           <button className="btn-hover-preview"
             onClick={() => setPreviewUrl(null)}

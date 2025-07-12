@@ -280,13 +280,13 @@ body.dark .metric-card {
 
 body.dark .metric-card:hover {
   box-shadow: 0 6px 18px rgba(255,255,255,0.18);
-  border-bottom-width: 9px;
+  border-bottom-width: 12px;
 }
 
 .metric-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 18px rgba(0,0,0,0.6);
-  border-bottom-width: 9px;
+  border-bottom-width: 12px;
 }
 
 .metric-card h4 {

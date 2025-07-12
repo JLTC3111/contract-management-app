@@ -15,9 +15,11 @@ const NotificationDropdown = () => {
   const [isClosing, setIsClosing] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [commentNotifications, setCommentNotifications] = useState([]);
+  const [approvalStatusNotifications, setApprovalStatusNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
+  const [approvalStatusCount, setApprovalStatusCount] = useState(0);
   const { t } = useTranslation();
 
   // Fetch approval requests for approver users
@@ -142,6 +144,63 @@ const NotificationDropdown = () => {
     }
   };
 
+  // Fetch approval status notifications for editor users
+  const fetchApprovalStatusNotifications = async () => {
+    if (!user || user.role !== 'editor') {
+      return;
+    }
+    
+    try {
+      // Get approval requests that were made by this editor and have been processed (approved/rejected)
+      const { data: approvalRequests, error: approvalError } = await supabase
+        .from('contract_approval_requests')
+        .select('*')
+        .eq('requester_id', user.id)
+        .in('status', ['approved', 'rejected'])
+        .order('updated_at', { ascending: false })
+        .limit(10); // Limit to recent 10 notifications
+
+      if (approvalError) {
+        console.error('Error fetching approval status notifications:', approvalError);
+        return;
+      }
+
+      if (!approvalRequests || approvalRequests.length === 0) {
+        setApprovalStatusNotifications([]);
+        setApprovalStatusCount(0);
+        return;
+      }
+
+      // Get contract IDs from approval requests
+      const contractIds = approvalRequests.map(req => req.contract_id);
+
+      // Fetch contract details for these IDs
+      const { data: contracts, error: contractError } = await supabase
+        .from('contracts')
+        .select('id, title, status')
+        .in('id', contractIds);
+
+      if (contractError) {
+        console.error('Error fetching contracts for approval status:', contractError);
+        return;
+      }
+
+      // Combine the data
+      const statusNotificationsWithContracts = approvalRequests.map(request => {
+        const contract = contracts?.find(c => c.id === request.contract_id);
+        return {
+          ...request,
+          contracts: contract || { id: request.contract_id, title: 'Unknown Contract', status: 'Unknown' }
+        };
+      });
+
+      setApprovalStatusNotifications(statusNotificationsWithContracts);
+      setApprovalStatusCount(statusNotificationsWithContracts.length);
+    } catch (err) {
+      console.error('Error fetching approval status notifications:', err);
+    }
+  };
+
   // Handle approval/rejection
   const handleApprovalAction = async (requestId, action) => {
     try {
@@ -181,6 +240,7 @@ const NotificationDropdown = () => {
 
       // Refresh notifications
       fetchNotifications();
+      fetchApprovalStatusNotifications();
     } catch (err) {
       console.error('Error handling approval action:', err);
       toast.error('Failed to process approval action');
@@ -201,6 +261,7 @@ const NotificationDropdown = () => {
     if (user) {
       fetchNotifications();
       fetchCommentNotifications();
+      fetchApprovalStatusNotifications();
     }
   }, [user]);
 
@@ -245,10 +306,10 @@ const NotificationDropdown = () => {
       >
         <Bell 
           size={20} 
-          className={`notification-bell ${(unreadCount > 0 || commentCount > 0) ? 'has-notifications' : ''}`}
+          className={`notification-bell ${(unreadCount > 0 || commentCount > 0 || approvalStatusCount > 0) ? 'has-notifications' : ''}`}
         />
         {/* Notification badge */}
-        {(unreadCount > 0 || commentCount > 0) && (
+        {(unreadCount > 0 || commentCount > 0 || approvalStatusCount > 0) && (
           <span
             style={{
               position: 'absolute',
@@ -266,7 +327,7 @@ const NotificationDropdown = () => {
               fontWeight: 'bold',
             }}
           >
-            {unreadCount + commentCount > 99 ? '99+' : unreadCount + commentCount}
+            {unreadCount + commentCount + approvalStatusCount > 99 ? '99+' : unreadCount + commentCount + approvalStatusCount}
           </span>
         )}
       </div>
@@ -322,62 +383,139 @@ const NotificationDropdown = () => {
           {/* Content */}
           <div style={{ maxHeight: 'clamp(220px, 50vh, 400px)', overflowY: 'auto', fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>
             {user.role === 'editor' ? (
-              // Editor view - show comments
-              commentNotifications.length === 0 ? (
-                <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                  <MessageCircle size={24} style={{ marginBottom: '0.5rem' }} />
-                  <p>{t('bell_no_new_comments_in_last_24_hours')}</p>
-                </div>
-              ) : (
-                commentNotifications.map((comment) => (
-                  <div
-                    key={comment.id}
-                    style={{
-                      padding: '1rem',
-                      borderBottom: '1px solid var(--card-border)',
-                      background: 'var(--card-bg)',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      handleCloseDropdown();
-                      navigate(`/contracts/${comment.contract_id}`);
-                    }}
-                  >
-                    {/* Contract Info */}
-                    <div style={{ marginBottom: '0.75rem' }}>
-                      <h4 style={{ margin: '0 0 0.25rem 0', color: 'var(--text)' }}>
-                        <MessageCircle size={16} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
-                        {comment.contracts?.title || 'Unknown Contract'}
-                      </h4>
-                      <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                        {t('comment_by')} {comment.user_email}
-                      </p>
-                      <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                        {new Date(comment.created_at).toLocaleString()}
-                      </p>
-                    </div>
+              // Editor view - show comments and approval status notifications
+              <>
+                {/* Approval Status Notifications */}
+                {approvalStatusNotifications.length > 0 && (
+                  <div style={{ padding: '1rem', borderBottom: '2px solid var(--card-border)' }}>
+                    <h4 style={{ margin: '0 0 1rem 0', color: 'var(--text)', fontSize: '1rem' }}>
+                      📋 {t('approval_status_updates', 'Approval Status Updates')}
+                    </h4>
+                    {approvalStatusNotifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        style={{
+                          padding: '0.75rem',
+                          marginBottom: '0.75rem',
+                          border: '1px solid var(--card-border)',
+                          borderRadius: '6px',
+                          background: notification.status === 'approved' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
+                          handleCloseDropdown();
+                          navigate(`/contracts/${notification.contract_id}`);
+                        }}
+                      >
+                        {/* Contract Info */}
+                        <div style={{ marginBottom: '0.5rem' }}>
+                          <h5 style={{ 
+                            margin: '0 0 0.25rem 0', 
+                            color: 'var(--text)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                          }}>
+                            {notification.status === 'approved' ? (
+                              <Check size={16} style={{ color: '#10b981' }} />
+                            ) : (
+                              <X size={16} style={{ color: '#ef4444' }} />
+                            )}
+                            {notification.contracts?.title || 'Unknown Contract'}
+                          </h5>
+                          <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                            {notification.status === 'approved' ? t('approved', 'Approved') : t('rejected', 'Rejected')} • {new Date(notification.updated_at).toLocaleString()}
+                          </p>
+                        </div>
 
-                    {/* Comment Preview */}
-                    <div style={{ marginBottom: '0.5rem' }}>
-                      <p style={{ margin: 0, color: 'var(--text)', fontSize: '0.875rem' }}>
-                        <strong>{t('comment')}:</strong> {comment.comment.length > 100 ? comment.comment.substring(0, 100) + '...' : comment.comment}
-                      </p>
-                    </div>
+                        {/* Response Message */}
+                        {notification.approval_response && (
+                          <div style={{ 
+                            background: 'var(--card-bg)', 
+                            padding: '0.5rem', 
+                            borderRadius: '4px',
+                            border: '1px solid var(--card-border)'
+                          }}>
+                            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text)' }}>
+                              <strong>{t('response', 'Response')}:</strong> {notification.approval_response}
+                            </p>
+                          </div>
+                        )}
 
-                    {/* Click hint */}
-                    <div style={{ 
-                      background: 'var(--hover-bg)', 
-                      padding: '0.5rem', 
-                      borderRadius: '4px',
-                      border: '1px solid var(--card-border)'
-                    }}>
-                      <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
-                        {t('click_to_view_contract_and_full_comment')}
-                      </p>
-                    </div>
+                        {/* Click hint */}
+                        <div style={{ 
+                          marginTop: '0.5rem',
+                          background: 'var(--hover-bg)', 
+                          padding: '0.25rem', 
+                          borderRadius: '4px',
+                          border: '1px solid var(--card-border)'
+                        }}>
+                          <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
+                            {t('click_to_view_contract', 'Click to view contract')}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))
-              )
+                )}
+
+                                {/* Comment Notifications */}
+                {commentNotifications.length === 0 ? (
+                  <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                    <MessageCircle size={24} style={{ marginBottom: '0.5rem' }} />
+                    <p>{t('bell_no_new_comments_in_last_24_hours')}</p>
+                  </div>
+                ) : (
+                  commentNotifications.map((comment) => (
+                    <div
+                      key={comment.id}
+                      style={{
+                        padding: '1rem',
+                        borderBottom: '1px solid var(--card-border)',
+                        background: 'var(--card-bg)',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        handleCloseDropdown();
+                        navigate(`/contracts/${comment.contract_id}`);
+                      }}
+                    >
+                      {/* Contract Info */}
+                      <div style={{ marginBottom: '0.75rem' }}>
+                        <h4 style={{ margin: '0 0 0.25rem 0', color: 'var(--text)' }}>
+                          <MessageCircle size={16} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />
+                          {comment.contracts?.title || 'Unknown Contract'}
+                        </h4>
+                        <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                          {t('comment_by')} {comment.user_email}
+                        </p>
+                        <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                          {new Date(comment.created_at).toLocaleString()}
+                        </p>
+                      </div>
+
+                      {/* Comment Preview */}
+                      <div style={{ marginBottom: '0.5rem' }}>
+                        <p style={{ margin: 0, color: 'var(--text)', fontSize: '0.875rem' }}>
+                          <strong>{t('comment')}:</strong> {comment.comment.length > 100 ? comment.comment.substring(0, 100) + '...' : comment.comment}
+                        </p>
+                      </div>
+
+                      {/* Click hint */}
+                      <div style={{ 
+                        background: 'var(--hover-bg)', 
+                        padding: '0.5rem', 
+                        borderRadius: '4px',
+                        border: '1px solid var(--card-border)'
+                      }}>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
+                          {t('click_to_view_contract_and_full_comment')}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </>
             ) : user.role !== 'approver' && user.role !== 'admin' ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                 <Clock size={24} style={{ marginBottom: '0.5rem' }} />
