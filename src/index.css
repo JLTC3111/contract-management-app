@@ -272,7 +272,7 @@ button:focus-visible {
   justify-content: center;
   min-height: 30px;
   max-height: 85px;
-  width: clamp(60px, 15vw, 160px);
+  width: clamp(80px, 15vw, 160px);
   aspect-ratio: 1.75 / 1;
   text-align: center;
 }
@@ -521,25 +521,25 @@ body.dark .dashboard-metrics .metric-expired:hover {
   box-shadow: 0 4px 16px rgba(29,154,231,0.12);
 }
 
-@media (max-width: 900px) {
+@media (min-width: 500px) and (max-width: 900px) {
   .contract-table, .contract-detail, .dashboard-metrics {
     font-size: clamp(0.9rem, 2vw, 1.1rem);
     padding: 1rem;
   }
   .metric-card {
-    width: clamp(80px, 12vw, 160px);
+    width: clamp(115px, 12vw, 145px);
     aspect-ratio: 1.5 / 1;
     padding: 0.5rem;
   }
 }
-@media (max-width: 600px) {
+@media (max-width: 499px) {
   .contract-table, .contract-detail, .dashboard-metrics {
     font-size: clamp(0.85rem, 4vw, 1rem);
     padding: 0.5rem;
   }
   .metric-card {
-    width: clamp(60px, 10vw, 120px);
-    aspect-ratio: 1.5 / 1;
+    width: clamp(100px, 10vw, 120px);
+    aspect-ratio: 1.75 / 1;
     padding: 0.25rem;
   }
   h1, h2, h3 {

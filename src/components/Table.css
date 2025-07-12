@@ -151,6 +151,20 @@ body.dark .contract-table-wrapper thead tr:hover {
   }
 }
 
+@media (max-width: 499px) {
+  .contract-table, .contract-table th, .contract-table td {
+    font-size: clamp(0.6rem, 2.5vw, 0.75rem);
+  }
+  .contract-table-wrapper {
+    overflow-x: auto;
+    width: 100vw;
+  }
+  .clear-btn, .fancy-btn {
+    font-size: clamp(0.6rem, 2.5vw, 0.75rem);
+    padding: clamp(0.1rem, 0.8vw, 0.3rem) clamp(0.25rem, 1.5vw, 0.8rem);
+  }
+}
+
 .table-filter-input {
   text-align: center;
   border: 1.5px solid var(--card-border);
