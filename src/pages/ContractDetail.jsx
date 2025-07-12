@@ -724,7 +724,7 @@ return (
             <button className="btn-hover-preview"
               onClick={() => navigate(-1)}
               style={{
-                padding: 'clamp(0.3rem, 2vw, 0.5rem) clamp(0.7rem, 2vw, 1rem)',
+                padding: '0.25rem 0.75rem',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
@@ -733,9 +733,10 @@ return (
                 border: 'none',
                 borderRadius: '12px',
                 cursor: 'pointer',
+                fontSize: 'clamp(0.875rem, 2vw, 1rem)',
               }}
             >
-              <ArrowLeft size={26} /> 
+              <ArrowLeft size={24} /> 
             </button>
 
             {/* Download button - next to back button (visible to admins, editors, and approver users) */}
@@ -755,6 +756,7 @@ return (
                   alignItems: 'center',
                   display: 'flex',
                   gap: '0.5rem',
+                  fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                 }}
                 disabled={selectedFiles.length === 0}
               >
@@ -774,11 +776,21 @@ return (
 
           {/* Right side - Create Folder and Delete buttons (visible only to admins and editors) */}
           {canEdit && (
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginLeft: '5px' }}>
               <button className="btn-hover-effect"
                 onClick={() => {
                   setNewFolderName('');
                   setShowFolderInput(true);
+                }}
+                style={{
+                  padding: '0.5rem 1rem',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                 }}>
                 📁 {t('create_folder')}
               </button>
@@ -804,12 +816,16 @@ return (
                     }}
                     placeholder={t('folder_name_example')}
                     style={{
-                      padding: '0.4rem',
+                      padding: '0.5rem 1rem',
                       borderRadius: '6px',
                       border: '1px solid #ccc',
-                      minWidth: '150px',
+                      minWidth: '100px',
+                      width: '100px',
                       outline: 'none',
                       transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                      height: 'auto',
+                      lineHeight: '1.5',
+                      fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                     }}
                     onFocus={(e) => {
                       e.target.style.borderColor = '#3b82f6';
@@ -834,6 +850,7 @@ return (
                       padding: '0.5rem 1rem',
                       borderRadius: '6px',
                       cursor: newFolderName.trim() ? 'pointer' : 'not-allowed',
+                      fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                     }}
                   >
                     ➕ {t('contract_detail_add')}
@@ -853,6 +870,7 @@ return (
                   filter: selectedFiles.length === 0 ? 'blur(0.5px) grayscale(60%)' : 'none',
                   opacity: selectedFiles.length === 0 ? 0.6 : 1,
                   transition: 'all 0.2s ease',
+                  fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                 }}
                 disabled={selectedFiles.length === 0}
               >
