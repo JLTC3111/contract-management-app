@@ -20,6 +20,8 @@ const NotificationDropdown = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [approvalStatusCount, setApprovalStatusCount] = useState(0);
+  const [readNotifications, setReadNotifications] = useState(new Set());
+  const [autoRefreshInterval, setAutoRefreshInterval] = useState(null);
   const { t } = useTranslation();
 
   // Fetch approval requests for approver users
@@ -247,6 +249,32 @@ const NotificationDropdown = () => {
     }
   };
 
+  // Mark notification as read
+  const markNotificationAsRead = (notificationId) => {
+    setReadNotifications(prev => new Set([...prev, notificationId]));
+  };
+
+  // Mark all notifications as read
+  const markAllAsRead = () => {
+    const allNotificationIds = [
+      ...approvalStatusNotifications.map(n => n.id),
+      ...commentNotifications.map(c => c.id)
+    ];
+    setReadNotifications(prev => new Set([...prev, ...allNotificationIds]));
+  };
+
+  // Handle notification click
+  const handleNotificationClick = (notificationId, contractId) => {
+    markNotificationAsRead(notificationId);
+    handleCloseDropdown();
+    navigate(`/contracts/${contractId}`);
+  };
+
+  // Calculate unread counts
+  const unreadApprovalCount = approvalStatusNotifications.filter(n => !readNotifications.has(n.id)).length;
+  const unreadCommentCount = commentNotifications.filter(c => !readNotifications.has(c.id)).length;
+  const totalUnreadCount = unreadCount + unreadCommentCount + unreadApprovalCount;
+
   // Handle dropdown close with animation
   const handleCloseDropdown = () => {
     setIsClosing(true);
@@ -262,8 +290,31 @@ const NotificationDropdown = () => {
       fetchNotifications();
       fetchCommentNotifications();
       fetchApprovalStatusNotifications();
+      
+      // Set up auto-refresh every 30 seconds for editors
+      if (user.role === 'editor') {
+        const interval = setInterval(() => {
+          fetchApprovalStatusNotifications();
+          fetchCommentNotifications();
+        }, 30000); // 30 seconds
+        
+        setAutoRefreshInterval(interval);
+        
+        return () => {
+          if (interval) clearInterval(interval);
+        };
+      }
     }
   }, [user]);
+
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+      }
+    };
+  }, [autoRefreshInterval]);
 
   // Don't show for non-approver/admin/editor users
   if (!user || (user.role !== 'approver' && user.role !== 'admin' && user.role !== 'editor')) {
@@ -306,10 +357,10 @@ const NotificationDropdown = () => {
       >
         <Bell 
           size={20} 
-          className={`notification-bell ${(unreadCount > 0 || commentCount > 0 || approvalStatusCount > 0) ? 'has-notifications' : ''}`}
+          className={`notification-bell ${totalUnreadCount > 0 ? 'has-notifications' : ''}`}
         />
         {/* Notification badge */}
-        {(unreadCount > 0 || commentCount > 0 || approvalStatusCount > 0) && (
+        {totalUnreadCount > 0 && (
           <span
             style={{
               position: 'absolute',
@@ -327,7 +378,7 @@ const NotificationDropdown = () => {
               fontWeight: 'bold',
             }}
           >
-            {unreadCount + commentCount + approvalStatusCount > 99 ? '99+' : unreadCount + commentCount + approvalStatusCount}
+            {totalUnreadCount > 99 ? '99+' : totalUnreadCount}
           </span>
         )}
       </div>
@@ -366,18 +417,36 @@ const NotificationDropdown = () => {
              {user.role === 'editor' ? t('bell_notifications') : t('bell_headers')}
            </h3>
 
-            <button
-              onClick={handleCloseDropdown}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--text-secondary)',
-                cursor: 'pointer',
-                padding: 'clamp(0.2rem, 1vw, 0.5rem)',
-              }}
-            >
-              <X size={16} />
-            </button>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              {user.role === 'editor' && totalUnreadCount > 0 && (
+                <button
+                  onClick={markAllAsRead}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--primary)',
+                    cursor: 'pointer',
+                    padding: 'clamp(0.2rem, 1vw, 0.5rem)',
+                    fontSize: '0.75rem',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  {t('mark_all_read', 'Mark all read')}
+                </button>
+              )}
+              <button
+                onClick={handleCloseDropdown}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  padding: 'clamp(0.2rem, 1vw, 0.5rem)',
+                }}
+              >
+                <X size={16} />
+              </button>
+            </div>
           </div>
 
           {/* Content */}
@@ -401,11 +470,10 @@ const NotificationDropdown = () => {
                           borderRadius: '6px',
                           background: notification.status === 'approved' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
                           cursor: 'pointer',
+                          opacity: readNotifications.has(notification.id) ? 0.7 : 1,
+                          transition: 'opacity 0.2s ease',
                         }}
-                        onClick={() => {
-                          handleCloseDropdown();
-                          navigate(`/contracts/${notification.contract_id}`);
-                        }}
+                        onClick={() => handleNotificationClick(notification.id, notification.contract_id)}
                       >
                         {/* Contract Info */}
                         <div style={{ marginBottom: '0.5rem' }}>
@@ -474,11 +542,10 @@ const NotificationDropdown = () => {
                         borderBottom: '1px solid var(--card-border)',
                         background: 'var(--card-bg)',
                         cursor: 'pointer',
+                        opacity: readNotifications.has(comment.id) ? 0.7 : 1,
+                        transition: 'opacity 0.2s ease',
                       }}
-                      onClick={() => {
-                        handleCloseDropdown();
-                        navigate(`/contracts/${comment.contract_id}`);
-                      }}
+                      onClick={() => handleNotificationClick(comment.id, comment.contract_id)}
                     >
                       {/* Contract Info */}
                       <div style={{ marginBottom: '0.75rem' }}>
