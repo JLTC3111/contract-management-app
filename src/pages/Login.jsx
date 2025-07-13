@@ -6,7 +6,6 @@ import { Sun, Moon, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import SplashCursor from '../components/SplashCursor';
 
 
 const LANGUAGES = [
@@ -480,7 +479,7 @@ const Login = () => {
            display: isMobile && aspectRatio > 0.72 ? 'none' : (isMobile ? 'block' : 'flex'),
            alignItems: 'center',
            justifyContent: 'center',
-           zIndex: 100, // Higher than SplashCursor's z-index of 50
+           zIndex: 100, 
          }}
          
         >

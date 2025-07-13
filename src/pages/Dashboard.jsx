@@ -27,7 +27,6 @@ const Dashboard = () => {
   const metricsRef = useRef();
   const debounceTimeout = useRef();
   const { t } = useTranslation();
-  
 
   const metrics = [
     { label: t('dashboard.active', 'Active'), count: contracts.filter(c => c.status === 'approved').length },
@@ -254,7 +253,9 @@ const Dashboard = () => {
           }
         `}
       </style>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+
+
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex' }}>
           <main style={{ padding: '2rem', flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>

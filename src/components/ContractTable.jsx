@@ -174,6 +174,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
   );
 
   return (
+    
     <div className={`contract-table-wrapper${Object.values(openFilters).some(Boolean) ? ' filter-open' : ''}`}>
       <table className="contract-table">
         <thead>

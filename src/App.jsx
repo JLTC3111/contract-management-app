@@ -6,7 +6,6 @@ import Login from './pages/Login';
 import NewContract from './pages/NewContract';
 import ApprovalsBoard from './pages/ApprovalsBoard';
 import ManualViewer from './components/ManualViewer';
-import SplashCursor from './components/SplashCursor'
 import Layout from './components/Layout';
 import './index.css';
 import './App.css';
@@ -26,7 +25,6 @@ function App() {
   return (
 
     <BrowserRouter>
-      <SplashCursor />
       <Routes>
         {/* Routes with Sidebar */}
         <Route element={<Layout />}>
@@ -36,7 +34,6 @@ function App() {
           <Route path="/approvals" element={<ApprovalsBoard />} />
           <Route path="/approvals/:id" element={<ApprovalsBoard />} />
         </Route>
-
         {/* Manual route outside sidebar layout */}
         <Route path="/manual" element={<ManualViewer />} />
 

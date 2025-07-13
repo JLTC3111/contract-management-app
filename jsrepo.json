@@ -6,7 +6,5 @@
   "watermark": true,
   "formatter": "prettier",
   "configFiles": {},
-  "paths": {
-    "*": "./src/splashcursor.jsx"
-  }
+  "paths": {}
 }

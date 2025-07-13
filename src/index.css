@@ -271,7 +271,7 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   height: clamp(30px, 10vw, 85px);
-  width: clamp(80px, 10.5vw, 180px);
+  width: clamp(80px, 10vw, 180px);
   aspect-ratio: 1.95 / 1;
   text-align: center;
 }
@@ -286,7 +286,7 @@ body.dark .metric-card:hover {
 }
 
 .metric-card:hover {
-  transform: translateY(-15px);
+  transform: translateY(-10px);
   box-shadow: 0 6px 18px rgba(0,0,0,0.6);
   border-left-width: 12px;
 }
