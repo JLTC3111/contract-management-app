@@ -6,8 +6,8 @@ import Login from './pages/Login';
 import NewContract from './pages/NewContract';
 import ApprovalsBoard from './pages/ApprovalsBoard';
 import ManualViewer from './components/ManualViewer';
-
-import Layout from './components/Layout'; // 👈 Add this
+import SplashCursor from './components/SplashCursor'
+import Layout from './components/Layout';
 import './index.css';
 import './App.css';
 import React, { useEffect } from 'react';
@@ -24,8 +24,9 @@ function App() {
   if (!user) return <Login />;
 
   return (
+
     <BrowserRouter>
-      
+      <SplashCursor />
       <Routes>
         {/* Routes with Sidebar */}
         <Route element={<Layout />}>
