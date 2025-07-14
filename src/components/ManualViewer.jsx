@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import remarkGfm from 'remark-gfm';
 
 const ManualViewer = () => {
     const [content, setContent] = useState('');
@@ -50,27 +51,23 @@ const ManualViewer = () => {
             console.log('Using embedded manual content as fallback');
             const embeddedManual = `# ${t('manual.title', 'Contract Manager App Manual')}
 
+
 ${t('manual.intro', 'Welcome to the Contract Manager App for ICUE(VN)! This guide will walk you through the key features and how to use them effectively.')}
 
 ---
 
-### ${t('manual.homeDashboard.title', '🛖 Home & Dashboard')}
+${t('manual.homeDashboard.title', '🛖 Home & Dashboard')}
 
-- **${t('sidebar.home', 'Home')}**: ${t('manual.homeDashboard.home', 'Redirects to ICUE.VN homepage.')}
-- **${t('sidebar.dashboard', 'Dashboard')}**: ${t('manual.homeDashboard.dashboard', 'The main area where you can view summary stats, recent contract updates, and quick actions.')}
+${t('sidebar.home', 'Home')}**: ${t('manual.homeDashboard.home', 'Redirects to ICUE.VN homepage.')}
+${t('sidebar.dashboard', 'Dashboard')}**: ${t('manual.homeDashboard.dashboard', 'The main area where you can view summary stats, recent contract updates, and quick actions.')}
 
----
 
 ### ${t('manual.approvals.title', '🛡️ Approvals')}
-
-- **${t('sidebar.approvals', 'Approvals')}**: ${t('manual.approvals.approveTab', 'Displays contracts awaiting approval.')}
-- **${t('common.actions', 'Actions')}**:
-  - **${t('send_approval_request', 'Request Approval')}**: ${t('manual.approvals.actions.requestApproval', 'Editors/Admins can request approval for a contract with a custom message.')}
-  - **${t('approval_board_approve', 'Approve Contract')}**: ${t('manual.approvals.actions.approveContract', 'Admins/Approvers can review and approve contracts.')}
-  - **${t('comments', 'Comment on Contracts')}**: ${t('manual.approvals.actions.comment', 'Add feedback or discussion notes to a contract.')}
-
----
-
+  ${t('sidebar.approvals', 'Approvals')}: ${t('manual.approvals.approveTab', 'Displays contracts awaiting approval.')}
+  ${t('common.actions', 'Actions')}:
+  ${t('send_approval_request', 'Request Approval')}: ${t('manual.approvals.actions.requestApproval', 'Editors/Admins can request approval for a contract with a custom message.')}
+  ${t('approval_board_approve', 'Approve Contract')}: ${t('manual.approvals.actions.approveContract', 'Admins/Approvers can review and approve contracts.')} 
+  ${t('comments', 'Comment on Contracts')}: ${t('manual.approvals.actions.comment', 'Add feedback or discussion notes to a contract.')}
 ### ${t('manual.statusUpdate.title', '🔄 Update Status')}
 
 - **${t('sidebar.updateStatus', 'Update Status')}**: ${t('manual.statusUpdate.trigger', 'Runs a background job to auto-update contract statuses based on set rules (e.g., deadlines or conditions).')}
@@ -134,6 +131,7 @@ ${t('manual.footer.thanks', 'Happy Contracting! 📍')}
 
 ${t('manual.footer.contact', 'For questions or help, contact dev@icue.vn')}`;
             
+            console.log('Manual markdown string:', embeddedManual);
             setContent(embeddedManual);
             setNotFound(true);
             setLoading(false);
@@ -145,7 +143,7 @@ ${t('manual.footer.contact', 'For questions or help, contact dev@icue.vn')}`;
 
 ${t('manual.error.message', 'Sorry, there was an error loading the manual. Please try again later.')}
 
-**${t('common.error', 'Error')} Details:** ${err.message}
+${t('common.error', 'Error')} Details:** ${err.message}
 
 ${t('manual.error.fallback', 'You can try:')}
 - ${t('manual.error.refresh', 'Refreshing the page')}
@@ -158,8 +156,9 @@ ${t('manual.error.fallback', 'You can try:')}
     }, [t, i18n.language]);
   
     return (
-      <div style={{ padding: '2rem', maxWidth: '800px', margin: 'auto' }}>
-        <button
+      <div className="manual-markdown"> 
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', maxWidth: '1600px', margin: 'auto' }}>
+        <button className='btn-hover-effect'
           onClick={() => navigate(-1)}
           style={{
             display: 'flex',
@@ -254,12 +253,28 @@ ${t('manual.error.fallback', 'You can try:')}
                 border: 1px solid var(--card-border);
                 padding: 0.5em 1em;
               }
+              .manual-markdown ul,
+              .manual-markdown ol {
+                list-style: none;
+                padding-left: -2.2em; /* Reduce this value to move bullets closer to the text */
+                margin-left: 0;      /* Remove extra margin if present */
+              }
+
+              .manual-markdown li {
+                padding-left: -2.2em; /* Optional: fine-tune space between bullet and text */
+                margin-left: 0;      /* Remove extra margin if present */
+              }
+              .manual-markdown li strong,
+              .manual-markdown li b {
+                font-weight: normal !important;
+              }
             `}</style>
             <div className="manual-markdown">
-              <ReactMarkdown>{content}</ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
             </div>
           </div>
         )}
+      </div>
       </div>
     );
   };

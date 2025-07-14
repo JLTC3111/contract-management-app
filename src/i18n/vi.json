@@ -156,13 +156,13 @@
     },
     "comments": {
       "title": "📄 Bình luận & Hợp tác",
-      "inline": "Thêm bình luận nội tuyến vào chi tiết hợp đồng.",
+      "inline": "Thêm bình luận vào chi tiết hợp đồng.",
       "timestamps": "Tất cả bình luận đều có dấu thời gian và hiển thị cho những người khác có quyền truy cập."
     },
     "limitations": {
       "title": "⚠️ Hạn chế đã biết",
       "approvalDisabled": "Nút yêu cầu phê duyệt bị vô hiệu hóa nếu hợp đồng đã đang chờ.",
-      "rls": "Bình luận và phê duyệt bị hạn chế thông qua Supabase Row Level Security (RLS)."
+      "rls": "Bình luận và phê duyệt bị hạn chế thông qua Supabase RLS."
     },
     "tips": {
       "title": "🚀 Mẹo & Phím tắt",
