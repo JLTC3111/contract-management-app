@@ -157,7 +157,19 @@ ${t('manual.error.fallback', 'You can try:')}
   
     return (
       <div className="manual-markdown"> 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', maxWidth: '1600px', margin: 'auto' }}>
+      <div
+        style={{
+          margin: '0 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem',
+          width: '95%',
+          maxWidth: '100%',
+          margin: '0 auto',
+        }}
+      >
         <button className='btn-hover-effect'
           onClick={() => navigate(-1)}
           style={{
