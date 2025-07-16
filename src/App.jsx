@@ -9,7 +9,7 @@ import ManualViewer from './components/ManualViewer';
 import Layout from './components/Layout';
 import './index.css';
 import './App.css';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 function App() {
