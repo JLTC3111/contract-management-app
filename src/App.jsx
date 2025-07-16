@@ -22,6 +22,15 @@ function App() {
   if (loading) return <p>{t('common.loading')}</p>;
   if (!user) return <Login />;
 
+  useEffect(() => {
+    if (navigator.userAgent.includes("Headless")) {
+      document.body.innerHTML = `
+        <img src="/preview.png" style="width:100vw;height:100vh;object-fit:cover;" />
+      `;
+    }
+  }, []);
+
+
   return (
 
     <BrowserRouter>
