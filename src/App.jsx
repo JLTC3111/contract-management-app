@@ -14,21 +14,31 @@ import { useTranslation } from 'react-i18next';
 
 function App() {
   const { t } = useTranslation();
-  
-  // Remove the entire useEffect that creates and manages the custom-magnifier
-
+  const [isBot, setIsBot] = useState(false);
   const { user, loading } = useUser();
-
-  if (loading) return <p>{t('common.loading')}</p>;
-  if (!user) return <Login />;
 
   useEffect(() => {
     if (navigator.userAgent.includes("Headless")) {
-      document.body.innerHTML = `
-        <img src="/preview.png" style="width:100vw;height:100vh;object-fit:cover;" />
-      `;
+      setIsBot(true);
     }
   }, []);
+
+  if (isBot) {
+    return (
+      <img
+        src="/preview.png"
+        style={{
+          width: "100vw",
+          height: "100vh",
+          objectFit: "cover",
+        }}
+        alt="Static Preview"
+      />
+    );
+  }
+
+  if (loading) return <p>{t('common.loading')}</p>;
+  if (!user) return <Login />;
 
 
   return (
