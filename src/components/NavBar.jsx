@@ -42,6 +42,7 @@ const Navbar = () => {
   const themeToggleRef = useRef();
   const [titleText, setTitleText] = useState('');
   const [logoVisible, setLogoVisible] = useState(false);
+  const LDLogoRef = useRef();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -320,7 +321,7 @@ const Navbar = () => {
         <style>{`
           @media (max-width: 500px) {
             .navbar-lang-switcher {
-              
+              margin-right: 0.5rem;
               width: 140px !important;
               min-width: 0 !important;
               max-width: 90% !important;
@@ -428,6 +429,50 @@ const Navbar = () => {
             />
           )}
         </div>
+      </div>
+    {/* LD Logo */}
+      <div ref={LDLogoRef} style={{ display: 'flex', alignItems: 'flex-end', marginLeft: 'auto',
+        opacity: isHovered ? 1 : 0.15,
+        transition: 'opacity 0.3s ease, transform 0.3s ease',
+        filter: isHovered ? 'drop-shadow(6px 12px 24px rgba(125, 125, 125, 1.5))' : 'drop-shadow(0 0px 0px rgba(0, 0, 0, 1.5))',
+        transform: isHovered ? 'scale(1.5)' : 'scale(1)',
+        cursor: 'pointer',
+        zIndex: 100,
+       }}>
+        <img 
+          src="/logoIcons/LD_logo_dark.png" 
+          style={{
+            display: darkMode ? 'none' : 'block',
+            height: 'clamp(1.15rem, 6.5vw, 2rem)', // Responsive height
+            width: 'auto',
+            borderRadius: '20px',
+            alignItems: 'center',
+            objectFit: 'contain',
+            transition: 'all 0.3s ease-in-out',
+            boxShadow: isHovered
+              ? darkMode
+                ? '0 1px 2px rgba(255, 255, 255, 1.5)'
+                : '0 1px 2px rgba(0, 0, 0, 1.5)'
+              : 'none',
+          }}
+        />
+        <img 
+          src="/logoIcons/LD_logo_light.png" 
+          style={{
+            display: darkMode ? 'block' : 'none',
+            height: 'clamp(1.15rem, 6.5vw, 2rem)', // Responsive height
+            width: 'auto',
+            borderRadius: '20px',
+            alignItems: 'center',
+            objectFit: 'contain',
+            transition: 'all 0.3s ease-in-out',
+            boxShadow: isHovered
+              ? darkMode
+                ? '0 1px 2px rgba(255, 255, 255, 1.5)'
+                : '0 1px 2px rgba(0, 0, 0, 1.5)'
+              : 'none',
+          }}
+        />
       </div>
       {/* Right: Theme Toggle (responsive on mobile) */}
 <div
