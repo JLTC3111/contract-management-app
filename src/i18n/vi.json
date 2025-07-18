@@ -75,10 +75,10 @@
     "noContractsFound": "Không tìm thấy hợp đồng nào."
   },
   "metrics": {
-    "active": "Đang hoạt động",
+    "active": "Hoạt động",
     "pending": "Đang chờ",
     "expiring": "Sắp hết hạn",
-    "drafts": "Bản nháp",
+    "drafts": "Nháp",
     "rejected": "Bị từ chối",
     "expired": "Đã hết hạn",
     "noMetricsAvailable": "Không có số liệu nào."

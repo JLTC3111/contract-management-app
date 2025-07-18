@@ -189,8 +189,8 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 8,
-                  width: 36,
-                  height: 36,
+                  width: 24,
+                  height: 24,
                   borderRadius: 8,
                   background: 'var(--card-bg)',
                   border: '1.5px solid var(--card-border)',
@@ -207,7 +207,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   e.currentTarget.style.boxShadow = openFilters.title ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('title', (
                 <input
@@ -231,8 +231,8 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 8,
-                  width: 36,
-                  height: 36,
+                  width: 24,
+                  height: 24,
                   borderRadius: 8,
                   background: 'var(--card-bg)',
                   border: '1.5px solid var(--card-border)',
@@ -249,7 +249,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   e.currentTarget.style.boxShadow = openFilters.status ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('status', (
                 <select
@@ -260,7 +260,9 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   autoFocus
                 >
                   <option value="">{t('contractTable.all')}</option>
-                  {uniqueStatuses.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                  {uniqueStatuses.map(s => (
+                    <option key={s} value={s}>{t(`contractTable.status.${s.toLowerCase()}`)}</option>
+                  ))}
                 </select>
               ))}
             </th>
@@ -274,8 +276,8 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 8,
-                  width: 36,
-                  height: 36,
+                  width: 24,
+                  height: 24,
                   borderRadius: 8,
                   background: 'var(--card-bg)',
                   border: '1.5px solid var(--card-border)',
@@ -292,7 +294,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   e.currentTarget.style.boxShadow = openFilters.version ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('version', (
                 <select
@@ -316,8 +318,8 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 8,
-                  width: 36,
-                  height: 36,
+                  width: 24,
+                  height: 24,
                   borderRadius: 8,
                   background: 'var(--card-bg)',
                   border: '1.5px solid var(--card-border)',
@@ -334,7 +336,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   e.currentTarget.style.boxShadow = openFilters.updated ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('updated', (
                 <input
@@ -357,8 +359,8 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 8,
-                  width: 36,
-                  height: 36,
+                  width: 24,
+                  height: 24,
                   borderRadius: 8,
                   background: 'var(--card-bg)',
                   border: '1.5px solid var(--card-border)',
@@ -375,7 +377,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   e.currentTarget.style.boxShadow = openFilters.author ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('author', (
                 <select
@@ -400,8 +402,8 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginLeft: 8,
-                  width: 36,
-                  height: 36,
+                  width: 24,
+                  height: 24,
                   borderRadius: 8,
                   background: 'var(--card-bg)',
                   border: '1.5px solid var(--card-border)',
@@ -418,7 +420,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   e.currentTarget.style.boxShadow = openFilters.expiry ? '0 2px 8px rgba(0,0,0,0.10)' : 'none';
                 }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('expiry', (
                 <input

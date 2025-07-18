@@ -434,7 +434,6 @@ const Navbar = () => {
       <div ref={LDLogoRef} style={{ display: 'flex', alignItems: 'flex-end', marginLeft: 'auto',
         opacity: isHovered ? 1 : 0.15,
         transition: 'opacity 0.3s ease, transform 0.3s ease',
-        filter: isHovered ? 'drop-shadow(6px 12px 24px rgba(125, 125, 125, 1.5))' : 'drop-shadow(0 0px 0px rgba(0, 0, 0, 1.5))',
         transform: isHovered ? 'scale(1.25)' : 'scale(1)',
         cursor: 'pointer',
         zIndex: 100,
@@ -452,8 +451,8 @@ const Navbar = () => {
             transition: 'all 0.3s ease-in-out',
             boxShadow: isHovered
               ? darkMode
-                ? '0 1px 2px rgba(255, 255, 255, 1.5)'
-                : '0 1px 2px rgba(0, 0, 0, 1.5)'
+                ? '0 1px 2px rgba(255, 255, 255, 1)'
+                : '0 1px 2px rgba(0, 0, 0, 1)'
               : 'none',
           }}
         />
@@ -470,8 +469,8 @@ const Navbar = () => {
             transition: 'all 0.3s ease-in-out',
             boxShadow: isHovered
               ? darkMode
-                ? '0 1px 2px rgba(255, 255, 255, 1.5)'
-                : '0 1px 2px rgba(0, 0, 0, 1.5)'
+                ? '0 1px 2px rgba(255, 255, 255, 1)'
+                : '0 1px 2px rgba(0, 0, 0, 1)'
               : 'none',
           }}
         />
