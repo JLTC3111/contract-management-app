@@ -435,7 +435,7 @@ const Navbar = () => {
         opacity: isHovered ? 1 : 0.15,
         transition: 'opacity 0.3s ease, transform 0.3s ease',
         filter: isHovered ? 'drop-shadow(6px 12px 24px rgba(125, 125, 125, 1.5))' : 'drop-shadow(0 0px 0px rgba(0, 0, 0, 1.5))',
-        transform: isHovered ? 'scale(1.5)' : 'scale(1)',
+        transform: isHovered ? 'scale(1.25)' : 'scale(1)',
         cursor: 'pointer',
         zIndex: 100,
        }}>
