@@ -7,6 +7,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --bg: #ffffff;
+  --ldlogo-bg: #e5e3ff; 
   --text: #1e293b;
   --card-bg: #f3f3f3;
   --card-border: #e5e7eb;
@@ -49,6 +50,7 @@
 
 body.dark {
   --bg: #1f2937;
+  --ldlogo-bg: #fdffee; 
   --text: #fff;
   --card-bg: #181e29;
   --card-border: #334155;

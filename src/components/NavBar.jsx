@@ -442,6 +442,7 @@ const Navbar = () => {
         <img 
           src="/logoIcons/LD_logo_dark.png" 
           style={{
+            backgroundColor: 'var(--ldlogo-bg)',
             display: darkMode ? 'none' : 'block',
             height: 'clamp(1.15rem, 6.5vw, 2rem)', // Responsive height
             width: 'auto',
@@ -459,6 +460,7 @@ const Navbar = () => {
         <img 
           src="/logoIcons/LD_logo_light.png" 
           style={{
+            backgroundColor: 'var(--ldlogo-bg)',
             display: darkMode ? 'block' : 'none',
             height: 'clamp(1.15rem, 6.5vw, 2rem)', // Responsive height
             width: 'auto',
