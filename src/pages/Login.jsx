@@ -9,6 +9,11 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
+// Ensure we're using a single Three.js instance
+if (typeof window !== 'undefined' && !window.THREE) {
+  window.THREE = THREE;
+}
+
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
   { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
@@ -72,7 +77,7 @@ const Login = () => {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 2.5; // Increased exposure for brighter colors
+    renderer.toneMappingExposure = 10; // Increased exposure for brighter colors
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.physicallyCorrectLights = true;
     renderer.useLegacyLights = false;
@@ -90,13 +95,13 @@ const Login = () => {
     controls.minDistance = 2;
     controlsRef.current = controls;
 
-    // Enhanced Bright Lighting Setup
+    // Enhanced Bright Lighting Setup - All Blue Lights
     // Strong ambient light for overall illumination - much brighter
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    const ambientLight = new THREE.AmbientLight(0xa8a8a8, 1.2);
     scene.add(ambientLight);
 
     // Bright main directional light - increased intensity
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    const directionalLight = new THREE.DirectionalLight(0xa8a8a8, 2.0);
     directionalLight.position.set(3, 5, 3);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 1024;
@@ -106,22 +111,27 @@ const Login = () => {
     scene.add(directionalLight);
 
     // Additional bright light from front - increased intensity
-    const frontLight = new THREE.DirectionalLight(0xffffff, 2.0);
-    frontLight.position.set(0, 0, 5);
+    const frontLight = new THREE.DirectionalLight(0x4a90e2, 1.0);
+    frontLight.position.set(0, 0, 10);
     scene.add(frontLight);
 
     // Top light for better illumination - increased intensity
-    const topLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    const topLight = new THREE.DirectionalLight(0x000000, 2.5);
     topLight.position.set(0, 10, 0);
     scene.add(topLight);
 
-    // Bright point light for dramatic effect - increased intensity and range
-    const pointLight = new THREE.PointLight(0x4a90e2, 1.5, 20);
-    pointLight.position.set(0, 2, 2);
+    // Bright point light for dramatic effect - positioned to be visible
+    const pointLight = new THREE.PointLight(0xff0000, 2.0, 30);
+    pointLight.position.set(0, 2, -3); // Closer to model for better visibility
     scene.add(pointLight);
 
+    // Additional bright blue light from the side for better visibility
+    const blueSideLight = new THREE.PointLight(0x0066ff, 3.0, 15);
+    blueSideLight.position.set(3, 1, 0); // Right side of the model
+    scene.add(blueSideLight);
+
     // Additional fill light from behind for better definition
-    const backLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    const backLight = new THREE.DirectionalLight(0xa8a8a8, 1.0);
     backLight.position.set(0, 2, -5);
     scene.add(backLight);
 
@@ -139,7 +149,7 @@ const Login = () => {
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
         const baseScale = 4 / maxDim;
-        const desktopScale = window.innerWidth > 768 ? baseScale * 1.35 : baseScale; // 15% larger on desktop
+        const desktopScale = window.innerWidth > 768 ? baseScale * 1.5 : baseScale; // 15% larger on desktop
         
         model.scale.setScalar(desktopScale);
         model.position.sub(center.multiplyScalar(desktopScale));
@@ -157,11 +167,11 @@ const Login = () => {
               child.material.transparent = false;
               child.material.opacity = 1.0;
               
-              // Ensure proper color space
-              if (child.material.map) {
-                child.material.map.encoding = THREE.sRGBEncoding;
-                child.material.map.needsUpdate = true;
-              }
+                          // Ensure proper color space
+            if (child.material.map) {
+              child.material.map.colorSpace = THREE.SRGBColorSpace;
+              child.material.map.needsUpdate = true;
+            }
               
               // If material has color, ensure it's properly set
               if (child.material.color) {
@@ -253,6 +263,19 @@ const Login = () => {
       if (controlsRef.current) {
         controlsRef.current.dispose();
       }
+      
+      // Clean up materials and textures
+      if (sceneRef.current) {
+        sceneRef.current.traverse((child) => {
+          if (child.isMesh && child.material) {
+            if (child.material.map) {
+              child.material.map.dispose();
+            }
+            child.material.dispose();
+          }
+        });
+      }
+      
       renderer.dispose();
     };
   }, []);
