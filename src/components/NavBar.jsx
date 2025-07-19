@@ -289,6 +289,7 @@ const Navbar = () => {
               exit={{ opacity: 0, x: 15}}
               transition={{ duration: 0.2 }}
               style={{
+                display: isMobile ? 'none' : 'block',
                 position: 'absolute',
                 left: '120%',
                 top: '10%',
@@ -516,10 +517,10 @@ const Navbar = () => {
       style={{
         position: 'absolute',
         top: '50%',
-        left: darkMode ? (isMobile ? '22px' : '25px') : '2px',
+        left: darkMode ? (isMobile ? '24px' : '25px') : '2px',
         transform: 'translateY(-50%)',
-        width: isMobile ? '20px' : 'clamp(18px, 5vw, 24px)',
-        height: isMobile ? '20px' : 'clamp(18px, 5vw, 24px)',
+        width: isMobile ? '16px' : 'clamp(18px, 5vw, 24px)',
+        height: isMobile ? '16px' : 'clamp(18px, 5vw, 24px)',
         borderRadius: '50%',
         background: 'var(--theme-toggle-bg)', // changed from var(--sidebar-hover-bg)
         display: 'flex',
@@ -527,7 +528,7 @@ const Navbar = () => {
         justifyContent: 'center',
         color: 'var(--text)',
         fontSize: isMobile ? '1rem' : 'clamp(1rem, 3vw, 1.2rem)',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+        boxShadow: darkMode ? '0 1px 4px rgba(255,255,255,0.8)' : '0 1px 4px rgba(0,0,0,0.8)',
         transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
         zIndex: 2,
       }}
@@ -535,7 +536,7 @@ const Navbar = () => {
         <motion.div 
          style={{ 
            position: 'relative', 
-           top: darkMode ? '-2.5px' : '4.5px'
+           top: isMobile ? '0px' : darkMode ? '-2.5px' : '4.5px'
          }}
          animate={{ rotate: darkMode ? 225 : 0 }}
          transition={{ duration: 0.5, ease: "linear" }}
