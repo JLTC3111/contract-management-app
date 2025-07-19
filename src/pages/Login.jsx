@@ -535,7 +535,7 @@ const Login = () => {
               position: 'absolute',
               left: '27.5%',
               top: 'calc(35vh - 40px)',
-              width: 54,
+              width: 56,
               height: 32,
               background: 'var(--card-bg)',
               borderRadius: 16,
@@ -575,7 +575,7 @@ const Login = () => {
                <motion.div 
                 style={{ 
                   position: 'relative', 
-                  top: isMobile ? '0px' : darkMode ? '-2.5px' : '4.5px'
+                  top: isMobile ? '0px' : darkMode ? '-1.5px' : '3px'
                 }}
                 animate={{ rotate: darkMode ? 225 : 0 }}
                 transition={{ duration: 0.5, ease: "linear" }}
