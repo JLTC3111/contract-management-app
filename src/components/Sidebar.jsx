@@ -37,7 +37,12 @@ const Sidebar = () => {
   const sidebarRef = useRef();
 
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
-  const [profileOpen, setProfileOpen] = useState(() => localStorage.getItem('profileOpen') !== 'false');
+  const [profileOpen, setProfileOpen] = useState(() => {
+    const isMobileInit = window.innerWidth < 1024;
+    if (isMobileInit) return false;
+    const stored = localStorage.getItem('profileOpen');
+    return stored !== 'false';
+  });
   const [sidebarWidth, setSidebarWidth] = useState(() => {
     const saved = localStorage.getItem('sidebarWidth');
     return saved ? parseInt(saved) : 380;
