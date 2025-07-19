@@ -160,7 +160,7 @@ const Login = () => {
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
         const baseScale = 4 / maxDim;
-        const desktopScale = window.innerWidth > 768 ? baseScale * 1.5 : baseScale; // 15% larger on desktop
+        const desktopScale = window.innerWidth > 768 ? baseScale * 1.25 : baseScale; // 15% larger on desktop
         
         model.scale.setScalar(desktopScale);
         model.position.sub(center.multiplyScalar(desktopScale));
@@ -912,13 +912,13 @@ const Login = () => {
          style={{
            pointerEvents: 'auto',
            position: 'absolute',
-           top: isMobile ? '10%' : 0,
+           top: isMobile ? '5%' : -75,
            left: isMobile ? '10%' : 0,
            right: isMobile ? '10%' : 0,
            margin: 'auto',
-           minWidth: isMobile ? 240 : 360,
-           maxWidth: isMobile ? 360 : 480,
-           height: isMobile ? 450 : 450,
+           minWidth: isMobile ? 240 : 280,
+           maxWidth: isMobile ? 360 : 400,
+           height: isMobile ? 450 : 500,
            display: isMobile && aspectRatio > 0.72 ? 'none' : (isMobile ? 'block' : 'flex'),
            alignItems: 'center',
            justifyContent: 'center',
