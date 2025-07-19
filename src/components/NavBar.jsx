@@ -430,7 +430,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-    {/* LD Logo */}
+    {/* LD Logo 
       <div ref={LDLogoRef} style={{ display: 'flex', alignItems: 'flex-end', marginLeft: 'auto',
         opacity: isHovered ? 1 : 0.15,
         transition: 'opacity 0.3s ease, transform 0.3s ease',
@@ -474,7 +474,7 @@ const Navbar = () => {
               : 'none',
           }}
         />
-      </div>
+      </div>*/}
       {/* Right: Theme Toggle (responsive on mobile) */}
 <div
   ref={themeToggleRef}

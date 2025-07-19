@@ -160,7 +160,7 @@ const Login = () => {
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
         const baseScale = 4 / maxDim;
-        const desktopScale = window.innerWidth > 768 ? baseScale * 1.75 : baseScale; // 15% larger on desktop
+        const desktopScale = window.innerWidth > 768 ? baseScale * 1.5 : baseScale; // 15% larger on desktop
         
         model.scale.setScalar(desktopScale);
         model.position.sub(center.multiplyScalar(desktopScale));
@@ -779,20 +779,94 @@ const Login = () => {
                   top: '50%',
                   transform: 'translateY(-50%)',
                   background: 'none',
+                  outline: 'none',
+                  boxShadow: 'none',
                   border: 'none',
+                  borderRadius: '50%',
+                  padding: '2px',
                   cursor: 'pointer',
-                  padding: 0,
                   margin: 0,
                   color: 'var(--eye-icon)',
                   zIndex: 2,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: '100%',
+                  height: '32px',
+                  width: '32px',
                 }}
                 tabIndex={0}
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? (
+                  <svg 
+                    width="22" 
+                    height="22" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      transition: 'transform 0.3s ease',
+                      transform: 'rotate(0deg)'
+                    }}
+                  >
+                    {/* Eye outline */}
+                    <path 
+                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" 
+                      fill="currentColor"
+                      style={{
+                        transition: 'opacity 0.3s ease',
+                        opacity: showPassword ? 1 : 1
+                      }}
+                    />
+                    {/* Diagonal line */}
+                    <line 
+                      x1="3" 
+                      y1="21" 
+                      x2="21" 
+                      y2="3" 
+                      stroke="currentColor" 
+                      strokeWidth="2"
+                      style={{
+                        transition: 'opacity 0.3s ease',
+                        opacity: showPassword ? 1 : 1
+                      }}
+                    />
+                  </svg>
+                ) : (
+                  <svg 
+                    width="22" 
+                    height="22" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      transition: 'transform 0.3s ease',
+                      transform: 'rotate(-360deg)'
+                    }}
+                  >
+                    {/* Eye outline */}
+                    <path 
+                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" 
+                      fill="currentColor"
+                      style={{
+                        transition: 'opacity 0.3s ease',
+                        opacity: showPassword ? 0 : 1
+                      }}
+                    />
+                    {/* Diagonal line */}
+                    <line 
+                      x1="3" 
+                      y1="21" 
+                      x2="21" 
+                      y2="3" 
+                      stroke="currentColor" 
+                      strokeWidth="2"
+                      style={{
+                        transition: 'opacity 0.3s ease',
+                        opacity: showPassword ? 1 : 0
+                      }}
+                    />
+                  </svg>
+                )}
               </button>
             </div>
             
