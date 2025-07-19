@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, MoonStar } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -258,6 +258,12 @@ const Navbar = () => {
             onClick={() => window.location.href = 'https://icue.vn'}
             src="/logoIcons/logo.png"
             alt="Logo"
+            animate={{ rotate: -360 }}
+            transition={{ 
+              duration: 5, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
             style={{
               height: 'clamp(1.15rem, 4.5vw, 1.8rem)', // Responsive height
               width: 'auto',
@@ -265,7 +271,6 @@ const Navbar = () => {
               alignItems: 'center',
               display: 'inline-block',
               objectFit: 'contain',
-              transition: 'all 0.3s ease-in-out',
               filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))',
               cursor: 'pointer',
               transform: isHovered ? 'scale(1.05)' : 'scale(1)',
@@ -482,6 +487,7 @@ const Navbar = () => {
     display: 'flex',
     justifyContent: 'flex-end',
     alignItems: 'center',
+    justifyItems: 'center',
     marginLeft: 'auto',
     padding: isMobile ? '0.25rem' : '0.5rem',
   }}
@@ -495,6 +501,7 @@ const Navbar = () => {
       borderRadius: '16px',
       border: '1.5px solid var(--card-border)',
       display: 'flex',
+      justifyContent: 'center',
       alignItems: 'center',
       cursor: 'pointer',
       transition: 'background 0.2s',
@@ -525,7 +532,16 @@ const Navbar = () => {
         zIndex: 2,
       }}
     >
-      {darkMode ? <Moon size={isMobile ? 12 : 20} /> : <Sun size={isMobile ? 12 : 18} />}
+        <motion.div 
+         style={{ 
+           position: 'relative', 
+           top: darkMode ? '-2.5px' : '4.5px'
+         }}
+         animate={{ rotate: darkMode ? 225 : 0 }}
+         transition={{ duration: 0.5, ease: "linear" }}
+       >
+         {darkMode ? <MoonStar size={isMobile ? 12 : 24} /> : <Sun size={isMobile ? 12 : 22} />}
+       </motion.div>
     </span>
   </div>
 </div>
