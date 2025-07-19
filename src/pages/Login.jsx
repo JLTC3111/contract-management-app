@@ -1,12 +1,13 @@
 // src/pages/Login.jsx
-import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../utils/supaBaseClient';
-import gsap from 'gsap';
-import { Sun, Moon, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
+import { Eye, EyeOff, Sun, Moon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence } from 'framer-motion';
-
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -27,15 +28,268 @@ const Login = () => {
   const [typedText, setTypedText] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
-  const modelViewerRef = useRef(null);
+  const canvasRef = useRef(null);
   const cardRef = useRef(null);
-  const modelRef = useRef(null);
   const logoUrl = '/logoIcons/logo.png';
   const { darkMode, toggleDarkMode } = useTheme();
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 767);
   const [aspectRatio, setAspectRatio] = useState(window.innerWidth / window.innerHeight);
   const { t, i18n } = useTranslation();
 
+  // Three.js refs
+  const sceneRef = useRef(null);
+  const rendererRef = useRef(null);
+  const mixerRef = useRef(null);
+  const modelRef = useRef(null);
+  const animationsRef = useRef([]);
+  const currentAnimationIndexRef = useRef(0);
+  const clockRef = useRef(new THREE.Clock());
+  const controlsRef = useRef(null);
+
+  // Initialize Three.js scene
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    const canvas = canvasRef.current;
+    const scene = new THREE.Scene();
+    sceneRef.current = scene;
+
+    // Camera with 360-degree initial angle for better model view
+    const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    camera.position.set(0, 2, -6); // Position camera at 135-degree angle (side-back view)
+    camera.lookAt(0, 1, 0);
+
+    // Renderer with enhanced settings
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas, 
+      alpha: true, 
+      antialias: true,
+      preserveDrawingBuffer: false
+    });
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 2.5; // Increased exposure for brighter colors
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.physicallyCorrectLights = true;
+    renderer.useLegacyLights = false;
+    rendererRef.current = renderer;
+
+    // Add OrbitControls for camera interaction
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.enableZoom = true;
+    controls.enablePan = false;
+    controls.autoRotate = false;
+    controls.autoRotateSpeed = 0.5;
+    controls.maxDistance = 20;
+    controls.minDistance = 2;
+    controlsRef.current = controls;
+
+    // Enhanced Bright Lighting Setup
+    // Strong ambient light for overall illumination - much brighter
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    scene.add(ambientLight);
+
+    // Bright main directional light - increased intensity
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    directionalLight.position.set(3, 5, 3);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 50;
+    scene.add(directionalLight);
+
+    // Additional bright light from front - increased intensity
+    const frontLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    frontLight.position.set(0, 0, 5);
+    scene.add(frontLight);
+
+    // Top light for better illumination - increased intensity
+    const topLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    topLight.position.set(0, 10, 0);
+    scene.add(topLight);
+
+    // Bright point light for dramatic effect - increased intensity and range
+    const pointLight = new THREE.PointLight(0x4a90e2, 1.5, 20);
+    pointLight.position.set(0, 2, 2);
+    scene.add(pointLight);
+
+    // Additional fill light from behind for better definition
+    const backLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    backLight.position.set(0, 2, -5);
+    scene.add(backLight);
+
+    // Load the model
+    const loader = new GLTFLoader();
+    loader.load(
+      '/3d_models/robot.glb',
+      (gltf) => {
+        const model = gltf.scene;
+        modelRef.current = model;
+        
+        // Center and scale the model - 15% larger on desktop
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const baseScale = 4 / maxDim;
+        const desktopScale = window.innerWidth > 768 ? baseScale * 1.35 : baseScale; // 15% larger on desktop
+        
+        model.scale.setScalar(desktopScale);
+        model.position.sub(center.multiplyScalar(desktopScale));
+        
+        // Enable shadows and ensure materials are properly rendered
+        model.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            
+            // Ensure materials are properly configured
+            if (child.material) {
+              // Enable proper material rendering
+              child.material.needsUpdate = true;
+              child.material.transparent = false;
+              child.material.opacity = 1.0;
+              
+              // Ensure proper color space
+              if (child.material.map) {
+                child.material.map.encoding = THREE.sRGBEncoding;
+                child.material.map.needsUpdate = true;
+              }
+              
+              // If material has color, ensure it's properly set
+              if (child.material.color) {
+                child.material.color.convertSRGBToLinear();
+              }
+            }
+          }
+        });
+        
+        scene.add(model);
+
+        // Debug: Log material information
+        console.log('Model loaded with materials:');
+        model.traverse((child) => {
+          if (child.isMesh && child.material) {
+            console.log('Mesh:', child.name, 'Material:', child.material);
+            if (child.material.color) {
+              console.log('Color:', child.material.color);
+            }
+            if (child.material.map) {
+              console.log('Texture map:', child.material.map);
+            }
+          }
+        });
+
+        // Setup animations
+        if (gltf.animations && gltf.animations.length > 0) {
+          const mixer = new THREE.AnimationMixer(model);
+          mixerRef.current = mixer;
+          animationsRef.current = gltf.animations;
+          
+          console.log('Loaded animations:', gltf.animations.map(anim => anim.name));
+          
+          // Start playing the first animation
+          playNextAnimation();
+        }
+
+        setIsLoading(false);
+      },
+      (progress) => {
+        console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+      },
+      (error) => {
+        console.error('Error loading model:', error);
+        setIsLoading(false);
+      }
+    );
+
+    // Animation loop
+    const animate = () => {
+      requestAnimationFrame(animate);
+      
+      const delta = clockRef.current.getDelta();
+      if (mixerRef.current) {
+        mixerRef.current.update(delta);
+      }
+      
+      // Update controls
+      if (controlsRef.current) {
+        controlsRef.current.update();
+      }
+      
+      // Only render if renderer and scene are available
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+    };
+    animate();
+
+    // Handle resize
+    const handleResize = () => {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+      
+      // Update controls on resize
+      if (controlsRef.current) {
+        controlsRef.current.update();
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (controlsRef.current) {
+        controlsRef.current.dispose();
+      }
+      renderer.dispose();
+    };
+  }, []);
+
+  // Play animations in sequence
+  const playNextAnimation = () => {
+    if (!mixerRef.current || animationsRef.current.length === 0) return;
+
+    // Stop current animation
+    mixerRef.current.stopAllAction();
+
+    // Play next animation
+    const animation = animationsRef.current[currentAnimationIndexRef.current];
+    const action = mixerRef.current.clipAction(animation);
+    action.setLoop(THREE.LoopOnce, 1);
+    action.clampWhenFinished = true;
+    action.play();
+
+    console.log(`Playing animation: ${animation.name}`);
+
+    // Listen for animation completion
+    const onFinished = () => {
+      currentAnimationIndexRef.current = (currentAnimationIndexRef.current + 1) % animationsRef.current.length;
+      setTimeout(playNextAnimation, 1000); // 1 second delay between animations
+    };
+
+    // Check if animation is finished
+    const checkFinished = () => {
+      if (action.isRunning()) {
+        requestAnimationFrame(checkFinished);
+      } else {
+        onFinished();
+      }
+    };
+    checkFinished();
+  };
+  
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 767);
@@ -82,17 +336,10 @@ const Login = () => {
     else window.location.href = '/'; // or use navigate('/')
   };
 
-  const handleModelLoad = () => {
-    setIsLoading(false);
-  };
 
-  const handleModelError = () => {
-    setIsLoading(false);
-  };
 
     return (
     <>
-
       <div style={{
         width: '85vw',
         minHeight: '100vh',
@@ -265,31 +512,29 @@ const Login = () => {
                 </span>
                 <span style={{ marginLeft: 8, fontSize: 12, opacity: 0.7 }}>▼</span>
               </button>
-              <AnimatePresence>
-                {showLanguageDropdown && (
-                  <motion.ul
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                      position: 'absolute',
-                      top: '110%',
-                      left: 0,
-                      width: '100%',
-                      background: 'var(--card-bg)',
-                      border: '1.5px solid var(--card-border)',
-                      borderRadius: '8px',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                      zIndex: 22,
-                      margin: 0,
-                      padding: 0,
-                      listStyle: 'none',
-                      overflow: 'hidden',
-                    }}
-                    role="listbox"
-                    aria-activedescendant={i18n.language}
-                  >
+              {showLanguageDropdown && (
+                <ul
+                  style={{
+                    position: 'absolute',
+                    top: '110%',
+                    left: 0,
+                    width: '100%',
+                    background: 'var(--card-bg)',
+                    border: '1.5px solid var(--card-border)',
+                    borderRadius: '8px',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                    zIndex: 22,
+                    margin: 0,
+                    padding: 0,
+                    listStyle: 'none',
+                    overflow: 'hidden',
+                    opacity: 1,
+                    transform: 'translateY(0)',
+                    transition: 'opacity 0.3s ease, transform 0.3s ease',
+                  }}
+                  role="listbox"
+                  aria-activedescendant={i18n.language}
+                >
                     {LANGUAGES.map(lang => (
                       <li
                         key={lang.code}
@@ -323,9 +568,8 @@ const Login = () => {
                         <span style={{ marginRight: 8 }}>{lang.flag}</span> {lang.label}
                       </li>
                     ))}
-                  </motion.ul>
-                )}
-              </AnimatePresence>
+                </ul>
+              )}
               {/* Click outside to close */}
               {showLanguageDropdown && (
                 <div
@@ -468,6 +712,7 @@ const Login = () => {
         <div
          ref={modelRef}
          style={{
+           pointerEvents: 'auto',
            position: 'absolute',
            top: 0,
            left: 0,
@@ -567,18 +812,8 @@ const Login = () => {
               </span>
             </button>
           )}
-          <model-viewer
-            id="robot"
-            ref={modelViewerRef}
-            src="/3d_models/robot.glb"
-            alt="Robot 3D Model"
-            auto-rotate
-            camera-controls
-            shadow-intensity="1"
-            environment-image="neutral"
-            exposure="1"
-            onLoad={handleModelLoad}
-            onError={handleModelError}
+          <canvas
+            ref={canvasRef}
             style={{
               display: isMobile ? 'block' : 'block',
               width: isMobile ? '90%' : '100%',
