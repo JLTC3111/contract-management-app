@@ -51,6 +51,7 @@ const Sidebar = () => {
   const [passwordError, setPasswordError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
   const [passwordLoading, setPasswordLoading] = useState(false);
+  const [statusUpdateLoading, setStatusUpdateLoading] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('collapsed', collapsed);
@@ -345,10 +346,26 @@ const Sidebar = () => {
               onClick={() => navigate('/approvals')}
             />
             <SidebarButton
-              icon={<RefreshCcwDotIcon size={18} />}
-              label={t('sidebar.updateStatus', 'Update Status')}
+              icon={
+                statusUpdateLoading ? (
+                  <motion.div
+                    animate={{ rotate: 720 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  >
+                    <RefreshCcwDotIcon size={18} />
+                  </motion.div>
+                ) : (
+                  <RefreshCcwDotIcon size={18} />
+                )
+              }
+              label={statusUpdateLoading ? t('sidebar.updatingStatus') : t('sidebar.updateStatus')}
               collapsed={collapsed}
-              onClick={async () => {
+              onClick={async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (statusUpdateLoading) return; // Prevent multiple clicks
+                console.log('🔄 Update Status clicked'); // Debug log
+                setStatusUpdateLoading(true);
                 try {
                   const response = await fetch('https://idkfmgdfzcsydrqnjcla.functions.supabase.co/contract-status-cron', {
                     method: 'POST',
@@ -360,13 +377,15 @@ const Sidebar = () => {
                   const result = await response.json();
                   if (!response.ok) {
                     console.error('❌ Cron failed:', result);
-                    alert(`❌ Cron failed: ${result.error || result.message || 'Unknown error'}`);
+                    alert(`${t('sidebar.cronFailed')} ${result.error || result.message || 'Unknown error'}`);
                   } else {
-                    alert(`✅ Status Updated! ${result.updatedCount ? `(${result.updatedCount} contract(s) updated)` : ''}`);
+                    alert(`${t('sidebar.statusUpdated')} ${result.updatedCount ? `(${result.updatedCount} ${t('sidebar.contractsUpdated')})` : ''}`);
                   }
                 } catch (error) {
                   console.error('🚨 Error triggering cron:', error);
-                  alert('🚨 Failed to trigger cron job. Check network or CORS settings.');
+                  alert(t('sidebar.cronTriggerFailed'));
+                } finally {
+                  setStatusUpdateLoading(false);
                 }
               }}
             />

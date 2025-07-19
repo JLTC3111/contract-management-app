@@ -10,6 +10,11 @@
     "profile": "Profile",
     "signOut": "Sign Out",
     "updateStatus": "Update Status",
+    "updatingStatus": "Updating...",
+    "cronFailed": "❌ Cron failed:",
+    "statusUpdated": "✅ Status Updated!",
+    "contractsUpdated": "contract(s) updated",
+    "cronTriggerFailed": "🚨 Failed to trigger cron job. Check network or CORS settings.",
     "logged_in_as": "Signed in as:",
     "role": "Role",
     "role_label": {
