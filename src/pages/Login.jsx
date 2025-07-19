@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
-import { Eye, EyeOff, Sun, Moon } from 'lucide-react';
+import { Eye, EyeOff, Sun, MoonStar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { motion } from 'framer-motion';
 
 // Ensure we're using a single Three.js instance
 if (typeof window !== 'undefined' && !window.THREE) {
@@ -482,7 +483,7 @@ const Login = () => {
             aria-label="Toggle theme"
             style={{
               position: 'absolute',
-              top: 'calc(50% - 210px + 10px)',
+              top: 'calc(50% - 210px - 25px)',
               left: 'calc(50% - 210px + 25px)',
               width: 40,
               height: 28,
@@ -520,9 +521,68 @@ const Login = () => {
                 zIndex: 2,
               }}
             >
-              {darkMode ? <Moon size={16} /> : <Sun size={16} />}
+              {darkMode ? <MoonStar size={16} /> : <Sun size={16} />}
             </span>
           
+          </button>
+        )}
+        {/* Theme Toggle Button for desktop - above login card, left-aligned */}
+        {!isMobile && (
+          <button
+            onClick={toggleDarkMode}
+            aria-label="Toggle theme"
+            style={{
+              position: 'absolute',
+              left: '27.5%',
+              top: 'calc(35vh - 40px)',
+              width: 54,
+              height: 32,
+              background: 'var(--card-bg)',
+              borderRadius: 16,
+              border: '1.5px solid var(--card-border)',
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              transition: 'background 0.2s',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+              zIndex: 200,
+              outline: 'none',
+              padding: 0,
+              overflow: 'hidden',
+            }}
+          >
+            <span
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: darkMode ? 26 : 4,
+                transform: 'translateY(-50%)',
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                background: 'var(--theme-toggle-bg)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'var(--text)',
+                fontSize: '1.2rem',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+                transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
+                zIndex: 2,
+              }}
+            >
+               {/* Animated Sun/Moon icon */}
+               <motion.div 
+                style={{ 
+                  position: 'relative', 
+                  top: isMobile ? '0px' : darkMode ? '-2.5px' : '4.5px'
+                }}
+                animate={{ rotate: darkMode ? 225 : 0 }}
+                transition={{ duration: 0.5, ease: "linear" }}
+              >
+                {darkMode ? <MoonStar size={isMobile ? 12 : 24} /> : <Sun size={isMobile ? 12 : 24} />}
+              </motion.div>
+            </span>
           </button>
         )}
         {/* Login Card */}
@@ -924,92 +984,7 @@ const Login = () => {
            justifyContent: 'center',
            zIndex: 100, 
          }}
-         
         >
-          {/* Theme Toggle Button (desktop only, inside model area) */}
-          {!isMobile && (
-            <button
-              onClick={toggleDarkMode}
-              aria-label="Toggle theme"
-              style={{
-                position: 'absolute',
-                top: 18,
-                left: 18,
-                width: 54,
-                height: 32,
-                background: 'var(--card-bg)',
-                borderRadius: 16,
-                border: '1.5px solid var(--card-border)',
-                display: 'flex',
-                alignItems: 'center',
-                cursor: 'pointer',
-                transition: 'background 0.2s',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                zIndex: 10,
-                outline: 'none',
-                padding: 0,
-                overflow: 'hidden',
-              }}
-            >
-              <span
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: darkMode ? 26 : 4,
-                  transform: 'translateY(-50%)',
-                  width: 24,
-                  height: 24,
-                  borderRadius: '50%',
-                  background: 'var(--theme-toggle-bg)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--text)',
-                  fontSize: '1.2rem',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-                  transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
-                  zIndex: 2,
-                }}
-              >
-              {/* Active icon (centered) */}
-              <span>
-                {darkMode ? <Moon size={18} /> : <Sun size={18} />}
-              </span>
-
-              {/* Inactive Sun icon (left side) */}
-              <span
-                style={{
-                  position: 'absolute',
-                  left: 8,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: !darkMode ? '#facc15' : 'var(--text-secondary)',
-                  opacity: !darkMode ? 0.7 : 0.3,
-                  fontSize: 14,
-                  zIndex: 1,
-                }}
-              >
-                <Sun size={14} />
-              </span>
-
-              {/* Inactive Moon icon (right side) */}
-              <span
-                style={{
-                  position: 'absolute',
-                  right: 8,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: darkMode ? '#60a5fa' : 'var(--text-secondary)',
-                  opacity: darkMode ? 0.7 : 0.3,
-                  fontSize: 14,
-                  zIndex: 1,
-                }}
-              >
-                <Moon size={14} />
-              </span>
-              </span>
-            </button>
-          )}
           <canvas
             ref={canvasRef}
             style={{
