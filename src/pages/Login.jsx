@@ -40,7 +40,7 @@ const Login = () => {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 767);
   const [aspectRatio, setAspectRatio] = useState(window.innerWidth / window.innerHeight);
   const { t, i18n } = useTranslation();
-
+  
   // Three.js refs
   const sceneRef = useRef(null);
   const rendererRef = useRef(null);
@@ -61,7 +61,7 @@ const Login = () => {
 
     // Camera with 360-degree initial angle for better model view
     const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-    camera.position.set(0, 2, -6); // Position camera at 135-degree angle (side-back view)
+    camera.position.set(4, 2, -4); // Position camera at 135-degree angle (side-back view)
     camera.lookAt(0, 1, 0);
 
     // Renderer with enhanced settings for emissive materials
@@ -74,11 +74,11 @@ const Login = () => {
     });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, 0);
+    renderer.setClearColor (0x000000, 0);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 15; // Adjusted for better emissive visibility
+    renderer.toneMappingExposure = 5; // Adjusted for better emissive visibility
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.physicallyCorrectLights = true;
     renderer.useLegacyLights = false;
@@ -103,11 +103,11 @@ const Login = () => {
 
     // Enhanced Lighting Setup with Emissive Support
     // Strong ambient light for overall illumination
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambientLight = new THREE.AmbientLight(0xbcbcbc, 0.8);
     scene.add(ambientLight);
 
     // Main directional light for primary illumination
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    const directionalLight = new THREE.DirectionalLight(0xbcbcbc, 1.5);
     directionalLight.position.set(3, 5, 3);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 1024;
@@ -117,27 +117,27 @@ const Login = () => {
     scene.add(directionalLight);
 
     // Front fill light for better visibility
-    const frontLight = new THREE.DirectionalLight(0x4a90e2, 0.8);
+    const frontLight = new THREE.DirectionalLight(0x057eff, 0.8);
     frontLight.position.set(0, 0, 10);
     scene.add(frontLight);
 
     // Top light for enhanced illumination
     const topLight = new THREE.DirectionalLight(0x6d6d6d, 1.2);
-    topLight.position.set(0, 10, 0);
+    topLight.position.set(0, -10, 0);
     scene.add(topLight);
 
     // Warm accent light for emissive materials
-    const warmLight = new THREE.PointLight(0x000000, 1.5, 20);
+    const warmLight = new THREE.PointLight(0xffffff, 1.5, 20);
     warmLight.position.set(-2, 1, 2);
     scene.add(warmLight);
 
     // Cool accent light for emissive materials
-    const coolLight = new THREE.PointLight(0xbcbcbc, 1.5, 20);
+    const coolLight = new THREE.PointLight(0xffffff, 1.5, 20);
     coolLight.position.set(2, 1, -2);
     scene.add(coolLight);
 
     // Subtle rim light for better definition
-    const rimLight = new THREE.DirectionalLight(0xbcbcbc, 1);
+    const rimLight = new THREE.DirectionalLight (0x00ffff, 1);
     rimLight.position.set(0, 2, -5);
     scene.add(rimLight);
 
@@ -205,8 +205,18 @@ const Login = () => {
                 child.material.color.convertSRGBToLinear();
               }
               
-              // Enable emissive rendering
-              child.material.emissiveIntensity = 0.5; // Default emissive intensity
+              // Enable emissive rendering only for glowing parts
+              if (child.name.toLowerCase().includes('eye') || 
+                  child.name.toLowerCase().includes('light') ||
+                  child.name.toLowerCase().includes('glow')) {
+                child.material.emissiveIntensity = 1;
+              } else {
+                // For body parts, ensure they're not emissive and have proper color
+                child.material.emissiveIntensity = 1;
+                child.material.emissive = new THREE.Color(0x000000);
+                child.material.metalness = 0.35;
+                child.material.roughness = 1;
+              }
               
               // Fix for WebGL texture format warnings
               if (child.material.normalMap) {
@@ -333,7 +343,7 @@ const Login = () => {
   }, []);
 
   // Create emissive material helper function
-  const createEmissiveMaterial = (baseColor = 0x00ffff, intensity = 0.3) => {
+  const createEmissiveMaterial = (baseColor = 0x00ffff, intensity = 0.75) => {
     const material = new THREE.MeshStandardMaterial({
       color: baseColor,
       emissive: baseColor,
