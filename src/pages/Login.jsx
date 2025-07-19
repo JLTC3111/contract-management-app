@@ -64,12 +64,13 @@ const Login = () => {
     camera.position.set(0, 2, -6); // Position camera at 135-degree angle (side-back view)
     camera.lookAt(0, 1, 0);
 
-    // Renderer with enhanced settings
+    // Renderer with enhanced settings for emissive materials
     const renderer = new THREE.WebGLRenderer({ 
       canvas, 
       alpha: true, 
       antialias: true,
-      preserveDrawingBuffer: false
+      preserveDrawingBuffer: false,
+      powerPreference: "high-performance"
     });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -77,10 +78,15 @@ const Login = () => {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 10; // Increased exposure for brighter colors
+    renderer.toneMappingExposure = 15; // Adjusted for better emissive visibility
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.physicallyCorrectLights = true;
     renderer.useLegacyLights = false;
+    
+    // Enable better texture handling
+    renderer.capabilities.isWebGL2 = true;
+    renderer.capabilities.precision = 'highp';
+    
     rendererRef.current = renderer;
 
     // Add OrbitControls for camera interaction
@@ -95,13 +101,13 @@ const Login = () => {
     controls.minDistance = 2;
     controlsRef.current = controls;
 
-    // Enhanced Bright Lighting Setup - All Blue Lights
-    // Strong ambient light for overall illumination - much brighter
-    const ambientLight = new THREE.AmbientLight(0xa8a8a8, 1.2);
+    // Enhanced Lighting Setup with Emissive Support
+    // Strong ambient light for overall illumination
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    // Bright main directional light - increased intensity
-    const directionalLight = new THREE.DirectionalLight(0xa8a8a8, 2.0);
+    // Main directional light for primary illumination
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
     directionalLight.position.set(3, 5, 3);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 1024;
@@ -110,30 +116,35 @@ const Login = () => {
     directionalLight.shadow.camera.far = 50;
     scene.add(directionalLight);
 
-    // Additional bright light from front - increased intensity
-    const frontLight = new THREE.DirectionalLight(0x4a90e2, 1.0);
+    // Front fill light for better visibility
+    const frontLight = new THREE.DirectionalLight(0x4a90e2, 0.8);
     frontLight.position.set(0, 0, 10);
     scene.add(frontLight);
 
-    // Top light for better illumination - increased intensity
-    const topLight = new THREE.DirectionalLight(0x000000, 2.5);
+    // Top light for enhanced illumination
+    const topLight = new THREE.DirectionalLight(0x6d6d6d, 1.2);
     topLight.position.set(0, 10, 0);
     scene.add(topLight);
 
-    // Bright point light for dramatic effect - positioned to be visible
-    const pointLight = new THREE.PointLight(0xff0000, 2.0, 30);
-    pointLight.position.set(0, 2, -3); // Closer to model for better visibility
-    scene.add(pointLight);
+    // Warm accent light for emissive materials
+    const warmLight = new THREE.PointLight(0x000000, 1.5, 20);
+    warmLight.position.set(-2, 1, 2);
+    scene.add(warmLight);
 
-    // Additional bright blue light from the side for better visibility
-    const blueSideLight = new THREE.PointLight(0x0066ff, 3.0, 15);
-    blueSideLight.position.set(3, 1, 0); // Right side of the model
-    scene.add(blueSideLight);
+    // Cool accent light for emissive materials
+    const coolLight = new THREE.PointLight(0xbcbcbc, 1.5, 20);
+    coolLight.position.set(2, 1, -2);
+    scene.add(coolLight);
 
-    // Additional fill light from behind for better definition
-    const backLight = new THREE.DirectionalLight(0xa8a8a8, 1.0);
-    backLight.position.set(0, 2, -5);
-    scene.add(backLight);
+    // Subtle rim light for better definition
+    const rimLight = new THREE.DirectionalLight(0xbcbcbc, 1);
+    rimLight.position.set(0, 2, -5);
+    scene.add(rimLight);
+
+    // Add subtle volumetric lighting effect
+    const volumetricLight = new THREE.PointLight(0x6d6d6d, 0.8, 15);
+    volumetricLight.position.set(0, 0, 0);
+    scene.add(volumetricLight);
 
     // Load the model
     const loader = new GLTFLoader();
@@ -149,12 +160,12 @@ const Login = () => {
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
         const baseScale = 4 / maxDim;
-        const desktopScale = window.innerWidth > 768 ? baseScale * 1.5 : baseScale; // 15% larger on desktop
+        const desktopScale = window.innerWidth > 768 ? baseScale * 1.75 : baseScale; // 15% larger on desktop
         
         model.scale.setScalar(desktopScale);
         model.position.sub(center.multiplyScalar(desktopScale));
         
-        // Enable shadows and ensure materials are properly rendered
+        // Enable shadows and ensure materials are properly rendered with emissive support
         model.traverse((child) => {
           if (child.isMesh) {
             child.castShadow = true;
@@ -167,21 +178,59 @@ const Login = () => {
               child.material.transparent = false;
               child.material.opacity = 1.0;
               
-                          // Ensure proper color space
-            if (child.material.map) {
-              child.material.map.colorSpace = THREE.SRGBColorSpace;
-              child.material.map.needsUpdate = true;
-            }
+              // Fix texture format issues and ensure proper color space
+              if (child.material.map) {
+                child.material.map.colorSpace = THREE.SRGBColorSpace;
+                child.material.map.needsUpdate = true;
+                child.material.map.format = THREE.RGBAFormat;
+                child.material.map.type = THREE.UnsignedByteType;
+              }
+              
+              // Handle emissive textures and maps
+              if (child.material.emissiveMap) {
+                child.material.emissiveMap.colorSpace = THREE.SRGBColorSpace;
+                child.material.emissiveMap.needsUpdate = true;
+                child.material.emissiveMap.format = THREE.RGBAFormat;
+                child.material.emissiveMap.type = THREE.UnsignedByteType;
+              }
+              
+              // Set emissive intensity for better glow effect
+              if (child.material.emissive) {
+                child.material.emissiveIntensity = 0.5; // Adjust this value for glow intensity
+                child.material.emissive.convertSRGBToLinear();
+              }
               
               // If material has color, ensure it's properly set
               if (child.material.color) {
                 child.material.color.convertSRGBToLinear();
+              }
+              
+              // Enable emissive rendering
+              child.material.emissiveIntensity = 0.5; // Default emissive intensity
+              
+              // Fix for WebGL texture format warnings
+              if (child.material.normalMap) {
+                child.material.normalMap.format = THREE.RGBAFormat;
+                child.material.normalMap.type = THREE.UnsignedByteType;
+              }
+              
+              if (child.material.roughnessMap) {
+                child.material.roughnessMap.format = THREE.RGBAFormat;
+                child.material.roughnessMap.type = THREE.UnsignedByteType;
+              }
+              
+              if (child.material.metalnessMap) {
+                child.material.metalnessMap.format = THREE.RGBAFormat;
+                child.material.metalnessMap.type = THREE.UnsignedByteType;
               }
             }
           }
         });
         
         scene.add(model);
+
+        // Add emissive glow effects to the model
+        addEmissiveGlow(model);
 
         // Debug: Log material information
         console.log('Model loaded with materials:');
@@ -193,6 +242,9 @@ const Login = () => {
             }
             if (child.material.map) {
               console.log('Texture map:', child.material.map);
+            }
+            if (child.material.emissive) {
+              console.log('Emissive:', child.material.emissive);
             }
           }
         });
@@ -279,6 +331,45 @@ const Login = () => {
       renderer.dispose();
     };
   }, []);
+
+  // Create emissive material helper function
+  const createEmissiveMaterial = (baseColor = 0x00ffff, intensity = 0.3) => {
+    const material = new THREE.MeshStandardMaterial({
+      color: baseColor,
+      emissive: baseColor,
+      emissiveIntensity: intensity,
+      metalness: 0.1,
+      roughness: 0.8,
+    });
+    return material;
+  };
+
+  // Add emissive glow effect to specific parts
+  const addEmissiveGlow = (model) => {
+    model.traverse((child) => {
+      if (child.isMesh) {
+        // Add emissive glow to eyes or specific parts
+        if (child.name.toLowerCase().includes('eye') || 
+            child.name.toLowerCase().includes('light') ||
+            child.name.toLowerCase().includes('glow')) {
+          
+          // Create emissive material for glowing parts
+          const emissiveMaterial = createEmissiveMaterial(0x00ffff, 0.5);
+          child.material = emissiveMaterial;
+          
+          // Add subtle animation to the glow
+          const originalIntensity = emissiveMaterial.emissiveIntensity;
+          let time = 0;
+          const animateGlow = () => {
+            time += 0.02;
+            emissiveMaterial.emissiveIntensity = originalIntensity + Math.sin(time) * 0.1;
+            requestAnimationFrame(animateGlow);
+          };
+          animateGlow();
+        }
+      }
+    });
+  };
 
   // Play animations in sequence
   const playNextAnimation = () => {
