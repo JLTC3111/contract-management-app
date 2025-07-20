@@ -533,7 +533,7 @@ const Login = () => {
             aria-label="Toggle theme"
             style={{
               position: 'absolute',
-              left: '27.5%',
+              left: '32.5%',
               top: 'calc(35vh - 40px)',
               width: 56,
               height: 32,
