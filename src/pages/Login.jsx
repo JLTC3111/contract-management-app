@@ -470,14 +470,13 @@ const Login = () => {
       setLogoRotation(360);
       timeout = setTimeout(() => {
         setLogoDirection(-1);
-      }, 2000); // 2s for rotation + 0s pause
+      }, 2000 + 50); // 2s for rotation + 0.25s pause
     } else {
       setLogoRotation(-360);
       timeout = setTimeout(() => {
         setLogoDirection(1);
-      }, 2000); // 2s for rotation + 0s pause
+      }, 2000 + 50); // 2s for rotation + 1s pause
     }
-    // Add pause after each rotation
     return () => clearTimeout(timeout);
   }, [logoDirection]);
 
@@ -650,29 +649,27 @@ const Login = () => {
                 fontWeight: 700,
               }}>|</span>
             )}
-            {/* Show logo after typing is done */}
-            {typedText === t('login.title') && (
-              <motion.img
-                onClick={() => window.location.href = 'https://icue.vn'}
-                src={logoUrl}
-                alt="Logo"
-                animate={{ rotate: logoRotation }}
-                transition={{
-                  duration: 2,
-                  ease: 'linear',
-                }}
-                style={{
-                  cursor: 'pointer',
-                  height: '2.2rem',
-                  width: 'auto',
-                  marginLeft: '0.5rem',
-                  verticalAlign: 'middle',
-                  display: 'inline-block',
-                  objectFit: 'contain',
-                  filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))',
-                }}
-              />
-            )}
+            {/* Show logo during typing and after */}
+            <motion.img
+              onClick={() => window.location.href = 'https://icue.vn'}
+              src={logoUrl}
+              alt="Logo"
+              animate={{ rotate: logoRotation }}
+              transition={{
+                duration: 2,
+                ease: 'linear',
+              }}
+              style={{
+                cursor: 'pointer',
+                height: '2.2rem',
+                width: 'auto',
+                marginLeft: '0.5rem',
+                verticalAlign: 'middle',
+                display: 'inline-block',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))',
+              }}
+            />
           </h2>
           
           {/* Language Switcher */}
