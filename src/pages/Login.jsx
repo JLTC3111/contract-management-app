@@ -461,6 +461,25 @@ const Login = () => {
     else window.location.href = '/'; // or use navigate('/')
   };
 
+  const [logoRotation, setLogoRotation] = useState(0);
+  const [logoDirection, setLogoDirection] = useState(1); // 1 for 360, -1 for -360
+
+  useEffect(() => {
+    let timeout;
+    if (logoDirection === 1) {
+      setLogoRotation(360);
+      timeout = setTimeout(() => {
+        setLogoDirection(-1);
+      }, 2000); // 2s for rotation + 0s pause
+    } else {
+      setLogoRotation(-360);
+      timeout = setTimeout(() => {
+        setLogoDirection(1);
+      }, 2000); // 2s for rotation + 0s pause
+    }
+    // Add pause after each rotation
+    return () => clearTimeout(timeout);
+  }, [logoDirection]);
 
 
     return (
@@ -633,10 +652,15 @@ const Login = () => {
             )}
             {/* Show logo after typing is done */}
             {typedText === t('login.title') && (
-              <img 
+              <motion.img
                 onClick={() => window.location.href = 'https://icue.vn'}
                 src={logoUrl}
                 alt="Logo"
+                animate={{ rotate: logoRotation }}
+                transition={{
+                  duration: 2,
+                  ease: 'linear',
+                }}
                 style={{
                   cursor: 'pointer',
                   height: '2.2rem',
