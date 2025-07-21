@@ -939,7 +939,7 @@ const Login = () => {
                 tabIndex={0}
               >
                 <motion.div
-                  animate={{ rotate: showPassword ? 360 : 0 }}
+                  animate={{ rotate: showPassword ? 360 : 0, scale: showPassword ? 1.25 : 1 }}
                   transition={{ duration: 0.5, ease: 'linear' }}
                   style={{ position: 'relative', width: 36, height: 36 }}
                 >
