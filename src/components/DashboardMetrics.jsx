@@ -60,7 +60,7 @@ const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
           <div
             key={label}
             ref={el => setCardRef(el, idx)}
-            className={`metric-card ${metricClassMap[label] || ''}`.trim()}
+            className={`metric-card btn-hover-preview ${metricClassMap[label] || ''}`.trim()}
             style={{
               cursor: 'pointer',
             }}

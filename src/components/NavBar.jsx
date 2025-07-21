@@ -335,7 +335,7 @@ const Navbar = () => {
           }
         `}</style>
         <div className="navbar-lang-switcher" style={{ position: 'relative', minWidth: 150 }}>
-          <button
+          <button className="btn-hover-preview"
             onClick={() => setShowDropdown((prev) => !prev)}
             aria-haspopup="listbox"
             aria-expanded={showDropdown}
