@@ -1,26 +1,38 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta property="og:image" content="https://contract.longd.asia/preview.png" />
-    <meta property="og:image" content="https://contracticue.netlify.app/preview.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:title" content="Contracticue" />
-    <meta property="og:description" content="Your contract management for icue." />
-    <meta property="og:type" content="website" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Contract Manager" />
+    <meta property="og:description" content="Contract management for ICUE." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://contract.icue.vn/preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://contract.icue.vn" />
+    
     <title>Contract Manager</title>
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/logoIcons/favicon.svg">
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="/app.css?v=2" />
+    <link rel="stylesheet" href="/index.css?v=2" />
+
+    <!-- Flags & Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Audiowide&family=Poppins&family=Space+Mono&family=Playfair+Display&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Serif&family=Roboto&family=Rubik&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols&display=swap" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Audiowide&family=Poppins&family=Space+Mono&family=Playfair+Display&family=IBM+Plex+Mono&family=IBM+Plex+Serif&family=Roboto&family=Rubik&family=Noto+Sans+Symbols&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="https://unpkg.com/@google/model-viewer@^3.4.0/dist/model-viewer.min.js"></script>
+
+    <!-- JS Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
