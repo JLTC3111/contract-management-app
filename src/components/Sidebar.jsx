@@ -64,6 +64,17 @@ const Sidebar = () => {
   }, [collapsed, profileOpen, sidebarWidth]);
 
   const handleLogout = async () => {
+    console.log('Attempting to log out...');
+    const { data: { session } } = await supabase.auth.getSession();
+    console.log('Current session on logout click:', session);
+    console.log('User object from useUser hook:', user);
+
+    if (!session) {
+      console.error('No active session found. Cannot log out.');
+      alert('Error: You are not signed in.');
+      return;
+    }
+
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Logout failed:', error.message);
@@ -442,7 +453,7 @@ const Sidebar = () => {
                   initial={{ opacity: 0, maxHeight: 0 }}
                   animate={{ opacity: 1, maxHeight: 300 }} // Pick a reasonable max
                   exit={{ opacity: 0, maxHeight: 0 }}
-                  transition={{ duration: 0.05, ease: 'easeOut' }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
                   style={{ overflow: 'hidden' }}
                 >
                   <SubMenu className="mobile-submenu-modal"
@@ -477,7 +488,7 @@ const Sidebar = () => {
               collapsed={collapsed}
               onClick={toggleDarkMode}
             />
-            <SidebarButton
+            <SidebarButton 
               icon={<LogOutIcon size={18} />}
               label={t('sidebar.signOut', 'Sign Out')}
               collapsed={collapsed}
@@ -706,6 +717,7 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
   
   return (
     <div
+      onClick={onClick}
       className="sidebar-button"
       {...rest}
       style={{
@@ -750,8 +762,9 @@ const SidebarButton = ({ icon, label, onClick, collapsed, path, currentPath, tog
           width: 'fit-content',
           paddingLeft: isMobile ? '0' : '0',
           flex: 1,
+          // Make sure this div doesn't block pointer events from its parent
+          pointerEvents: 'none',
         }}
-        onClick={onClick}
       >
         {icon}
         {(!collapsed && !isMobile) && <span>{label}</span>}
