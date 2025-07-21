@@ -35,7 +35,6 @@ const Sidebar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
   const { t } = useTranslation();
   const sidebarRef = useRef();
-
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
   const [profileOpen, setProfileOpen] = useState(() => {
     const isMobileInit = window.innerWidth < 1024;
@@ -57,7 +56,7 @@ const Sidebar = () => {
   const [passwordSuccess, setPasswordSuccess] = useState('');
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [statusUpdateLoading, setStatusUpdateLoading] = useState(false);
-
+  
   useEffect(() => {
     localStorage.setItem('collapsed', collapsed);
     localStorage.setItem('profileOpen', profileOpen);
@@ -232,8 +231,8 @@ const Sidebar = () => {
           top: isMobile ? 'unset' : undefined,
           left: isMobile ? '0' : undefined,
           right: isMobile ? '0' : undefined,
-          bottom: isMobile ? '0.5px' : undefined,
-          zIndex: isMobile ? '11' : undefined,
+          bottom: isMobile ? '0.25px' : undefined,
+          zIndex: isMobile ? '20' : undefined,
           flexWrap: isMobile ? 'wrap' : 'nowrap',
           borderTop: isMobile ? '1px solid var(--card-border)' : undefined,
           borderRight: isMobile ? 'none' : undefined,
@@ -253,15 +252,15 @@ const Sidebar = () => {
                 cursor: 'pointer',
                 color: 'var(--sidebar-text)',
                 borderRadius: '8px',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'all 0.3s ease',
                 padding: '0.5rem',
                 transform: 'scale(1)',
                 boxShadow: 'none',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = 'var(--chevron-hover-bg)';
+                e.currentTarget.style.background = 'none';
                 e.currentTarget.style.transform = 'scale(1.1)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+                e.currentTarget.style.boxShadow = darkMode ? '0 2px 8px rgba(255, 255, 255, 0.75)' : '0 2px 8px rgba(127, 127, 127, 0.75)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.background = 'none';
@@ -269,7 +268,23 @@ const Sidebar = () => {
                 e.currentTarget.style.boxShadow = 'none';
               }}
             >
-              {collapsed ? <ChevronsRight size={22} /> : <ChevronsLeft size={22} />}
+              {collapsed ? (
+                <ChevronsLeft 
+                  size={22}
+                  style={{
+                    transition: 'transform 0.65s ease',
+                    transform: 'rotate(180deg)', // points right
+                  }}
+                />
+              ) : (
+                <ChevronsLeft 
+                  size={22}
+                  style={{
+                    transition: 'transform 1.5s ease',
+                    transform: 'rotate(0deg)', // points left
+                  }}
+                />
+              )}
             </button>
           </div>
         )}
