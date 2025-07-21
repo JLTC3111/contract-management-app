@@ -26,6 +26,62 @@ const LANGUAGES = [
   { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
 ];
 
+// Custom Eye Icon SVG
+const CustomEyeIcon = (props) => (
+  <svg width="36px" height="36px" viewBox="-102.4 -102.4 1228.80 1228.80" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <g>
+      <path d="M512 256C326.4 256 160.8 344 55.2 480c-14.4 18.4-14.4 44.8 0 63.2C160.8 680 326.4 768 512 768s351.2-88 456.8-224c14.4-18.4 14.4-44.8 0-63.2C863.2 344 697.6 256 512 256z" fill="#ffffff"/>
+      <path d="M512 512m-241.6 0a241.6 241.6 0 1 0 483.2 0 241.6 241.6 0 1 0-483.2 0Z" fill="#6a3974"/>
+      <path d="M512 512m-116 0a116 116 0 1 0 232 0 116 116 0 1 0-232 0Z" fill="#00fbff"/>
+      <path d="M512 636c-68 0-124-55.2-124-124s56-124 124-124 124 56 124 124-56 124-124 124z m0-232c-59.2 0-108 48-108 108s48 108 108 108 108-48 108-108S571.2 404 512 404z" fill="#3d3e3d"/>
+      <path d="M32 512c43.2 64 98.4 118.4 162.4 160.8 39.2-111.2 128-296.8 311.2-416C308.8 258.4 134.4 359.2 32 512z" fill="#ffffff"/>
+      <path d="M512 256C312 256 136 357.6 32 512c0 0 469.6-220.8 960 0-104-154.4-280-256-480-256z" fill="#ffffff"/>
+      <path d="M512 761.6c-137.6 0-249.6-112-249.6-249.6s112-249.6 249.6-249.6 249.6 112 249.6 249.6-112 249.6-249.6 249.6z m0-483.2c-128.8 0-233.6 104.8-233.6 233.6S383.2 745.6 512 745.6 745.6 640.8 745.6 512 640.8 278.4 512 278.4z" fill="#3d3e3d"/>
+      <path d="M512 636c-68 0-124-55.2-124-124s56-124 124-124 124 56 124 124-56 124-124 124z m0-232c-59.2 0-108 48-108 108s48 108 108 108 108-48 108-108S571.2 404 512 404z" fill="#3d3e3d"/>
+      <path d="M512 776c-4.8 0-8-3.2-8-8s3.2-8 8-8c177.6 0 341.6-80.8 451.2-220.8 12-16 12-37.6 0-53.6C853.6 344.8 689.6 264 512 264c-4.8 0-8-3.2-8-8s3.2-8 8-8c182.4 0 351.2 83.2 463.2 227.2 16.8 21.6 16.8 51.2 0 72.8C863.2 692.8 694.4 776 512 776z" fill="#3d3e3d"/>
+      <path d="M512 776C329.6 776 160.8 692.8 48.8 548.8a58.88 58.88 0 0 1 0-72.8C160.8 331.2 329.6 248 512 248c4.8 0 8 3.2 8 8s-3.2 8-8 8C334.4 264 170.4 344.8 60.8 485.6c-12 16-12 37.6 0 53.6C170.4 679.2 334.4 760 512 760c4.8 0 8 3.2 8 8s-3.2 8-8 8z" fill="#3d3e3d"/>
+    </g>
+  </svg>
+);
+
+{/*const originalEyeIcon = ((
+  <svg 
+    width="22" 
+    height="22" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    style={{
+      transition: 'transform 0.3s ease',
+      transform: 'rotate(0deg)',
+    }}
+  >
+    // Eye outline  
+    <path 
+      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" 
+      fill="currentColor"
+      style={{
+        transition: 'opacity 0.3s ease',
+        opacity: showPassword ? 0 : 1,
+      }}
+    />
+    // Diagonal line 
+    <line 
+      x1="3" 
+      y1="21" 
+      x2="21" 
+      y2="3" 
+      stroke="currentColor" 
+      strokeWidth="2"
+      style={{
+        transition: 'opacity 0.3s ease',
+        opacity: showPassword ? 0 : 1,
+      }}
+    />
+  </svg>
+)*/}
+
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -463,6 +519,7 @@ const Login = () => {
 
   const [logoRotation, setLogoRotation] = useState(0);
   const [logoDirection, setLogoDirection] = useState(1); // 1 for 360, -1 for -360
+  
 
   useEffect(() => {
     let timeout;
@@ -489,7 +546,6 @@ const Login = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'var(--bg)',
         padding: isMobile ? '2rem' : 'clamp(1rem, 4vw, 2rem)',
         gap: 'clamp(1rem, 4vw, 2rem)',
         position: 'relative',
@@ -505,12 +561,12 @@ const Login = () => {
               left: 'calc(50% - 210px + 25px)',
               width: 40,
               height: 28,
-              background: 'var(--card-bg)',
               borderRadius: 14,
               border: '1.5px solid var(--card-border)',
               display: 'flex',
               alignItems: 'center',
               cursor: 'pointer',
+              background: darkMode ? '#232b3b' : '#ffffff',
               transition: 'background 0.2s',
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
               zIndex: 100,
@@ -539,9 +595,14 @@ const Login = () => {
                 zIndex: 2,
               }}
             >
-              {darkMode ? <MoonStar size={16} /> : <Sun size={16} />}
+              <motion.div
+                animate={{ rotate: darkMode ? 225 : 0 }}
+                transition={{ duration: 0.5, ease: 'linear' }}
+                style={{ position: 'relative', top: darkMode ? '-1.5px' : '3px' }}
+              >
+                {darkMode ? <MoonStar size={16} /> : <Sun size={16} />}
+              </motion.div>
             </span>
-          
           </button>
         )}
         {/* Theme Toggle Button for desktop - above login card, left-aligned */}
@@ -608,7 +669,6 @@ const Login = () => {
           ref={cardRef}
           style={{
             flex: 1,
-            background: 'var(--card-bg)',
             border: '1.5px solid var(--card-border)',
             borderRadius: '12px',
             padding: 'clamp(0.75rem, 2vw, 1.5rem)',
@@ -681,7 +741,7 @@ const Login = () => {
             justifyContent: 'center'
           }}>
             <div style={{ position: 'relative', minWidth: 120 }}>
-              <button
+              <button className="btn-hover-preview"
                 onClick={() => setShowLanguageDropdown((prev) => !prev)}
                 aria-haspopup="listbox"
                 aria-expanded={showLanguageDropdown}
@@ -788,7 +848,6 @@ const Login = () => {
           
           <form onSubmit={handleLogin} style={{ 
             display: 'flex', 
-            background: 'transparent',
             flexDirection: 'column', 
             gap: '1.5rem',
             width: '100%',
@@ -801,6 +860,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)} 
                 required 
                 style={{
+                  backgroundColor: darkMode ? '#fbfffe' : '#e7fffc',
                   width: '100%',
                   maxWidth: '92.5%',
                   padding: 'clamp(0.5rem, 2vw, 0.75rem)',
@@ -830,6 +890,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)} 
                 required 
                 style={{
+                  backgroundColor: darkMode ? '#fbfffe' : '#e7fffc',
                   width: '100%',
                   maxWidth: '92.5%',
                   padding: 'clamp(0.5rem, 2vw, 0.75rem)',
@@ -877,77 +938,37 @@ const Login = () => {
                 }}
                 tabIndex={0}
               >
-                {showPassword ? (
-                  <svg 
-                    width="22" 
-                    height="22" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg"
+                <motion.div
+                  animate={{ rotate: showPassword ? 360 : 0 }}
+                  transition={{ duration: 0.5, ease: 'linear' }}
+                  style={{ position: 'relative', width: 36, height: 36 }}
+                >
+                  <CustomEyeIcon />
+                  <svg
+                    width="22"
+                    height="22"
                     style={{
-                      transition: 'transform 0.3s ease',
-                      transform: 'rotate(0deg)'
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      pointerEvents: 'none',
                     }}
                   >
-                    {/* Eye outline */}
-                    <path 
-                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" 
-                      fill="currentColor"
-                      style={{
-                        transition: 'opacity 0.3s ease',
-                        opacity: showPassword ? 1 : 1
-                      }}
-                    />
-                    {/* Diagonal line */}
-                    <line 
-                      x1="3" 
-                      y1="21" 
-                      x2="21" 
-                      y2="3" 
-                      stroke="currentColor" 
-                      strokeWidth="2"
-                      style={{
-                        transition: 'opacity 0.3s ease',
-                        opacity: showPassword ? 1 : 1
-                      }}
+                    <motion.line
+                      x1="3"
+                      y1="21"
+                      x2="21"
+                      y2="3"
+                      stroke="#ef4444"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      initial={false}
+                      animate={{ opacity: showPassword ? 1 : 0 }}
+                      transition={{ duration: 0.3 }}
                     />
                   </svg>
-                ) : (
-                  <svg 
-                    width="22" 
-                    height="22" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{
-                      transition: 'transform 0.3s ease',
-                      transform: 'rotate(-360deg)'
-                    }}
-                  >
-                    {/* Eye outline */}
-                    <path 
-                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" 
-                      fill="currentColor"
-                      style={{
-                        transition: 'opacity 0.3s ease',
-                        opacity: showPassword ? 0 : 1
-                      }}
-                    />
-                    {/* Diagonal line */}
-                    <line 
-                      x1="3" 
-                      y1="21" 
-                      x2="21" 
-                      y2="3" 
-                      stroke="currentColor" 
-                      strokeWidth="2"
-                      style={{
-                        transition: 'opacity 0.3s ease',
-                        opacity: showPassword ? 1 : 0
-                      }}
-                    />
-                  </svg>
-                )}
+                </motion.div>
               </button>
             </div>
             

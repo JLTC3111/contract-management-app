@@ -9,6 +9,7 @@
   --bg: #ffffff;
   --test-color: #057eff;
   --ldlogo-bg: #f5f5fe; 
+  --input-bg: #e7fffc;
   --text: #1e293b;
   --card-bg: #ffffff;
   --card-border: #e5e7eb;
@@ -17,7 +18,7 @@
   --eye-border: #360082;
   --hover-bg: #f9f9ff;
   --login-input-text: #1e293b;
-  --btn-hover-preview: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  --btn-hover-preview: linear-gradient(90deg, transparent, rgba(225, 225, 225, 0.2), transparent);
   --primary: #3b82f6;
   --danger: #ef4444;
   --special-card-bg: #fffcfc;
@@ -53,6 +54,7 @@
 body.dark {
   --bg: #1f2937;
   --ldlogo-bg: #fdffee; 
+  --input-bg: #fbfffe;
   --text: #fff;
   --card-bg: #181e29;
   --card-border: #334155;
