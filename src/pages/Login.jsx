@@ -194,7 +194,7 @@ const Login = () => {
     scene.add(coolLight);
 
     // Subtle rim light for better definition
-    const rimLight = new THREE.DirectionalLight (0x00ffff, 1);
+    const rimLight = new THREE.DirectionalLight (0xffffff, 1);
     rimLight.position.set(0, 2, -5);
     scene.add(rimLight);
 
@@ -682,7 +682,7 @@ const Login = () => {
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
-            marginTop: '15vh', // <-- Add this line
+            marginTop: '15vh', 
           }}
         >
           <h2 style={{
