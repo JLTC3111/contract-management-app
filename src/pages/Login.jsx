@@ -222,20 +222,16 @@ const Login = () => {
         model.scale.setScalar(desktopScale);
         model.position.sub(center.multiplyScalar(desktopScale));
         
-        // Enable shadows and ensure materials are properly rendered with emissive support
         model.traverse((child) => {
           if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
             
-            // Ensure materials are properly configured
             if (child.material) {
-              // Enable proper material rendering
               child.material.needsUpdate = true;
               child.material.transparent = false;
               child.material.opacity = 1.0;
               
-              // Fix texture format issues and ensure proper color space
               if (child.material.map) {
                 child.material.map.colorSpace = THREE.SRGBColorSpace;
                 child.material.map.needsUpdate = true;
@@ -257,25 +253,21 @@ const Login = () => {
                 child.material.emissive.convertSRGBToLinear();
               }
               
-              // If material has color, ensure it's properly set
               if (child.material.color) {
                 child.material.color.convertSRGBToLinear();
               }
               
-              // Enable emissive rendering only for glowing parts
               if (child.name.toLowerCase().includes('eye') || 
                   child.name.toLowerCase().includes('light') ||
                   child.name.toLowerCase().includes('glow')) {
                 child.material.emissiveIntensity = 1;
               } else {
-                // For body parts, ensure they're not emissive and have proper color
                 child.material.emissiveIntensity = 1;
                 child.material.emissive = new THREE.Color(0x000000);
                 child.material.metalness = 0.35;
                 child.material.roughness = 1;
               }
               
-              // Fix for WebGL texture format warnings
               if (child.material.normalMap) {
                 child.material.normalMap.format = THREE.RGBAFormat;
                 child.material.normalMap.type = THREE.UnsignedByteType;
@@ -315,16 +307,17 @@ const Login = () => {
             }
           }
         });
-
-        // Setup animations
+        
+        // Animations 
         if (gltf.animations && gltf.animations.length > 0) {
+          const filteredAnimations = gltf.animations.filter(anim => anim.name !== 'jump');
           const mixer = new THREE.AnimationMixer(model);
+          // const filteredAnimations = gltf.animations.slice(1);
           mixerRef.current = mixer;
-          animationsRef.current = gltf.animations;
+          animationsRef.current = filteredAnimations;
           
           console.log('Loaded animations:', gltf.animations.map(anim => anim.name));
           
-          // Start playing the first animation
           playNextAnimation();
         }
 
@@ -339,7 +332,6 @@ const Login = () => {
       }
     );
 
-    // Animation loop
     const animate = () => {
       requestAnimationFrame(animate);
       
