@@ -860,6 +860,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)} 
                 required 
                 style={{
+                  WebkitBoxShadow: '0 0 0px 1000px ' + (darkMode ? '#fbfffe' : '#e7fffc') + ' inset', 
                   backgroundColor: darkMode ? '#fbfffe' : '#e7fffc',
                   width: '100%',
                   maxWidth: '92.5%',
