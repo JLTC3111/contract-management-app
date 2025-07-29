@@ -674,7 +674,7 @@ const Login = () => {
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
-            marginTop: '15vh', 
+            marginTop: isMobile ? '25vh' : '15vh', 
           }}
         >
           <h2 style={{
