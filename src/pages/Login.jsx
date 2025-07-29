@@ -674,7 +674,7 @@ const Login = () => {
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
-            marginTop: isMobile ? '25vh' : '15vh', 
+            marginTop: isMobile ? '20vh' : '15vh', 
           }}
         >
           <h2 style={{
@@ -1010,7 +1010,7 @@ const Login = () => {
            right: isMobile ? '10%' : 0,
            margin: 'auto',
            minWidth: isMobile ? 240 : 280,
-           maxWidth: isMobile ? 360 : 400,
+           maxWidth: isMobile ? 360 : 430,
            height: isMobile ? 450 : 500,
            display: isMobile && aspectRatio > 0.72 ? 'none' : (isMobile ? 'block' : 'flex'),
            alignItems: 'center',
@@ -1022,8 +1022,8 @@ const Login = () => {
             ref={canvasRef}
             style={{
               display: isMobile ? 'block' : 'block',
-              width: isMobile ? '90%' : '100%',
-              height: isMobile ? '90%' : '100%',
+              width: isMobile ? '100%' : '100%',
+              height: isMobile ? '100%' : '100%',
               borderRadius: '12px',
               background: 'transparent',
             }}
