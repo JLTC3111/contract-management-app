@@ -511,7 +511,7 @@ const Login = () => {
 
   const [logoRotation, setLogoRotation] = useState(0);
   const [logoDirection, setLogoDirection] = useState(1); // 1 for 360, -1 for -360
-  
+  const [logoSpeed, setLogoSpeed] = useState(2);
 
   useEffect(() => {
     let timeout;
@@ -519,12 +519,12 @@ const Login = () => {
       setLogoRotation(360);
       timeout = setTimeout(() => {
         setLogoDirection(-1);
-      }, 2000 + 50); // 2s for rotation + 0.25s pause
+      }, 2000 + 250); //Timeout to pause (not spinning duration)
     } else {
-      setLogoRotation(-360);
+      setLogoRotation(-255);
       timeout = setTimeout(() => {
         setLogoDirection(1);
-      }, 2000 + 50); // 2s for rotation + 1s pause
+      }, 4000 + 50); //Timeout to pause (not spinning duration)
     }
     return () => clearTimeout(timeout);
   }, [logoDirection]);
@@ -707,10 +707,7 @@ const Login = () => {
               src={logoUrl}
               alt="Logo"
               animate={{ rotate: logoRotation }}
-              transition={{
-                duration: 2,
-                ease: 'linear',
-              }}
+              transition={{ duration: 4, ease: [0.7, -0.5, 0.3, 0.1] }}
               style={{
                 cursor: 'pointer',
                 height: '2.2rem',
@@ -719,7 +716,7 @@ const Login = () => {
                 verticalAlign: 'middle',
                 display: 'inline-block',
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.08))',
+                filter: 'drop-shadow(0px 0px 12px rgba(255, 255, 255, 0.1))',
               }}
             />
           </h2>
@@ -1008,7 +1005,7 @@ const Login = () => {
          style={{
            pointerEvents: isMobile ? 'none' : 'auto',
            position: 'absolute',
-           top: isMobile ? '5%' : -75,
+           top: isMobile ? '.5%' : -75,
            left: isMobile ? '10%' : 0,
            right: isMobile ? '10%' : 0,
            margin: 'auto',
