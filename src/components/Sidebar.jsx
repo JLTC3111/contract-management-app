@@ -247,7 +247,7 @@ const Sidebar = () => {
           flexWrap: isMobile ? 'wrap' : 'nowrap',
           borderTop: isMobile ? '1px solid var(--card-border)' : undefined,
           borderRight: isMobile ? 'none' : undefined,
-          padding: isMobile ? '0' : '1.25rem',
+          padding: isMobile ? '0' : '1rem',
           overflow: isMobile ? 'visible' : 'auto',
         }}
       >
@@ -326,7 +326,7 @@ const Sidebar = () => {
               onMouseLeave={() => setIsHovered(false)}
             >
               <SidebarButton
-                icon={<HomeIcon size={18} />}
+                icon={<HomeIcon size={20} />}
                 label={t('sidebar.home', 'Home')}
                 path="/home"
                 collapsed={collapsed || isMobile}
@@ -361,7 +361,7 @@ const Sidebar = () => {
               </AnimatePresence>
             </div>
             <SidebarButton
-              icon={<LayoutDashboardIcon size={18} />}
+              icon={<LayoutDashboardIcon size={20} />}
               label={t('sidebar.dashboard', 'Dashboard')}
               path="/"
               collapsed={collapsed}
@@ -369,7 +369,7 @@ const Sidebar = () => {
               onClick={() => navigate('/')}
             />
             <SidebarButton
-              icon={<ShieldCheckIcon size={18} />}
+              icon={<ShieldCheckIcon size={20} />}
               label={t('sidebar.approvals', 'Approvals')}
               path="/contracts"
               collapsed={collapsed}
@@ -383,10 +383,10 @@ const Sidebar = () => {
                     animate={{ rotate: 720 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                   >
-                    <RefreshCcwDotIcon size={18} />
+                    <RefreshCcwDotIcon size={20} />
                   </motion.div>
                 ) : (
-                  <RefreshCcwDotIcon size={18} />
+                  <RefreshCcwDotIcon size={20} />
                 )
               }
               label={statusUpdateLoading ? t('sidebar.updatingStatus') : t('sidebar.updateStatus')}
@@ -422,7 +422,7 @@ const Sidebar = () => {
             />
 
             <SidebarButton 
-              icon={<UserLock size={18} />}
+              icon={<UserLock size={20} />}
               label={t('sidebar.profile', 'Profile')}
               collapsed={collapsed}
               toggleable
@@ -483,13 +483,13 @@ const Sidebar = () => {
             </AnimatePresence>
 
             <SidebarButton
-              icon={darkMode ? <Sun size={18} /> : <Moon size={18} />}
+              icon={darkMode ? <Sun size={20} /> : <Moon size={20} />}
               label={darkMode ? t('buttons.light', 'Light Mode') : t('buttons.dark', 'Dark Mode')}
               collapsed={collapsed}
               onClick={toggleDarkMode}
             />
             <SidebarButton 
-              icon={<LogOutIcon size={18} />}
+              icon={<LogOutIcon size={20} />}
               label={t('sidebar.signOut', 'Sign Out')}
               collapsed={collapsed}
               onClick={handleLogout}
