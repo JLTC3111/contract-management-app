@@ -217,6 +217,10 @@
     "expiryDate": "有効期限",
     "headerStatus": "ステータス"
   },
+  "upload_completed": "アップロードが完了しました",
+  "upload_failed": "アップロードに失敗しました",
+  "upload_in_progress": "アップロード中...",
+  "uploading": "アップロード中...",
   "newContract": "新規契約",
   "createContract": "契約を作成",
   "edit": "編集",

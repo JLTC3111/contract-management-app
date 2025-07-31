@@ -217,6 +217,9 @@
     "all": "ทั้งหมด",
     "clear": "ล้าง"
   },
+  "upload_completed": "อัปโหลดเสร็จสิ้น",
+  "upload_failed": "อัปโหลดล้มเหลว",
+  "upload_in_progress": "กำลังอัปโหลด...",
   "newContract": "สัญญาใหม่",
   "createContract": "สร้างสัญญา",
   "edit": "แก้ไข",
@@ -260,7 +263,6 @@
   "response": "การตอบกลับ",
   "click_to_view_contract": "คลิกเพื่อดูสัญญา",
   "mark_all_read": "ทำเครื่องหมายทั้งหมดว่าอ่านแล้ว",
-  "bell_no_new_comments_in_last_24_hours": "ไม่มีความคิดเห็นใหม่ใน 24 ชั่วโมงที่ผ่านมา",
   "unknown_contract": "สัญญาที่ไม่ทราบ",
   "approval_board_approve": "อนุมัติ",
   "approval_board_reject": "ปฏิเสธ",

@@ -243,6 +243,9 @@
     "all": "All",
     "clear": "Clear"
   },
+  "upload_completed": "Upload completed",
+  "uploading": "Uploading...",
+  "upload_error": "Upload error",
   "newContract": "New Contract",
   "createContract": "Create Contract",
   "delete": "Delete",

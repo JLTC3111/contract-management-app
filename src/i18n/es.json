@@ -251,6 +251,10 @@
     "title": "Título",
     "subtitle": "Gestionar solicitudes de aprobación pendientes de editores"
   },
+  "upload_completed": "Carga completada",
+  "upload_failed": "Error de carga",
+  "upload_in_progress": "Carga en progreso",
+  "uploading": "Subiendo...",
   "approval_board_title": "Título",
   "approval_board_subtitle": "Gestionar solicitudes de aprobación pendientes de editores",
   "status_label": "Estado",

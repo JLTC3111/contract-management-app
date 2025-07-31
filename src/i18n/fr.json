@@ -216,6 +216,10 @@
     "all": "Tous",
     "clear": "Effacer"
   },
+  "upload_completed": "Téléchargement terminé",
+  "upload_failed": "Échec du téléchargement",
+  "upload_in_progress": "Téléchargement en cours",
+  "uploading": "Téléchargement...",
   "newContract": "Nouveau contrat",
   "createContract": "Créer un contrat",
   "edit": "Éditer",

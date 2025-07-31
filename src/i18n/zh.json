@@ -217,6 +217,9 @@
     "all": "全部",
     "clear": "清除"
   },
+  "upload_completed": "上传完成",
+  "upload_failed": "上传失败",
+  "upload_in_progress": "正在上传...",
   "newContract": "新合同",
   "createContract": "创建合同",
   "edit": "编辑",

@@ -219,6 +219,9 @@
     "all": "Tất cả",
     "clear": "Xóa"
   },
+  "upload_completed": "Đã Tải Thành Công",
+  "upload_failed": "Tải lên không thành công",
+  "upload_in_progress": "Đang tải lên...",
   "newContract": "Hợp đồng mới",
   "createContract": "Tạo hợp đồng",
   "edit": "Chỉnh sửa",

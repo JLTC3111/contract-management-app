@@ -412,11 +412,14 @@ useEffect(() => {
   useEffect(() => {
     if (fileItemRefs.current && fileItemRefs.current.length > 0 && gsap) {
       try {
-        gsap.fromTo(
-          fileItemRefs.current,
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2 }
-        );
+        const validRefs = fileItemRefs.current.filter(Boolean);
+        if (validRefs.length > 0) {
+          gsap.fromTo(
+            validRefs,
+            { opacity: 0, y: 50 },
+            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2 }
+          );
+        }
       } catch (error) {
         console.warn('GSAP animation error:', error);
       }
@@ -1007,7 +1010,7 @@ return (
           <span style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>{new Date(contract.updated_at).toLocaleString()}</span>
         </p>
   
-        <p ref={el => infoRefs.current[3] = el}>
+        <div ref={el => infoRefs.current[3] = el}>
           <strong>{t('contract_detail_expiry_date')}:</strong>{' '}
           {editMode ? (
             <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -1054,7 +1057,7 @@ return (
           ) : (
             <span style={{ fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>{contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString() : '—'}</span>
           )}
-        </p>
+        </div>
   
         <div style={{ marginTop: '1rem', textAlign: 'left' }}>
           <p ref={el => infoRefs.current[4] = el}>

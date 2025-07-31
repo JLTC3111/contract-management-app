@@ -56,6 +56,7 @@ const validateFile = (file) => {
 
 const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath, align = 'center' }) => {
   const [uploadProgress, setUploadProgress] = useState({});
+  const [completedUploads, setCompletedUploads] = useState([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef();
   const { t } = useTranslation();
@@ -107,7 +108,23 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) {
             const percent = Math.round((e.loaded / e.total) * 100);
-            setUploadProgress(prev => ({ ...prev, [file.name]: percent }));
+            if (percent === 100) {
+              setUploadProgress(prev => {
+                const newState = { ...prev };
+                delete newState[file.name];
+                return newState;
+              });
+              setCompletedUploads(prev => [...prev, file.name]);
+              setTimeout(() => {
+                setCompletedUploads(prev => prev.filter(name => name !== file.name));
+              }, 5000);
+            } else {
+              // Update progress for ongoing uploads
+              setUploadProgress(prev => ({
+                ...prev,
+                [file.name]: `${percent}`
+              }));
+            }
           }
         };
 
@@ -243,7 +260,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
           <div style={{ flex: 1 }}>
             <strong>{filename}</strong>: {progress}%
             <div style={{
-              width: '100%',
+              width: '50%',
               height: '8px',
               backgroundColor: '#ddd',
               borderRadius: '4px',
@@ -253,15 +270,17 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
               <div style={{
                 width: `${progress}%`,
                 height: '100%',
-                background: 'linear-gradient(90deg, #000000, #3b82f6)',
+                background: 'linear-gradient(90deg, #000000, #742222, #a09b0e, rgb(148, 246, 1))',
                 transition: 'width 0.2s',
               }}></div>
             </div>
           </div>
-          
-          {progress === 100 && (
-            <Check size={16} color="#22c55e" />
-          )}
+        </div>
+      ))}
+
+      {completedUploads.map(filename => (
+        <div key={filename} style={{ color: 'green', marginTop: '8px', fontWeight: 500 }}>
+          {filename}: {t('upload_completed') || 'Upload completed'}
         </div>
       ))}
     </div>
