@@ -226,7 +226,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
           color: 'var(--text)',
           padding: '0.5rem 1rem',
           marginTop: '1rem',
-          borderRadius: '8px',
+          borderRadius: '2px',
           border: 'none',
           fontSize: '.8rem',
           fontWeight: 'bold',
