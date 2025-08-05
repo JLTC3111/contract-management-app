@@ -1002,7 +1002,7 @@ const Login = () => {
          style={{
            pointerEvents: 'auto',
            position: 'absolute',
-           top: isMobile ? '1.5%' : -15,
+           top: isMobile ? '-5%' : -15,
            left: isMobile ? '15%' : 0,
            right: isMobile ? '10%' : 0,
            margin: 'auto',
