@@ -999,7 +999,7 @@ const Login = () => {
         <div
          ref={modelRef}
          style={{
-           pointerEvents: isMobile ? 'none' : 'auto',
+           pointerEvents: 'auto',
            position: 'absolute',
            top: isMobile ? '.5%' : -75,
            left: isMobile ? '10%' : 0,

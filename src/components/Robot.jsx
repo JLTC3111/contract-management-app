@@ -26,7 +26,7 @@ export default function Scene() {
       <ambientLight />
       <Environment preset="sunset" />
       <RobotModel />
-      <OrbitControls />
+      <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
     </Canvas>
   )
 }
