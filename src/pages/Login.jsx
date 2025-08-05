@@ -7,6 +7,7 @@ import { Eye, EyeOff, Sun, MoonStar, ChevronDownIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { motion } from 'framer-motion';
 
@@ -198,9 +199,12 @@ const Login = () => {
     scene.add(volumetricLight);
 
     // Load the model
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('/draco/'); // Path to the DRACO decoder files
     const loader = new GLTFLoader();
+    loader.setDRACOLoader(dracoLoader);
     loader.load(
-      '/3d_models/robot.glb',
+      '/3d_models/retro_computer.glb',
       (gltf) => {
         const model = gltf.scene;
         modelRef.current = model;
@@ -1001,9 +1005,9 @@ const Login = () => {
            left: isMobile ? '10%' : 0,
            right: isMobile ? '10%' : 0,
            margin: 'auto',
-           minWidth: isMobile ? 240 : 280,
+           minWidth: isMobile ? 220 : 280,
            maxWidth: isMobile ? 360 : 430,
-           height: isMobile ? 450 : 500,
+           height: isMobile ? 400 : 500,
            display: isMobile && aspectRatio > 0.72 ? 'none' : (isMobile ? 'block' : 'flex'),
            alignItems: 'center',
            justifyContent: 'center',
