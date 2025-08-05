@@ -536,7 +536,7 @@ const Login = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: isMobile ? '2rem' : 'clamp(1rem, 4vw, 2rem)',
+        padding: isMobile ? '2rem' : 'clamp(2rem, 10vw, 4.5rem)',
         gap: 'clamp(1rem, 4vw, 2rem)',
         position: 'relative',
       }}>
@@ -602,7 +602,7 @@ const Login = () => {
             aria-label="Toggle theme"
             style={{
               position: 'absolute',
-              left: '32.5%',
+              left: isMobile ? '27.5%' : '24.5%',
               top: 'calc(35vh - 40px)',
               width: 56,
               height: 32,
@@ -664,6 +664,7 @@ const Login = () => {
             padding: 'clamp(0.75rem, 2vw, 1.5rem)',
             width: '100%',
             maxWidth: isMobile ? '100vw' : 'clamp(280px, 95vw, 550px)',
+            height: isMobile ? '400px' : '450px',
             boxSizing: 'border-box',
             boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
             transition: 'all 0.3s ease',
@@ -672,7 +673,7 @@ const Login = () => {
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
-            marginTop: isMobile ? '20vh' : '15vh', 
+            marginTop: isMobile ? '15vh' : '35vh', 
           }}
         >
           <h2 style={{
@@ -1001,14 +1002,13 @@ const Login = () => {
          style={{
            pointerEvents: 'auto',
            position: 'absolute',
-           top: isMobile ? '.5%' : -75,
-           left: isMobile ? '10%' : 0,
+           top: isMobile ? '1.5%' : -15,
+           left: isMobile ? '15%' : 0,
            right: isMobile ? '10%' : 0,
            margin: 'auto',
            minWidth: isMobile ? 220 : 280,
            maxWidth: isMobile ? 360 : 430,
-           minHeight: isMobile ? 300 : 400,
-           maxHeight: isMobile ? 400 : 500,
+           height: 350,
            display: isMobile && aspectRatio > 0.72 ? 'none' : (isMobile ? 'block' : 'flex'),
            alignItems: 'center',
            justifyContent: 'center',
