@@ -97,6 +97,18 @@ const Login = () => {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 767);
   const [aspectRatio, setAspectRatio] = useState(window.innerWidth / window.innerHeight);
   const { t, i18n } = useTranslation();
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   
   // Three.js refs
   const sceneRef = useRef(null);
@@ -107,6 +119,7 @@ const Login = () => {
   const currentAnimationIndexRef = useRef(0);
   const clockRef = useRef(new THREE.Clock());
   const controlsRef = useRef(null);
+
 
   // Initialize Three.js scene
   useEffect(() => {
@@ -729,9 +742,19 @@ const Login = () => {
             display: 'flex',
             justifyContent: 'center'
           }}>
-            <div style={{ position: 'relative', minWidth: 120 }}>
-              <button className="btn-hover-preview"
-                onClick={() => setShowLanguageDropdown((prev) => !prev)}
+            <div style={{ position: 'relative', minWidth: 150 }}>
+              <button 
+                className="btn-hover-preview"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowLanguageDropdown((prev) => !prev);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowLanguageDropdown((prev) => !prev);
+                }}
                 aria-haspopup="listbox"
                 aria-expanded={showLanguageDropdown}
                 title={t('login.languageSelector')}
@@ -741,9 +764,9 @@ const Login = () => {
                   border: '1.5px solid var(--card-border)',
                   background: 'var(--card-bg)',
                   color: 'var(--text)',
-                  padding: '0.5rem 0.75rem',
+                  padding: '0.25rem',
                   cursor: 'pointer',
-                  minWidth: 100,
+                  minWidth: 150,
                   width: '100%',
                   textAlign: 'left',
                   display: 'flex',
@@ -751,12 +774,18 @@ const Login = () => {
                   justifyContent: 'space-between',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
                   transition: 'all 0.2s ease',
+                  WebkitTapHighlightColor: 'transparent',
+                  WebkitUserSelect: 'none',
+                  userSelect: 'none',
                 }}
                 onFocus={(e) => {
                   e.target.style.borderColor = 'var(--primary)';
                   e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
                 }}
                 onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget)) {
+                    setShowLanguageDropdown(false);
+                  }
                   e.target.style.borderColor = 'var(--card-border)';
                   e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
                 }}
@@ -768,6 +797,7 @@ const Login = () => {
               </button>
               {showLanguageDropdown && (
                 <ul
+                  ref={dropdownRef}
                   style={{
                     position: 'absolute',
                     top: '110%',
@@ -777,11 +807,13 @@ const Login = () => {
                     border: '1.5px solid var(--card-border)',
                     borderRadius: '8px',
                     boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                    zIndex: 22,
+                    zIndex: 1000,
                     margin: 0,
                     padding: 0,
                     listStyle: 'none',
-                    overflow: 'hidden',
+                    overflow: 'auto',
+                    maxHeight: '300px',
+                    WebkitOverflowScrolling: 'touch',
                     opacity: 1,
                     transform: 'translateY(0)',
                     transition: 'opacity 0.3s ease, transform 0.3s ease',
@@ -827,9 +859,27 @@ const Login = () => {
               {/* Click outside to close */}
               {showLanguageDropdown && (
                 <div
-                  style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 }}
-                  onClick={() => setShowLanguageDropdown(false)}
+                  style={{ 
+                    position: 'fixed', 
+                    top: 0, 
+                    left: 0, 
+                    right: 0, 
+                    bottom: 0, 
+                    zIndex: 999,
+                    WebkitTapHighlightColor: 'transparent'
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowLanguageDropdown(false);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowLanguageDropdown(false);
+                  }}
                   tabIndex={-1}
+                  aria-hidden="true"
                 />
               )}
             </div>
