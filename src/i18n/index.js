@@ -36,6 +36,7 @@ const initI18n = () => {
       interpolation: { 
         escapeValue: false,
       },
+      debug: true,
     });
 
   // Save language preference whenever it changes

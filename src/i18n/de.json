@@ -343,8 +343,7 @@
   "contract_detail_close_preview": "Vorschau schließen",
   "failed_to_upload": "Hochladen fehlgeschlagen.",
   "upload_error_for": "Fehler beim Hochladen für",
-  "uploader_uploaded": "hochgeladen"
-  ,
+  "uploader_uploaded": "hochgeladen",
   "sidebar_mobile": {
     "password": "Passwort",
     "manual": "Handbuch",

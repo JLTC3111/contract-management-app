@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
-import { Eye, EyeOff, Sun, MoonStar } from 'lucide-react';
+import { Eye, EyeOff, Sun, MoonStar, ChevronDownIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -16,14 +16,14 @@ if (typeof window !== 'undefined' && !window.THREE) {
 }
 
 const LANGUAGES = [
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'ja', label: '日本語', flag: '🇯🇵' },
-  { code: 'th', label: 'ไทย', flag: '🇹🇭' },
-  { code: 'zh', label: '中文', flag: '🇨🇳' },
-  { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'en', label: 'English', flag: '/flags/gb.svg' },
+  { code: 'de', label: 'Deutsch', flag: '/flags/de.svg' },
+  { code: 'fr', label: 'Français', flag: '/flags/fr.svg' },
+  { code: 'es', label: 'Español', flag: '/flags/es.svg' },
+  { code: 'ja', label: '日本語', flag: '/flags/jp.svg' },
+  { code: 'th', label: 'ไทย', flag: '/flags/th.svg' },
+  { code: 'zh', label: '中文', flag: '/flags/cn.svg' },
+  { code: 'vi', label: 'Tiếng Việt', flag: '/flags/vn.svg' },
 ];
 
 // Custom Eye Icon SVG
@@ -44,44 +44,6 @@ const CustomEyeIcon = (props) => (
   </svg>
 );
 
-{/*const originalEyeIcon = ((
-  <svg 
-    width="22" 
-    height="22" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    xmlns="http://www.w3.org/2000/svg"
-    style={{
-      transition: 'transform 0.3s ease',
-      transform: 'rotate(0deg)',
-    }}
-  >
-    // Eye outline  
-    <path 
-      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" 
-      fill="currentColor"
-      style={{
-        transition: 'opacity 0.3s ease',
-        opacity: showPassword ? 0 : 1,
-      }}
-    />
-    // Diagonal line 
-    <line 
-      x1="3" 
-      y1="21" 
-      x2="21" 
-      y2="3" 
-      stroke="currentColor" 
-      strokeWidth="2"
-      style={{
-        transition: 'opacity 0.3s ease',
-        opacity: showPassword ? 0 : 1,
-      }}
-    />
-  </svg>
-)*/}
-
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -98,17 +60,29 @@ const Login = () => {
   const [aspectRatio, setAspectRatio] = useState(window.innerWidth / window.innerHeight);
   const { t, i18n } = useTranslation();
   const dropdownRef = useRef(null);
+  const langSwitcherRef = useRef(null);
 
-  // Close dropdown on outside click
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
+      if (langSwitcherRef.current && !langSwitcherRef.current.contains(event.target)) {
+        setShowLanguageDropdown(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+
+    if (showLanguageDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [showLanguageDropdown]);
   
   // Three.js refs
   const sceneRef = useRef(null);
@@ -119,6 +93,13 @@ const Login = () => {
   const currentAnimationIndexRef = useRef(0);
   const clockRef = useRef(new THREE.Clock());
   const controlsRef = useRef(null);
+  const [lang, setLang] = useState(i18n.language);
+
+  useEffect(() => {
+    const onLangChange = (lng) => setLang(lng);
+    i18n.on('languageChanged', onLangChange);
+    return () => i18n.off('languageChanged', onLangChange);
+  }, []);
 
 
   // Initialize Three.js scene
@@ -742,86 +723,64 @@ const Login = () => {
             display: 'flex',
             justifyContent: 'center'
           }}>
-            <div style={{ position: 'relative', minWidth: 150 }}>
+            <div ref={langSwitcherRef} style={{ position: 'relative', minWidth: 150 }}>
               <button 
                 className="btn-hover-preview"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowLanguageDropdown((prev) => !prev);
-                }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowLanguageDropdown((prev) => !prev);
-                }}
+                onClick={() => setShowLanguageDropdown((prev) => !prev)}
                 aria-haspopup="listbox"
                 aria-expanded={showLanguageDropdown}
                 title={t('login.languageSelector')}
                 style={{
-                  fontSize: 'clamp(0.675rem, 2.5vw, 0.925rem)',
-                  borderRadius: '8px',
-                  border: '1.5px solid var(--card-border)',
-                  background: 'var(--card-bg)',
-                  color: 'var(--text)',
-                  padding: '0.25rem',
-                  cursor: 'pointer',
-                  minWidth: 150,
                   width: '100%',
-                  textAlign: 'left',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                  transition: 'all 0.2s ease',
-                  WebkitTapHighlightColor: 'transparent',
-                  WebkitUserSelect: 'none',
-                  userSelect: 'none',
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = 'var(--primary)';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
-                }}
-                onBlur={(e) => {
-                  if (!e.currentTarget.contains(e.relatedTarget)) {
-                    setShowLanguageDropdown(false);
-                  }
-                  e.target.style.borderColor = 'var(--card-border)';
-                  e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+                  padding: '0.5rem 0.75rem',
+                  fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)',
+                  fontWeight: 500,
+                  color: 'var(--text-secondary)',
+                  background: 'var(--input-bg)',
+                  border: '1px solid var(--input-border)',
+                  borderRadius: 'var(--radius-md)',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'background 0.2s, border-color 0.2s',
                 }}
               >
-                <span>
-                  {LANGUAGES.find(l => l.code === i18n.language)?.flag} {LANGUAGES.find(l => l.code === i18n.language)?.label}
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
+                  <img 
+                    src={LANGUAGES.find(l => l.code === i18n.language)?.flag}
+                    alt={LANGUAGES.find(l => l.code === i18n.language)?.label}
+                    style={{ width: '1.25em', height: '1.25em', objectFit: 'contain' }}
+                  />
+                  <span style={{ flexGrow: 1 }}>{LANGUAGES.find(l => l.code === i18n.language)?.label}</span>
+                  <ChevronDownIcon size={16} />
                 </span>
-                <span style={{ marginLeft: 8, fontSize: 12, opacity: 0.7 }}>▼</span>
               </button>
+
               {showLanguageDropdown && (
                 <ul
                   ref={dropdownRef}
+                  role="listbox"
                   style={{
                     position: 'absolute',
-                    top: '110%',
+                    top: '100%',
                     left: 0,
-                    width: '100%',
+                    right: 0,
                     background: 'var(--card-bg)',
-                    border: '1.5px solid var(--card-border)',
-                    borderRadius: '8px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                    zIndex: 1000,
-                    margin: 0,
-                    padding: 0,
+                    border: '1px solid var(--card-border)',
+                    borderRadius: 'var(--radius-md)',
                     listStyle: 'none',
-                    overflow: 'auto',
-                    maxHeight: '300px',
+                    padding: 0,
+                    margin: '0.5rem 0 0 0',
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                    zIndex: 1000,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                     WebkitOverflowScrolling: 'touch',
-                    opacity: 1,
-                    transform: 'translateY(0)',
-                    transition: 'opacity 0.3s ease, transform 0.3s ease',
                   }}
-                  role="listbox"
-                  aria-activedescendant={i18n.language}
                 >
-                    {LANGUAGES.map(lang => (
+                  {LANGUAGES.map(lang => (
                       <li
                         key={lang.code}
                         role="option"
@@ -833,12 +792,16 @@ const Login = () => {
                         }}
                         onKeyDown={e => {
                           if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
                             i18n.changeLanguage(lang.code);
                             setShowLanguageDropdown(false);
                           }
                         }}
                         style={{
-                          fontSize: 'clamp(0.675rem, 2.5vw, 0.925rem)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.75rem',
+                          fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)',
                           padding: '0.6rem 1rem',
                           cursor: 'pointer',
                           background: i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)',
@@ -848,39 +811,18 @@ const Login = () => {
                           outline: 'none',
                           transition: 'background 0.2s ease',
                         }}
-                        onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'}
-                        onMouseLeave={e => e.currentTarget.style.background = i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)'}
+                        onMouseEnter={(e) => e.currentTarget.style.background = 'var(--hover-bg)'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)'}
                       >
-                        <span style={{ marginRight: 8 }}>{lang.flag}</span> {lang.label}
+                        <img 
+                          src={lang.flag} 
+                          alt={lang.label} 
+                          style={{ width: '1.5em', height: '1.5em', objectFit: 'contain' }}
+                        />
+                        <span>{lang.label}</span>
                       </li>
                     ))}
                 </ul>
-              )}
-              {/* Click outside to close */}
-              {showLanguageDropdown && (
-                <div
-                  style={{ 
-                    position: 'fixed', 
-                    top: 0, 
-                    left: 0, 
-                    right: 0, 
-                    bottom: 0, 
-                    zIndex: 999,
-                    WebkitTapHighlightColor: 'transparent'
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowLanguageDropdown(false);
-                  }}
-                  onTouchEnd={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowLanguageDropdown(false);
-                  }}
-                  tabIndex={-1}
-                  aria-hidden="true"
-                />
               )}
             </div>
           </div>
