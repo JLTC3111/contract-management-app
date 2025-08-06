@@ -41,7 +41,6 @@ const Navbar = () => {
   const themeToggleRef = useRef();
   const [titleText, setTitleText] = useState('');
   const [logoVisible, setLogoVisible] = useState(false);
-  const LDLogoRef = useRef();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -237,7 +236,7 @@ const Navbar = () => {
             alignItems: 'center',
             marginRight: '1rem'
           }}
-        > <FolderOpen size={isMobile ? 14 : 20} />
+        > <Folder size={isMobile ? 14 : 20} />
           {titleText}
           {titleText.length < t('navbar.title').length && (
             <span 
@@ -277,7 +276,7 @@ const Navbar = () => {
               ease: "linear" 
             }}
             style={{
-              height: 'clamp(1.15rem, 4.5vw, 1.8rem)', // Responsive height
+              height: 'clamp(1rem, 2.75vw, 1.8rem)', // Responsive height
               width: 'auto',
               borderRadius: '20px',
               alignItems: 'center',
@@ -353,7 +352,7 @@ const Navbar = () => {
             aria-expanded={showDropdown}
             title={t('navbar.languageSelector')}
             style={{
-              fontSize: 'clamp(0.65rem, 2.5vw, 0.925rem)',
+              fontSize: 'clamp(0.65rem, 1.75vw, 0.925rem)',
               borderRadius: '6px',
               border: '1.5px solid var(--card-border)',
               background: 'var(--card-bg)',
@@ -461,53 +460,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-    {/* LD Logo 
-      <div ref={LDLogoRef} style={{ display: 'flex', alignItems: 'flex-end', marginLeft: 'auto',
-        opacity: isHovered ? 1 : 0.15,
-        transition: 'opacity 0.3s ease, transform 0.3s ease',
-        transform: isHovered ? 'scale(1.25)' : 'scale(1)',
-        cursor: 'pointer',
-        zIndex: 100,
-       }}>
-        <img 
-          src="/logoIcons/LD_logo_dark.png" 
-          style={{
-            backgroundColor: 'var(--ldlogo-bg)',
-            display: darkMode ? 'none' : 'block',
-            height: 'clamp(1.15rem, 6.5vw, 2rem)', // Responsive height
-            width: 'auto',
-            borderRadius: '20px',
-            alignItems: 'center',
-            objectFit: 'contain',
-            transition: 'all 0.3s ease-in-out',
-            boxShadow: isHovered
-              ? darkMode
-                ? '0 1px 2px rgba(255, 255, 255, 1)'
-                : '0 1px 2px rgba(0, 0, 0, 1)'
-              : 'none',
-          }}
-        />
-        <img 
-          src="/logoIcons/LD_logo_light.png" 
-          style={{
-            backgroundColor: 'var(--ldlogo-bg)',
-            display: darkMode ? 'block' : 'none',
-            height: 'clamp(1.15rem, 6.5vw, 2rem)', // Responsive height
-            width: 'auto',
-            borderRadius: '20px',
-            alignItems: 'center',
-            objectFit: 'contain',
-            transition: 'all 0.3s ease-in-out',
-            boxShadow: isHovered
-              ? darkMode
-                ? '0 1px 2px rgba(255, 255, 255, 1)'
-                : '0 1px 2px rgba(0, 0, 0, 1)'
-              : 'none',
-          }}
-        />
-      </div>*/}
-      {/* Right: Theme Toggle (responsive on mobile) */}
-<div
+  <div
   ref={themeToggleRef}
   style={{
     display: 'flex',

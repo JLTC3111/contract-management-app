@@ -738,10 +738,11 @@ const Login = () => {
                 style={{
                   width: '100%',
                   display: 'flex',
+                  marginBottom: '1rem',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '0.5rem 0.75rem',
-                  fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)',
+                  fontSize: 'clamp(0.75rem, 2.75vw, 1.25rem)',
                   fontWeight: 500,
                   color: 'var(--text-secondary)',
                   background: 'var(--input-bg)',
