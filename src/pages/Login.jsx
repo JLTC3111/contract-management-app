@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
-import { Eye, EyeOff, Sun, MoonStar, ChevronDownIcon } from 'lucide-react';
+import { Sun, MoonStar, ChevronDownIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
