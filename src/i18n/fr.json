@@ -378,7 +378,7 @@
   "comment_deleted": "Commentaire supprimé !",
   "failed_to_delete_comment": "Échec de la suppression du commentaire.",
   "navbar": {
-    "title": "📁 Gestionnaire de Contrats",
+    "title": "Gestionnaire de Contrats",
     "visitIcue": "Visiter iCUE !",
     "searchPlaceholder": "Rechercher des fichiers ou dossiers...",
     "noResults": "Aucun résultat trouvé",

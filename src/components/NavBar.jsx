@@ -1,24 +1,23 @@
 // src/components/Navbar.jsx
 import { useUser } from '../hooks/useUser';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LogOut } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
-import { Sun, MoonStar } from 'lucide-react';
+import { Sun, MoonStar, ChevronDownIcon, Folder, FolderOpen } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 
 const LANGUAGES = [
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
-  { code: 'ja', label: '日本語', flag: '🇯🇵' },
-  { code: 'th', label: 'ไทย', flag: '🇹🇭' },
-  { code: 'zh', label: '中文', flag: '🇨🇳' },
-  { code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'en', label: 'English', flag: '/flags/gb.svg' },
+  { code: 'de', label: 'Deutsch', flag: '/flags/de.svg' },
+  { code: 'fr', label: 'Français', flag: '/flags/fr.svg' },
+  { code: 'es', label: 'Español', flag: '/flags/es.svg' },
+  { code: 'ja', label: '日本語', flag: '/flags/jp.svg' },
+  { code: 'th', label: 'ไทย', flag: '/flags/th.svg' },
+  { code: 'zh', label: '中文', flag: '/flags/cn.svg' },
+  { code: 'vi', label: 'Tiếng Việt', flag: '/flags/vn.svg' },
 ];
 
 const Navbar = () => {
@@ -104,16 +103,27 @@ const Navbar = () => {
     return () => { active = false; };
   }, [searchTerm]);
 
-  // Close dropdown on outside click
+  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClick = (e) => {
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
+    const handleClickOutside = (event) => {
+      if (langSwitcherRef.current && !langSwitcherRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
     };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [showDropdown]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 1024);
@@ -223,9 +233,11 @@ const Navbar = () => {
             fontWeight: 'bold',
             minHeight: '1.5em',
             display: 'flex',
-            alignItems: 'center'
+            gap: '0.5rem',
+            alignItems: 'center',
+            marginRight: '1rem'
           }}
-        >
+        > <FolderOpen size={isMobile ? 14 : 20} />
           {titleText}
           {titleText.length < t('navbar.title').length && (
             <span 
@@ -361,10 +373,15 @@ const Navbar = () => {
               zIndex: 21,
             }}
           >
-            <span>
-              {LANGUAGES.find(l => l.code === i18n.language)?.flag} {LANGUAGES.find(l => l.code === i18n.language)?.label}
-            </span>
-            <span style={{ marginLeft: 8, fontSize: 12, opacity: 0.7 }}>▼</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
+                  <img 
+                    src={LANGUAGES.find(l => l.code === i18n.language)?.flag}
+                    alt={LANGUAGES.find(l => l.code === i18n.language)?.label}
+                    style={{ width: '1.25em', height: '1.25em', objectFit: 'contain' }}
+                  />
+                  <span style={{ flexGrow: 1 }}>{LANGUAGES.find(l => l.code === i18n.language)?.label}</span>
+                  <ChevronDownIcon size={16} />
+                </span>
           </button>
           <AnimatePresence>
             {showDropdown && (
@@ -410,6 +427,9 @@ const Navbar = () => {
                     style={{
                       fontSize: 'clamp(0.65rem, 2.5vw, 0.925rem)',
                       padding: '0.5rem 1rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
                       cursor: 'pointer',
                       background: i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)',
                       color: 'var(--text)',
@@ -420,7 +440,12 @@ const Navbar = () => {
                     onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'}
                     onMouseLeave={e => e.currentTarget.style.background = i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)'}
                   >
-                    <span style={{ marginRight: 8 }}>{lang.flag}</span> {lang.label}
+                    <img 
+                          src={lang.flag} 
+                          alt={lang.label} 
+                          style={{ width: '1.5em', height: '1.5em', objectFit: 'contain' }}
+                        />
+                        <span>{lang.label}</span>
                   </li>
                 ))}
               </motion.ul>

@@ -378,7 +378,7 @@
   "comment_deleted": "评论已删除！",
   "failed_to_delete_comment": "删除评论失败。",
   "navbar": {
-    "title": "📁 合同管理器",
+    "title": "合同管理器",
     "visitIcue": "访问 iCUE！",
     "searchPlaceholder": "搜索文件或文件夹...",
     "noResults": "未找到结果",

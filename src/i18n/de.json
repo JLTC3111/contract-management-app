@@ -374,7 +374,7 @@
   "comment_deleted": "Kommentar gelöscht!",
   "failed_to_delete_comment": "Kommentar konnte nicht gelöscht werden.",
   "navbar": {
-    "title": "📁 Vertragsmanager",
+    "title": "Vertragsmanager",
     "visitIcue": "iCUE besuchen!",
     "searchPlaceholder": "Dateien oder Ordner suchen...",
     "noResults": "Keine Ergebnisse gefunden",

@@ -439,7 +439,7 @@
     "close": "Close"
   },
   "navbar": {
-    "title": "📁 Contract Manager",
+    "title": "Contract Manager",
     "visitIcue": "Visit iCUE!",
     "searchPlaceholder": "Search files or folders...",
     "noResults": "No results found",
