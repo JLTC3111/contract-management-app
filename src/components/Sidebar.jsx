@@ -302,6 +302,7 @@ const Sidebar = () => {
 
         <div style={{ 
           display: 'flex', 
+          fontSize: 'clamp(0.7rem, 2.5vw, 1.25rem)',
           flexDirection: isMobile ? 'row' : 'column', 
           alignItems: isMobile ? 'center' : 'flex-start', 
           flex: 1, 
@@ -451,9 +452,9 @@ const Sidebar = () => {
                 <motion.div
                   key="profile-submenu"
                   initial={{ opacity: 0, maxHeight: 0 }}
-                  animate={{ opacity: 1, maxHeight: 300 }} // Pick a reasonable max
+                  animate={{ opacity: 1, maxHeight: '100%' }} 
                   exit={{ opacity: 0, maxHeight: 0 }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  transition={{ duration: 0.25, ease: 'easeOut' }}
                   style={{ overflow: 'hidden' }}
                 >
                   <SubMenu className="mobile-submenu-modal"
