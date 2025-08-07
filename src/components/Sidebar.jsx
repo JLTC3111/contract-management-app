@@ -150,8 +150,8 @@ const Sidebar = () => {
     if (!isResizing) return;
     
     const newWidth = e.clientX;
-    const minWidth = 200;
-    const maxWidth = 600;
+    const minWidth = 220;
+    const maxWidth = 280;
     
     if (newWidth >= minWidth && newWidth <= maxWidth) {
       setSidebarWidth(newWidth);
