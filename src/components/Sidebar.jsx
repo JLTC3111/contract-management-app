@@ -411,7 +411,22 @@ const Sidebar = () => {
                     console.error('❌ Cron failed:', result);
                     alert(`${t('sidebar.cronFailed')} ${result.error || result.message || 'Unknown error'}`);
                   } else {
-                    alert(`${t('sidebar.statusUpdated')} ${result.updatedCount ? `(${result.updatedCount} ${t('sidebar.contractsUpdated')})` : ''}`);
+                    console.log('✅ Cron result:', result);
+                    const { updated_count, expired_count, expiring_count, notifications_sent } = result;
+                    let message = t('sidebar.statusUpdated');
+                    
+                    if (updated_count > 0) {
+                      const details = [];
+                      if (expired_count > 0) details.push(`${expired_count} expired`);
+                      if (expiring_count > 0) details.push(`${expiring_count} expiring`);
+                      if (notifications_sent > 0) details.push(`${notifications_sent} notifications sent`);
+                      
+                      message += ` (${updated_count} contracts updated: ${details.join(', ')})`;
+                    } else {
+                      message += ' (No contracts needed updates)';
+                    }
+                    
+                    alert(message);
                   }
                 } catch (error) {
                   console.error('🚨 Error triggering cron:', error);

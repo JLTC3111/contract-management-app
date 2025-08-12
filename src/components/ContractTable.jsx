@@ -37,12 +37,18 @@ const statusStyles = {
   },
 };
 
-const isExpiringSoon = (dateStr) => {
+const isExpiringSoon = (dateStr, status) => {
   if (!dateStr) return false;
   const expiry = new Date(dateStr);
   const now = new Date();
   const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
-  return diffDays > 0 && diffDays <= 7; // within 7 days
+  
+  // Different timeframes based on status: draft (21 days), pending (14 days), approved/rejected (7 days)
+  if (status === 'draft') return diffDays > 0 && diffDays <= 21;
+  if (status === 'pending') return diffDays > 0 && diffDays <= 14;
+  if (['approved', 'rejected'].includes(status)) return diffDays > 0 && diffDays <= 7;
+  
+  return false; // For other statuses or expiring status (already handled)
 };
 
 const getUnique = (arr, key) => Array.from(new Set(arr.map(c => c[key]).filter(Boolean)));
@@ -450,8 +456,11 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               <td>
                 {(() => {
                   const rawStatus = contract.status?.toLowerCase();
-                  const isNearExpiry = isExpiringSoon(contract.expiry_date);
-                  const finalStatus = rawStatus === 'approved' && isNearExpiry ? 'expiring' : rawStatus;
+                  const isNearExpiry = isExpiringSoon(contract.expiry_date, contract.status);
+                  const finalStatus = rawStatus === 'approved' && isNearExpiry ? 'expiring' : 
+                                     rawStatus === 'draft' && isNearExpiry ? 'expiring' :
+                                     rawStatus === 'pending' && isNearExpiry ? 'expiring' :
+                                     rawStatus === 'rejected' && isNearExpiry ? 'expiring' : rawStatus;
                   const style = statusStyles[finalStatus] || {
                     color: '#374151',
                     backgroundColor: '#f3f4f6',

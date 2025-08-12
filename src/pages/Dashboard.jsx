@@ -31,7 +31,19 @@ const Dashboard = () => {
   const metrics = [
     { label: t('dashboard.active', 'Active'), count: contracts.filter(c => c.status === 'approved').length },
     { label: t('dashboard.pending', 'Pending'), count: contracts.filter(c => c.status === 'pending').length },
-    { label: t('dashboard.expiring', 'Expiring'), count: contracts.filter(c => c.status === 'expiring').length },
+    { label: t('dashboard.expiring', 'Expiring'), count: contracts.filter(c => {
+      // Include both explicitly set 'expiring' status AND any contracts expiring within their respective timeframes
+      if (c.status === 'expiring') return true;
+      if (!c.expiry_date) return false;
+      const expiry = new Date(c.expiry_date);
+      const now = new Date();
+      const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
+      // Different timeframes based on status: draft (21 days), pending (14 days), approved/rejected (7 days)
+      if (c.status === 'draft') return diffDays > 0 && diffDays <= 21;
+      if (c.status === 'pending') return diffDays > 0 && diffDays <= 14;
+      if (['approved', 'rejected'].includes(c.status)) return diffDays > 0 && diffDays <= 7;
+      return false;
+    }).length },
     { label: t('dashboard.drafts', 'Drafts'), count: contracts.filter(c => c.status === 'draft').length },
     { label: t('dashboard.rejected', 'Rejected'), count: contracts.filter(c => c.status === 'rejected').length },
     { label: t('dashboard.expired', 'Expired'), count: contracts.filter(c => c.status === 'expired').length },
@@ -49,14 +61,18 @@ const Dashboard = () => {
       
       let filtered;
       if (label === 'Expiring') {
-        // For expiring, filter approved contracts that are expiring soon
+        // Include both explicitly set 'expiring' status AND any contracts expiring within their respective timeframes
         filtered = contracts.filter(c => {
-          if (c.status !== 'approved') return false;
+          if (c.status === 'expiring') return true;
           if (!c.expiry_date) return false;
           const expiry = new Date(c.expiry_date);
           const now = new Date();
           const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
-          return diffDays > 0 && diffDays <= 7; // within 7 days
+          // Different timeframes based on status: draft (21 days), pending (14 days), approved/rejected (7 days)
+          if (c.status === 'draft') return diffDays > 0 && diffDays <= 21;
+          if (c.status === 'pending') return diffDays > 0 && diffDays <= 14;
+          if (['approved', 'rejected'].includes(c.status)) return diffDays > 0 && diffDays <= 7;
+          return false;
         });
       } else {
         // For other statuses, use direct status matching
@@ -80,14 +96,18 @@ const Dashboard = () => {
     if (activeFilter) {
       let filtered;
       if (activeFilter === 'Expiring') {
-        // For expiring, filter approved contracts that are expiring soon
+        // Include both explicitly set 'expiring' status AND any contracts expiring within their respective timeframes
         filtered = contracts.filter(c => {
-          if (c.status !== 'approved') return false;
+          if (c.status === 'expiring') return true;
           if (!c.expiry_date) return false;
           const expiry = new Date(c.expiry_date);
           const now = new Date();
           const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
-          return diffDays > 0 && diffDays <= 7; // within 7 days
+          // Different timeframes based on status: draft (21 days), pending (14 days), approved/rejected (7 days)
+          if (c.status === 'draft') return diffDays > 0 && diffDays <= 21;
+          if (c.status === 'pending') return diffDays > 0 && diffDays <= 14;
+          if (['approved', 'rejected'].includes(c.status)) return diffDays > 0 && diffDays <= 7;
+          return false;
         });
       } else {
         // For other statuses, use direct status matching

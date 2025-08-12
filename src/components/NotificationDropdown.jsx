@@ -14,10 +14,12 @@ const NotificationDropdown = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [generalNotifications, setGeneralNotifications] = useState([]);
   const [commentNotifications, setCommentNotifications] = useState([]);
   const [approvalStatusNotifications, setApprovalStatusNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [generalCount, setGeneralCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [approvalStatusCount, setApprovalStatusCount] = useState(0);
   const [readNotifications, setReadNotifications] = useState(new Set());
@@ -146,6 +148,32 @@ const NotificationDropdown = () => {
     }
   };
 
+  // Fetch general notifications for the current user
+  const fetchGeneralNotifications = async () => {
+    if (!user) return;
+    
+    try {
+      // Get unread notifications for the current user
+      const { data: userNotifications, error: notificationError } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('read', false)
+        .order('created_at', { ascending: false })
+        .limit(10); // Limit to recent notifications
+
+      if (notificationError) {
+        console.error('Error fetching general notifications:', notificationError);
+        return;
+      }
+
+      setGeneralNotifications(userNotifications || []);
+      setGeneralCount(userNotifications?.length || 0);
+    } catch (err) {
+      console.error('Error fetching general notifications:', err);
+    }
+  };
+
   // Fetch approval status notifications for editor users
   const fetchApprovalStatusNotifications = async () => {
     if (!user || user.role !== 'editor') {
@@ -250,17 +278,45 @@ const NotificationDropdown = () => {
   };
 
   // Mark notification as read
-  const markNotificationAsRead = (notificationId) => {
+  const markNotificationAsRead = async (notificationId) => {
     setReadNotifications(prev => new Set([...prev, notificationId]));
+    
+    // Check if this is a general notification that needs to be marked as read in the database
+    const generalNotification = generalNotifications.find(n => n.id === notificationId);
+    if (generalNotification) {
+      try {
+        await supabase
+          .from('notifications')
+          .update({ read: true })
+          .eq('id', notificationId)
+          .eq('user_id', user.id);
+      } catch (error) {
+        console.error('Error marking notification as read:', error);
+      }
+    }
   };
 
   // Mark all notifications as read
-  const markAllAsRead = () => {
+  const markAllAsRead = async () => {
     const allNotificationIds = [
       ...approvalStatusNotifications.map(n => n.id),
-      ...commentNotifications.map(c => c.id)
+      ...commentNotifications.map(c => c.id),
+      ...generalNotifications.map(n => n.id)
     ];
     setReadNotifications(prev => new Set([...prev, ...allNotificationIds]));
+    
+    // Mark all general notifications as read in the database
+    if (generalNotifications.length > 0) {
+      try {
+        await supabase
+          .from('notifications')
+          .update({ read: true })
+          .eq('user_id', user.id)
+          .eq('read', false);
+      } catch (error) {
+        console.error('Error marking all notifications as read:', error);
+      }
+    }
   };
 
   // Handle notification click
@@ -273,7 +329,8 @@ const NotificationDropdown = () => {
   // Calculate unread counts
   const unreadApprovalCount = approvalStatusNotifications.filter(n => !readNotifications.has(n.id)).length;
   const unreadCommentCount = commentNotifications.filter(c => !readNotifications.has(c.id)).length;
-  const totalUnreadCount = unreadCount + unreadCommentCount + unreadApprovalCount;
+  const unreadGeneralCount = generalNotifications.filter(n => !readNotifications.has(n.id)).length;
+  const totalUnreadCount = unreadCount + unreadCommentCount + unreadApprovalCount + unreadGeneralCount;
 
   // Handle dropdown close with animation
   const handleCloseDropdown = () => {
@@ -290,13 +347,26 @@ const NotificationDropdown = () => {
       fetchNotifications();
       fetchCommentNotifications();
       fetchApprovalStatusNotifications();
+      fetchGeneralNotifications(); // Add general notifications
       
-      // Set up auto-refresh every 30 seconds for editors
+      // Set up auto-refresh every 30 seconds for editors and all users for general notifications
       if (user.role === 'editor') {
         const interval = setInterval(() => {
           fetchApprovalStatusNotifications();
           fetchCommentNotifications();
+          fetchGeneralNotifications();
         }, 30000); // 30 seconds
+        
+        setAutoRefreshInterval(interval);
+        
+        return () => {
+          if (interval) clearInterval(interval);
+        };
+      } else {
+        // For non-editors, still refresh general notifications
+        const interval = setInterval(() => {
+          fetchGeneralNotifications();
+        }, 60000); // 60 seconds
         
         setAutoRefreshInterval(interval);
         
@@ -316,9 +386,8 @@ const NotificationDropdown = () => {
     };
   }, [autoRefreshInterval]);
 
-  // Don't show for non-approver/admin/editor users
-  if (!user || (user.role !== 'approver' && user.role !== 'admin' && user.role !== 'editor')) {
-    console.log('NotificationDropdown: User role is', user?.role, 'User:', user);
+  // Show for all authenticated users (general notifications), but only show specific types based on role
+  if (!user) {
     return null;
   }
 
@@ -451,6 +520,78 @@ const NotificationDropdown = () => {
 
           {/* Content */}
           <div style={{ maxHeight: 'clamp(220px, 50vh, 400px)', overflowY: 'auto', fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>
+            {/* General Notifications - Show for all users */}
+            {generalNotifications.length > 0 && (
+              <div style={{ padding: '1rem', borderBottom: '2px solid var(--card-border)' }}>
+                <h4 style={{ margin: '0 0 1rem 0', color: 'var(--text)', fontSize: '1rem' }}>
+                  🔔 {t('general_notifications', 'System Notifications')}
+                </h4>
+                {generalNotifications.map((notification) => (
+                  <div
+                    key={notification.id}
+                    style={{
+                      padding: '0.75rem',
+                      marginBottom: '0.75rem',
+                      border: '1px solid var(--card-border)',
+                      borderRadius: '6px',
+                      background: notification.type === 'error' ? 'rgba(239, 68, 68, 0.1)' : 
+                                 notification.type === 'warning' ? 'rgba(245, 158, 11, 0.1)' : 
+                                 notification.type === 'success' ? 'rgba(16, 185, 129, 0.1)' : 
+                                 'rgba(59, 130, 246, 0.1)',
+                      cursor: 'pointer',
+                      opacity: readNotifications.has(notification.id) ? 0.7 : 1,
+                      transition: 'opacity 0.2s ease',
+                    }}
+                    onClick={() => handleNotificationClick(notification.id, notification.contract_id)}
+                  >
+                    <div style={{ marginBottom: '0.5rem' }}>
+                      <h5 style={{ 
+                        margin: '0 0 0.25rem 0', 
+                        color: 'var(--text)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}>
+                        {notification.type === 'error' && '🛑'}
+                        {notification.type === 'warning' && '⚠️'}
+                        {notification.type === 'success' && '✅'}
+                        {notification.type === 'info' && 'ℹ️'}
+                        {notification.title}
+                      </h5>
+                      <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                        {new Date(notification.created_at).toLocaleString()}
+                      </p>
+                    </div>
+
+                    <div style={{ 
+                      background: 'var(--card-bg)', 
+                      padding: '0.5rem', 
+                      borderRadius: '4px',
+                      border: '1px solid var(--card-border)'
+                    }}>
+                      <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text)' }}>
+                        {notification.message}
+                      </p>
+                    </div>
+
+                    {notification.contract_id && (
+                      <div style={{ 
+                        marginTop: '0.5rem',
+                        background: 'var(--hover-bg)', 
+                        padding: '0.25rem', 
+                        borderRadius: '4px',
+                        border: '1px solid var(--card-border)'
+                      }}>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
+                          {t('click_to_view_contract', 'Click to view contract')}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
             {user.role === 'editor' ? (
               // Editor view - show comments and approval status notifications
               <>
