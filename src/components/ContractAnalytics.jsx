@@ -202,7 +202,7 @@ const ContractAnalytics = ({ contracts = [] }) => {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
         <p style={{ color: 'var(--text)' }}>
-          {t('errorLoadingContractData')}
+          {t('analytics.errorLoadingContractData')}
         </p>
       </div>
     );
@@ -216,7 +216,7 @@ const ContractAnalytics = ({ contracts = [] }) => {
           {t('analytics.title')}
         </h2>
         <p style={{ color: 'var(--text)', opacity: 0.7 }}>
-          {t('No contracts available for analysis')}
+          {t('analytics.noContractsAvailable')}
         </p>
       </div>
     );
@@ -233,7 +233,7 @@ const ContractAnalytics = ({ contracts = [] }) => {
         gap: '1rem'
       }}>
         <h1 style={{ color: 'var(--text)', margin: 0 }}>
-          {t('Contract Analytics & History')}
+          {t('analytics.contractAnalyticsHistory')}
         </h1>
         
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -248,11 +248,11 @@ const ContractAnalytics = ({ contracts = [] }) => {
               color: 'var(--text)'
             }}
           >
-            <option value="1month">{t('Last Month')}</option>
-            <option value="3months">{t('Last 3 Months')}</option>
-            <option value="6months">{t('Last 6 Months')}</option>
-            <option value="1year">{t('Last Year')}</option>
-            <option value="all">{t('All Time')}</option>
+            <option value="1month">{t('analytics.lastMonth')}</option>
+            <option value="3months">{t('analytics.last3Months')}</option>
+            <option value="6months">{t('analytics.last6Months')}</option>
+            <option value="1year">{t('analytics.lastYear')}</option>
+            <option value="all">{t('analytics.allTime')}</option>
           </select>
           
           <button
@@ -270,7 +270,7 @@ const ContractAnalytics = ({ contracts = [] }) => {
             }}
           >
             <Eye size={16} />
-            {showDetailedView ? t('Simple View') : t('Detailed View')}
+            {showDetailedView ? t('analytics.simpleView') : t('analytics.detailedView')}
           </button>
         </div>
       </div>
@@ -283,25 +283,25 @@ const ContractAnalytics = ({ contracts = [] }) => {
         marginBottom: '2rem'
       }}>
         <MetricCard
-          title={t('Total Contracts')}
+          title={t('analytics.totalContracts')}
           value={keyMetrics.total}
           icon={Calendar}
           color="#3b82f6"
         />
         <MetricCard
-          title={t('Approval Rate')}
+          title={t('analytics.approvalRate')}
           value={`${keyMetrics.approvalRate}%`}
           icon={CheckCircle}
           color="#10b981"
         />
         <MetricCard
-          title={t('Pending Review')}
+          title={t('analytics.pendingReview')}
           value={keyMetrics.pending}
           icon={Clock}
           color="#f59e0b"
         />
         <MetricCard
-          title={t('Expiring Soon')}
+          title={t('analytics.expiringSoon')}
           value={keyMetrics.expiring}
           icon={AlertTriangle}
           color="#ef4444"

@@ -83,7 +83,7 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
       }
     } catch (error) {
       console.error('Error fetching contract phases:', error);
-      toast.error(t('Failed to load contract phases'));
+      toast.error(t('phaseManagement.failedToLoadPhases'));
     } finally {
       setLoading(false);
     }
@@ -118,7 +118,7 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
       setPhases(data);
     } catch (error) {
       console.error('Error initializing phases:', error);
-      toast.error(t('Failed to initialize contract phases'));
+      toast.error(t('phaseManagement.failedToInitializePhases'));
     }
   };
 

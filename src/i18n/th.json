@@ -29,7 +29,9 @@
       "approver": "สามารถตรวจสอบและอนุมัติสัญญาได้ ไม่มีสิทธิ์แก้ไข",
       "viewer": "ดูสัญญาทั้งหมดได้เท่านั้น",
       "unknown": "ไม่รู้จักบทบาทนี้"
-    }
+    },
+    "analytics": "การวิเคราะห์และประวัติ",
+    "phaseManagement": "การจัดการขั้นตอน"
   },
   "buttons": {
     "login": "เข้าสู่ระบบ",
@@ -377,5 +379,69 @@
     "themeToggle": "สลับธีม"
   },
   "no_permission_create_contract": "คุณไม่มีสิทธิ์ในการสร้างสัญญาใหม่",
-  "sidebar.visitIcueTooltip": "เยี่ยมชม iCUE!"
+  "analytics": {
+    "title": "การวิเคราะห์สัญญา",
+    "errorLoadingContractData": "ข้อผิดพลาดในการโหลดข้อมูลสัญญา",
+    "noContractsAvailable": "ไม่มีสัญญาสำหรับการวิเคราะห์",
+    "contractAnalyticsHistory": "การวิเคราะห์และประวัติสัญญา",
+    "lastMonth": "เดือนที่แล้ว",
+    "last3Months": "3 เดือนที่แล้ว",
+    "last6Months": "6 เดือนที่แล้ว",
+    "lastYear": "ปีที่แล้ว",
+    "allTime": "ตลอดเวลา",
+    "simpleView": "มุมมองง่าย",
+    "detailedView": "มุมมองละเอียด",
+    "totalContracts": "สัญญาทั้งหมด",
+    "approvalRate": "อัตราการอนุมัติ",
+    "pendingReview": "รอการตรวจสอบ",
+    "expiringSoon": "ใกล้หมดอายุ",
+    "totalContractValue": "มูลค่าสัญญาทั้งหมด",
+    "approvedValue": "มูลค่าที่อนุมัติ",
+    "averageContractValue": "มูลค่าเฉลี่ยสัญญา",
+    "statusDistribution": "การกระจายสถานะ",
+    "monthlyTrends": "แนวโน้มรายเดือน",
+    "contractStatusTimeline": "ไทม์ไลน์สถานะสัญญา",
+    "recentContractHistory": "ประวัติสัญญาล่าสุด",
+    "contract": "สัญญา",
+    "status": "สถานะ",
+    "created": "สร้างแล้ว",
+    "expiry": "หมดอายุ",
+    "value": "มูลค่า",
+    "approved": "อนุมัติแล้ว",
+    "pending": "รอดำเนินการ",
+    "rejected": "ปฏิเสธแล้ว",
+    "draft": "ร่าง"
+  },
+  "phaseManagement": {
+    "title": "การจัดการขั้นตอน",
+    "trackProjectPhases": "ติดตามขั้นตอนโครงการและผลส่งมอบ",
+    "viewContractPerformance": "ดูประสิทธิภาพและแนวโน้มสัญญา",
+    "loadingContractPhases": "กำลังโหลดขั้นตอนสัญญา...",
+    "contractPhaseManagement": "การจัดการขั้นตอนสัญญา",
+    "overallContractProgress": "ความคืบหน้าโดยรวมของสัญญา",
+    "phase": "ขั้นตอน",
+    "complete": "เสร็จสิ้น",
+    "started": "เริ่มแล้ว",
+    "completed": "เสร็จสมบูรณ์",
+    "tasksDeliverables": "งานและผลส่งมอบ",
+    "custom": "กำหนดเอง",
+    "addCustomTask": "เพิ่มงานกำหนดเอง...",
+    "startPhase": "เริ่มขั้นตอน",
+    "markComplete": "ทำเครื่องหมายเสร็จสิ้น",
+    "failedToLoadPhases": "ไม่สามารถโหลดขั้นตอนสัญญา",
+    "failedToInitializePhases": "ไม่สามารถเริ่มต้นขั้นตอนสัญญา",
+    "phaseUpdatedSuccessfully": "อัปเดตขั้นตอนสำเร็จ",
+    "failedToUpdatePhase": "ไม่สามารถอัปเดตขั้นตอน"
+  },
+  "lifecycle": {
+    "contractLifecycleManagement": "การจัดการวงจรชีวิตสัญญา",
+    "failedToLoadContractDetails": "ไม่สามารถโหลดรายละเอียดสัญญา",
+    "failedToLoadContractsForAnalytics": "ไม่สามารถโหลดสัญญาสำหรับการวิเคราะห์",
+    "loadingContractLifecycleData": "กำลังโหลดข้อมูลวงจรชีวิตสัญญา...",
+    "contractNotFound": "ไม่พบสัญญา",
+    "contractNotFoundMessage": "ไม่พบสัญญาที่ร้องขอหรือคุณอาจไม่มีสิทธิ์เข้าถึง",
+    "expires": "หมดอายุ",
+    "export": "ส่งออก",
+    "share": "แชร์"
+  }
 } 

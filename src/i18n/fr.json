@@ -29,7 +29,9 @@
       "approver": "Peut examiner et approuver les contrats. Aucun accès à la modification.",
       "viewer": "Accès en lecture seule à tous les contrats.",
       "unknown": "Rôle non reconnu."
-    }
+    },
+    "analytics": "Analytiques & Historique",
+    "phaseManagement": "Gestion des Phases"
   },
   "buttons": {
     "login": "Connexion",
@@ -386,5 +388,69 @@
     "themeToggle": "Basculer le thème"
   },
   "no_permission_create_contract": "Vous n'avez pas la permission de créer de nouveaux contrats.",
-  "sidebar.visitIcueTooltip": "Visiter iCUE!"
+  "analytics": {
+    "title": "Analytiques des Contrats",
+    "errorLoadingContractData": "Erreur lors du chargement des données de contrat",
+    "noContractsAvailable": "Aucun contrat disponible pour l'analyse",
+    "contractAnalyticsHistory": "Analytiques & Historique des Contrats",
+    "lastMonth": "Mois Dernier",
+    "last3Months": "3 Derniers Mois",
+    "last6Months": "6 Derniers Mois",
+    "lastYear": "Année Dernière",
+    "allTime": "Tous les Temps",
+    "simpleView": "Vue Simple",
+    "detailedView": "Vue Détaillée",
+    "totalContracts": "Total des Contrats",
+    "approvalRate": "Taux d'Approbation",
+    "pendingReview": "En Attente de Révision",
+    "expiringSoon": "Expire Bientôt",
+    "totalContractValue": "Valeur Totale du Contrat",
+    "approvedValue": "Valeur Approuvée",
+    "averageContractValue": "Valeur Moyenne du Contrat",
+    "statusDistribution": "Distribution des Statuts",
+    "monthlyTrends": "Tendances Mensuelles",
+    "contractStatusTimeline": "Timeline des Statuts de Contrat",
+    "recentContractHistory": "Historique Récent des Contrats",
+    "contract": "Contrat",
+    "status": "Statut",
+    "created": "Créé",
+    "expiry": "Expiration",
+    "value": "Valeur",
+    "approved": "Approuvé",
+    "pending": "En Attente",
+    "rejected": "Rejeté",
+    "draft": "Brouillon"
+  },
+  "phaseManagement": {
+    "title": "Gestion des Phases",
+    "trackProjectPhases": "Suivre les phases et livrables du projet",
+    "viewContractPerformance": "Voir les performances et tendances du contrat",
+    "loadingContractPhases": "Chargement des phases du contrat...",
+    "contractPhaseManagement": "Gestion des Phases du Contrat",
+    "overallContractProgress": "Progrès Global du Contrat",
+    "phase": "Phase",
+    "complete": "Complet",
+    "started": "Commencé",
+    "completed": "Terminé",
+    "tasksDeliverables": "Tâches & Livrables",
+    "custom": "Personnalisé",
+    "addCustomTask": "Ajouter une tâche personnalisée...",
+    "startPhase": "Commencer la Phase",
+    "markComplete": "Marquer comme Terminé",
+    "failedToLoadPhases": "Échec du chargement des phases du contrat",
+    "failedToInitializePhases": "Échec de l'initialisation des phases du contrat",
+    "phaseUpdatedSuccessfully": "Phase mise à jour avec succès",
+    "failedToUpdatePhase": "Échec de la mise à jour de la phase"
+  },
+  "lifecycle": {
+    "contractLifecycleManagement": "Gestion du Cycle de Vie du Contrat",
+    "failedToLoadContractDetails": "Échec du chargement des détails du contrat",
+    "failedToLoadContractsForAnalytics": "Échec du chargement des contrats pour l'analytique",
+    "loadingContractLifecycleData": "Chargement des données du cycle de vie du contrat...",
+    "contractNotFound": "Contrat Non Trouvé",
+    "contractNotFoundMessage": "Le contrat demandé n'a pas pu être trouvé ou vous n'avez peut-être pas accès à celui-ci.",
+    "expires": "Expire",
+    "export": "Exporter",
+    "share": "Partager"
+  }
 } 

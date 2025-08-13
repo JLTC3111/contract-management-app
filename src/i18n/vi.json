@@ -29,7 +29,9 @@
       "approver": "Có thể xem xét và phê duyệt hợp đồng. Không có quyền chỉnh sửa.",
       "viewer": "Chỉ được xem tất cả hợp đồng.",
       "unknown": "Vai trò không xác định."
-    }
+    },
+    "analytics": "Phân tích & Lịch sử",
+    "phaseManagement": "Quản lý Giai đoạn"
   },
   "buttons": {
     "login": "Đăng nhập",
@@ -387,5 +389,69 @@
     "themeToggle": "Chuyển đổi giao diện"
   },
   "no_permission_create_contract": "Bạn không có quyền tạo hợp đồng mới.",
-  "sidebar.visitIcueTooltip": "Truy cập iCUE!"
+  "analytics": {
+    "title": "Phân tích Hợp đồng",
+    "errorLoadingContractData": "Lỗi tải dữ liệu hợp đồng",
+    "noContractsAvailable": "Không có hợp đồng nào để phân tích",
+    "contractAnalyticsHistory": "Phân tích & Lịch sử Hợp đồng",
+    "lastMonth": "Tháng Trước",
+    "last3Months": "3 Tháng Trước",
+    "last6Months": "6 Tháng Trước",
+    "lastYear": "Năm Trước",
+    "allTime": "Tất cả Thời gian",
+    "simpleView": "Xem Đơn giản",
+    "detailedView": "Xem Chi tiết",
+    "totalContracts": "Tổng Hợp đồng",
+    "approvalRate": "Tỷ lệ Phê duyệt",
+    "pendingReview": "Chờ Xem xét",
+    "expiringSoon": "Sắp Hết hạn",
+    "totalContractValue": "Tổng Giá trị Hợp đồng",
+    "approvedValue": "Giá trị Được phê duyệt",
+    "averageContractValue": "Giá trị Trung bình Hợp đồng",
+    "statusDistribution": "Phân bố Trạng thái",
+    "monthlyTrends": "xu hướng Hàng tháng",
+    "contractStatusTimeline": "Dòng thời gian Trạng thái Hợp đồng",
+    "recentContractHistory": "Lịch sử Hợp đồng Gần đây",
+    "contract": "Hợp đồng",
+    "status": "Trạng thái",
+    "created": "Đã tạo",
+    "expiry": "Hết hạn",
+    "value": "Giá trị",
+    "approved": "Đã phê duyệt",
+    "pending": "Chờ xử lý",
+    "rejected": "Đã từ chối",
+    "draft": "Bản nháp"
+  },
+  "phaseManagement": {
+    "title": "Quản lý Giai đoạn",
+    "trackProjectPhases": "Theo dõi các giai đoạn và sản phẩm của dự án",
+    "viewContractPerformance": "Xem hiệu suất và xu hướng hợp đồng",
+    "loadingContractPhases": "Đang tải các giai đoạn hợp đồng...",
+    "contractPhaseManagement": "Quản lý Giai đoạn Hợp đồng",
+    "overallContractProgress": "Tiến độ Tổng thể Hợp đồng",
+    "phase": "Giai đoạn",
+    "complete": "Hoàn thành",
+    "started": "Đã bắt đầu",
+    "completed": "Đã hoàn thành",
+    "tasksDeliverables": "Nhiệm vụ & Sản phẩm",
+    "custom": "Tùy chỉnh",
+    "addCustomTask": "Thêm nhiệm vụ tùy chỉnh...",
+    "startPhase": "Bắt đầu Giai đoạn",
+    "markComplete": "Đánh dấu Hoàn thành",
+    "failedToLoadPhases": "Không thể tải các giai đoạn hợp đồng",
+    "failedToInitializePhases": "Không thể khởi tạo các giai đoạn hợp đồng",
+    "phaseUpdatedSuccessfully": "Giai đoạn đã được cập nhật thành công",
+    "failedToUpdatePhase": "Không thể cập nhật giai đoạn"
+  },
+  "lifecycle": {
+    "contractLifecycleManagement": "Quản lý Chu kỳ Sống Hợp đồng",
+    "failedToLoadContractDetails": "Không thể tải chi tiết hợp đồng",
+    "failedToLoadContractsForAnalytics": "Không thể tải hợp đồng cho phân tích",
+    "loadingContractLifecycleData": "Đang tải dữ liệu chu kỳ sống hợp đồng...",
+    "contractNotFound": "Không Tìm thấy Hợp đồng",
+    "contractNotFoundMessage": "Hợp đồng được yêu cầu không thể được tìm thấy hoặc bạn có thể không có quyền truy cập vào nó.",
+    "expires": "Hết hạn",
+    "export": "Xuất",
+    "share": "Chia sẻ"
+  }
 } 

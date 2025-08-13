@@ -52,7 +52,7 @@ const ContractLifecycleManager = () => {
       setContract(data);
     } catch (error) {
       console.error('Error fetching contract:', error);
-      toast.error(t('Failed to load contract details'));
+      toast.error(t('lifecycle.failedToLoadContractDetails'));
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ const ContractLifecycleManager = () => {
       console.error('Error fetching contracts:', error);
       // Don't show error toast for analytics page, just log it
       if (contractId) {
-        toast.error(t('failedToLoadContractsForAnalytics'));
+        toast.error(t('lifecycle.failedToLoadContractsForAnalytics'));
       }
     }
   };
@@ -89,15 +89,15 @@ const ContractLifecycleManager = () => {
   const tabs = [
     { 
       id: 'phases', 
-      label: t('Phase Management'), 
+      label: t('phaseManagement.title'), 
       icon: Clock,
-      description: t('Track project phases and deliverables')
+      description: t('phaseManagement.trackProjectPhases')
     },
     { 
       id: 'analytics', 
-      label: t('Analytics & History'), 
+      label: t('analytics.title'), 
       icon: BarChart3,
-      description: t('View contract performance and trends')
+      description: t('phaseManagement.viewContractPerformance')
     }
   ];
 

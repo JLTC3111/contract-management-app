@@ -29,7 +29,9 @@
       "approver": "Kann Verträge prüfen und genehmigen. Kein Bearbeitungszugriff.",
       "viewer": "Nur Lesezugriff auf alle Verträge.",
       "unknown": "Rolle nicht erkannt."
-    }
+    },
+    "analytics": "Analytics & Verlauf",
+    "phaseManagement": "Phasenmanagement"
   },
   "buttons": {
     "login": "Anmelden",
@@ -382,5 +384,69 @@
     "themeToggle": "Theme umschalten"
   },
   "no_permission_create_contract": "Sie haben keine Berechtigung, neue Verträge zu erstellen.",
-  "sidebar.visitIcueTooltip": "iCUE besuchen!"
+  "analytics": {
+    "title": "Vertragsanalyse",
+    "errorLoadingContractData": "Fehler beim Laden der Vertragsdaten",
+    "noContractsAvailable": "Keine Verträge für die Analyse verfügbar",
+    "contractAnalyticsHistory": "Vertragsanalyse & Verlauf",
+    "lastMonth": "Letzter Monat",
+    "last3Months": "Letzte 3 Monate",
+    "last6Months": "Letzte 6 Monate",
+    "lastYear": "Letztes Jahr",
+    "allTime": "Alle Zeit",
+    "simpleView": "Einfache Ansicht",
+    "detailedView": "Detaillierte Ansicht",
+    "totalContracts": "Gesamte Verträge",
+    "approvalRate": "Genehmigungsrate",
+    "pendingReview": "Ausstehende Überprüfung",
+    "expiringSoon": "Läuft bald ab",
+    "totalContractValue": "Gesamter Vertragswert",
+    "approvedValue": "Genehmigter Wert",
+    "averageContractValue": "Durchschnittlicher Vertragswert",
+    "statusDistribution": "Statusverteilung",
+    "monthlyTrends": "Monatliche Trends",
+    "contractStatusTimeline": "Vertragsstatus-Zeitachse",
+    "recentContractHistory": "Aktueller Vertragsverlauf",
+    "contract": "Vertrag",
+    "status": "Status",
+    "created": "Erstellt",
+    "expiry": "Ablauf",
+    "value": "Wert",
+    "approved": "Genehmigt",
+    "pending": "Ausstehend",
+    "rejected": "Abgelehnt",
+    "draft": "Entwurf"
+  },
+  "phaseManagement": {
+    "title": "Phasenmanagement",
+    "trackProjectPhases": "Projektphasen und Lieferobjekte verfolgen",
+    "viewContractPerformance": "Vertragsleistung und -trends anzeigen",
+    "loadingContractPhases": "Vertragsphasen werden geladen...",
+    "contractPhaseManagement": "Vertragsphasenmanagement",
+    "overallContractProgress": "Gesamter Vertragsfortschritt",
+    "phase": "Phase",
+    "complete": "Vollständig",
+    "started": "Gestartet",
+    "completed": "Abgeschlossen",
+    "tasksDeliverables": "Aufgaben & Lieferobjekte",
+    "custom": "Benutzerdefiniert",
+    "addCustomTask": "Benutzerdefinierte Aufgabe hinzufügen...",
+    "startPhase": "Phase starten",
+    "markComplete": "Als abgeschlossen markieren",
+    "failedToLoadPhases": "Vertragsphasen konnten nicht geladen werden",
+    "failedToInitializePhases": "Vertragsphasen konnten nicht initialisiert werden",
+    "phaseUpdatedSuccessfully": "Phase erfolgreich aktualisiert",
+    "failedToUpdatePhase": "Phase konnte nicht aktualisiert werden"
+  },
+  "lifecycle": {
+    "contractLifecycleManagement": "Vertragslebenszyklus-Management",
+    "failedToLoadContractDetails": "Vertragsdetails konnten nicht geladen werden",
+    "failedToLoadContractsForAnalytics": "Verträge für Analysen konnten nicht geladen werden",
+    "loadingContractLifecycleData": "Vertragslebenszyklus-Daten werden geladen...",
+    "contractNotFound": "Vertrag nicht gefunden",
+    "contractNotFoundMessage": "Der angeforderte Vertrag konnte nicht gefunden werden oder Sie haben möglicherweise keinen Zugriff darauf.",
+    "expires": "Läuft ab",
+    "export": "Exportieren",
+    "share": "Teilen"
+  }
 } 

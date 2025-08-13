@@ -29,7 +29,9 @@
       "approver": "可审核和批准合同。无编辑权限。",
       "viewer": "仅可查看所有合同。",
       "unknown": "角色无法识别。"
-    }
+    },
+    "analytics": "分析与历史",
+    "phaseManagement": "阶段管理"
   },
   "buttons": {
     "login": "登录",
@@ -386,5 +388,69 @@
     "themeToggle": "切换主题"
   },
   "no_permission_create_contract": "您没有权限创建新合同。",
-  "sidebar.visitIcueTooltip": "访问 iCUE!"
+  "analytics": {
+    "title": "合同分析",
+    "errorLoadingContractData": "加载合同数据错误",
+    "noContractsAvailable": "没有可供分析的合同",
+    "contractAnalyticsHistory": "合同分析与历史",
+    "lastMonth": "上个月",
+    "last3Months": "过去3个月",
+    "last6Months": "过去6个月",
+    "lastYear": "去年",
+    "allTime": "全部时间",
+    "simpleView": "简单视图",
+    "detailedView": "详细视图",
+    "totalContracts": "总合同数",
+    "approvalRate": "批准率",
+    "pendingReview": "待审核",
+    "expiringSoon": "即将到期",
+    "totalContractValue": "总合同价值",
+    "approvedValue": "已批准价值",
+    "averageContractValue": "平均合同价值",
+    "statusDistribution": "状态分布",
+    "monthlyTrends": "月度趋势",
+    "contractStatusTimeline": "合同状态时间线",
+    "recentContractHistory": "最近合同历史",
+    "contract": "合同",
+    "status": "状态",
+    "created": "已创建",
+    "expiry": "到期",
+    "value": "价值",
+    "approved": "已批准",
+    "pending": "待处理",
+    "rejected": "已拒绝",
+    "draft": "草稿"
+  },
+  "phaseManagement": {
+    "title": "阶段管理",
+    "trackProjectPhases": "跟踪项目阶段和交付成果",
+    "viewContractPerformance": "查看合同性能和趋势",
+    "loadingContractPhases": "正在加载合同阶段...",
+    "contractPhaseManagement": "合同阶段管理",
+    "overallContractProgress": "整体合同进度",
+    "phase": "阶段",
+    "complete": "完成",
+    "started": "已开始",
+    "completed": "已完成",
+    "tasksDeliverables": "任务与交付成果",
+    "custom": "自定义",
+    "addCustomTask": "添加自定义任务...",
+    "startPhase": "开始阶段",
+    "markComplete": "标记完成",
+    "failedToLoadPhases": "加载合同阶段失败",
+    "failedToInitializePhases": "初始化合同阶段失败",
+    "phaseUpdatedSuccessfully": "阶段更新成功",
+    "failedToUpdatePhase": "更新阶段失败"
+  },
+  "lifecycle": {
+    "contractLifecycleManagement": "合同生命周期管理",
+    "failedToLoadContractDetails": "加载合同详情失败",
+    "failedToLoadContractsForAnalytics": "加载分析合同失败",
+    "loadingContractLifecycleData": "正在加载合同生命周期数据...",
+    "contractNotFound": "未找到合同",
+    "contractNotFoundMessage": "所请求的合同无法找到，或您可能没有访问权限。",
+    "expires": "到期",
+    "export": "导出",
+    "share": "分享"
+  }
 } 

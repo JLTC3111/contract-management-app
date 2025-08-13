@@ -29,7 +29,9 @@
       "approver": "契約の確認と承認が可能です。編集権限はありません。",
       "viewer": "すべての契約を閲覧のみ可能です。",
       "unknown": "役割が認識されません。"
-    }
+    },
+    "analytics": "分析と履歴",
+    "phaseManagement": "段階管理"
   },
   "buttons": {
     "login": "ログイン",
@@ -387,5 +389,69 @@
     "themeToggle": "テーマを切り替え"
   },
   "no_permission_create_contract": "新しい契約を作成する権限がありません。",
-  "sidebar.visitIcueTooltip": "iCUEを訪問!"
+  "analytics": {
+    "title": "契約分析",
+    "errorLoadingContractData": "契約データの読み込みエラー",
+    "noContractsAvailable": "分析用の契約がありません",
+    "contractAnalyticsHistory": "契約分析と履歴",
+    "lastMonth": "先月",
+    "last3Months": "過去3ヶ月",
+    "last6Months": "過去6ヶ月",
+    "lastYear": "昨年",
+    "allTime": "全期間",
+    "simpleView": "シンプルビュー",
+    "detailedView": "詳細ビュー",
+    "totalContracts": "総契約数",
+    "approvalRate": "承認率",
+    "pendingReview": "レビュー待ち",
+    "expiringSoon": "まもなく期限切れ",
+    "totalContractValue": "総契約価値",
+    "approvedValue": "承認済み価値",
+    "averageContractValue": "平均契約価値",
+    "statusDistribution": "ステータス分布",
+    "monthlyTrends": "月間トレンド",
+    "contractStatusTimeline": "契約ステータスタイムライン",
+    "recentContractHistory": "最近の契約履歴",
+    "contract": "契約",
+    "status": "ステータス",
+    "created": "作成済み",
+    "expiry": "期限",
+    "value": "価値",
+    "approved": "承認済み",
+    "pending": "保留中",
+    "rejected": "拒否済み",
+    "draft": "下書き"
+  },
+  "phaseManagement": {
+    "title": "段階管理",
+    "trackProjectPhases": "プロジェクトの段階と成果物を追跡",
+    "viewContractPerformance": "契約のパフォーマンスとトレンドを表示",
+    "loadingContractPhases": "契約段階を読み込み中...",
+    "contractPhaseManagement": "契約段階管理",
+    "overallContractProgress": "全体的な契約進捗",
+    "phase": "段階",
+    "complete": "完了",
+    "started": "開始済み",
+    "completed": "完了済み",
+    "tasksDeliverables": "タスクと成果物",
+    "custom": "カスタム",
+    "addCustomTask": "カスタムタスクを追加...",
+    "startPhase": "段階を開始",
+    "markComplete": "完了としてマーク",
+    "failedToLoadPhases": "契約段階の読み込みに失敗",
+    "failedToInitializePhases": "契約段階の初期化に失敗",
+    "phaseUpdatedSuccessfully": "段階が正常に更新されました",
+    "failedToUpdatePhase": "段階の更新に失敗"
+  },
+  "lifecycle": {
+    "contractLifecycleManagement": "契約ライフサイクル管理",
+    "failedToLoadContractDetails": "契約詳細の読み込みに失敗",
+    "failedToLoadContractsForAnalytics": "分析用契約の読み込みに失敗",
+    "loadingContractLifecycleData": "契約ライフサイクルデータを読み込み中...",
+    "contractNotFound": "契約が見つかりません",
+    "contractNotFoundMessage": "要求された契約が見つからないか、アクセス権限がない可能性があります。",
+    "expires": "期限切れ",
+    "export": "エクスポート",
+    "share": "共有"
+  }
 } 
