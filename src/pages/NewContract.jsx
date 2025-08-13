@@ -58,36 +58,75 @@ const NewContract = () => {
   }
 
   const handleCreateContract = async () => {
-    if (!title) return alert('Title is required');
-    // Check for duplicate contract title (case-insensitive)
-    const { data: existing, error: fetchError } = await supabase
-      .from('contracts')
-      .select('id')
-      .ilike('title', title.trim());
-    if (fetchError) {
-      alert(t('duplicate_error'));
-      console.error(fetchError);
-      return;
-    }
-    if (existing && existing.length > 0) {
-      alert(t('duplicate_prompt'));
-      return;
-    }
-    // Insert contract without file info
-    const { data, error } = await supabase.from('contracts').insert([
-      {
-        title,
-        status,
-        version,
-        updated_at: new Date().toISOString(),
-      },
-    ]).select().single();
+    if (!title) return alert(t('title_required', 'Title is required'));
+    
+    console.log('Creating contract with data:', {
+      title: title.trim(),
+      status,
+      version,
+      user: user?.id,
+      userRole: user?.role
+    });
+    
+    try {
+      // Check for duplicate contract title (case-insensitive)
+      const { data: existing, error: fetchError } = await supabase
+        .from('contracts')
+        .select('id')
+        .ilike('title', title.trim());
+        
+      if (fetchError) {
+        alert(t('duplicate_error'));
+        console.error(fetchError);
+        return;
+      }
+      
+      if (existing && existing.length > 0) {
+        alert(t('duplicate_prompt'));
+        return;
+      }
+      
+      // Insert contract without file info
+      const { data, error } = await supabase.from('contracts').insert([
+        {
+          title: title.trim(),
+          status,
+          version,
+          updated_at: new Date().toISOString(),
+          author: user?.email || user?.user_metadata?.email || 'Unknown', // Add author field
+        },
+      ]).select().single();
 
-    if (error) {
-      alert('duplicate_error_short');
-      console.error(error);
-    } else {
-      setContract(data); // Save the created contract (with id)
+      if (error) {
+        console.error('Contract creation error:', error);
+        console.error('Error details:', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        });
+        
+        // Handle specific error types
+        if (error.code === '23505') {
+          // Unique constraint violation
+          alert(t('duplicate_prompt', 'A contract with this title already exists'));
+        } else if (error.message?.includes('duplicate') || error.message?.includes('already exists')) {
+          alert(t('duplicate_prompt', 'A contract with this title already exists'));
+        } else if (error.message?.includes('only WITH CHECK expression allowed')) {
+          alert('Database RLS policy error: Please check the SQL editor for the fix script. The RLS policy needs to be corrected in Supabase.');
+        } else if (error.message?.includes('row-level security') || error.message?.includes('policy')) {
+          alert(t('permission_denied', 'You do not have permission to create contracts. Please contact your administrator.'));
+        } else if (error.message?.includes('violates') && error.message?.includes('policy')) {
+          alert(t('permission_denied', 'You do not have permission to create contracts. Please contact your administrator.'));
+        } else {
+          alert(t('duplicate_error_short', 'Error saving contract') + ': ' + (error.message || 'Unknown error'));
+        }
+      } else {
+        setContract(data); // Save the created contract (with id)
+      }
+    } catch (err) {
+      console.error('Unexpected error creating contract:', err);
+      alert(t('duplicate_error_short', 'Error saving contract'));
     }
   };
 

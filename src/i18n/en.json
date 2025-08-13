@@ -380,6 +380,8 @@
   },
   "newcontract.back": "Back",
   "newcontract.done": "Done",
+  "title_required": "Title is required",
+  "permission_denied": "You do not have permission to create contracts. Please contact your administrator.",
   "duplicate_error": "Error checking for duplicate contract",
   "duplicate_prompt": "A contract with this title already exists. Please choose a different name.",
   "duplicate_error_short": "Error saving contract",
