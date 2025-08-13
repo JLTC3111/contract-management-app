@@ -853,7 +853,7 @@ return (
                       gap: '0.5rem',
                     }}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" width="20px" height="20px">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" width="20px" height="20px">
                       <line style={{fill: 'none', stroke: newFolderName.trim() ? '#000000' : '#ffffff', strokeWidth: 2, strokeMiterlimit: 10}} x1="13" y1="25" x2="37" y2="25"/>
                       <line style={{fill: 'none', stroke: newFolderName.trim() ? '#000000' : '#ffffff', strokeWidth: 2, strokeMiterlimit: 10}} x1="25" y1="13" x2="25" y2="37"/>
                       <circle style={{fill: 'none', stroke: newFolderName.trim() ? '#000000' : '#ffffff', strokeWidth: 2, strokeMiterlimit: 10}} cx="25" cy="25" r="22"/>

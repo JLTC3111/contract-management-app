@@ -18,6 +18,9 @@ import {
   Lock,
   HelpCircle,
   MessageSquare,
+  BarChart3,
+  Calendar,
+  Clock,
   Settings
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -31,7 +34,7 @@ import { useTranslation } from 'react-i18next';
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useUser();
+  const { user, logout } = useUser();
   const { darkMode, toggleDarkMode } = useTheme();
   const { t } = useTranslation();
   const sidebarRef = useRef();
@@ -65,20 +68,18 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     console.log('Attempting to log out...');
-    const { data: { session } } = await supabase.auth.getSession();
-    console.log('Current session on logout click:', session);
     console.log('User object from useUser hook:', user);
 
-    if (!session) {
-      console.error('No active session found. Cannot log out.');
-      alert('Error: You are not signed in.');
-      return;
-    }
-
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error('Logout failed:', error.message);
-    } else {
+    try {
+      // Use the logout function from user context for more reliable logout
+      await logout();
+      console.log('Logout successful');
+      
+      // Navigate to login page
+      navigate('/login');
+    } catch (err) {
+      console.error('Unexpected logout error:', err);
+      // Even if there's an error, still navigate to login
       navigate('/login');
     }
   };
@@ -376,6 +377,22 @@ const Sidebar = () => {
               collapsed={collapsed}
               currentPath={location.pathname}
               onClick={() => navigate('/approvals')}
+            />
+            <SidebarButton
+              icon={<BarChart3 size={20} />}
+              label={t('sidebar.analytics', 'Analytics & History')}
+              path="/lifecycle"
+              collapsed={collapsed}
+              currentPath={location.pathname}
+              onClick={() => navigate('/lifecycle')}
+            />
+            <SidebarButton
+              icon={<Clock size={20} />}
+              label={t('sidebar.phaseManagement', 'Phase Management')}
+              path="/lifecycle/phases"
+              collapsed={collapsed}
+              currentPath={location.pathname}
+              onClick={() => navigate('/lifecycle')}
             />
             <SidebarButton
               icon={

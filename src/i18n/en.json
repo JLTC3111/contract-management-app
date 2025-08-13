@@ -471,5 +471,32 @@
     "statusUpdated": "Status updated successfully!",
     "contractCreated": "Contract created successfully!",
     "contractUpdated": "Contract updated successfully!"
+  },
+  "forcePasswordChange": {
+    "title": "Password Change Required",
+    "description": "Your account is using a temporary password. For security reasons, you must change your password before continuing.",
+    "currentPassword": "Current Password (Temporary)",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "updatePassword": "Update Password",
+    "updating": "Updating...",
+    "currentPasswordRequired": "Current password is required",
+    "newPasswordRequired": "New password is required",
+    "passwordMinLength": "Password must be at least 8 characters long",
+    "passwordMustBeDifferent": "New password must be different from current password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordTooWeak": "Password is too weak. Please choose a stronger password.",
+    "currentPasswordIncorrect": "Current password is incorrect",
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "requirements": "Password Requirements:",
+    "requirement1": "At least 8 characters long",
+    "requirement2": "Contains uppercase and lowercase letters",
+    "requirement3": "Contains at least one number",
+    "requirement4": "Contains at least one special character"
+  },
+  "passwordStrength": {
+    "weak": "Weak",
+    "medium": "Medium", 
+    "strong": "Strong"
   }
 } 

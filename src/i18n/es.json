@@ -27,9 +27,11 @@
       "admin": "Acceso total: crear, editar, aprobar, comentar y eliminar contratos.",
       "editor": "Puede crear, editar y eliminar contratos pero no aprobar.",
       "approver": "Puede revisar y aprobar contratos. Sin acceso de edición.",
-      "viewer": "Acceso de solo lectura a todos los contratos.",
-      "unknown": "Rol no reconocido."
-    }
+            "viewer": "Acceso de solo lectura a todos los contratos.",
+      "unknown": "Rol no reconocido en este sistema."
+    },
+    "analytics": "Análisis e Historial",
+    "phaseManagement": "Gestión de Fases"
   },
   "buttons": {
     "login": "Iniciar sesión",
@@ -373,5 +375,96 @@
     "themeToggle": "Cambiar tema"
   },
   "no_permission_create_contract": "No tienes permiso para crear nuevos contratos.",
-  "sidebar.visitIcueTooltip": "Visitar iCUE!"
-} 
+  "sidebar.visitIcueTooltip": "Visitar iCUE!",
+  "contractLifecycle": {
+    "title": "Gestión del Ciclo de Vida del Contrato",
+    "phaseManagement": "Gestión de Fases",
+    "analyticsHistory": "Análisis e Historial",
+    "export": "Exportar",
+    "share": "Compartir",
+    "simpleView": "Vista Simple",
+    "detailedView": "Vista Detallada",
+    "contractNotFound": "Contrato No Encontrado",
+    "contractNotFoundMessage": "El contrato solicitado no se pudo encontrar o puede que no tenga acceso a él.",
+    "loadingContract": "Cargando datos del ciclo de vida del contrato...",
+    "expires": "Vence"
+  },
+  "analytics": {
+    "title": "Análisis e Historial de Contratos",
+    "lastMonth": "Último Mes",
+    "last3Months": "Últimos 3 Meses",
+    "last6Months": "Últimos 6 Meses",
+    "lastYear": "Último Año",
+    "allTime": "Todo el Tiempo",
+    "totalContracts": "Total de Contratos",
+    "approvalRate": "Tasa de Aprobación",
+    "pendingReview": "Pendiente de Revisión",
+    "expiringSoon": "Próximo a Vencer",
+    "totalContractValue": "Valor Total de Contratos",
+    "approvedValue": "Valor Aprobado",
+    "averageContractValue": "Valor Promedio de Contrato",
+    "statusDistribution": "Distribución de Estados",
+    "monthlyTrends": "Tendencias Mensuales",
+    "contractStatusTimeline": "Cronología de Estados de Contrato",
+    "recentContractHistory": "Historial Reciente de Contratos",
+    "contract": "Contrato",
+    "status": "Estado",
+    "created": "Creado",
+    "expiry": "Vencimiento",
+    "value": "Valor",
+    "approved": "Aprobado",
+    "pending": "Pendiente",
+    "rejected": "Rechazado",
+    "draft": "Borrador"
+  },
+  "phases": {
+    "title": "Gestión de Fases del Contrato",
+    "overallProgress": "Progreso General del Contrato",
+    "phase": "Fase",
+    "complete": "Completo",
+    "designPlanning": "Diseño y Planificación",
+    "executionQuality": "Ejecución y Control de Calidad",
+    "billingClosure": "Facturación y Cierre",
+    "loadingPhases": "Cargando fases del contrato...",
+    "started": "Iniciado",
+    "completed": "Completado",
+    "tasksDeliverables": "Tareas y Entregables",
+    "addCustomTask": "Agregar tarea personalizada...",
+    "custom": "Personalizado",
+    "startPhase": "Iniciar Fase",
+    "markComplete": "Marcar Completo",
+    "pending": "Pendiente",
+    "active": "Activo",
+    "delayed": "Retrasado"
+  },
+  "errorLoadingContractData": "Error al cargar datos de contratos",
+  "failedToLoadContractsForAnalytics": "Error al cargar contratos para análisis",
+  "No contracts available for analysis": "No hay contratos disponibles para análisis",
+  "forcePasswordChange": {
+    "title": "Cambio de Contraseña Requerido",
+    "description": "Su cuenta está usando una contraseña temporal. Por razones de seguridad, debe cambiar su contraseña antes de continuar.",
+    "currentPassword": "Contraseña Actual (Temporal)",
+    "newPassword": "Nueva Contraseña",
+    "confirmPassword": "Confirmar Nueva Contraseña",
+    "updatePassword": "Actualizar Contraseña",
+    "updating": "Actualizando...",
+    "currentPasswordRequired": "La contraseña actual es requerida",
+    "newPasswordRequired": "La nueva contraseña es requerida",
+    "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+    "passwordMustBeDifferent": "La nueva contraseña debe ser diferente a la actual",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "passwordTooWeak": "La contraseña es muy débil. Por favor, elija una contraseña más fuerte.",
+    "currentPasswordIncorrect": "La contraseña actual es incorrecta",
+    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
+    "requirements": "Requisitos de Contraseña:",
+    "requirement1": "Al menos 8 caracteres de longitud",
+    "requirement2": "Contiene letras mayúsculas y minúsculas",
+    "requirement3": "Contiene al menos un número",
+    "requirement4": "Contiene al menos un carácter especial"
+  },
+  "passwordStrength": {
+    "weak": "Débil",
+    "medium": "Medio",
+    "strong": "Fuerte"
+  }
+}

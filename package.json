@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "admin:reset-password": "node admin-password-reset.js"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -20,6 +21,7 @@
     "@types/react-dom": "18.2.7",
     "@types/three": "^0.178.1",
     "axios": "^1.10.0",
+    "dotenv": "^17.2.1",
     "framer-motion": "^12.23.0",
     "gsap": "^3.13.0",
     "i18next": "^25.3.1",
@@ -35,6 +37,7 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.2",
     "react-three-fiber": "^6.0.13",
+    "recharts": "^3.1.2",
     "remark-gfm": "^4.0.1",
     "three": "^0.178.0"
   },
