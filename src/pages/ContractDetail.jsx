@@ -868,10 +868,10 @@ return (
                 style={{
                   backgroundColor: selectedFiles.length === 0 
                     ? (document.body.classList.contains('dark') ? '#374151' : '#fff')
-                    : (document.body.classList.contains('dark') ? '#fcffa3' : '#fcffa3'),
+                    : (document.body.classList.contains('dark') ? '#be0000' : '#be0000'),
                   color: selectedFiles.length === 0 
                     ? (document.body.classList.contains('dark') ? '#9ca3af' : '#999')
-                    : (document.body.classList.contains('dark') ? '#000' : '#000'),
+                    : (document.body.classList.contains('dark') ? '#fff' : '#fff'),
                   padding: '0.5rem 1rem',
                   border: 'none',
                   borderRadius: '6px',
@@ -885,7 +885,7 @@ return (
                   gap: '0.5rem',
                 }}
                 disabled={selectedFiles.length === 0}
-              > <Trash size={16} color={selectedFiles.length === 0 ? "#9ca3af" : "#000"} /> {t('contract_detail_delete')} ({selectedFiles.length})
+              > <Trash size={16} color={selectedFiles.length === 0 ? (darkMode ? "#9ca3af" : "#000") : "#fff"} /> {t('contract_detail_delete')} ({selectedFiles.length})
               </button>
             </div>
           )}
