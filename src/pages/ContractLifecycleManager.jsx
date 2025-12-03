@@ -207,7 +207,7 @@ const ContractLifecycleManager = () => {
                   <ArrowLeft size={20} color="var(--text)" />
                 </button>
                 <h1 style={{ color: 'var(--text)', margin: 0, fontSize: '1.8rem' }}>
-                  {t('Contract Lifecycle Management')}
+                  {t('lifecycle.contractLifecycleManagement', 'Quản Lý Vòng Đời Hợp Đồng')}
                 </h1>
               </div>
               
@@ -262,29 +262,6 @@ const ContractLifecycleManager = () => {
             </div>
 
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <button
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '8px',
-                  border: '1px solid var(--card-border)',
-                  background: 'var(--card-bg)',
-                  color: 'var(--text)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background = 'var(--hover-bg)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background = 'var(--card-bg)';
-                }}
-              >
-                <Download size={16} />
-                {t('Export')}
-              </button>
               <button
                 style={{
                   padding: '0.75rem 1.5rem',

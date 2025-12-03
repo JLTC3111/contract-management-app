@@ -4,7 +4,7 @@ import {
   PieChart, Pie, Cell, AreaChart, Area
 } from 'recharts';
 import { 
-  TrendingUp, TrendingDown, Clock, 
+  Clock, 
   CheckCircle, AlertTriangle, Calendar,
   Filter, Download, Eye, ChevronLeft, ChevronRight, RefreshCw
 } from 'lucide-react';
