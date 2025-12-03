@@ -173,7 +173,7 @@ const NewContract = () => {
               fontSize: 'clamp(0.95rem, 2vw, 1rem)',
             }}
           >
-            <ArrowLeft size={18} /> {t('newcontract.back')}
+            <ArrowLeft style={{ color: darkMode ? '#fff' : '#000' }} size={22} /> {t('newcontract.back')}
           </button>
         </div>
       )}

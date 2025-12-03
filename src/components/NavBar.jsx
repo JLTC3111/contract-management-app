@@ -271,8 +271,8 @@ const Navbar = () => {
             alt="Logo"
             animate={{ rotate: -360 }}
             transition={{ 
-              duration: 5, 
-              repeat: Infinity, 
+              duration: 2.5, 
+              repeat: 1, 
               ease: "linear" 
             }}
             style={{

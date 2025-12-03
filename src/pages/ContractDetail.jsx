@@ -733,14 +733,14 @@ return (
                 alignItems: 'center',
                 gap: '0.5rem',
                 margin: 0,
-                backgroundColor: darkMode ? '#fff' : 'transparent',
+                backgroundColor: 'transparent',
                 border: 'none',
                 borderRadius: '12px',
                 cursor: 'pointer',
                 fontSize: 'clamp(0.875rem, 2vw, 1rem)',
               }}
             >
-              <MoveLeft size={22} /> 
+              <ArrowLeft stroke="var(--text)" size={22} />
             </button>
 
             {/* Download button - next to back button (visible to admins, editors, and approver users) */}
@@ -748,7 +748,7 @@ return (
               <button className="btn-hover-effect"
                 onClick={() => handleDownloadItems(selectedFiles)}
                 style={{
-                  backgroundColor: selectedFiles.length === 0 ? '#eee' : 'rgba(1, 82, 255, 0.8)',
+                  backgroundColor: selectedFiles.length === 0 ? (darkMode ? '#eee' : 'rgba(1, 82, 255, 0.8)') : 'rgba(1, 82, 255, 0.8)',
                   color: selectedFiles.length === 0 ? '#999' : '#fff',
                   padding: '0.5rem 1rem',
                   border: 'none',
