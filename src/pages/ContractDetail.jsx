@@ -885,7 +885,7 @@ return (
                   gap: '0.5rem',
                 }}
                 disabled={selectedFiles.length === 0}
-              > <Trash size={16} color={selectedFiles.length === 0 ? (darkMode ? "#9ca3af" : "#000") : "#fff"} /> {t('contract_detail_delete')} ({selectedFiles.length})
+              > <Trash size={16} color={selectedFiles.length === 0 ? (darkMode ? "#9ca3af" : "#9ca3af") : "#fff"} /> {t('contract_detail_delete')} ({selectedFiles.length})
               </button>
             </div>
           )}
