@@ -260,26 +260,6 @@ const ContractLifecycleManager = () => {
                 </div>
               )}
             </div>
-
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <button
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '8px',
-                  border: 'none',
-                  background: 'var(--primary-color)',
-                  color: 'white',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <Share2 size={16} />
-                {t('Share')}
-              </button>
-            </div>
           </div>
 
           {/* Tab Navigation */}
@@ -348,6 +328,43 @@ const ContractLifecycleManager = () => {
             contract={contract}
             onUpdate={fetchContractDetails}
           />
+        )}
+        
+        {/* Show message when phases tab is selected but no contract */}
+        {activeTab === 'phases' && !contract && (
+          <div style={{
+            padding: '4rem 2rem',
+            textAlign: 'center',
+            background: 'var(--card-bg)',
+            borderRadius: '12px',
+            border: '1px solid var(--card-border)'
+          }}>
+            <Clock size={64} style={{ color: 'var(--text)', opacity: 0.3, marginBottom: '1.5rem' }} />
+            <h2 style={{ color: 'var(--text)', marginBottom: '1rem' }}>
+              {t('phaseManagement.noContractSelected', 'No Contract Selected')}
+            </h2>
+            <p style={{ color: 'var(--text)', opacity: 0.7, marginBottom: '2rem', maxWidth: '400px', margin: '0 auto 2rem' }}>
+              {t('phaseManagement.selectContractMessage', 'Please select a contract from the Dashboard to manage its phases.')}
+            </p>
+            <button
+              onClick={() => window.location.href = '/'}
+              style={{
+                padding: '0.75rem 1.5rem',
+                borderRadius: '8px',
+                border: 'none',
+                background: 'var(--primary)',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              <FileText size={18} />
+              {t('phaseManagement.goToDashboard', 'Go to Dashboard')}
+            </button>
+          </div>
         )}
         
         {activeTab === 'analytics' && (
