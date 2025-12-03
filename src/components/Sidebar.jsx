@@ -387,14 +387,6 @@ const Sidebar = () => {
               onClick={() => navigate('/lifecycle')}
             />
             <SidebarButton
-              icon={<Clock size={20} />}
-              label={t('sidebar.phaseManagement', 'Phase Management')}
-              path="/lifecycle/phases"
-              collapsed={collapsed}
-              currentPath={location.pathname}
-              onClick={() => navigate('/lifecycle')}
-            />
-            <SidebarButton
               icon={
                 statusUpdateLoading ? (
                   <motion.div

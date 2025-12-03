@@ -1,54 +1,31 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { gsap } from 'gsap';
 import './Table.css';
 
-const statusStyles = {
-  approved: {
-    color: '#16a34a',
-    backgroundColor: '#dcfce7',
-    icon: '✅',
-  },
-  pending: {
-    color: '#2563eb',
-    backgroundColor: '#dbeafe',
-    icon: '⏳',
-  },
-  draft: {
-    color: '#d97706',
-    backgroundColor: '#fef3c7',
-    icon: '📝',
-  },
-  rejected: {
-    color: '#dc2626',
-    backgroundColor: '#fee2e2',
-    icon: '❌',
-  },
-  expired: {
-    color: '#6b7280',
-    backgroundColor: '#e5e7eb',
-    icon: '🛑',
-  },
-  expiring: {
-    color: '#92400e',
-    backgroundColor: '#ffedd5',
-    icon: '',
-  },
-};
+// Centralized utilities
+import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS, getStatusColor } from '../utils/constants';
+import { formatDate, getDaysUntilExpiry } from '../utils/formatters';
+import { StatusBadge } from './common';
+
+// Generate status styles from centralized constants
+const statusStyles = Object.keys(STATUS_COLORS).reduce((acc, status) => {
+  const color = STATUS_COLORS[status];
+  acc[status] = {
+    color: color,
+    backgroundColor: `${color}20`,
+    icon: STATUS_ICONS[status] || '',
+  };
+  return acc;
+}, {});
 
 const isExpiringSoon = (dateStr, status) => {
-  if (!dateStr) return false;
-  const expiry = new Date(dateStr);
-  const now = new Date();
-  const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
+  const days = getDaysUntilExpiry(dateStr);
+  if (days === null || days <= 0) return false;
   
-  // Different timeframes based on status: draft (21 days), pending (14 days), approved/rejected (7 days)
-  if (status === 'draft') return diffDays > 0 && diffDays <= 21;
-  if (status === 'pending') return diffDays > 0 && diffDays <= 14;
-  if (['approved', 'rejected'].includes(status)) return diffDays > 0 && diffDays <= 7;
-  
-  return false; // For other statuses or expiring status (already handled)
+  const threshold = EXPIRY_THRESHOLDS[status] || EXPIRY_THRESHOLDS.default;
+  return days <= threshold;
 };
 
 const getUnique = (arr, key) => Array.from(new Set(arr.map(c => c[key]).filter(Boolean)));
