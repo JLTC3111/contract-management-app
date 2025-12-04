@@ -284,7 +284,7 @@ const ContractLifecycleManager = () => {
                       ? 'var(--primary-color)' 
                       : 'transparent',
                     color: activeTab === tab.id 
-                      ? 'white' 
+                      ? 'var(--text)'
                       : 'var(--text)',
                     cursor: 'pointer',
                     display: 'flex',
