@@ -257,7 +257,6 @@ const Navbar = () => {
             position: 'relative', 
             display: 'flex', 
             alignItems: 'center', 
-            marginLeft: '0.5rem',
             opacity: logoVisible ? 1 : 0,
             transform: logoVisible ? 'scale(1)' : 'scale(0.8)',
             transition: 'opacity 0.3s ease, transform 0.3s ease'
@@ -276,7 +275,7 @@ const Navbar = () => {
               ease: "linear" 
             }}
             style={{
-              height: 'clamp(1rem, 2.75vw, 1.8rem)', // Responsive height
+              height: 'clamp(1rem, 2.5vw, 1.5rem)', 
               width: 'auto',
               borderRadius: '20px',
               alignItems: 'center',

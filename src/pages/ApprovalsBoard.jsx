@@ -75,7 +75,7 @@ const Approvals = () => {
 
   // Fetch all pending approval requests
   const fetchApprovalRequests = async () => {
-    if (!user || (user.role !== 'admin' && user.role !== 'approver')) {
+    if (!user || (user.role !== 'admin' && user.role !== 'approver' && user.role !== 'editor')) {
       return;
     }
 
@@ -287,7 +287,7 @@ const Approvals = () => {
   }, [editingRequestId, approvalRequests]);
 
   // Don't show for non-admin/approver users
-  if (!user || (user.role !== 'admin' && user.role !== 'approver')) {
+  if (!user || (user.role !== 'admin' && user.role !== 'approver' && user.role !== 'editor')) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
         <h2>{t('access_denied')}</h2>
@@ -303,6 +303,7 @@ const Approvals = () => {
           ref={headerRef}
           style={{
             display: 'flex',
+            minWidth: 'clamp(250px, 82.5vw, 800px)',
             alignItems: 'center',
             gap: 'clamp(0.5rem, 2vw, 1rem)',
             marginBottom: '0.5rem',
@@ -478,8 +479,14 @@ const Approvals = () => {
                   <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
                     <strong>{t('defaultApprovalResponse')}:</strong>
                   </p>
-                  {(user?.role === 'admin' || user?.role === 'approver') && (
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  {(user?.role === 'admin' || user?.role === 'approver' || user?.role === 'editor') && (
+                    <div style={{ 
+                      display: 'flex', 
+                      gap: '0.5rem',
+                      filter: user?.role === 'editor' ? 'blur(4px)' : 'none',
+                      pointerEvents: user?.role === 'editor' ? 'none' : 'auto',
+                      opacity: user?.role === 'editor' ? 0.6 : 1
+                    }}>
                       {editingRequestId === request.id ? (
                         <>
                           <button className="btn-hover-effect"
@@ -585,7 +592,14 @@ const Approvals = () => {
               </div>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'space-between' }}>
+              <div style={{ 
+                display: 'flex', 
+                gap: '0.75rem', 
+                justifyContent: 'space-between',
+                filter: user?.role === 'editor' ? 'blur(4px)' : 'none',
+                pointerEvents: user?.role === 'editor' ? 'none' : 'auto',
+                opacity: user?.role === 'editor' ? 0.6 : 1
+              }}>
                 <button
                   ref={el => buttonRefs.current[idx * 2] = el}
                   onClick={() => handleApprovalAction(request.id, 'approve')}

@@ -18,7 +18,7 @@ const Approvals = ({ contractId, contract, onStatusUpdate }) => {
     <div
       style={{
         width: '95%',
-        maxWidth: '1100px',
+        maxWidth: '1300px',
         minWidth: 'min(90vw, 640px)',
         padding: 'clamp(1rem, 3vw, 1.5rem)',
         background: 'var(--card-bg)',
