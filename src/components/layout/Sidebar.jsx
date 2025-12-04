@@ -226,7 +226,7 @@ const Sidebar = () => {
           flexDirection: isMobile ? 'row' : 'column',
           alignItems: 'center',
           justifyContent: isMobile ? 'space-around' : 'space-between',
-          width: isMobile ? '100%' : collapsed ? '36px' : `${sidebarWidth}px`,
+          width: isMobile ? '100%' : collapsed ? '64px' : `${sidebarWidth}px`,
           height: isMobile ? (collapsed ? '36px' : 'auto') : '100vh',
           backgroundColor: 'var(--sidebar-bg)',
           transition: isResizing || isMobile ? 'none' : 'width 0.3s',

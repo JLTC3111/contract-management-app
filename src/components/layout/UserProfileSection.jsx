@@ -40,6 +40,10 @@ const UserProfileSection = ({ user, collapsed, isMobile }) => {
           style={{
             fontSize: 'clamp(0.7rem, 1.25vw, 0.9rem)',
             display: 'inline-block',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            width: '100%',
           }}
         >
           <span>{t('sidebar.logged_in_as', 'Logged in as')}</span>{' '}
@@ -68,9 +72,12 @@ const UserProfileSection = ({ user, collapsed, isMobile }) => {
           borderRadius: '8px',
           transition: 'box-shadow 0.3s ease-in-out',
           backgroundColor: 'var(--card-bg)',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
         }}
       >
-        <div>
+        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           <strong>{t('sidebar.role', 'Role')}:</strong>{' '}
           {t(`sidebar.role_label.${user.role}`, user.role ?? 'unknown')}
         </div>
@@ -79,6 +86,9 @@ const UserProfileSection = ({ user, collapsed, isMobile }) => {
             fontSize: '0.8rem',
             color: darkMode ? '#9ca3af' : '#64748b',
             marginTop: '0.25rem',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
           {roleDescriptions[user.role] || t('sidebar.role_description.unknown', 'Role not recognized.')}

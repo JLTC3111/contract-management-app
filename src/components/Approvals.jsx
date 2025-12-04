@@ -17,8 +17,9 @@ const Approvals = ({ contractId, contract, onStatusUpdate }) => {
   return (
     <div
       style={{
-        width: '90%',
-        maxWidth: '100%',
+        width: '95%',
+        maxWidth: '1100px',
+        minWidth: 'min(90vw, 640px)',
         padding: 'clamp(1rem, 3vw, 1.5rem)',
         background: 'var(--card-bg)',
         border: '1px solid var(--card-border)',
@@ -28,7 +29,8 @@ const Approvals = ({ contractId, contract, onStatusUpdate }) => {
             ? '0 4px 24px 0 rgba(255,255,255,0.18)'
             : '0 4px 24px 0 rgba(0,0,0,0.18)'
           : '0 2px 8px rgba(0,0,0,0.04)',
-        marginLeft: 'clamp(1rem, 4vw, 2rem)',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         marginBottom: 'clamp(1rem, 4vw, 2rem)',
         fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
         boxSizing: 'border-box',

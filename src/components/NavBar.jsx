@@ -228,7 +228,7 @@ const Navbar = () => {
         <h2 
           ref={titleRef}
           style={{ 
-            fontSize: 'clamp(0.75rem, 1.5vw, 1.25rem)', 
+            fontSize: 'clamp(0.75rem, 1.25vw, 1.25rem)', 
             fontWeight: 'bold',
             minHeight: '1.5em',
             display: 'flex',
@@ -236,7 +236,7 @@ const Navbar = () => {
             alignItems: 'center',
             marginRight: '1rem'
           }}
-        > <Folder size={isMobile ? 14 : 20} />
+        > <Folder size={isMobile ? 14 : 18} />
           {titleText}
           {titleText.length < t('navbar.title').length && (
             <span 
@@ -246,7 +246,7 @@ const Navbar = () => {
                 height: '1.2em',
                 backgroundColor: 'var(--text)',
                 marginLeft: '2px',
-                animation: 'blink 1s infinite'
+                animation: 'blink 1s infinite', 
               }}
             />
           )}

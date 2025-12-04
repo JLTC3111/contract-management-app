@@ -602,7 +602,7 @@ const ContractDetailPage = () => {
   return (
     <div
       style={{
-        width: 'clamp(280px, 95vw, 800px)',
+        width: 'clamp(350px, 95vw, 800px)',
         margin: '0 auto',
         border: '1px solid var(--card-border)',
         padding: '1rem',

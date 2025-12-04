@@ -40,8 +40,8 @@ export const SidebarButton = ({
         cursor: disabled ? 'not-allowed' : 'pointer',
         marginBottom: isMobile ? '0' : '1rem',
         marginRight: isMobile ? '0.5rem' : '0',
-        width: isMobile ? 'auto' : 'fit-content',
-        maxWidth: isMobile ? 'auto' : 'calc(100% - 1rem)',
+        width: isMobile ? 'auto' : '100%',
+        maxWidth: isMobile ? 'auto' : '100%',
         padding: isMobile ? '0.5rem' : '0.5rem 0.75rem',
         borderRadius: '8px',
         backgroundColor: isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent',
@@ -53,6 +53,7 @@ export const SidebarButton = ({
         position: 'relative',
         overflow: 'hidden',
         opacity: disabled ? 0.6 : 1,
+        whiteSpace: 'nowrap',
       }}
       onMouseEnter={(e) => {
         if (disabled) return;
@@ -81,7 +82,7 @@ export const SidebarButton = ({
         }}
       >
         {icon}
-        {(!collapsed && !isMobile) && <span>{label}</span>}
+        {(!collapsed && !isMobile) && <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{label}</span>}
       </div>
       {!collapsed && toggleable && (
         <div 
@@ -157,14 +158,17 @@ export const SubMenu = ({ items }) => {
               borderRadius: '4px',
               display: 'flex',
               alignItems: 'center',
-              gap: '1.5rem',
+              gap: '0.65rem',
               transition: 'transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
               justifyContent: 'flex-start',
-              width: 'fit-content',
-              maxWidth: 'calc(100% - 0.5rem)',
+              width: '100%',
+              maxWidth: '100%',
               borderBottom: !isMobile && index !== items.length - 1 ? '1px solid var(--card-border)' : 'none',
               transform: 'translateX(0) scale(1)',
               boxShadow: 'none',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = darkMode ? '#232b3b' : '#e0e7ff';
@@ -181,8 +185,12 @@ export const SubMenu = ({ items }) => {
               e.currentTarget.style.borderRadius = '4px';
             }}
           >
-            {icon}
-            {label}
+            <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+              {icon}
+            </span>
+            <span style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {label}
+            </span>
           </li>
         ))}
       </ul>
