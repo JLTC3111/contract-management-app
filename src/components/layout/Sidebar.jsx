@@ -109,7 +109,7 @@ const Sidebar = () => {
           if (notifications_sent > 0) details.push(`${notifications_sent} notifications sent`);
           message += ` (${updated_count} contracts updated: ${details.join(', ')})`;
         } else {
-          message += ' (No contracts needed updates)';
+          message += '';
         }
         toast.success(message);
       }
