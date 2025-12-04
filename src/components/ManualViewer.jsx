@@ -185,8 +185,17 @@ ${t('manual.error.fallback', 'You can try:')}
           if (Icon) {
             const remainingText = firstChild.replace(match[0], '');
             return (
-              <h3 {...props} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Icon size={24} />
+              <h3 
+                {...props} 
+                className="manual-heading-with-icon"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  gap: 'clamp(0.25rem, 1vw, 0.5rem)' 
+                }}
+              >
+                <Icon className="manual-heading-icon" />
                 <span>
                   {remainingText}
                   {childArray.slice(1)}
@@ -196,7 +205,7 @@ ${t('manual.error.fallback', 'You can try:')}
           }
         }
       }
-      return <h3 {...props}>{children}</h3>;
+      return <h3 {...props} style={{ textAlign: 'center' }}>{children}</h3>;
     },
     p: ({ node, children, ...props }) => {
       const childArray = React.Children.toArray(children);
@@ -364,6 +373,34 @@ ${t('manual.error.fallback', 'You can try:')}
               }
               .animate-spin {
                 animation: spin 1s linear infinite;
+              }
+              /* Responsive heading icons */
+              .manual-heading-icon {
+                width: clamp(20px, 4vw, 44px);
+                height: clamp(20px, 4vw, 44px);
+                flex-shrink: 0;
+                margin-right: 8px;
+              }
+              @media (max-width: 480px) {
+                .manual-heading-icon {
+                  width: 18px;
+                  height: 18px;
+                  margin-right: 8px;
+                }
+              }
+              @media (min-width: 768px) {
+                .manual-heading-icon {
+                  width: 28px;
+                  height: 28px;
+                  margin-right: 8px;
+                }
+              }
+              @media (min-width: 1024px) {
+                .manual-heading-icon {
+                  width: 44px;
+                  height: 44px;
+                  margin-right: 8px;
+                }
               }
             `}</style>
             <div className="manual-markdown-content">

@@ -181,15 +181,15 @@ const ContractHeader = ({
                 gap: '0.5rem',
                 padding: '0.4rem 0.8rem',
                 borderRadius: '6px',
-                border: '1px solid var(--card-border)',
-                background: 'var(--card-bg)',
-                color: 'var(--text)',
+                border: `1px solid ${darkMode ? 'rgba(255,255,255,0.06)' : 'var(--card-border)'}`,
+                background: 'transparent',
+                color: darkMode ? 'var(--text)' : 'var(--text)',
                 cursor: 'pointer',
                 fontSize: '0.85rem'
               }}
             >
               <FolderPlus size={16} />
-              <span>New Folder</span>
+              <span>{t('contractHeader.newFolder', 'New Folder')}</span>
             </button>
           )}
 

@@ -5,6 +5,7 @@
 
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Calendar } from 'lucide-react';
 import { STATUS_COLORS } from '../../utils/constants';
 import { StatusBadge } from '../../components/common';
 
@@ -143,13 +144,41 @@ const ContractInfo = ({
       <div ref={(el) => setInfoRef(el, 4)} style={cardStyle}>
         <label style={labelStyle}>{t('contractTable.expiry', 'Expiry Date')}</label>
         {editMode ? (
-          <input
-            ref={dateInputRef}
-            type="date"
-            value={updated.expiry_date?.split('T')[0] || ''}
-            onChange={(e) => onFieldChange('expiry_date', e.target.value)}
-            style={inputStyle}
-          />
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <input
+              ref={dateInputRef}
+              type="date"
+              value={updated.expiry_date?.split('T')[0] || ''}
+              onChange={(e) => onFieldChange('expiry_date', e.target.value)}
+              style={{
+                ...inputStyle,
+                paddingRight: '2.5rem',
+                /* Hide native calendar icon */
+                WebkitAppearance: 'none',
+                MozAppearance: 'textfield'
+              }}
+            />
+            <Calendar 
+              size={18} 
+              style={{ 
+                position: 'absolute', 
+                right: '0.75rem', 
+                pointerEvents: 'none',
+                color: 'var(--text)',
+                opacity: 0.6
+              }} 
+            />
+            <style>{`
+              input[type="date"]::-webkit-calendar-picker-indicator {
+                opacity: 0;
+                position: absolute;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+              }
+            `}</style>
+          </div>
         ) : (
           <span style={valueStyle}>
             {contract.expiry_date 

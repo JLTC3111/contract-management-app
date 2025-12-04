@@ -263,7 +263,7 @@ const FileBrowser = ({
                   marginLeft: '2rem',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
+                  gap: '0.75rem',
                   padding: '0.25rem 0',
                 }}
               >
