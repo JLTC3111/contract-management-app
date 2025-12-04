@@ -1,8 +1,3 @@
-/**
- * File Browser Component
- * Displays files/folders with selection, breadcrumb navigation, and preview
- */
-
 import React, { useState, useEffect } from 'react';
 import { FolderOpen, CornerLeftUp } from 'lucide-react';
 import { supabase } from '../../utils/supaBaseClient';
@@ -25,7 +20,16 @@ const FileBrowser = ({
   t
 }) => {
   const [hoveredFile, setHoveredFile] = useState(null);
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
+
+  // keep isMobile in sync with viewport changes
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    // set initial
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Animate file items
   useEffect(() => {
@@ -218,16 +222,16 @@ const FileBrowser = ({
             display: 'flex',
             alignItems: 'center',
             fontSize: 'clamp(0.5rem, 2.5vw, 1rem)',
-            backgroundColor: '#eee',
+            backgroundColor: darkMode ? 'var(--bg-secondary)' : '#eee',
             gap: '4px',
             border: 'none',
             padding: '0.5rem',
             borderRadius: '6px',
             cursor: 'pointer',
-            marginLeft: '2rem',
+            marginLeft: '1.25rem',
           }}
         >
-          <CornerLeftUp size={isMobile ? 12 : 14} color="#000" /> {t('contract_detail_prev_folder')}
+          <CornerLeftUp size={isMobile ? 15 : 20} color={darkMode ? "#fff" : "#000"} className='mb-2' /> {t('contract_detail_prev_folder')}
         </button>
       )}
 
@@ -274,17 +278,20 @@ const FileBrowser = ({
                 />
                 <span
                   style={{
-                    fontSize: '1.1rem',
+                    fontSize: 'clamp(0.95rem, 2.5vw, 1.1rem)',
                     cursor: 'pointer',
                     color: darkMode ? '#fff' : '#000',
                     fontWeight: 'normal',
                     transition: 'font-weight 0.2s ease',
+                    display: 'inline-flex',
+                    alignItems: 'center',
                   }}
                   onClick={() => handleFolderClick(fileName)}
                   onMouseEnter={(e) => { e.currentTarget.style.fontWeight = 'bold'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.fontWeight = 'normal'; }}
                 >
-                  <FolderOpen size={16} className="inline-block mb-0.5" /> {originalFileName}
+                  <FolderOpen size={isMobile ? 14 : 16} className="inline-block mb-0.5" style={{ marginRight: '0.35rem' }} />
+                  <span style={{ lineHeight: 1 }}>{originalFileName}</span>
                 </span>
               </li>
             );
@@ -312,14 +319,17 @@ const FileBrowser = ({
                 checked={isChecked}
                 onChange={() => handleCheckboxChange(fileName, !isChecked)}
               />
-              <button
-                onClick={() => handleFileClick(file)}
-                style={style}
-                onMouseEnter={() => setHoveredFile(fileName)}
-                onMouseLeave={() => setHoveredFile(null)}
-              >
-                {getFileIcon(fileName)} {originalFileName}
-              </button>
+                  <button
+                    onClick={() => handleFileClick(file)}
+                    style={{ ...style, fontSize: 'clamp(0.85rem, 2.2vw, 1rem)' }}
+                    onMouseEnter={() => setHoveredFile(fileName)}
+                    onMouseLeave={() => setHoveredFile(null)}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', marginRight: '0.5rem' }}>
+                      {getFileIcon(fileName)}
+                    </span>
+                    <span style={{ lineHeight: 1 }}>{originalFileName}</span>
+                  </button>
             </li>
           );
         })}

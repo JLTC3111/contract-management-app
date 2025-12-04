@@ -1,8 +1,3 @@
-/**
- * Contract Detail Header Component
- * Back button, title, and action buttons
- */
-
 import React from 'react';
 import { ArrowLeft, Trash, Download, FolderPlus, Trash2, X, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -182,7 +177,7 @@ const ContractHeader = ({
                 padding: '0.4rem 0.8rem',
                 borderRadius: '6px',
                 border: `1px solid ${darkMode ? 'rgba(255,255,255,0.06)' : 'var(--card-border)'}`,
-                background: 'transparent',
+                background: darkMode ? 'var(--bg-secondary)' : 'var(--bg-secondary)',
                 color: darkMode ? 'var(--text)' : 'var(--text)',
                 cursor: 'pointer',
                 fontSize: '0.85rem'
