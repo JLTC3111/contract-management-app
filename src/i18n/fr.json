@@ -119,12 +119,12 @@
     "title": "Manuel de l'application de gestion des contrats",
     "intro": "Bienvenue dans l'application de gestion des contrats pour ICUE(VN) ! Ce guide vous accompagnera à travers les fonctionnalités principales et comment les utiliser efficacement.",
     "homeDashboard": {
-      "title": "🛖 Accueil et Tableau de bord",
+      "title": "Accueil et Tableau de bord",
       "home": "Redirige vers la page d'accueil ICUE.VN.",
       "dashboard": "La zone principale où vous pouvez voir les statistiques récapitulatives, les mises à jour récentes des contrats et les actions rapides."
     },
     "approvals": {
-      "title": "🛡️ Approbations",
+      "title": "Approbations",
       "approveTab": "Affiche les contrats en attente d'approbation.",
       "actions": {
         "requestApproval": "Les éditeurs/administrateurs peuvent demander une approbation pour un contrat avec un message personnalisé.",
@@ -133,23 +133,23 @@
       }
     },
     "statusUpdate": {
-      "title": "🔄 Mise à jour du statut",
+      "title": "Mise à jour du statut",
       "trigger": "Exécute un travail en arrière-plan pour mettre à jour automatiquement les statuts des contrats basés sur des règles établies (ex. échéances ou conditions).",
       "accessibleVia": "Accessible via le bouton de la barre latérale \"Mise à jour du statut\""
     },
     "profile": {
-      "title": "👤 Menu du profil",
+      "title": "Menu du profil",
       "changePassword": "Initie le processus de réinitialisation du mot de passe.",
       "readManual": "Ouvre ce manuel utilisateur.",
       "sendFeedback": "Ouvre un formulaire (ou mailto) pour partager des idées ou signaler des bugs."
     },
     "sidebar": {
-      "title": "🔍 Navigation de la barre latérale",
+      "title": "Navigation de la barre latérale",
       "collapsible": "Basculer entre les états réduit et étendu.",
       "mobile": "Sur les écrans de moins de 1024px, la barre latérale apparaît en bas dans une disposition en ligne."
     },
     "roles": {
-      "title": "🛠️ Rôles et permissions",
+      "title": "Rôles et permissions",
       "columns": {
         "role": "Rôle",
         "permissions": "Permissions"
@@ -162,23 +162,23 @@
       }
     },
     "comments": {
-      "title": "📄 Commentaires et collaboration",
+      "title": "Commentaires et collaboration",
       "inline": "Ajouter des commentaires en ligne aux détails du contrat.",
       "timestamps": "Tous les commentaires ont des horodatages et sont visibles pour les autres ayant accès."
     },
     "limitations": {
-      "title": "⚠️ Limitations connues",
+      "title": "Limitations connues",
       "approvalDisabled": "Le bouton de demande d'approbation est désactivé si le contrat est déjà en attente.",
       "rls": "Les commentaires et approbations sont restreints via Supabase Row Level Security (RLS)."
     },
     "tips": {
-      "title": "🚀 Conseils et raccourcis",
+      "title": "Conseils et raccourcis",
       "sidebarTip": "Utilisez la barre latérale en mode réduit pour économiser l'espace d'écran.",
       "cronTip": "Utilisez la mise à jour cron du statut pour éviter le suivi manuel.",
       "manualTip": "Utilisez les options de manuel et de commentaires pour améliorer votre expérience."
     },
     "footer": {
-      "thanks": "Bonne gestion des contrats ! 📍",
+      "thanks": "Bonne gestion des contrats !",
       "contact": "Pour des questions ou de l'aide, contactez dev@icue.vn"
     }
   },

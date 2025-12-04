@@ -53,7 +53,7 @@ const highlight = (text, query) => {
 
 const ContractTable = ({ contracts, searchQuery = '' }) => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [filters, setFilters] = useState({
     title: '',
     status: '',
@@ -482,7 +482,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                 })()}
               </td>
               <td>{contract.version || '—'}</td>
-              <td>{contract.updated_at ? new Date(contract.updated_at).toLocaleDateString('en-GB', {
+              <td>{contract.updated_at ? new Date(contract.updated_at).toLocaleDateString(i18n.language, {
                 day: '2-digit',
                 month: 'short',
                 year: 'numeric',
@@ -490,7 +490,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                 minute: '2-digit',
               }) : '—'}</td>
               <td>{contract.author || '—'}</td>
-              <td>{contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString() : '—'}</td>
+              <td>{contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString(i18n.language) : '—'}</td>
             </tr>
           ))}
         </tbody>

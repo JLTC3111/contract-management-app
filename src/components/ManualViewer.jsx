@@ -1,83 +1,98 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { ArrowLeft } from 'lucide-react';
+import { 
+  ArrowLeft, Home, Shield, RefreshCw, User, Search, 
+  Settings, MessageSquare, AlertTriangle, Rocket, MapPin,
+  BookOpen, Loader2, AlertCircle
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import remarkGfm from 'remark-gfm';
 
-const ManualViewer = () => {
-    const [content, setContent] = useState('');
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const [notFound, setNotFound] = useState(false);
-    const navigate = useNavigate();
-    const { t, i18n } = useTranslation();
-  
-    useEffect(() => {
-      const loadManual = async () => {
-        setLoading(true);
-        setError(false);
-        setNotFound(false);
-        
-        try {
-          // Try to fetch the manual template file
-          console.log('Trying to fetch: /docs/manual.md');
-          const res = await fetch('/docs/manual.md');
-          console.log(`Response status: ${res.status}, ok: ${res.ok}`);
-          
-          if (res.ok) {
-            const text = await res.text();
-            console.log(`Received content length: ${text.length}`);
-            console.log(`Content preview: ${text.substring(0, 100)}`);
-            
-            // Check if we got HTML instead of markdown
-            if (text.includes('<!doctype html>') || text.includes('<html')) {
-              console.error('Received HTML instead of markdown');
-              throw new Error('Received HTML instead of markdown');
-            }
-            
-            // Parse the template and replace {{t('key')}} placeholders with translations
-            const parseTemplate = (template) => {
-              return template.replace(/\{\{t\('([^']+)'\)\}\}/g, (match, key) => {
-                return t(key);
-              });
-            };
-            
-            const processedContent = parseTemplate(text);
-            setContent(processedContent);
-            setLoading(false);
-          } else {
-            // If fetch fails, use embedded manual content as fallback
-            console.log('Using embedded manual content as fallback');
-            const embeddedManual = `# ${t('manual.title', 'Contract Manager App Manual')}
+// Icon mapping for markdown headings
+const HEADING_ICONS = {
+  Home,
+  Shield,
+  RefreshCw,
+  User,
+  Search,
+  Settings,
+  MessageSquare,
+  AlertTriangle,
+  Rocket,
+  MapPin
+};
 
+const ManualViewer = () => {
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [notFound, setNotFound] = useState(false);
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    const loadManual = async () => {
+      setLoading(true);
+      setError(false);
+      setNotFound(false);
+      
+      try {
+        console.log('Trying to fetch: /docs/manual.md');
+        const res = await fetch('/docs/manual.md');
+        console.log(`Response status: ${res.status}, ok: ${res.ok}`);
+        
+        if (res.ok) {
+          const text = await res.text();
+          console.log(`Received content length: ${text.length}`);
+          
+          if (text.includes('<!doctype html>') || text.includes('<html')) {
+            console.error('Received HTML instead of markdown');
+            throw new Error('Received HTML instead of markdown');
+          }
+          
+          const parseTemplate = (template) => {
+            return template.replace(/\{\{t\('([^']+)'\)\}\}/g, (match, key) => {
+              return t(key);
+            });
+          };
+          
+          const processedContent = parseTemplate(text);
+          setContent(processedContent);
+          setLoading(false);
+        } else {
+          console.log('Using embedded manual content as fallback');
+          
+          const embeddedManual = `# ${t('manual.title', 'Contract Manager App Manual')}
 
 ${t('manual.intro', 'Welcome to the Contract Manager App for ICUE(VN)! This guide will walk you through the key features and how to use them effectively.')}
 
 ---
 
-${t('manual.homeDashboard.title', '🛖 Home & Dashboard')}
+### [Home] ${t('manual.homeDashboard.title', 'Home & Dashboard')}
 
-${t('sidebar.home', 'Home')}**: ${t('manual.homeDashboard.home', 'Redirects to ICUE.VN homepage.')}
-${t('sidebar.dashboard', 'Dashboard')}**: ${t('manual.homeDashboard.dashboard', 'The main area where you can view summary stats, recent contract updates, and quick actions.')}
+- **${t('sidebar.home', 'Home')}**: ${t('manual.homeDashboard.home', 'Redirects to ICUE.VN homepage.')}
+- **${t('sidebar.dashboard', 'Dashboard')}**: ${t('manual.homeDashboard.dashboard', 'The main area where you can view summary stats, recent contract updates, and quick actions.')}
 
+---
 
-### ${t('manual.approvals.title', '🛡️ Approvals')}
-  ${t('sidebar.approvals', 'Approvals')}: ${t('manual.approvals.approveTab', 'Displays contracts awaiting approval.')}
-  ${t('common.actions', 'Actions')}:
-  ${t('send_approval_request', 'Request Approval')}: ${t('manual.approvals.actions.requestApproval', 'Editors/Admins can request approval for a contract with a custom message.')}
-  ${t('approval_board_approve', 'Approve Contract')}: ${t('manual.approvals.actions.approveContract', 'Admins/Approvers can review and approve contracts.')} 
-  ${t('comments', 'Comment on Contracts')}: ${t('manual.approvals.actions.comment', 'Add feedback or discussion notes to a contract.')}
-### ${t('manual.statusUpdate.title', '🔄 Update Status')}
+### [Shield] ${t('manual.approvals.title', 'Approvals')}
+
+- **${t('sidebar.approvals', 'Approvals')}**: ${t('manual.approvals.approveTab', 'Displays contracts awaiting approval.')}
+- **${t('send_approval_request', 'Request Approval')}**: ${t('manual.approvals.actions.requestApproval', 'Editors/Admins can request approval for a contract with a custom message.')}
+- **${t('approval_board_approve', 'Approve Contract')}**: ${t('manual.approvals.actions.approveContract', 'Admins/Approvers can review and approve contracts.')}
+- **${t('comments', 'Comment on Contracts')}**: ${t('manual.approvals.actions.comment', 'Add feedback or discussion notes to a contract.')}
+
+---
+
+### [RefreshCw] ${t('manual.statusUpdate.title', 'Update Status')}
 
 - **${t('sidebar.updateStatus', 'Update Status')}**: ${t('manual.statusUpdate.trigger', 'Runs a background job to auto-update contract statuses based on set rules (e.g., deadlines or conditions).')}
 - ${t('manual.statusUpdate.accessibleVia', 'Accessible via the sidebar button "Update Status"')}
 
 ---
 
-### ${t('manual.profile.title', '👤 Profile Menu')}
-
-${t('sidebar.profile', 'Profile')} ${t('common.actions', 'Actions')}:
+### [User] ${t('manual.profile.title', 'Profile Menu')}
 
 - **${t('sidebar.changePassword', 'Change Password')}**: ${t('manual.profile.changePassword', 'Initiates the password reset flow.')}
 - **${t('sidebar.manual', 'Read Manual')}**: ${t('manual.profile.readManual', 'Opens this user manual.')}
@@ -85,14 +100,14 @@ ${t('sidebar.profile', 'Profile')} ${t('common.actions', 'Actions')}:
 
 ---
 
-### ${t('manual.sidebar.title', '🔍 Sidebar Navigation')}
+### [Search] ${t('manual.sidebar.title', 'Sidebar Navigation')}
 
-- **${t('manual.sidebar.collapsible', 'Collapsible Sidebar: Toggle between collapsed and expanded states.')}**
-- **${t('manual.sidebar.mobile', 'Mobile Mode: On screens smaller than 1024px, the sidebar appears at the bottom in a row layout.')}**
+- **${t('manual.sidebar.collapsible', 'Collapsible Sidebar')}**: Toggle between collapsed and expanded states.
+- **${t('manual.sidebar.mobile', 'Mobile Mode')}**: On screens smaller than 1024px, the sidebar appears at the bottom in a row layout.
 
 ---
 
-### ${t('manual.roles.title', '🛠️ Roles & Permissions')}
+### [Settings] ${t('manual.roles.title', 'Roles & Permissions')}
 
 | ${t('sidebar.role', 'Role')} | ${t('common.permissions', 'Permissions')} |
 | -------- | --------------------------------------------------------------------- |
@@ -103,21 +118,21 @@ ${t('sidebar.profile', 'Profile')} ${t('common.actions', 'Actions')}:
 
 ---
 
-### ${t('manual.comments.title', '📄 Commenting & Collaboration')}
+### [MessageSquare] ${t('manual.comments.title', 'Commenting & Collaboration')}
 
 - ${t('manual.comments.inline', 'Add inline comments on contract details.')}
 - ${t('manual.comments.timestamps', 'All comments are timestamped and visible to others with access.')}
 
 ---
 
-### ${t('manual.limitations.title', '⚠️ Known Limitations')}
+### [AlertTriangle] ${t('manual.limitations.title', 'Known Limitations')}
 
 - ${t('manual.limitations.approvalDisabled', 'Approval request button is disabled if the contract is already pending.')}
 - ${t('manual.limitations.rls', 'Comments and approvals are restricted via Supabase Row Level Security (RLS).')}
 
 ---
 
-### ${t('manual.tips.title', '🚀 Tips & Shortcuts')}
+### [Rocket] ${t('manual.tips.title', 'Tips & Shortcuts')}
 
 - ${t('manual.tips.sidebarTip', 'Use the sidebar in collapsed mode to save screen space.')}
 - ${t('manual.tips.cronTip', 'Use the status cron update to avoid manual tracking.')}
@@ -125,41 +140,93 @@ ${t('sidebar.profile', 'Profile')} ${t('common.actions', 'Actions')}:
 
 ---
 
-${t('manual.footer.thanks', 'Happy Contracting! 📍')}
+${t('manual.footer.thanks', 'Happy Contracting!')} [MapPin]
 
 ---
 
 ${t('manual.footer.contact', 'For questions or help, contact dev@icue.vn')}`;
-            
-            console.log('Manual markdown string:', embeddedManual);
-            setContent(embeddedManual);
-            setNotFound(true);
-            setLoading(false);
-          }
-        } catch (err) {
-          console.error('Error loading manual:', err);
-          setError(true);
-          setContent(`# ${t('manual.error.title', 'Manual Error')}
+          
+          setContent(embeddedManual);
+          setNotFound(true);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('Error loading manual:', err);
+        setError(true);
+        setContent(`# ${t('manual.error.title', 'Manual Error')}
 
 ${t('manual.error.message', 'Sorry, there was an error loading the manual. Please try again later.')}
 
-${t('common.error', 'Error')} Details:** ${err.message}
+**${t('common.error', 'Error')} Details:** ${err.message}
 
 ${t('manual.error.fallback', 'You can try:')}
 - ${t('manual.error.refresh', 'Refreshing the page')}
 - ${t('manual.error.connection', 'Checking your internet connection')}
 - ${t('manual.error.support', 'Contacting support if the problem persists')}`);
-          setLoading(false);
+        setLoading(false);
+      }
+    };
+    loadManual();
+  }, [t, i18n.language]);
+
+  // Custom component renderers for ReactMarkdown
+  const markdownComponents = {
+    h3: ({ node, children, ...props }) => {
+      const childArray = React.Children.toArray(children);
+      if (childArray.length === 0) return <h3 {...props}>{children}</h3>;
+
+      const firstChild = childArray[0];
+      
+      if (typeof firstChild === 'string') {
+        const match = firstChild.match(/^\s*\[([a-zA-Z]+)\]\s*/);
+        if (match) {
+          const iconName = match[1];
+          const Icon = HEADING_ICONS[iconName];
+          if (Icon) {
+            const remainingText = firstChild.replace(match[0], '');
+            return (
+              <h3 {...props} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Icon size={24} />
+                <span>
+                  {remainingText}
+                  {childArray.slice(1)}
+                </span>
+              </h3>
+            );
+          }
         }
-      };
-      loadManual();
-    }, [t, i18n.language]);
-  
-    return (
-      <div className="manual-markdown"> 
+      }
+      return <h3 {...props}>{children}</h3>;
+    },
+    p: ({ node, children, ...props }) => {
+      const childArray = React.Children.toArray(children);
+      const textContent = childArray
+        .map(child => (typeof child === 'string' ? child : ''))
+        .join('');
+      
+      if (textContent.includes('[MapPin]')) {
+        const newChildren = childArray.map(child => {
+          if (typeof child === 'string') {
+            return child.replace('[MapPin]', '').trim();
+          }
+          return child;
+        });
+        
+        return (
+          <p {...props} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {newChildren}
+            <MapPin size={16} />
+          </p>
+        );
+      }
+      return <p {...props}>{children}</p>;
+    }
+  };
+
+  return (
+    <div className="manual-markdown">
       <div
         style={{
-          margin: '0 auto',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -170,7 +237,8 @@ ${t('manual.error.fallback', 'You can try:')}
           margin: '0 auto',
         }}
       >
-        <button className='btn-hover-effect'
+        <button
+          className="btn-hover-effect"
           onClick={() => navigate(-1)}
           style={{
             display: 'flex',
@@ -187,17 +255,22 @@ ${t('manual.error.fallback', 'You can try:')}
         >
           <ArrowLeft size={20} /> {t('buttons.back')}
         </button>
-  
-        <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>📘 {t('headers.userManual')}</h1>
+
+        <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <BookOpen size={24} /> {t('headers.userManual')}
+        </h1>
         
         {loading && (
           <div style={{ 
             textAlign: 'center', 
             padding: '2rem',
             color: '#6b7280',
-            fontStyle: 'italic'
+            fontStyle: 'italic',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
           }}>
-            📖 {t('manual.loading', 'Loading manual...')}
+            <Loader2 size={20} className="animate-spin" /> {t('manual.loading', 'Loading manual...')}
           </div>
         )}
         
@@ -209,9 +282,12 @@ ${t('manual.error.fallback', 'You can try:')}
             padding: '0.5rem',
             backgroundColor: '#fef3c7',
             borderRadius: '4px',
-            border: '1px solid #f59e42'
+            border: '1px solid #f59e42',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
           }}>
-            ⚠️ {t('manual.missingTranslation', { defaultValue: 'No manual available in your language. Showing English or default.' })}
+            <AlertTriangle size={16} /> {t('manual.missingTranslation', { defaultValue: 'No manual available in your language. Showing English or default.' })}
           </div>
         )}
         
@@ -222,9 +298,12 @@ ${t('manual.error.fallback', 'You can try:')}
             padding: '0.5rem',
             backgroundColor: '#fef2f2',
             borderRadius: '4px',
-            border: '1px solid #ef4444'
+            border: '1px solid #ef4444',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
           }}>
-            ❌ {t('manual.error.loading', 'Error loading manual. Please try again.')}
+            <AlertCircle size={16} /> {t('manual.error.loading', 'Error loading manual. Please try again.')}
           </div>
         )}
         
@@ -237,6 +316,7 @@ ${t('manual.error.fallback', 'You can try:')}
               borderRadius: '8px',
               border: '1px solid var(--card-border)',
               transition: 'background 0.2s, color 0.2s',
+              width: '100%',
             }}
           >
             <style>{`
@@ -267,30 +347,38 @@ ${t('manual.error.fallback', 'You can try:')}
               }
               .manual-markdown ul,
               .manual-markdown ol {
-                list-style: none;
-                padding-left: -2.2em; /* Reduce this value to move bullets closer to the text */
-                margin-left: 0;      /* Remove extra margin if present */
+                list-style: disc;
+                padding-left: 1.5em;
+                margin-left: 0;
               }
-
               .manual-markdown li {
-                padding-left: -2.2em; /* Optional: fine-tune space between bullet and text */
-                margin-left: 0;      /* Remove extra margin if present */
+                margin-bottom: 0.25em;
               }
               .manual-markdown li strong,
               .manual-markdown li b {
-                font-weight: normal !important;
+                font-weight: 600;
+              }
+              @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+              }
+              .animate-spin {
+                animation: spin 1s linear infinite;
               }
             `}</style>
-            <div className="manual-markdown">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+            <div className="manual-markdown-content">
+              <ReactMarkdown 
+                remarkPlugins={[remarkGfm]}
+                components={markdownComponents}
+              >
+                {content}
+              </ReactMarkdown>
             </div>
           </div>
         )}
       </div>
-      </div>
-    );
-  };
-  
+    </div>
+  );
+};
+
 export default ManualViewer;
-  
-  

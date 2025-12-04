@@ -284,7 +284,7 @@ const FileBrowser = ({
                   onMouseEnter={(e) => { e.currentTarget.style.fontWeight = 'bold'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.fontWeight = 'normal'; }}
                 >
-                  <FolderOpen size={14} className="inline-block w-2 h-2 mr-1" /> {originalFileName}
+                  <FolderOpen size={16} className="inline-block mb-0.5" /> {originalFileName}
                 </span>
               </li>
             );

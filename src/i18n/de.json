@@ -76,12 +76,12 @@
     "title": "Vertragsmanager-App Handbuch",
     "intro": "Willkommen zur Vertragsmanager-App für ICUE(VN)! Diese Anleitung führt Sie durch die wichtigsten Funktionen und deren effektive Nutzung.",
     "homeDashboard": {
-      "title": "🛖 Startseite & Dashboard",
+      "title": "Startseite & Dashboard",
       "home": "Leitet zur ICUE.VN Startseite weiter.",
       "dashboard": "Der Hauptbereich, wo Sie Zusammenfassungsstatistiken, aktuelle Vertragsaktualisierungen und Schnellaktionen anzeigen können."
     },
     "approvals": {
-      "title": "🛡️ Genehmigungen",
+      "title": "Genehmigungen",
       "approveTab": "Zeigt Verträge an, die auf Genehmigung warten.",
       "actions": {
         "requestApproval": "Editoren/Admins können eine Genehmigung für einen Vertrag mit einer benutzerdefinierten Nachricht anfordern.",
@@ -90,23 +90,23 @@
       }
     },
     "statusUpdate": {
-      "title": "🔄 Status aktualisieren",
+      "title": "Status aktualisieren",
       "trigger": "Führt einen Hintergrundjob aus, um Vertragsstatus automatisch basierend auf festgelegten Regeln zu aktualisieren (z.B. Fristen oder Bedingungen).",
       "accessibleVia": "Zugänglich über die Sidebar-Schaltfläche \"Status aktualisieren\""
     },
     "profile": {
-      "title": "👤 Profil-Menü",
+      "title": "Profil-Menü",
       "changePassword": "Initiiert den Passwort-Reset-Prozess.",
       "readManual": "Öffnet dieses Benutzerhandbuch.",
       "sendFeedback": "Öffnet ein Formular (oder mailto), um Ideen zu teilen oder Fehler zu melden."
     },
     "sidebar": {
-      "title": "🔍 Sidebar-Navigation",
+      "title": "Sidebar-Navigation",
       "collapsible": "Zwischen eingeklapptem und ausgeklapptem Zustand wechseln.",
       "mobile": "Auf Bildschirmen kleiner als 1024px erscheint die Sidebar am unteren Rand in einer Zeilenanordnung."
     },
     "roles": {
-      "title": "🛠️ Rollen & Berechtigungen",
+      "title": "Rollen & Berechtigungen",
       "columns": {
         "role": "Rolle",
         "permissions": "Berechtigungen"
@@ -119,23 +119,23 @@
       }
     },
     "comments": {
-      "title": "📄 Kommentieren & Zusammenarbeit",
+      "title": "Kommentieren & Zusammenarbeit",
       "inline": "Inline-Kommentare zu Vertragsdetails hinzufügen.",
       "timestamps": "Alle Kommentare sind zeitstempelmarkiert und für andere mit Zugriff sichtbar."
     },
     "limitations": {
-      "title": "⚠️ Bekannte Einschränkungen",
+      "title": "Bekannte Einschränkungen",
       "approvalDisabled": "Genehmigungsanfrage-Schaltfläche ist deaktiviert, wenn der Vertrag bereits ausstehend ist.",
       "rls": "Kommentare und Genehmigungen sind über Supabase Row Level Security (RLS) eingeschränkt."
     },
     "tips": {
-      "title": "🚀 Tipps & Shortcuts",
+      "title": "Tipps & Shortcuts",
       "sidebarTip": "Verwenden Sie die Sidebar im eingeklappten Modus, um Bildschirmplatz zu sparen.",
       "cronTip": "Verwenden Sie die Status-Cron-Aktualisierung, um manuelles Tracking zu vermeiden.",
       "manualTip": "Verwenden Sie das Handbuch und Feedback-Optionen, um Ihre Erfahrung zu verbessern."
     },
     "footer": {
-      "thanks": "Viel Erfolg beim Vertragsmanagement! 📍",
+      "thanks": "Viel Erfolg beim Vertragsmanagement!",
       "contact": "Bei Fragen oder Hilfe kontaktieren Sie das dev@icue.vn"
     }
   },

@@ -62,24 +62,24 @@
     "changePassword": "Đổi mật khẩu"
   },
   "status": {
-    "approved": "Đã phê duyệt",
-    "pending": "Chờ duyệt",
-    "draft": "Bản nháp",
-    "rejected": "Bị từ chối",
-    "expired": "Đã hết hạn",
-    "expiring": "Sắp hết hạn"
+    "approved": "Đã Duyệt",
+    "pending": "Chờ Duyệt",
+    "draft": "Bản Nháp",
+    "rejected": "Bị Từ Chối",
+    "expired": "Đã Hết Hạn",
+    "expiring": "Sắp Hết Hạn"
   },
   "table": {
-    "title": "Tiêu đề",
-    "status": "Trạng thái",
-    "version": "Phiên bản",
-    "lastUpdated": "Cập nhật lần cuối",
-    "author": "Tác giả",
-    "expiryDate": "Ngày hết hạn",
-    "all": "Tất cả",
+    "title": "Tiêu Đề",
+    "status": "Trạng Thái",
+    "version": "Phiên Bản",
+    "lastUpdated": "Cập Nhật",
+    "author": "Tác Giả",
+    "expiryDate": "Ngày Hết Hạn",
+    "all": "Tất Cả",
     "clear": "Xóa",
-    "filterByTitle": "Lọc theo tiêu đề",
-    "noContractsFound": "Không tìm thấy hợp đồng nào."
+    "filterByTitle": "Lọc Theo Tiêu Đề",
+    "noContractsFound": "Không Tìm Thấy Hợp Đồng Nào."
   },
   "metrics": {
     "active": "Hoạt động",
@@ -119,7 +119,7 @@
     "title": "Hướng dẫn ứng dụng quản lý hợp đồng",
     "intro": "Chào mừng đến với ứng dụng quản lý hợp đồng cho ICUE(VN)! Hướng dẫn này sẽ đưa bạn qua các tính năng chính và cách sử dụng chúng hiệu quả.",
     "homeDashboard": {
-      "title": "🛖 Trang chủ & Bảng điều khiển",
+      "title": "Trang chủ & Bảng điều khiển",
       "home": "Chuyển hướng đến trang chủ ICUE.VN.",
       "dashboard": "Khu vực chính nơi bạn có thể xem thống kê tóm tắt, cập nhật hợp đồng gần đây và các hành động nhanh."
     },
@@ -133,23 +133,23 @@
       }
     },
     "statusUpdate": {
-      "title": "🔄 Cập nhật trạng thái",
+      "title": "Cập nhật trạng thái",
       "trigger": "Chạy một công việc nền để tự động cập nhật trạng thái hợp đồng dựa trên các quy tắc đã thiết lập (ví dụ: thời hạn hoặc điều kiện).",
       "accessibleVia": "Có thể truy cập qua nút sidebar \"Cập nhật trạng thái\""
     },
     "profile": {
-      "title": "👤 Menu cá nhân",
+      "title": "Menu cá nhân",
       "changePassword": "Khởi tạo quy trình đặt lại mật khẩu.",
       "readManual": "Mở hướng dẫn sử dụng này.",
       "sendFeedback": "Mở biểu mẫu (hoặc mailto) để chia sẻ ý tưởng hoặc báo cáo lỗi."
     },
     "sidebar": {
-      "title": "🔍 Điều hướng sidebar",
+      "title": "Điều hướng sidebar",
       "collapsible": "Chuyển đổi giữa trạng thái thu gọn và mở rộng.",
       "mobile": "Trên màn hình nhỏ hơn 1024px, sidebar xuất hiện ở dưới cùng trong bố cục hàng."
     },
     "roles": {
-      "title": "🛠️ Vai trò & Quyền hạn",
+      "title": "Vai trò & Quyền hạn",
       "columns": {
         "role": "Vai trò",
         "permissions": "Quyền hạn"
@@ -162,23 +162,23 @@
       }
     },
     "comments": {
-      "title": "📄 Bình luận & Hợp tác",
+      "title": "Bình luận & Hợp tác",
       "inline": "Thêm bình luận vào chi tiết hợp đồng.",
       "timestamps": "Tất cả bình luận đều có dấu thời gian và hiển thị cho những người khác có quyền truy cập."
     },
     "limitations": {
-      "title": "⚠️ Hạn chế đã biết",
+      "title": "Hạn chế đã biết",
       "approvalDisabled": "Nút yêu cầu phê duyệt bị vô hiệu hóa nếu hợp đồng đã đang chờ.",
       "rls": "Bình luận và phê duyệt bị hạn chế thông qua Supabase RLS."
     },
     "tips": {
-      "title": "🚀 Mẹo & Phím tắt",
+      "title": "Mẹo & Phím tắt",
       "sidebarTip": "Sử dụng sidebar ở chế độ thu gọn để tiết kiệm không gian màn hình.",
       "cronTip": "Sử dụng cập nhật cron trạng thái để tránh theo dõi thủ công.",
       "manualTip": "Sử dụng hướng dẫn và tùy chọn phản hồi để cải thiện trải nghiệm của bạn."
     },
     "footer": {
-      "thanks": "Chúc bạn quản lý hợp đồng thành công! 📍",
+      "thanks": "Chúc bạn quản lý hợp đồng thành công!",
       "contact": "Để câu hỏi hoặc trợ giúp, hãy liên hệ dev@icue.vn"
     }
   },
@@ -187,7 +187,7 @@
     "title": "Tiêu đề",
     "status": "Trạng thái",
     "version": "Phiên bản",
-    "lastUpdated": "Cập nhật lần cuối",
+    "lastUpdated": "Cập Nhật",
     "author": "Tác giả",
     "expiryDate": "Ngày hết hạn"
   },
@@ -203,22 +203,22 @@
   "clear": "Xóa",
   
   "contractTable": {
-    "title": "Tiêu đề",
-    "headerStatus": "Trạng thái",
+    "title": "Tiêu Đề",
+    "headerStatus": "Trạng Thái",
     "status": {
-      "expired": "Đã hết hạn",
-      "status": "Trạng thái",
+      "expired": "Đã Hết Hạn",
+      "status": "Trạng Thái",
       "draft": "Nháp",
-      "approved": "Đã duyệt",
-      "pending": "Đang chờ",
-      "rejected": "Bị từ chối",
-      "expiring": "Sắp hết hạn"
+      "approved": "Đã Duyệt",
+      "pending": "Đang Chờ",
+      "rejected": "Bị Từ Chối",
+      "expiring": "Sắp Hết Hạn"
     },
-    "version": "Phiên bản",
-    "lastUpdated": "Cập nhật lần cuối",
-    "author": "Tác giả",
-    "expiryDate": "Ngày hết hạn",
-    "all": "Tất cả",
+    "version": "Phiên Bản",
+    "lastUpdated": "Cập Nhật",
+    "author": "Người Tạo",
+    "expiryDate": "Ngày Hết Hạn",
+    "all": "Tất Cả",
     "clear": "Xóa"
   },
   "upload_completed": "Đã Tải Thành Công",
