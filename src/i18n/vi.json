@@ -1,4 +1,13 @@
 {
+  "contractHeader": {
+    "back": "Quay Lại",
+    "edit": "Chỉnh Sửa",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "downloadAll": "Tải Xuống Tất Cả",
+    "newFolder": "Thư Mục Mới"
+  },
   "sidebar": {
     "dashboard": "Bảng điều khiển",
     "approvals": "Phê duyệt",
@@ -34,6 +43,9 @@
     "phaseManagement": "Quản lý Giai đoạn"
   },
   "buttons": {
+    "delete": "Xóa",
+    "downloadAll": "Tải Xuống Tất Cả",
+    "newFolder": "Thư Mục Mới",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
     "save": "Lưu",

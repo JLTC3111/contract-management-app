@@ -1,4 +1,13 @@
 {
+  "contractHeader": {
+    "back": "Atrás",
+    "edit": "Editar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "downloadAll": "Descargar todo",
+    "newFolder": "Nueva carpeta"
+  },
   "sidebar": {
     "dashboard": "Panel de control",
     "approvals": "Aprobaciones",
@@ -34,6 +43,9 @@
     "phaseManagement": "Gestión de Fases"
   },
   "buttons": {
+    "delete": "Eliminar",
+    "downloadAll": "Descargar todo",
+    "newFolder": "Nueva carpeta",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
     "save": "Guardar",

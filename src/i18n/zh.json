@@ -34,6 +34,9 @@
     "phaseManagement": "阶段管理"
   },
   "buttons": {
+    "delete": "删除",
+    "downloadAll": "全部下载",
+    "newFolder": "新建文件夹",
     "login": "登录",
     "logout": "退出登录",
     "save": "保存",

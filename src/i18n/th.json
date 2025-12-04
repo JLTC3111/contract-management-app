@@ -1,4 +1,13 @@
 {
+  "contractHeader": {
+    "back": "กลับ",
+    "edit": "แก้ไข",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "delete": "ลบ",
+    "downloadAll": "ดาวน์โหลดทั้งหมด",
+    "newFolder": "โฟลเดอร์ใหม่"
+  },
   "sidebar": {
     "dashboard": "แดชบอร์ด",
     "approvals": "การอนุมัติ",
@@ -34,6 +43,9 @@
     "phaseManagement": "การจัดการขั้นตอน"
   },
   "buttons": {
+    "delete": "ลบ",
+    "downloadAll": "ดาวน์โหลดทั้งหมด",
+    "newFolder": "โฟลเดอร์ใหม่",
     "login": "เข้าสู่ระบบ",
     "logout": "ออกจากระบบ",
     "save": "บันทึก",

@@ -1,4 +1,13 @@
 {
+  "contractHeader": {
+    "back": "戻る",
+    "edit": "編集",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "downloadAll": "すべてダウンロード",
+    "newFolder": "新しいフォルダー"
+  },
   "sidebar": {
     "dashboard": "ダッシュボード",
     "approvals": "承認",
@@ -34,6 +43,9 @@
     "phaseManagement": "段階管理"
   },
   "buttons": {
+    "delete": "削除",
+    "downloadAll": "すべてダウンロード",
+    "newFolder": "新しいフォルダー",
     "login": "ログイン",
     "logout": "ログアウト",
     "save": "保存",

@@ -231,7 +231,7 @@ const ContractHeader = ({
                   }}
                 >
                   <Trash2 size={16} />
-                  <span>Delete Files ({selectedFiles.length})</span>
+                  <span>{t('buttons.delete', 'Delete')} ({selectedFiles.length})</span>
                 </button>
               )}
             </>

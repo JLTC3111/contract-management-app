@@ -1,4 +1,13 @@
 {
+  "contractHeader": {
+    "back": "Back",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "downloadAll": "Download All",
+    "newFolder": "New Folder"
+  },
   "sidebar": {
     "visitIcue": "Visit iCUE!",
     "home": "Home",
@@ -36,6 +45,9 @@
     "phaseManagement": "Phase Management"
   },
   "buttons": {
+    "delete": "Delete",
+    "downloadAll": "Download All",
+    "newFolder": "New Folder",
     "login": "Log In",
     "logout": "Logout",
     "save": "Save",
