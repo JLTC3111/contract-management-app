@@ -11,10 +11,10 @@
     "signOut": "Sign Out",
     "updateStatus": "Update Status",
     "updatingStatus": "Updating...",
-    "cronFailed": "❌ Cron failed:",
-    "statusUpdated": "✅ Status Updated!",
+    "cronFailed": "Cron failed:",
+    "statusUpdated": "Status Updated!",
     "contractsUpdated": "contract(s) updated",
-    "cronTriggerFailed": "🚨 Failed to trigger cron job. Check network or CORS settings.",
+    "cronTriggerFailed": "Failed to trigger cron job. Check network or CORS settings.",
     "logged_in_as": "Signed in as:",
     "role": "Role",
     "role_label": {
@@ -80,12 +80,12 @@
     "title": "Contract Manager App Manual",
     "intro": "Welcome to the Contract Manager App for ICUE(VN)! This guide will walk you through the key features and how to use them effectively.",
     "homeDashboard": {
-      "title": "🛖 Home & Dashboard",
+      "title": "Home & Dashboard",
       "home": "Redirects to ICUE.VN homepage.",
       "dashboard": "The main area where you can view summary stats, recent contract updates, and quick actions."
     },
     "approvals": {
-      "title": "🛡️ Approvals",
+      "title": "Approvals",
       "approveTab": "Displays contracts awaiting approval.",
       "actions": {
         "requestApproval": "Editors/Admins can request approval for a contract with a custom message.",
@@ -94,23 +94,23 @@
       }
     },
     "statusUpdate": {
-      "title": "🔄 Update Status",
+      "title": "Update Status",
       "trigger": "Runs a background job to auto-update contract statuses based on set rules (e.g., deadlines or conditions).",
       "accessibleVia": "Accessible via the sidebar button \"Update Status\""
     },
     "profile": {
-      "title": "👤 Profile Menu",
+      "title": "Profile Menu",
       "changePassword": "Initiates the password reset flow.",
       "readManual": "Opens this user manual.",
       "sendFeedback": "Opens a form (or mailto) to share ideas or report bugs."
     },
     "sidebar": {
-      "title": "🔍 Sidebar Navigation",
+      "title": "Sidebar Navigation",
       "collapsible": "Toggle between collapsed and expanded states.",
       "mobile": "On screens smaller than 1024px, the sidebar appears at the bottom in a row layout."
     },
     "roles": {
-      "title": "🛠️ Roles & Permissions",
+      "title": "Roles & Permissions",
       "columns": {
         "role": "Role",
         "permissions": "Permissions"
@@ -123,23 +123,23 @@
       }
     },
     "comments": {
-      "title": "📄 Commenting & Collaboration",
+      "title": "Commenting & Collaboration",
       "inline": "Add inline comments on contract details.",
       "timestamps": "All comments are timestamped and visible to others with access."
     },
     "limitations": {
-      "title": "⚠️ Known Limitations",
+      "title": "Known Limitations",
       "approvalDisabled": "Approval request button is disabled if the contract is already pending.",
       "rls": "Comments and approvals are restricted via Supabase Row Level Security (RLS)."
     },
     "tips": {
-      "title": "🚀 Tips & Shortcuts",
+      "title": "Tips & Shortcuts",
       "sidebarTip": "Use the sidebar in collapsed mode to save screen space.",
       "cronTip": "Use the status cron update to avoid manual tracking.",
       "manualTip": "Use the manual and feedback options to improve your experience."
     },
     "footer": {
-      "thanks": "Happy Contracting! 📍",
+      "thanks": "Happy Contracting!",
       "contact": "For questions or help, contact dev@icue.vn"
     }
   },
@@ -264,7 +264,7 @@
   "message": "Message",
   "contractDetails": "Contract Details",
   "defaultApprovalResponse": "Default Approval Response",
-  "defaultApprovalResponseText": "Request is being viewed. Please wait for approval response in the next 24 hours. Thank you! 👍",
+  "defaultApprovalResponseText": "Request is being viewed. Please wait for approval response in the next 24 hours. Thank you!",
   "requestMessage": "Request Message",
   "pending": "Pending",
   "updated": "Updated",
@@ -280,7 +280,7 @@
   "bell_no_pending_approval_requests": "No pending approval requests",
   "bell_requested_by": "Requested by",
   "bell_default_response": "Default Response",
-  "bell_default_response_message": "Request is being viewed. Please wait for approval response in the next 24 hours. Thank you! 👍",
+  "bell_default_response_message": "Request is being viewed. Please wait for approval response in the next 24 hours. Thank you!",
   "bell_notifications": "Notifications",
   "bell_headers": "Approval Request",
   "approval_status_updates": "Approval Status Updates",

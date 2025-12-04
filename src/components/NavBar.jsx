@@ -499,7 +499,7 @@ const Navbar = () => {
         width: isMobile ? '16px' : 'clamp(18px, 5vw, 24px)',
         height: isMobile ? '16px' : 'clamp(18px, 5vw, 24px)',
         borderRadius: '50%',
-        background: 'var(--theme-toggle-bg)', // changed from var(--sidebar-hover-bg)
+        background: 'var(--theme-toggle-bg)', 
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -513,7 +513,7 @@ const Navbar = () => {
         <motion.div 
          style={{ 
            position: 'relative', 
-           top: isMobile ? '0px' : darkMode ? '-2.5px' : '4.5px'
+           top: isMobile ? '0px' : darkMode ? '-2.5px' : '0.5px'
          }}
          animate={{ rotate: darkMode ? 225 : 0 }}
          transition={{ duration: 0.5, ease: "linear" }}

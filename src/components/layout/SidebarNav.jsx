@@ -58,7 +58,6 @@ export const SidebarButton = ({
       onMouseEnter={(e) => {
         if (disabled) return;
         e.currentTarget.style.backgroundColor = 'var(--sidebar-hover-bg, #e0e7ff)';
-        e.currentTarget.style.transform = 'translateX(4px) scale(1.02)';
         e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
         e.currentTarget.style.borderRadius = '10px';
       }}

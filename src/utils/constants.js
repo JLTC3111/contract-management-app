@@ -17,18 +17,18 @@ export const STATUS_COLORS = {
   cancelled: '#9ca3af'
 };
 
-// Status icons for display
+// Status icons for display (mapped to Lucide icons in components)
 export const STATUS_ICONS = {
-  approved: '✅',
-  pending: '⏳',
-  draft: '📝',
-  rejected: '❌',
-  expired: '🛑',
-  expiring: '⚠️',
-  completed: '✔️',
-  active: '▶️',
-  delayed: '🔴',
-  cancelled: '🚫'
+  approved: 'CheckCircle',
+  pending: 'Clock',
+  draft: 'FileText',
+  rejected: 'XCircle',
+  expired: 'AlertOctagon',
+  expiring: 'AlertTriangle',
+  completed: 'CheckSquare',
+  active: 'PlayCircle',
+  delayed: 'PauseCircle',
+  cancelled: 'Ban'
 };
 
 // Expiry thresholds in days (when to show expiring warning)

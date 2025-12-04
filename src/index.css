@@ -49,7 +49,7 @@
   );
   --sidebar-active-bg: #fefeff;
   --sidebar-active-text: #1e3a8a;
-  --theme-toggle-bg: linear-gradient(to bottom, #e0f7fa 0%, #b2ebf2 100%);
+  --theme-toggle-bg: linear-gradient(to bottom, #ecffc5 0%, #b2ebf2 100%);
   --fancy-btn-border: #fbf3e7;
   --fancy-btn-shadow: 0 1.5px 4px rgba(0,0,0,0.15);
 }

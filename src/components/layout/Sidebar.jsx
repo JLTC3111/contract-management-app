@@ -20,6 +20,7 @@ import { useUser } from '../../hooks/useUser';
 import { useTheme } from '../../hooks/useTheme';
 import { gsap } from 'gsap';
 import { useTranslation } from 'react-i18next';
+import toast from 'react-hot-toast';
 
 // Extracted components
 import { SidebarButton, SubMenu } from './SidebarNav';
@@ -96,7 +97,7 @@ const Sidebar = () => {
       
       if (!response.ok) {
         console.error('Cron failed:', result);
-        alert(`${t('sidebar.cronFailed')} ${result.error || result.message || 'Unknown error'}`);
+        toast.error(`${t('sidebar.cronFailed')} ${result.error || result.message || 'Unknown error'}`);
       } else {
         const { updated_count, expired_count, expiring_count, notifications_sent } = result;
         let message = t('sidebar.statusUpdated');
@@ -110,11 +111,11 @@ const Sidebar = () => {
         } else {
           message += ' (No contracts needed updates)';
         }
-        alert(message);
+        toast.success(message);
       }
     } catch (error) {
       console.error('Error triggering cron:', error);
-      alert(t('sidebar.cronTriggerFailed'));
+      toast.error(t('sidebar.cronTriggerFailed'));
     } finally {
       setStatusUpdateLoading(false);
     }
@@ -226,7 +227,7 @@ const Sidebar = () => {
           flexDirection: isMobile ? 'row' : 'column',
           alignItems: 'center',
           justifyContent: isMobile ? 'space-around' : 'space-between',
-          width: isMobile ? '100%' : collapsed ? '64px' : `${sidebarWidth}px`,
+          width: isMobile ? '100%' : collapsed ? '72px' : `${sidebarWidth}px`,
           height: isMobile ? (collapsed ? '36px' : 'auto') : '100vh',
           backgroundColor: 'var(--sidebar-bg)',
           transition: isResizing || isMobile ? 'none' : 'width 0.3s',

@@ -2,12 +2,23 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { gsap } from 'gsap';
+import { 
+  CheckCircle, Clock, FileText, XCircle, AlertOctagon, 
+  AlertTriangle, CheckSquare, PlayCircle, PauseCircle, Ban, 
+  HelpCircle, Search 
+} from 'lucide-react';
 import './Table.css';
 
 // Centralized utilities
 import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS, getStatusColor } from '../utils/constants';
 import { formatDate, getDaysUntilExpiry } from '../utils/formatters';
 import { StatusBadge } from './common';
+
+const ICON_COMPONENTS = {
+  CheckCircle, Clock, FileText, XCircle, AlertOctagon,
+  AlertTriangle, CheckSquare, PlayCircle, PauseCircle, Ban,
+  HelpCircle
+};
 
 // Generate status styles from centralized constants
 const statusStyles = Object.keys(STATUS_COLORS).reduce((acc, status) => {
@@ -420,7 +431,11 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
         </thead>
         <tbody ref={tbodyRef}>
           {filtered.length === 0 ? (
-            <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>😢 {t('contractTable.noContractsFound')}</td></tr>
+            <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                <Search size={20} /> {t('contractTable.noContractsFound')}
+              </div>
+            </td></tr>
           ) : filtered.map(contract => (
             <tr
               key={contract.id}
@@ -441,9 +456,11 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   const style = statusStyles[finalStatus] || {
                     color: '#374151',
                     backgroundColor: '#f3f4f6',
-                    icon: '❔',
+                    icon: 'HelpCircle',
                   };
                   
+                  const IconComponent = ICON_COMPONENTS[style.icon] || HelpCircle;
+
                   return (
                     <span
                       style={{
@@ -457,7 +474,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                         ...style,
                       }}
                     >
-                      <span>{style.icon}</span>
+                      <IconComponent size={14} />
                       {t(`contractTable.status.${finalStatus}`)}
                       {finalStatus === 'expiring'}
                     </span>

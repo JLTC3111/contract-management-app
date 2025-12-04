@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
-import { Check, X, Clock, FileText, User, ArrowLeft, Edit, Save, X as CancelIcon } from 'lucide-react';
+import { Check, X, Clock, FileText, User, ArrowLeft, Edit, Save, X as CancelIcon, ThumbsUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
@@ -585,8 +585,8 @@ const Approvals = () => {
                     />
                   </div>
                 ) : (
-                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem', fontStyle: 'italic' }}>
-                    "{request.approval_response || t('defaultApprovalResponseText')}"
+                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    "{request.approval_response || t('defaultApprovalResponseText')}" <ThumbsUp size={16} />
                   </p>
                 )}
               </div>
