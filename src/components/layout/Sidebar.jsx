@@ -36,7 +36,7 @@ import '../Table.css';
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useUser();
+  const { user, logout, isDemoMode, disableDemoMode } = useUser();
   const { darkMode, toggleDarkMode } = useTheme();
   const { t } = useTranslation();
   const sidebarRef = useRef();
@@ -202,17 +202,17 @@ const Sidebar = () => {
   const profileMenuItems = [
     {
       label: isMobile ? t('sidebar_mobile.password') : t('sidebar.changePassword'),
-      icon: <Settings size={14} style={{ marginRight: isMobile ? '-1rem' : '-.5rem' }} />,
+      icon: <Settings size={14} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
       onClick: () => setShowPasswordModal(true),
     },
     {
       label: isMobile ? t('sidebar_mobile.manual') : t('sidebar.manual'),
-      icon: <BookOpen size={14} style={{ marginRight: isMobile ? '-1rem' : '-.5rem' }} />,
+      icon: <BookOpen size={14} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
       onClick: handleReadManual,
     },
     {
       label: isMobile ? t('sidebar_mobile.feedback') : t('sidebar.sendFeedback'),
-      icon: <MessageSquare size={14} style={{ marginRight: isMobile ? '-1rem' : '-.5rem' }} />,
+      icon: <MessageSquare size={14} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
       onClick: handleSendFeedback,
     },
   ];
@@ -279,6 +279,44 @@ const Sidebar = () => {
                   transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)',
                 }}
               />
+            </button>
+          </div>
+        )}
+
+        {/* Demo Mode Badge - Desktop only */}
+        {isDemoMode && !isMobile && !collapsed && (
+          <div
+            style={{
+              width: '100%',
+              marginBottom: '0.75rem',
+              padding: '0.5rem 0.75rem',
+              background: 'linear-gradient(135deg, #f59e0b20, #f97316 20)',
+              border: '1px solid #f59e0b',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '0.5rem',
+            }}
+          >
+            <span style={{ color: '#f59e0b', fontSize: '0.8rem', fontWeight: 600 }}>
+              🎮 {t('sidebar.demoMode', 'Demo Mode')}
+            </span>
+            <button
+              onClick={() => {
+                disableDemoMode();
+                navigate('/login');
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#f59e0b',
+                fontSize: '0.75rem',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+              }}
+            >
+              {t('sidebar.exitDemo', 'Exit')}
             </button>
           </div>
         )}

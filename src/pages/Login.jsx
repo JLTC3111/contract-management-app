@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
-import { Sun, MoonStar, ChevronDownIcon } from 'lucide-react';
+import { useUser } from '../hooks/useUser';
+import { Sun, MoonStar, ChevronDownIcon, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -57,9 +58,17 @@ const Login = () => {
   const cardRef = useRef(null);
   const logoUrl = '/logoIcons/logo.png';
   const { darkMode, toggleDarkMode } = useTheme();
+  const { enableDemoMode } = useUser();
+  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 767);
   const [aspectRatio, setAspectRatio] = useState(window.innerWidth / window.innerHeight);
   const { t, i18n } = useTranslation();
+
+  // Handle demo mode activation
+  const handleTryDemo = () => {
+    enableDemoMode();
+    navigate('/');
+  };
   const dropdownRef = useRef(null);
   const langSwitcherRef = useRef(null);
 
@@ -540,7 +549,6 @@ const Login = () => {
         gap: 'clamp(1rem, 4vw, 2rem)',
         position: 'relative',
       }}>
-        {/* Theme Toggle Button for mobile - visually overlapping the card's top left by ~5px */}
         {isMobile && (
           <button
             onClick={toggleDarkMode}
@@ -595,7 +603,7 @@ const Login = () => {
             </span>
           </button>
         )}
-        {/* Theme Toggle Button for desktop - above login card, left-aligned */}
+        {/* Theme Toggle Button for Desktop */}
         {!isMobile && (
           <button
             onClick={toggleDarkMode}
@@ -850,7 +858,7 @@ const Login = () => {
                   WebkitBoxShadow: '0 0 0px 1000px ' + (darkMode ? '#fbfffe' : '#e7fffc') + ' inset', 
                   backgroundColor: darkMode ? '#fbfffe' : '#e7fffc',
                   width: '100%',
-                  maxWidth: '92.5%',
+                  maxWidth: '100%',
                   padding: 'clamp(0.5rem, 2vw, 0.75rem)',
                   border: '1.5px solid var(--card-border)',
                   borderRadius: '8px',
@@ -881,7 +889,7 @@ const Login = () => {
                   WebkitBoxShadow: '0 0 0px 1000px ' + (darkMode ? '#fbfffe' : '#e7fffc') + ' inset', 
                   backgroundColor: darkMode ? '#fbfffe' : '#e7fffc',
                   width: '100%',
-                  maxWidth: '92.5%',
+                  maxWidth: '100%',
                   padding: 'clamp(0.5rem, 2vw, 0.75rem)',
                   border: '1.5px solid var(--card-border)',
                   borderRadius: '8px',
@@ -979,6 +987,40 @@ const Login = () => {
               }}
             >
               {t('login.loginButton')}
+            </button>
+
+            {/* Try Demo Button */}
+            <button 
+              type="button"
+              onClick={handleTryDemo}
+              style={{
+                width: '100%',
+                fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
+                fontWeight: 500,
+                marginTop: '0.75rem',
+                padding: '0.6rem 1rem',
+                background: 'transparent',
+                border: `1px solid ${darkMode ? '#60a5fa' : '#3b82f6'}`,
+                borderRadius: '8px',
+                color: darkMode ? '#60a5fa' : '#3b82f6',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = darkMode ? 'rgba(96, 165, 250, 0.1)' : 'rgba(59, 130, 246, 0.1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              <Play size={16} />
+              {t('login.tryDemo', 'Try Demo Mode')}
             </button>
             
             {error && (

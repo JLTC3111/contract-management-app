@@ -98,10 +98,6 @@ export const SidebarButton = ({
   );
 };
 
-/**
- * SubMenu Component
- * Animated submenu for sidebar navigation
- */
 export const SubMenu = ({ items }) => {
   const { darkMode } = useTheme();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;

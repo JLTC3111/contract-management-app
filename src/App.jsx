@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { useUser } from './hooks/useUser';
 import Dashboard from './pages/Dashboard';
 import ContractDetail from './pages/ContractDetail';
@@ -66,8 +66,6 @@ function App() {
 
 
   return (
-
-    <BrowserRouter>
       <Routes>
         {/* Routes with Sidebar */}
         <Route element={<Layout />}>
@@ -85,7 +83,6 @@ function App() {
         {/* Optional: Login Route - if you want to support logout redirect */}
         <Route path="/login" element={<Login />} />
       </Routes>
-    </BrowserRouter>
   );
 }
 

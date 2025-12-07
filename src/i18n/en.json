@@ -42,7 +42,9 @@
     },
     "visitIcueTooltip": "Visit iCUE!",
     "analytics": "Analytics & History",
-    "phaseManagement": "Phase Management"
+    "phaseManagement": "Phase Management",
+    "demoMode": "Demo Mode",
+    "exitDemo": "Exit"
   },
   "buttons": {
     "delete": "Delete",
@@ -69,6 +71,7 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "loginButton": "Log In",
+    "tryDemo": "Try Demo Mode",
     "error": "Login failed. Please check your credentials.",
     "loading": "Loading...",
     "languageSelector": "Select Language"

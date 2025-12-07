@@ -1,13 +1,40 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../utils/supaBaseClient';
+import { MOCK_USER } from '../data/mockData';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // This will be your custom user object
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isDemoMode, setIsDemoMode] = useState(() => {
+    return localStorage.getItem('isDemoMode') === 'true';
+  });
+
+  // Demo mode functions
+  const enableDemoMode = () => {
+    localStorage.setItem('isDemoMode', 'true');
+    setIsDemoMode(true);
+    setUser(MOCK_USER);
+    setLoading(false);
+  };
+
+  const disableDemoMode = async () => {
+    localStorage.removeItem('isDemoMode');
+    setIsDemoMode(false);
+    setUser(null);
+    // After exiting demo, try to fetch real user if logged in
+    await fetchUser();
+  };
 
   const fetchUser = async () => {
+    // If in demo mode, use mock user
+    if (localStorage.getItem('isDemoMode') === 'true') {
+      setUser(MOCK_USER);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     try {
       const {
@@ -71,6 +98,12 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
+    // If in demo mode, just exit demo
+    if (isDemoMode) {
+      await disableDemoMode();
+      return;
+    }
+
     try {
       console.log('Starting logout process...');
       
@@ -97,7 +130,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, loading, logout }}>
+    <UserContext.Provider value={{ user, loading, logout, isDemoMode, enableDemoMode, disableDemoMode }}>
       {children}
     </UserContext.Provider>
   );
