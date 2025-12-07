@@ -40,10 +40,13 @@
       "unknown": "Rolle nicht erkannt."
     },
     "analytics": "Analytics & Verlauf",
-    "phaseManagement": "Phasenmanagement"
+    "phaseManagement": "Phasenmanagement",
+    "demoMode": "Demo-Modus",
+    "exitDemo": "Beenden"
   },
   "buttons": {
     "delete": "Löschen",
+    "download": "Herunterladen",
     "downloadAll": "Alle herunterladen",
     "newFolder": "Neuer Ordner",
     "login": "Anmelden",
@@ -65,6 +68,8 @@
     "showPassword": "Passwort anzeigen",
     "hidePassword": "Passwort ausblenden",
     "loginButton": "Anmelden",
+    "tryDemo": "Demo-Modus testen",
+    "or": "oder",
     "error": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.",
     "loading": "Lädt...",
     "languageSelector": "Sprache auswählen"

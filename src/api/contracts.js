@@ -1,13 +1,383 @@
 /**
  * Contracts API Service
  * Centralized contract CRUD operations with Supabase
+ * Supports Demo Mode with localStorage-based operations
  */
 
 import { supabase } from '../utils/supaBaseClient';
+import { 
+  getDemoContracts, 
+  setDemoContracts, 
+  getDemoComments, 
+  setDemoComments,
+  getDemoPhases,
+  setDemoPhases,
+  getDemoApprovals,
+  setDemoApprovals,
+  generateDemoId 
+} from '../data/mockData';
+
+// Helper to check demo mode
+const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
+
+/**
+ * Demo Contracts API
+ * All demo contract-related localStorage operations
+ */
+const demoContractsApi = {
+  async getAll(options = {}) {
+    let data = getDemoContracts();
+    
+    // Apply filters
+    if (options.status && options.status !== 'all') {
+      data = data.filter(c => c.status === options.status);
+    }
+    
+    if (options.search) {
+      const searchLower = options.search.toLowerCase();
+      data = data.filter(c => 
+        c.title?.toLowerCase().includes(searchLower) ||
+        c.author?.toLowerCase().includes(searchLower) ||
+        c.client_name?.toLowerCase().includes(searchLower)
+      );
+    }
+    
+    // Apply ordering
+    const orderBy = options.orderBy || 'updated_at';
+    const ascending = options.ascending ?? false;
+    data.sort((a, b) => {
+      const aVal = a[orderBy] || '';
+      const bVal = b[orderBy] || '';
+      if (typeof aVal === 'string') {
+        return ascending ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      }
+      return ascending ? aVal - bVal : bVal - aVal;
+    });
+    
+    // Apply pagination
+    if (options.offset) {
+      data = data.slice(options.offset);
+    }
+    if (options.limit) {
+      data = data.slice(0, options.limit);
+    }
+    
+    return data;
+  },
+
+  async getById(id) {
+    const contracts = getDemoContracts();
+    const contract = contracts.find(c => c.id === id);
+    if (!contract) {
+      throw new Error('Contract not found');
+    }
+    return contract;
+  },
+
+  async create(contract) {
+    const contracts = getDemoContracts();
+    const now = new Date().toISOString();
+    const newContract = {
+      ...contract,
+      id: generateDemoId('contract'),
+      created_at: now,
+      updated_at: now,
+      author: 'Demo User',
+      author_id: 'demo-user-id',
+    };
+    contracts.unshift(newContract);
+    setDemoContracts(contracts);
+    return newContract;
+  },
+
+  async update(id, updates) {
+    const contracts = getDemoContracts();
+    const index = contracts.findIndex(c => c.id === id);
+    if (index === -1) {
+      throw new Error('Contract not found');
+    }
+    contracts[index] = {
+      ...contracts[index],
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+    setDemoContracts(contracts);
+    return contracts[index];
+  },
+
+  async updateStatus(id, status) {
+    return this.update(id, { status });
+  },
+
+  async delete(id) {
+    const contracts = getDemoContracts();
+    const filtered = contracts.filter(c => c.id !== id);
+    setDemoContracts(filtered);
+    
+    // Also delete related comments and phases
+    const comments = getDemoComments().filter(c => c.contract_id !== id);
+    setDemoComments(comments);
+    
+    const phases = getDemoPhases().filter(p => p.contract_id !== id);
+    setDemoPhases(phases);
+  },
+
+  async getStatusCounts() {
+    const contracts = getDemoContracts();
+    const counts = {
+      total: contracts.length,
+      draft: 0,
+      pending: 0,
+      approved: 0,
+      rejected: 0,
+      expiring: 0,
+      expired: 0,
+    };
+    
+    contracts.forEach(contract => {
+      if (counts.hasOwnProperty(contract.status)) {
+        counts[contract.status]++;
+      }
+    });
+    
+    return counts;
+  },
+
+  async getExpiring(days = 14) {
+    const contracts = getDemoContracts();
+    const now = new Date();
+    const futureDate = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+    
+    return contracts.filter(c => {
+      if (!c.expiry_date) return false;
+      const expiry = new Date(c.expiry_date);
+      return expiry >= now && expiry <= futureDate;
+    }).sort((a, b) => new Date(a.expiry_date) - new Date(b.expiry_date));
+  },
+
+  async getRecent(limit = 5) {
+    return this.getAll({ orderBy: 'updated_at', limit });
+  },
+
+  async search(searchTerm, options = {}) {
+    if (!searchTerm || searchTerm.trim().length < 2) {
+      return [];
+    }
+    return this.getAll({ ...options, search: searchTerm });
+  }
+};
+
+/**
+ * Demo Phases API
+ */
+const demoPhasesApi = {
+  async getByContractId(contractId) {
+    const phases = getDemoPhases();
+    return phases
+      .filter(p => p.contract_id === contractId)
+      .sort((a, b) => a.phase_number - b.phase_number);
+  },
+
+  async update(phaseId, updates) {
+    const phases = getDemoPhases();
+    const index = phases.findIndex(p => p.id === phaseId);
+    if (index === -1) {
+      throw new Error('Phase not found');
+    }
+    phases[index] = {
+      ...phases[index],
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+    setDemoPhases(phases);
+    return phases[index];
+  },
+
+  async initialize(contractId, phaseDefs) {
+    const phases = getDemoPhases();
+    const newPhases = phaseDefs.map((phase, index) => ({
+      ...phase,
+      id: generateDemoId('phase'),
+      contract_id: contractId,
+      phase_number: index + 1,
+      created_at: new Date().toISOString(),
+    }));
+    phases.push(...newPhases);
+    setDemoPhases(phases);
+    return newPhases;
+  }
+};
+
+/**
+ * Demo Comments API
+ */
+const demoCommentsApi = {
+  async getByContractId(contractId) {
+    const comments = getDemoComments();
+    return comments
+      .filter(c => c.contract_id === contractId)
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  },
+
+  async create(comment) {
+    const comments = getDemoComments();
+    const newComment = {
+      ...comment,
+      id: generateDemoId('comment'),
+      user_id: 'demo-user-id',
+      user_name: 'Demo User',
+      created_at: new Date().toISOString(),
+    };
+    comments.unshift(newComment);
+    setDemoComments(comments);
+    return newComment;
+  },
+
+  async delete(commentId) {
+    const comments = getDemoComments();
+    const filtered = comments.filter(c => c.id !== commentId);
+    setDemoComments(filtered);
+  }
+};
+
+/**
+ * Demo Storage API (simulated file storage)
+ */
+const demoStorageApi = {
+  async upload(path, file) {
+    // In demo mode, we can't actually store files, but we can simulate it
+    console.log('[Demo Mode] Simulated file upload:', path, file.name);
+    return { 
+      path, 
+      id: generateDemoId('file'),
+      name: file.name,
+      size: file.size,
+      type: file.type,
+    };
+  },
+
+  async delete(path) {
+    console.log('[Demo Mode] Simulated file delete:', path);
+  },
+
+  async getSignedUrl(path, expiresIn = 3600) {
+    // Return a placeholder URL for demo mode
+    console.log('[Demo Mode] Simulated signed URL request:', path);
+    return null;
+  },
+
+  async listFiles(folder) {
+    console.log('[Demo Mode] Simulated list files:', folder);
+    return [];
+  }
+};
+
+/**
+ * Demo Approvals API
+ */
+const demoApprovalsApi = {
+  async getAll() {
+    return getDemoApprovals();
+  },
+
+  async getById(id) {
+    const approvals = getDemoApprovals();
+    return approvals.find(a => a.id === id) || null;
+  },
+
+  async getPending() {
+    const approvals = getDemoApprovals();
+    return approvals.filter(a => a.status === 'pending');
+  },
+
+  async create(approval) {
+    const approvals = getDemoApprovals();
+    const newApproval = {
+      ...approval,
+      id: generateDemoId('approval'),
+      requested_by: approval.requester_id || 'demo-user-id',
+      requested_by_name: 'Demo User',
+      requester_email: approval.requester_email || 'demo@example.com',
+      status: 'pending',
+      created_at: new Date().toISOString(),
+    };
+    approvals.unshift(newApproval);
+    setDemoApprovals(approvals);
+    return newApproval;
+  },
+
+  async update(id, updates) {
+    const approvals = getDemoApprovals();
+    const index = approvals.findIndex(a => a.id === id);
+    if (index === -1) {
+      throw new Error('Approval not found');
+    }
+    approvals[index] = {
+      ...approvals[index],
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+    setDemoApprovals(approvals);
+    return approvals[index];
+  },
+
+  async approve(approvalId, response) {
+    const approvals = getDemoApprovals();
+    const index = approvals.findIndex(a => a.id === approvalId);
+    if (index === -1) {
+      throw new Error('Approval not found');
+    }
+    approvals[index] = {
+      ...approvals[index],
+      status: 'approved',
+      response,
+      responded_at: new Date().toISOString(),
+    };
+    setDemoApprovals(approvals);
+    
+    // Also update the contract status
+    const contracts = getDemoContracts();
+    const contractIndex = contracts.findIndex(c => c.id === approvals[index].contract_id);
+    if (contractIndex !== -1) {
+      contracts[contractIndex].status = 'approved';
+      contracts[contractIndex].updated_at = new Date().toISOString();
+      setDemoContracts(contracts);
+    }
+    
+    return approvals[index];
+  },
+
+  async reject(approvalId, response) {
+    const approvals = getDemoApprovals();
+    const index = approvals.findIndex(a => a.id === approvalId);
+    if (index === -1) {
+      throw new Error('Approval not found');
+    }
+    approvals[index] = {
+      ...approvals[index],
+      status: 'rejected',
+      response,
+      responded_at: new Date().toISOString(),
+    };
+    setDemoApprovals(approvals);
+    
+    // Also update the contract status
+    const contracts = getDemoContracts();
+    const contractIndex = contracts.findIndex(c => c.id === approvals[index].contract_id);
+    if (contractIndex !== -1) {
+      contracts[contractIndex].status = 'rejected';
+      contracts[contractIndex].updated_at = new Date().toISOString();
+      setDemoContracts(contracts);
+    }
+    
+    return approvals[index];
+  }
+};
 
 /**
  * Contracts API
  * All contract-related database operations
+ * Automatically switches between demo and real mode
  */
 export const contractsApi = {
   /**
@@ -22,6 +392,11 @@ export const contractsApi = {
    * @returns {Promise<Array>} Array of contracts
    */
   async getAll(options = {}) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoContractsApi.getAll(options);
+    }
+    
     let query = supabase.from('contracts').select('*');
     
     // Apply filters
@@ -61,6 +436,11 @@ export const contractsApi = {
    * @returns {Promise<object>} Contract object
    */
   async getById(id) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoContractsApi.getById(id);
+    }
+    
     const { data, error } = await supabase
       .from('contracts')
       .select('*')
@@ -77,6 +457,11 @@ export const contractsApi = {
    * @returns {Promise<object>} Created contract
    */
   async create(contract) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoContractsApi.create(contract);
+    }
+    
     const now = new Date().toISOString();
     
     const { data, error } = await supabase
@@ -100,6 +485,11 @@ export const contractsApi = {
    * @returns {Promise<object>} Updated contract
    */
   async update(id, updates) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoContractsApi.update(id, updates);
+    }
+    
     const { data, error } = await supabase
       .from('contracts')
       .update({
@@ -130,6 +520,11 @@ export const contractsApi = {
    * @returns {Promise<void>}
    */
   async delete(id) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoContractsApi.delete(id);
+    }
+    
     const { error } = await supabase
       .from('contracts')
       .delete()
@@ -143,6 +538,11 @@ export const contractsApi = {
    * @returns {Promise<object>} Status counts
    */
   async getStatusCounts() {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoContractsApi.getStatusCounts();
+    }
+    
     const { data, error } = await supabase
       .from('contracts')
       .select('status');
@@ -174,6 +574,11 @@ export const contractsApi = {
    * @returns {Promise<Array>} Expiring contracts
    */
   async getExpiring(days = 14) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoContractsApi.getExpiring(days);
+    }
+    
     const now = new Date();
     const futureDate = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
     
@@ -204,6 +609,11 @@ export const contractsApi = {
    * @returns {Promise<Array>} Matching contracts
    */
   async search(searchTerm, options = {}) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoContractsApi.search(searchTerm, options);
+    }
+    
     if (!searchTerm || searchTerm.trim().length < 2) {
       return [];
     }
@@ -241,6 +651,11 @@ export const phasesApi = {
    * @returns {Promise<Array>} Array of phases
    */
   async getByContractId(contractId) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoPhasesApi.getByContractId(contractId);
+    }
+    
     const { data, error } = await supabase
       .from('contract_phases')
       .select('*')
@@ -258,6 +673,11 @@ export const phasesApi = {
    * @returns {Promise<object>} Updated phase
    */
   async update(phaseId, updates) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoPhasesApi.update(phaseId, updates);
+    }
+    
     const { data, error } = await supabase
       .from('contract_phases')
       .update({
@@ -279,6 +699,11 @@ export const phasesApi = {
    * @returns {Promise<Array>} Created phases
    */
   async initialize(contractId, phases) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoPhasesApi.initialize(contractId, phases);
+    }
+    
     const { data, error } = await supabase
       .from('contract_phases')
       .insert(phases.map(phase => ({
@@ -303,8 +728,13 @@ export const commentsApi = {
    * @returns {Promise<Array>} Array of comments
    */
   async getByContractId(contractId) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoCommentsApi.getByContractId(contractId);
+    }
+    
     const { data, error } = await supabase
-      .from('comments')
+      .from('contract_comments')
       .select('*')
       .eq('contract_id', contractId)
       .order('created_at', { ascending: false });
@@ -319,8 +749,13 @@ export const commentsApi = {
    * @returns {Promise<object>} Created comment
    */
   async create(comment) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoCommentsApi.create(comment);
+    }
+    
     const { data, error } = await supabase
-      .from('comments')
+      .from('contract_comments')
       .insert({
         ...comment,
         created_at: new Date().toISOString()
@@ -338,8 +773,13 @@ export const commentsApi = {
    * @returns {Promise<void>}
    */
   async delete(commentId) {
+    // Demo mode: use localStorage
+    if (isDemoMode()) {
+      return demoCommentsApi.delete(commentId);
+    }
+    
     const { error } = await supabase
-      .from('comments')
+      .from('contract_comments')
       .delete()
       .eq('id', commentId);
     
@@ -359,6 +799,10 @@ export const storageApi = {
    * @returns {Promise<object>} Upload result
    */
   async upload(path, file) {
+    // Demo mode: simulate upload
+    if (isDemoMode()) {
+      return demoStorageApi.upload(path, file);
+    }
     const { data, error } = await supabase.storage
       .from('contracts')
       .upload(path, file, {
@@ -376,6 +820,11 @@ export const storageApi = {
    * @returns {Promise<void>}
    */
   async delete(path) {
+    // Demo mode: simulate delete
+    if (isDemoMode()) {
+      return demoStorageApi.delete(path);
+    }
+    
     const { error } = await supabase.storage
       .from('contracts')
       .remove([path]);
@@ -390,6 +839,11 @@ export const storageApi = {
    * @returns {Promise<string>} Signed URL
    */
   async getSignedUrl(path, expiresIn = 3600) {
+    // Demo mode: return null
+    if (isDemoMode()) {
+      return demoStorageApi.getSignedUrl(path, expiresIn);
+    }
+    
     const { data, error } = await supabase.storage
       .from('contracts')
       .createSignedUrl(path, expiresIn);
@@ -404,6 +858,11 @@ export const storageApi = {
    * @returns {Promise<Array>} Array of files
    */
   async listFiles(folder) {
+    // Demo mode: return empty array
+    if (isDemoMode()) {
+      return demoStorageApi.listFiles(folder);
+    }
+    
     const { data, error } = await supabase.storage
       .from('contracts')
       .list(folder, {
@@ -415,9 +874,131 @@ export const storageApi = {
   }
 };
 
+/**
+ * Approvals API
+ * Approval request operations
+ */
+export const approvalsApi = {
+  async getAll() {
+    if (isDemoMode()) {
+      return demoApprovalsApi.getAll();
+    }
+    // Real implementation would go here
+    const { data, error } = await supabase
+      .from('contract_approval_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return data || [];
+  },
+
+  async getById(id) {
+    if (isDemoMode()) {
+      return demoApprovalsApi.getById(id);
+    }
+    const { data, error } = await supabase
+      .from('contract_approval_requests')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async getPending() {
+    if (isDemoMode()) {
+      return demoApprovalsApi.getPending();
+    }
+    const { data, error } = await supabase
+      .from('contract_approval_requests')
+      .select('*')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return data || [];
+  },
+
+  async create(approval) {
+    if (isDemoMode()) {
+      return demoApprovalsApi.create(approval);
+    }
+    const { data, error } = await supabase
+      .from('contract_approval_requests')
+      .insert({
+        ...approval,
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async update(id, updates) {
+    if (isDemoMode()) {
+      return demoApprovalsApi.update(id, updates);
+    }
+    const { data, error } = await supabase
+      .from('contract_approval_requests')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async approve(approvalId, response) {
+    if (isDemoMode()) {
+      return demoApprovalsApi.approve(approvalId, response);
+    }
+    const { data, error } = await supabase
+      .from('contract_approval_requests')
+      .update({
+        status: 'approved',
+        response,
+        responded_at: new Date().toISOString()
+      })
+      .eq('id', approvalId)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async reject(approvalId, response) {
+    if (isDemoMode()) {
+      return demoApprovalsApi.reject(approvalId, response);
+    }
+    const { data, error } = await supabase
+      .from('contract_approval_requests')
+      .update({
+        status: 'rejected',
+        response,
+        responded_at: new Date().toISOString()
+      })
+      .eq('id', approvalId)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  }
+};
+
 export default {
   contracts: contractsApi,
   phases: phasesApi,
   comments: commentsApi,
-  storage: storageApi
+  storage: storageApi,
+  approvals: approvalsApi
 };

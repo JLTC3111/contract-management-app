@@ -40,10 +40,13 @@
       "unknown": "ไม่รู้จักบทบาทนี้"
     },
     "analytics": "การวิเคราะห์และประวัติ",
-    "phaseManagement": "การจัดการขั้นตอน"
+    "phaseManagement": "การจัดการขั้นตอน",
+    "demoMode": "โหมดสาธิต",
+    "exitDemo": "ออก"
   },
   "buttons": {
     "delete": "ลบ",
+    "download": "ดาวน์โหลด",
     "downloadAll": "ดาวน์โหลดทั้งหมด",
     "newFolder": "โฟลเดอร์ใหม่",
     "login": "เข้าสู่ระบบ",
@@ -65,6 +68,8 @@
     "showPassword": "แสดงรหัสผ่าน",
     "hidePassword": "ซ่อนรหัสผ่าน",
     "loginButton": "เข้าสู่ระบบ",
+    "tryDemo": "ทดลองใช้โหมดสาธิต",
+    "or": "หรือ",
     "error": "การเข้าสู่ระบบล้มเหลว กรุณาตรวจสอบข้อมูลประจำตัวของคุณ",
     "loading": "กำลังโหลด...",
     "languageSelector": "เลือกภาษา"

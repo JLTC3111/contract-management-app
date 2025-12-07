@@ -48,6 +48,7 @@
   },
   "buttons": {
     "delete": "Delete",
+    "download": "Download",
     "downloadAll": "Download All",
     "newFolder": "New Folder",
     "login": "Log In",
@@ -72,6 +73,7 @@
     "hidePassword": "Hide password",
     "loginButton": "Log In",
     "tryDemo": "Try Demo Mode",
+    "or": "or",
     "error": "Login failed. Please check your credentials.",
     "loading": "Loading...",
     "languageSelector": "Select Language"

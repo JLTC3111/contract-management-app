@@ -2,6 +2,7 @@
 import { useUser } from '../hooks/useUser';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
+import { contractsApi } from '../api/contracts';
 import { useTheme } from '../hooks/useTheme';
 import { Sun, MoonStar, ChevronDownIcon, Folder, FolderOpen } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
@@ -77,27 +78,31 @@ const Navbar = () => {
     }
     let active = true;
     (async () => {
-      // Get all contracts
-      const { data: contracts, error } = await supabase.from('contracts').select('id, title');
-      if (error || !contracts) return;
-      let results = [];
-      for (const contract of contracts) {
-        const basePath = `uploads/${contract.id}`;
-        const allItems = await listAllFilesRecursive(basePath);
-        for (const item of allItems) {
-          if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-            results.push({
-              contractId: contract.id,
-              contractTitle: contract.title,
-              name: item.name,
-              isFolder: item.isFolder,
-              path: item.basePath,
-              fullPath: item.fullPath,
-            });
+      // Get all contracts using API (handles demo mode)
+      try {
+        const contracts = await contractsApi.getAll();
+        if (!contracts) return;
+        let results = [];
+        for (const contract of contracts) {
+          const basePath = `uploads/${contract.id}`;
+          const allItems = await listAllFilesRecursive(basePath);
+          for (const item of allItems) {
+            if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+              results.push({
+                contractId: contract.id,
+                contractTitle: contract.title,
+                name: item.name,
+                isFolder: item.isFolder,
+                path: item.basePath,
+                fullPath: item.fullPath,
+              });
+            }
           }
         }
+        if (active) setSearchResults(results);
+      } catch (error) {
+        console.error('Search error:', error);
       }
-      if (active) setSearchResults(results);
     })();
     return () => { active = false; };
   }, [searchTerm]);

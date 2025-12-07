@@ -210,7 +210,7 @@ const ContractHeader = ({
                 }}
               >
                 <Download size={16} />
-                <span>Download ({selectedFiles.length})</span>
+                <span>{t('buttons.download', 'Download')} ({selectedFiles.length})</span>
               </button>
 
               {canEdit && (

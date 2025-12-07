@@ -6,6 +6,7 @@ import gsap from 'gsap';
 import JSZip from 'jszip';
 
 import { supabase } from '../../utils/supaBaseClient';
+import { contractsApi } from '../../api/contracts';
 import { useUser } from '../../hooks/useUser';
 import { useTheme } from '../../hooks/useTheme';
 
@@ -18,6 +19,23 @@ import ContractInfo from './ContractInfo';
 import FileBrowser from './FileBrowser';
 import FilePreviewPanel from './FilePreviewPanel';
 import { getOriginalFileName } from './fileUtils';
+
+// Helper to check demo mode
+const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
+
+// Demo file storage key
+const DEMO_FILES_KEY = 'demo_files';
+
+// Get demo files from localStorage
+const getDemoFiles = () => {
+  const stored = localStorage.getItem(DEMO_FILES_KEY);
+  return stored ? JSON.parse(stored) : [];
+};
+
+// Save demo files to localStorage
+const setDemoFiles = (files) => {
+  localStorage.setItem(DEMO_FILES_KEY, JSON.stringify(files));
+};
 
 // Ensure GSAP is properly initialized
 if (typeof window !== 'undefined' && !window.gsap) {
@@ -69,16 +87,15 @@ const ContractDetailPage = () => {
         setLoading(false);
         return;
       }
-      const { data, error } = await supabase
-        .from('contracts')
-        .select('*')
-        .eq('id', Number(contractId))
-        .single();
-
-      if (!error) {
-        setContract(data);
-        setUpdated(data);
-      } else {
+      
+      try {
+        // Use API which handles demo mode
+        const data = await contractsApi.getById(contractId);
+        if (data) {
+          setContract(data);
+          setUpdated(data);
+        }
+      } catch (error) {
         console.error('Error fetching contract:', error);
       }
       setLoading(false);
@@ -103,6 +120,53 @@ const ContractDetailPage = () => {
 
   const listFiles = async (path = currentPath) => {
     const cleanedPath = path.replace(/^\/+|\/+$/g, '');
+
+    // Demo mode: get files from localStorage
+    if (isDemoMode()) {
+      const demoFiles = getDemoFiles();
+      const result = [];
+      const seenFolders = new Set();
+
+      demoFiles.forEach(f => {
+        const filePath = f.path || '';
+        
+        // Check if file is under the current path
+        if (!filePath.startsWith(cleanedPath + '/')) return;
+        
+        // Get the relative path from the current directory
+        const relativePath = filePath.substring(cleanedPath.length + 1);
+        const parts = relativePath.split('/');
+        
+        if (parts.length === 1 && parts[0] !== '.keep') {
+          // Direct file in this folder
+          result.push({
+            name: f.name,
+            id: f.id,
+            metadata: { mimetype: f.type, size: f.size },
+            created_at: f.uploadedAt,
+            updated_at: f.uploadedAt,
+            isDemo: true
+          });
+        } else if (parts.length > 1) {
+          // File is in a subfolder - show the folder entry
+          const folderName = parts[0];
+          if (!seenFolders.has(folderName)) {
+            seenFolders.add(folderName);
+            result.push({
+              name: folderName,
+              id: `demo-folder-${folderName}`,
+              metadata: {}, // Empty metadata indicates folder
+              created_at: f.uploadedAt,
+              updated_at: f.uploadedAt,
+              isDemo: true
+            });
+          }
+        }
+      });
+
+      setFiles(result);
+      return;
+    }
 
     const { data, error } = await supabase
       .storage
@@ -188,6 +252,34 @@ const ContractDetailPage = () => {
 
     const newFolderPath = `${currentPath}/${cleanName}/.keep`;
 
+    // Demo mode: simulate folder creation
+    if (isDemoMode()) {
+      const demoFiles = getDemoFiles();
+      // Check if folder already exists
+      const folderExists = demoFiles.some(f => f.path && f.path.startsWith(`${currentPath}/${cleanName}/`));
+      if (folderExists) {
+        toast(`⚠️ Folder "${cleanName}" already exists.`);
+      } else {
+        // Add a placeholder file for the folder
+        demoFiles.push({
+          id: `demo-folder-${Date.now()}`,
+          name: '.keep',
+          path: newFolderPath,
+          type: 'text/plain',
+          size: 4,
+          contractId: contract.id,
+          uploadedAt: new Date().toISOString(),
+          isFolder: true
+        });
+        setDemoFiles(demoFiles);
+        toast.success(`📁 Folder "${cleanName}" created.`);
+      }
+      setNewFolderName('');
+      setShowFolderInput(false);
+      listFiles(currentPath);
+      return;
+    }
+
     const { error } = await supabase.storage
       .from('contracts')
       .upload(newFolderPath, new Blob(['keep'], { type: 'text/plain' }));
@@ -211,6 +303,14 @@ const ContractDetailPage = () => {
   // ========== File Operations ==========
 
   const getAllPathsInFolder = async (basePath) => {
+    // Demo mode: get paths from localStorage
+    if (isDemoMode()) {
+      const demoFiles = getDemoFiles();
+      return demoFiles
+        .filter(f => f.path && f.path.startsWith(basePath + '/'))
+        .map(f => f.path);
+    }
+
     let paths = [];
 
     const { data: items, error } = await supabase.storage
@@ -271,6 +371,36 @@ const ContractDetailPage = () => {
     );
 
     if (!confirmed) return;
+
+    // Demo mode: delete from localStorage
+    if (isDemoMode()) {
+      try {
+        let demoFiles = getDemoFiles();
+        let deleteCount = 0;
+
+        for (const item of filesToDelete) {
+          const itemName = typeof item === 'string' ? item : item.name;
+          // Delete files matching this name or path
+          const beforeCount = demoFiles.length;
+          demoFiles = demoFiles.filter(f => {
+            const fileName = f.name;
+            const filePath = f.path || '';
+            // Don't delete if it matches the item name or is in a folder with that name
+            return fileName !== itemName && !filePath.includes(`/${itemName}/`) && !filePath.endsWith(`/${itemName}`);
+          });
+          deleteCount += beforeCount - demoFiles.length;
+        }
+
+        setDemoFiles(demoFiles);
+        toast.success(`🗑️ Deleted ${deleteCount} item(s).`);
+        await listFiles(currentPath);
+        setSelectedFiles([]);
+      } catch (err) {
+        console.error('Demo delete error:', err);
+        toast.error('🚨 Something went wrong.');
+      }
+      return;
+    }
 
     try {
       let deletePaths = [];
@@ -449,32 +579,25 @@ const ContractDetailPage = () => {
     setActionLoading(true);
 
     try {
-      const { error } = await supabase
-        .from('contracts')
-        .update({
-          title: updated.title?.trim(),
-          version: updated.version?.trim(),
-          status: updated.status,
-          file_url: updated.file_url,
-          file_name: updated.file_name,
-          file_type: updated.file_type,
-          updated_at: new Date().toISOString(),
-          author: updated.author?.trim(),
-          expiry_date: updated.expiry_date,
-        })
-        .eq('id', contract.id);
+      // Use contractsApi which handles demo mode
+      const updatedContract = await contractsApi.update(contract.id, {
+        title: updated.title?.trim(),
+        version: updated.version?.trim(),
+        status: updated.status,
+        file_url: updated.file_url,
+        file_name: updated.file_name,
+        file_type: updated.file_type,
+        author: updated.author?.trim(),
+        expiry_date: updated.expiry_date,
+      });
 
-      if (error) {
-        toast.error('❌ Failed to update contract.');
-        console.error(error);
-      } else {
-        setContract(updated);
-        setEditMode(false);
-        toast.success('✅ Contract updated!');
-      }
+      setContract(updatedContract);
+      setUpdated(updatedContract);
+      setEditMode(false);
+      toast.success('✅ Contract updated!');
     } catch (err) {
       console.error('Unexpected error:', err);
-      toast.error('🚨 Something went wrong.');
+      toast.error('❌ Failed to update contract.');
     } finally {
       setActionLoading(false);
     }
@@ -484,14 +607,32 @@ const ContractDetailPage = () => {
     if (!confirm(t('contract_detail_delete_contract_and_file'))) return;
 
     try {
-      const { error: fileError } = await supabase.storage
-        .from('contracts')
-        .remove([contract.file_name]);
+      // Demo mode: handle deletion differently
+      if (isDemoMode()) {
+        // Delete associated files from demo storage
+        let demoFiles = getDemoFiles();
+        demoFiles = demoFiles.filter(f => f.contractId !== contract.id);
+        setDemoFiles(demoFiles);
 
-      if (fileError) {
-        console.error('Error deleting file:', fileError.message);
-        alert(t('contract_detail_failed_to_delete_file_from_storage'));
+        // Delete contract using API
+        await contractsApi.delete(contract.id);
+        
+        alert(t('contract_detail_contract_and_file_deleted_successfully'));
+        navigate('/');
         return;
+      }
+
+      // Real mode: delete from Supabase
+      if (contract.file_name) {
+        const { error: fileError } = await supabase.storage
+          .from('contracts')
+          .remove([contract.file_name]);
+
+        if (fileError) {
+          console.error('Error deleting file:', fileError.message);
+          alert(t('contract_detail_failed_to_delete_file_from_storage'));
+          return;
+        }
       }
 
       const { error: dbError } = await supabase

@@ -40,10 +40,13 @@
       "unknown": "Vai trò không xác định."
     },
     "analytics": "Phân tích & Lịch sử",
-    "phaseManagement": "Quản lý Giai đoạn"
+    "phaseManagement": "Quản lý Giai đoạn",
+    "demoMode": "Chế độ demo",
+    "exitDemo": "Thoát"
   },
   "buttons": {
     "delete": "Xóa",
+    "download": "Tải xuống",
     "downloadAll": "Tải Xuống Tất Cả",
     "newFolder": "Thư Mục Mới",
     "login": "Đăng nhập",
@@ -65,6 +68,8 @@
     "showPassword": "Hiển thị mật khẩu",
     "hidePassword": "Ẩn mật khẩu",
     "loginButton": "Đăng nhập",
+    "tryDemo": "Dùng thử chế độ demo",
+    "or": "hoặc",
     "error": "Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.",
     "loading": "Đang tải...",
     "languageSelector": "Chọn ngôn ngữ"

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
+import { contractsApi } from '../api/contracts';
 import FileUploader from '../components/FileUploader';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -69,64 +70,26 @@ const NewContract = () => {
     });
     
     try {
-      // Check for duplicate contract title (case-insensitive)
-      const { data: existing, error: fetchError } = await supabase
-        .from('contracts')
-        .select('id')
-        .ilike('title', title.trim());
-        
-      if (fetchError) {
-        alert(t('duplicate_error'));
-        console.error(fetchError);
-        return;
-      }
+      // Use the contractsApi which handles demo mode
+      const data = await contractsApi.create({
+        title: title.trim(),
+        status,
+        version,
+        author: user?.email || user?.user_metadata?.email || 'Demo User',
+      });
       
-      if (existing && existing.length > 0) {
-        alert(t('duplicate_prompt'));
-        return;
-      }
+      setContract(data); // Save the created contract (with id)
+    } catch (error) {
+      console.error('Contract creation error:', error);
       
-      // Insert contract without file info
-      const { data, error } = await supabase.from('contracts').insert([
-        {
-          title: title.trim(),
-          status,
-          version,
-          updated_at: new Date().toISOString(),
-          author: user?.email || user?.user_metadata?.email || 'Unknown', // Add author field
-        },
-      ]).select().single();
-
-      if (error) {
-        console.error('Contract creation error:', error);
-        console.error('Error details:', {
-          code: error.code,
-          message: error.message,
-          details: error.details,
-          hint: error.hint
-        });
-        
-        // Handle specific error types
-        if (error.code === '23505') {
-          // Unique constraint violation
-          alert(t('duplicate_prompt', 'A contract with this title already exists'));
-        } else if (error.message?.includes('duplicate') || error.message?.includes('already exists')) {
-          alert(t('duplicate_prompt', 'A contract with this title already exists'));
-        } else if (error.message?.includes('only WITH CHECK expression allowed')) {
-          alert('Database RLS policy error: Please check the SQL editor for the fix script. The RLS policy needs to be corrected in Supabase.');
-        } else if (error.message?.includes('row-level security') || error.message?.includes('policy')) {
-          alert(t('permission_denied', 'You do not have permission to create contracts. Please contact your administrator.'));
-        } else if (error.message?.includes('violates') && error.message?.includes('policy')) {
-          alert(t('permission_denied', 'You do not have permission to create contracts. Please contact your administrator.'));
-        } else {
-          alert(t('duplicate_error_short', 'Error saving contract') + ': ' + (error.message || 'Unknown error'));
-        }
+      // Handle specific error types
+      if (error.code === '23505' || error.message?.includes('duplicate') || error.message?.includes('already exists')) {
+        alert(t('duplicate_prompt', 'A contract with this title already exists'));
+      } else if (error.message?.includes('row-level security') || error.message?.includes('policy')) {
+        alert(t('permission_denied', 'You do not have permission to create contracts. Please contact your administrator.'));
       } else {
-        setContract(data); // Save the created contract (with id)
+        alert(t('duplicate_error_short', 'Error saving contract') + ': ' + (error.message || 'Unknown error'));
       }
-    } catch (err) {
-      console.error('Unexpected error creating contract:', err);
-      alert(t('duplicate_error_short', 'Error saving contract'));
     }
   };
 
@@ -135,19 +98,19 @@ const NewContract = () => {
     if (!uploads || uploads.length === 0 || !contract) return;
     setUploading(true);
     const uploadedFile = uploads[0];
-    // Update contract with file info
-    const { error } = await supabase.from('contracts').update({
-      file_url: uploadedFile.url,
-      file_name: uploadedFile.name,
-      file_type: uploadedFile.type,
-      updated_at: new Date().toISOString(),
-    }).eq('id', Number(contract.id));
-    setUploading(false);
-    if (error) {
+    try {
+      // Update contract with file info using API
+      await contractsApi.update(contract.id, {
+        file_url: uploadedFile.url,
+        file_name: uploadedFile.name,
+        file_type: uploadedFile.type,
+      });
+      navigate('/');
+    } catch (error) {
       alert(t('upload_file_error'));
       console.error(error);
-    } else {
-      navigate('/');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -165,7 +128,8 @@ const NewContract = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              backgroundColor: '#ddd',
+              backgroundColor: darkMode ? '#374151' : '#ddd',
+              color: darkMode ? '#f3f4f6' : 'inherit',
               border: 'none',
               borderRadius: '4px',
               cursor: 'pointer',
@@ -298,7 +262,8 @@ const NewContract = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                backgroundColor: '#ddd',
+                backgroundColor: darkMode ? '#374151' : '#ddd',
+                color: darkMode ? '#f3f4f6' : 'inherit',
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
@@ -317,7 +282,8 @@ const NewContract = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                backgroundColor: '#ddd',
+                backgroundColor: darkMode ? '#374151' : '#ddd',
+                color: darkMode ? '#f3f4f6' : 'inherit',
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',

@@ -2,6 +2,7 @@ import DashboardMetrics from '../components/DashboardMetrics';
 import ContractTable from '../components/ContractTable';
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '../utils/supaBaseClient';
+import { contractsApi } from '../api/contracts';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import { useUser } from '../hooks/useUser';
@@ -148,37 +149,23 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchContracts = async () => {
-      setLoading(true); // move this up for safety
+      setLoading(true);
   
-      const { data, error } = await supabase
-        .from('contracts')
-        .select('*')
-        .order('updated_at', { ascending: false });
+      try {
+        // Use contractsApi which handles demo mode
+        const data = await contractsApi.getAll({ orderBy: 'updated_at', ascending: false });
   
-      if (error) {
-        console.error('Supabase error:', error.message);
-        setLoading(false);
-        return;
-      }
-  
-      if (!data || !Array.isArray(data)) {
-        console.error('Unexpected data format:', data);
-        setLoading(false);
-        return;
-      }
-  
-      setContracts(prevContracts => {
-        if (prevContracts.length === 0) {
-          // First load
-          return data;
+        if (!data || !Array.isArray(data)) {
+          console.error('Unexpected data format:', data);
+          setLoading(false);
+          return;
         }
   
-        // Update only modified contracts, keep order
-        return prevContracts.map(existing => {
-          const updated = data.find(d => d.id === existing.id);
-          return updated ? updated : existing;
-        });
-      });
+        setContracts(data);
+        setFilteredContracts(data);
+      } catch (error) {
+        console.error('Error fetching contracts:', error.message);
+      }
   
       setLoading(false);
     };
@@ -197,30 +184,34 @@ const Dashboard = () => {
     debounceTimeout.current = setTimeout(() => {
       let active = true;
       (async () => {
-        // Get all contracts
-        const { data: contracts, error } = await supabase.from('contracts').select('id, title');
-        if (error || !contracts) {
-          setSearchLoading(false);
-          return;
-        }
-        let results = [];
-        for (const contract of contracts) {
-          const basePath = `uploads/${contract.id}`;
-          const allItems = await listAllFilesRecursive(basePath);
-          for (const item of allItems) {
-            if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-              results.push({
-                contractId: contract.id,
-                contractTitle: contract.title,
-                name: item.name,
-                isFolder: item.isFolder,
-                path: item.basePath,
-                fullPath: item.fullPath,
-              });
+        // Get all contracts using API (handles demo mode)
+        try {
+          const contracts = await contractsApi.getAll();
+          if (!contracts) {
+            setSearchLoading(false);
+            return;
+          }
+          let results = [];
+          for (const contract of contracts) {
+            const basePath = `uploads/${contract.id}`;
+            const allItems = await listAllFilesRecursive(basePath);
+            for (const item of allItems) {
+              if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                results.push({
+                  contractId: contract.id,
+                  contractTitle: contract.title,
+                  name: item.name,
+                  isFolder: item.isFolder,
+                  path: item.basePath,
+                  fullPath: item.fullPath,
+                });
+              }
             }
           }
+          if (active) setSearchResults(results);
+        } catch (error) {
+          console.error('Search error:', error);
         }
-        if (active) setSearchResults(results);
         setSearchLoading(false);
       })();
       return () => { active = false; };

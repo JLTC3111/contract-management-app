@@ -40,10 +40,13 @@
       "unknown": "Rol no reconocido en este sistema."
     },
     "analytics": "Análisis e Historial",
-    "phaseManagement": "Gestión de Fases"
+    "phaseManagement": "Gestión de Fases",
+    "demoMode": "Modo demo",
+    "exitDemo": "Salir"
   },
   "buttons": {
     "delete": "Eliminar",
+    "download": "Descargar",
     "downloadAll": "Descargar todo",
     "newFolder": "Nueva carpeta",
     "login": "Iniciar sesión",
@@ -65,6 +68,8 @@
     "showPassword": "Mostrar contraseña",
     "hidePassword": "Ocultar contraseña",
     "loginButton": "Iniciar sesión",
+    "tryDemo": "Probar modo demo",
+    "or": "o",
     "error": "Error de inicio de sesión. Por favor, verifique sus credenciales.",
     "loading": "Cargando...",
     "languageSelector": "Seleccionar idioma"

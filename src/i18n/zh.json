@@ -31,10 +31,13 @@
       "unknown": "角色无法识别。"
     },
     "analytics": "分析与历史",
-    "phaseManagement": "阶段管理"
+    "phaseManagement": "阶段管理",
+    "demoMode": "演示模式",
+    "exitDemo": "退出"
   },
   "buttons": {
     "delete": "删除",
+    "download": "下载",
     "downloadAll": "全部下载",
     "newFolder": "新建文件夹",
     "login": "登录",
@@ -56,6 +59,8 @@
     "showPassword": "显示密码",
     "hidePassword": "隐藏密码",
     "loginButton": "登录",
+    "tryDemo": "试用演示模式",
+    "or": "或",
     "error": "登录失败。请检查您的凭据。",
     "loading": "加载中...",
     "languageSelector": "选择语言"

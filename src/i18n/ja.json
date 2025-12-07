@@ -40,10 +40,13 @@
       "unknown": "役割が認識されません。"
     },
     "analytics": "分析と履歴",
-    "phaseManagement": "段階管理"
+    "phaseManagement": "段階管理",
+    "demoMode": "デモモード",
+    "exitDemo": "終了"
   },
   "buttons": {
     "delete": "削除",
+    "download": "ダウンロード",
     "downloadAll": "すべてダウンロード",
     "newFolder": "新しいフォルダー",
     "login": "ログイン",
@@ -65,6 +68,8 @@
     "showPassword": "パスワードを表示",
     "hidePassword": "パスワードを隠す",
     "loginButton": "ログイン",
+    "tryDemo": "デモモードを試す",
+    "or": "または",
     "error": "ログインに失敗しました。認証情報を確認してください。",
     "loading": "読み込み中...",
     "languageSelector": "言語を選択"

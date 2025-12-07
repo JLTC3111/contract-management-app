@@ -1,9 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
+import { commentsApi } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+
+// Helper to check demo mode
+const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
 
 // Centralized Supabase insert helper
 const insertToSupabase = async (table, payload) => {
@@ -155,25 +159,11 @@ const CommentSection = ({ contractId }) => {
   const fetchComments = async () => {
     setLoadingComments(true);
     try {
-      const { data, error } = await supabase
-        .from('contract_comments')
-        .select('*')
-        .eq('contract_id', contractId)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching comments:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
-        });
-        toast.error('Failed to load comments');
-      } else {
-        setComments(data || []);
-      }
+      // Use commentsApi which handles demo mode
+      const data = await commentsApi.getByContractId(contractId);
+      setComments(data || []);
     } catch (err) {
-      console.error('Unexpected error fetching comments:', err);
+      console.error('Error fetching comments:', err);
       toast.error('Failed to load comments');
     } finally {
       setLoadingComments(false);
@@ -217,7 +207,8 @@ const CommentSection = ({ contractId }) => {
     setSubmittingComment(true);
 
     try {
-      await insertToSupabase('contract_comments', {
+      // Use commentsApi which handles demo mode
+      await commentsApi.create({
         contract_id: contractId,
         user_id: user.id,
         user_email: user.email,
@@ -242,14 +233,14 @@ const CommentSection = ({ contractId }) => {
 
   const handleDeleteComment = async (commentId) => {
     if (!window.confirm(t('delete_comment_confirm', 'Are you sure you want to delete this comment?'))) return;
-    const { error } = await supabase
-      .from('contract_comments')
-      .delete()
-      .eq('id', commentId);
-    if (!error) {
+    
+    try {
+      // Use commentsApi which handles demo mode
+      await commentsApi.delete(commentId);
       setComments(prev => prev.filter(c => c.id !== commentId));
       toast.success(t('comment_deleted', 'Comment deleted!'));
-    } else {
+    } catch (error) {
+      console.error('Error deleting comment:', error);
       toast.error(t('failed_to_delete_comment', 'Failed to delete comment.'));
     }
   };

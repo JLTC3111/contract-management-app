@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
+import { approvalsApi, contractsApi } from '../api/contracts';
 import { Check, X, Clock, FileText, User, ArrowLeft, Edit, Save, X as CancelIcon, ThumbsUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import toast from 'react-hot-toast';
 import React, { useRef } from 'react';
+
+// Helper to check demo mode
+const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
 
 const Approvals = () => {
   const { user } = useUser();
@@ -54,18 +58,17 @@ const Approvals = () => {
 
   useEffect(() => {
     const fetchRequest = async () => {
-      const { data, error } = await supabase
-        .from('contract_approval_requests')
-        .select('*, contracts(*)')
-        .eq('id', id)
-        .single();
-  
-      if (error) {
+      try {
+        // Use API which handles demo mode
+        const data = await approvalsApi.getById(id);
+        if (data) {
+          // Also fetch contract details
+          const contract = await contractsApi.getById(data.contract_id);
+          setRequest({ ...data, contracts: contract });
+        }
+      } catch (error) {
         console.error('Error fetching approval request:', error);
-        return;
       }
-  
-      setRequest(data);
     };
   
     if (id) {
@@ -81,43 +84,25 @@ const Approvals = () => {
 
     setLoading(true);
     try {
-      // First, get all pending approval requests
-      const { data: approvalRequests, error: approvalError } = await supabase
-        .from('contract_approval_requests')
-        .select('*')
-        .eq('status', 'pending')
-        .order('created_at', { ascending: false });
+      // Use API which handles demo mode
+      const pendingApprovals = await approvalsApi.getPending();
 
-      if (approvalError) {
-        console.error('Error fetching approval requests:', approvalError);
-        toast.error('Failed to load approval requests');
-        return;
-      }
-
-      if (!approvalRequests || approvalRequests.length === 0) {
+      if (!pendingApprovals || pendingApprovals.length === 0) {
         setApprovalRequests([]);
         setLoading(false);
         return;
       }
 
       // Get contract IDs from approval requests
-      const contractIds = approvalRequests.map(req => req.contract_id);
+      const contractIds = pendingApprovals.map(req => req.contract_id);
 
-      // Fetch contract details for these IDs
-      const { data: contracts, error: contractError } = await supabase
-        .from('contracts')
-        .select('id, title, status, updated_at')
-        .in('id', contractIds);
-
-      if (contractError) {
-        console.error('Error fetching contracts:', contractError);
-        toast.error('Failed to load contract details');
-        return;
-      }
+      // Fetch contract details using API
+      const contracts = await contractsApi.getAll();
+      const relevantContracts = contracts.filter(c => contractIds.includes(c.id));
 
       // Combine the data
-      const requestsWithContracts = approvalRequests.map(request => {
-        const contract = contracts?.find(c => c.id === request.contract_id);
+      const requestsWithContracts = pendingApprovals.map(request => {
+        const contract = relevantContracts?.find(c => c.id === request.contract_id);
         return {
           ...request,
           contracts: contract || { id: request.contract_id, title: 'Unknown Contract', status: 'Unknown', updated_at: null }
@@ -136,37 +121,23 @@ const Approvals = () => {
   // Handle approval/rejection
   const handleApprovalAction = async (requestId, action) => {
     try {
-      // Update the approval request status
-      const { error: requestError } = await supabase
-        .from('contract_approval_requests')
-        .update({ 
-          status: action === 'approve' ? 'approved' : 'rejected'
-        })
-        .eq('id', requestId);
-
-      if (requestError) {
-        console.error('Error updating approval request:', requestError);
-        toast.error(t('failed_to_update_approval_request'));
-        return;
-      }
+      // Update the approval request status using API
+      await approvalsApi.update(requestId, { 
+        status: action === 'approve' ? 'approved' : 'rejected'
+      });
 
       // Get the contract ID from the request
       const request = approvalRequests.find(r => r.id === requestId);
       if (request) {
-        // Update contract status
-        const { error: contractError } = await supabase
-          .from('contracts')
-          .update({ 
-            status: action === 'approve' ? 'approved' : 'rejected',
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', request.contract_id);
-
-        if (contractError) {
+        // Update contract status using API
+        try {
+          await contractsApi.update(request.contract_id, { 
+            status: action === 'approve' ? 'approved' : 'rejected'
+          });
+          toast.success(t('contract_approval_action_completed_successfully'));
+        } catch (contractError) {
           console.error('Error updating contract status:', contractError);
           toast.error(t('approval_action_completed_but_failed_to_update_contract_status'));
-        } else {
-          toast.success(t('contract_approval_action_completed_successfully'));
         }
       }
 
@@ -193,19 +164,10 @@ const Approvals = () => {
 
     setSaving(true);
     try {
-      const { error } = await supabase
-        .from('contract_approval_requests')
-        .update({ 
-          approval_response: editedMessage.trim(),
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', requestId);
-
-      if (error) {
-        console.error('Error updating approval response:', error);
-        toast.error(t('failed_to_update_approval_response'));
-        return;
-      }
+      // Use API which handles demo mode
+      await approvalsApi.update(requestId, { 
+        approval_response: editedMessage.trim()
+      });
 
       toast.success(t('approval_response_updated_successfully'));
       setEditingRequestId(null);

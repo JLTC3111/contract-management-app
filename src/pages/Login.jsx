@@ -549,149 +549,34 @@ const Login = () => {
         gap: 'clamp(1rem, 4vw, 2rem)',
         position: 'relative',
       }}>
-        {isMobile && (
-          <button
-            onClick={toggleDarkMode}
-            aria-label="Toggle theme"
-            style={{
-              position: 'absolute',
-              top: 'calc(50% - 210px - 25px)',
-              left: 'calc(50% - 210px + 25px)',
-              width: 40,
-              height: 28,
-              borderRadius: 14,
-              border: '1.5px solid var(--card-border)',
-              display: 'flex',
-              alignItems: 'center',
-              cursor: 'pointer',
-              background: darkMode ? '#232b3b' : '#ffffff',
-              transition: 'background 0.2s',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-              zIndex: 100,
-              outline: 'none',
-              padding: 0,
-              overflow: 'hidden',
-            }}
-          >
-            <span
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: darkMode ? 18 : 4,
-                transform: 'translateY(-50%)',
-                width: 20,
-                height: 20,
-                borderRadius: '50%',
-                background: 'var(--theme-toggle-bg)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text)',
-                fontSize: '1.1rem',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-                transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
-                zIndex: 2,
-              }}
-            >
-              <motion.div
-                animate={{ rotate: darkMode ? 225 : 0 }}
-                transition={{ duration: 0.5, ease: 'linear' }}
-                style={{ position: 'relative', top: darkMode ? '-1.5px' : '3px' }}
-              >
-                {darkMode ? <MoonStar size={16} /> : <Sun size={16} />}
-              </motion.div>
-            </span>
-          </button>
-        )}
-        {/* Theme Toggle Button for Desktop */}
-        {!isMobile && (
-          <button
-            onClick={toggleDarkMode}
-            aria-label="Toggle theme"
-            style={{
-              position: 'absolute',
-              left: isMobile ? '27.5%' : '24.5%',
-              top: 'calc(35vh - 40px)',
-              width: 56,
-              height: 32,
-              background: 'var(--card-bg)',
-              borderRadius: 16,
-              border: '1.5px solid var(--card-border)',
-              display: 'flex',
-              alignItems: 'center',
-              cursor: 'pointer',
-              transition: 'background 0.2s',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-              zIndex: 200,
-              outline: 'none',
-              padding: 0,
-              overflow: 'hidden',
-            }}
-          >
-            <span
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: darkMode ? 26 : 4,
-                transform: 'translateY(-50%)',
-                width: 24,
-                height: 24,
-                borderRadius: '50%',
-                background: 'var(--theme-toggle-bg)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text)',
-                fontSize: '1.2rem',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-                transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
-                zIndex: 2,
-              }}
-            >
-               {/* Animated Sun/Moon icon */}
-               <motion.div 
-                style={{ 
-                  position: 'relative', 
-                  top: isMobile ? '0px' : darkMode ? '-1.5px' : '3px'
-                }}
-                animate={{ rotate: darkMode ? 225 : 0 }}
-                transition={{ duration: 0.5, ease: "linear" }}
-              >
-                {darkMode ? <MoonStar size={isMobile ? 12 : 24} /> : <Sun size={isMobile ? 12 : 24} />}
-              </motion.div>
-            </span>
-          </button>
-        )}
         {/* Login Card */}
         <div
           ref={cardRef}
           style={{
             flex: 1,
             border: '1.5px solid var(--card-border)',
-            borderRadius: '12px',
-            padding: 'clamp(0.75rem, 2vw, 1.5rem)',
+            borderRadius: '16px',
+            padding: isMobile ? '1.5rem' : '2rem 2.5rem',
             width: '100%',
-            maxWidth: isMobile ? '100vw' : 'clamp(280px, 95vw, 550px)',
-            height: isMobile ? '400px' : '450px',
+            maxWidth: isMobile ? '100vw' : 'clamp(320px, 90vw, 420px)',
             boxSizing: 'border-box',
             boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
             transition: 'all 0.3s ease',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
             position: 'relative',
             marginTop: isMobile ? '15vh' : '35vh', 
           }}
         >
           <h2 style={{
             textAlign: 'center',
-            marginBottom: 'clamp(1rem, 4vw, 2rem)',
+            marginBottom: '1.5rem',
             color: 'var(--text)',
-            fontSize: 'clamp(1.2rem, 5vw, 2rem)',
+            fontSize: 'clamp(1.4rem, 5vw, 1.75rem)',
             fontWeight: '600',
             minHeight: '2.5rem',
-            letterSpacing: '2px',
+            letterSpacing: '1px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -728,15 +613,17 @@ const Login = () => {
             />
           </h2>
           
-          {/* Language Switcher */}
+          {/* Language Switcher & Theme Toggle Row */}
           <div style={{ 
-            position: 'relative', 
             width: '100%', 
-            marginBottom: '1rem',
+            marginBottom: '1.25rem',
             display: 'flex',
-            justifyContent: 'center'
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.75rem',
           }}>
-            <div ref={langSwitcherRef} style={{ position: 'relative', minWidth: 150 }}>
+            {/* Language Switcher */}
+            <div ref={langSwitcherRef} style={{ position: 'relative', flex: 1, maxWidth: '180px' }}>
               <button 
                 className="btn-hover-preview"
                 onClick={() => setShowLanguageDropdown((prev) => !prev)}
@@ -746,19 +633,19 @@ const Login = () => {
                 style={{
                   width: '100%',
                   display: 'flex',
-                  marginBottom: '1rem',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '0.5rem 0.75rem',
-                  fontSize: 'clamp(0.75rem, 2.75vw, 1.25rem)',
+                  fontSize: '0.9rem',
                   fontWeight: 500,
                   color: 'var(--text-secondary)',
                   background: 'var(--input-bg)',
                   border: '1px solid var(--input-border)',
-                  borderRadius: 'var(--radius-md)',
+                  borderRadius: '8px',
                   cursor: 'pointer',
                   textAlign: 'left',
                   transition: 'background 0.2s, border-color 0.2s',
+                  height: '38px',
                 }}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%' }}>
@@ -767,8 +654,8 @@ const Login = () => {
                     alt={LANGUAGES.find(l => l.code === i18n.language)?.label}
                     style={{ width: '1.25em', height: '1.25em', objectFit: 'contain' }}
                   />
-                  <span style={{ flexGrow: 1 }}>{LANGUAGES.find(l => l.code === i18n.language)?.label}</span>
-                  <ChevronDownIcon size={16} />
+                  <span style={{ flexGrow: 1, fontSize: '0.875rem' }}>{LANGUAGES.find(l => l.code === i18n.language)?.label}</span>
+                  <ChevronDownIcon size={14} />
                 </span>
               </button>
 
@@ -783,10 +670,10 @@ const Login = () => {
                     right: 0,
                     background: 'var(--card-bg)',
                     border: '1px solid var(--card-border)',
-                    borderRadius: 'var(--radius-md)',
+                    borderRadius: '8px',
                     listStyle: 'none',
                     padding: 0,
-                    margin: '0.5rem 0 0 0',
+                    margin: '0.25rem 0 0 0',
                     maxHeight: '200px',
                     overflowY: 'auto',
                     zIndex: 1000,
@@ -814,9 +701,9 @@ const Login = () => {
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '0.75rem',
-                          fontSize: 'clamp(0.8rem, 2.5vw, 0.9rem)',
-                          padding: '0.6rem 1rem',
+                          gap: '0.5rem',
+                          fontSize: '0.875rem',
+                          padding: '0.5rem 0.75rem',
                           cursor: 'pointer',
                           background: i18n.language === lang.code ? 'var(--hover-bg)' : 'var(--card-bg)',
                           color: 'var(--text)',
@@ -831,7 +718,7 @@ const Login = () => {
                         <img 
                           src={lang.flag} 
                           alt={lang.label} 
-                          style={{ width: '1.5em', height: '1.5em', objectFit: 'contain' }}
+                          style={{ width: '1.25em', height: '1.25em', objectFit: 'contain' }}
                         />
                         <span>{lang.label}</span>
                       </li>
@@ -839,12 +726,47 @@ const Login = () => {
                 </ul>
               )}
             </div>
+
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleDarkMode}
+              aria-label={darkMode ? t('buttons.light') : t('buttons.dark')}
+              title={darkMode ? t('buttons.light') : t('buttons.dark')}
+              style={{
+                width: 52,
+                height: 38,
+                background: 'var(--input-bg)',
+                borderRadius: '8px',
+                border: '1px solid var(--input-border)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                outline: 'none',
+                padding: 0,
+                flexShrink: 0,
+              }}
+            >
+              <motion.div 
+                animate={{ rotate: darkMode ? 360 : 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                style={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-secondary)',
+                }}
+              >
+                {darkMode ? <MoonStar size={18} /> : <Sun size={18} />}
+              </motion.div>
+            </button>
           </div>
           
           <form onSubmit={handleLogin} style={{ 
             display: 'flex', 
             flexDirection: 'column', 
-            gap: '1.5rem',
+            gap: '1rem',
             width: '100%',
           }}>
             <div>
@@ -859,14 +781,16 @@ const Login = () => {
                   backgroundColor: darkMode ? '#fbfffe' : '#e7fffc',
                   width: '100%',
                   maxWidth: '100%',
-                  padding: 'clamp(0.5rem, 2vw, 0.75rem)',
+                  padding: '0.75rem 1rem',
                   border: '1.5px solid var(--card-border)',
                   borderRadius: '8px',
-                  fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+                  fontSize: '0.95rem',
                   color: 'var(--login-input-text)',
                   outline: 'none',
                   transition: 'all 0.2s ease',
                   boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  height: '48px',
+                  boxSizing: 'border-box',
                 }}
                 onFocus={(e) => {
                   e.target.style.borderColor = 'var(--primary)';
@@ -890,14 +814,16 @@ const Login = () => {
                   backgroundColor: darkMode ? '#fbfffe' : '#e7fffc',
                   width: '100%',
                   maxWidth: '100%',
-                  padding: 'clamp(0.5rem, 2vw, 0.75rem)',
+                  padding: '0.75rem 3rem 0.75rem 1rem',
                   border: '1.5px solid var(--card-border)',
                   borderRadius: '8px',
-                  fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+                  fontSize: '0.95rem',
                   color: 'var(--login-input-text)',
                   outline: 'none',
                   transition: 'all 0.2s ease',
                   boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  height: '48px',
+                  boxSizing: 'border-box',
                 }}
                 onFocus={(e) => {
                   e.target.style.borderColor = 'var(--primary)';
@@ -914,7 +840,7 @@ const Login = () => {
                 onClick={() => setShowPassword((v) => !v)}
                 style={{
                   position: 'absolute',
-                  right: '2.5%',
+                  right: '12px',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   background: 'none',
@@ -936,14 +862,14 @@ const Login = () => {
                 tabIndex={0}
               >
                 <motion.div
-                  animate={{ rotate: showPassword ? 360 : 0, scale: showPassword ? 1.25 : 1 }}
+                  animate={{ rotate: showPassword ? 360 : 0, scale: showPassword ? 1.15 : 1 }}
                   transition={{ duration: 0.5, ease: 'linear' }}
-                  style={{ position: 'relative', width: 36, height: 36 }}
+                  style={{ position: 'relative', width: 32, height: 32 }}
                 >
-                  <CustomEyeIcon />
+                  <CustomEyeIcon style={{ width: 32, height: 32 }} />
                   <svg
-                    width="22"
-                    height="22"
+                    width="20"
+                    height="20"
                     style={{
                       position: 'absolute',
                       top: '50%',
@@ -954,8 +880,8 @@ const Login = () => {
                   >
                     <motion.line
                       x1="3"
-                      y1="21"
-                      x2="21"
+                      y1="17"
+                      x2="17"
                       y2="3"
                       stroke="#ef4444"
                       strokeWidth="2.5"
@@ -974,10 +900,11 @@ const Login = () => {
               className="fancy-btn"
               style={{
                 width: '100%',
-                fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+                fontSize: '0.95rem',
                 fontWeight: 600,
                 marginTop: '0.5rem',
                 transition: 'transform 0.2s',
+                height: '48px',
               }}
               onMouseEnter={e => {
                 e.target.style.transform = 'translateY(-1px)';
@@ -989,18 +916,29 @@ const Login = () => {
               {t('login.loginButton')}
             </button>
 
+            {/* Divider */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              margin: '0.25rem 0',
+            }}>
+              <div style={{ flex: 1, height: '1px', background: 'var(--card-border)' }} />
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{t('login.or', 'or')}</span>
+              <div style={{ flex: 1, height: '1px', background: 'var(--card-border)' }} />
+            </div>
+
             {/* Try Demo Button */}
             <button 
               type="button"
               onClick={handleTryDemo}
               style={{
                 width: '100%',
-                fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
+                fontSize: '0.9rem',
                 fontWeight: 500,
-                marginTop: '0.75rem',
-                padding: '0.6rem 1rem',
+                padding: '0.75rem 1rem',
                 background: 'transparent',
-                border: `1px solid ${darkMode ? '#60a5fa' : '#3b82f6'}`,
+                border: `1.5px solid ${darkMode ? 'rgba(96, 165, 250, 0.5)' : 'rgba(59, 130, 246, 0.5)'}`,
                 borderRadius: '8px',
                 color: darkMode ? '#60a5fa' : '#3b82f6',
                 cursor: 'pointer',
@@ -1009,13 +947,16 @@ const Login = () => {
                 justifyContent: 'center',
                 gap: '0.5rem',
                 transition: 'all 0.2s',
+                height: '48px',
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.background = darkMode ? 'rgba(96, 165, 250, 0.1)' : 'rgba(59, 130, 246, 0.1)';
+                e.currentTarget.style.borderColor = darkMode ? '#60a5fa' : '#3b82f6';
                 e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = darkMode ? 'rgba(96, 165, 250, 0.5)' : 'rgba(59, 130, 246, 0.5)';
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >

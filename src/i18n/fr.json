@@ -40,10 +40,13 @@
       "unknown": "Rôle non reconnu."
     },
     "analytics": "Analytiques & Historique",
-    "phaseManagement": "Gestion des Phases"
+    "phaseManagement": "Gestion des Phases",
+    "demoMode": "Mode démo",
+    "exitDemo": "Quitter"
   },
   "buttons": {
     "delete": "Supprimer",
+    "download": "Télécharger",
     "downloadAll": "Tout télécharger",
     "newFolder": "Nouveau dossier",
     "login": "Connexion",
@@ -65,6 +68,8 @@
     "showPassword": "Afficher le mot de passe",
     "hidePassword": "Masquer le mot de passe",
     "loginButton": "Connexion",
+    "tryDemo": "Essayer le mode démo",
+    "or": "ou",
     "error": "Échec de la connexion. Veuillez vérifier vos identifiants.",
     "loading": "Chargement...",
     "languageSelector": "Sélectionner la langue"

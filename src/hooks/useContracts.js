@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { contractsApi } from '../api/contracts';
-import { MOCK_CONTRACTS } from '../data/mockData';
+import { getDemoContracts, setDemoContracts, generateDemoId } from '../data/mockData';
 
 // Helper to check demo mode
 const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
@@ -41,33 +41,7 @@ export const useContracts = (options = {}) => {
       setLoading(true);
       setError(null);
       
-      // Demo mode: return mock data
-      if (isDemoMode()) {
-        let data = [...MOCK_CONTRACTS];
-        
-        // Apply status filter
-        if (status && status !== 'all') {
-          data = data.filter(c => c.status === status);
-        }
-        
-        // Apply ordering
-        data.sort((a, b) => {
-          const aVal = a[orderBy] || '';
-          const bVal = b[orderBy] || '';
-          return ascending ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-        });
-        
-        // Apply limit
-        if (limit) {
-          data = data.slice(0, limit);
-        }
-        
-        setContracts(data);
-        setLoading(false);
-        return;
-      }
-
-      // Real mode: fetch from Supabase
+      // Use the API which handles demo mode internally
       const data = await contractsApi.getAll({
         orderBy,
         ascending,

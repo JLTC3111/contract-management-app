@@ -1,9 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Loader2 } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
+import { approvalsApi, contractsApi } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+
+// Helper to check demo mode
+const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
 
 // Centralized Supabase insert helper
 const insertToSupabase = async (table, payload) => {
@@ -77,8 +81,8 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
 
     setSubmitting(true);
     try {
-      // Store approval request in the dedicated table
-      await insertToSupabase('contract_approval_requests', {
+      // Use approvalsApi which handles demo mode
+      await approvalsApi.create({
         contract_id: contractId,
         requester_id: user.id,
         requester_email: user.email,
@@ -86,25 +90,16 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
         status: 'pending'
       });
 
-      // Update contract status to pending
-      const { error: contractError } = await supabase
-        .from('contracts')
-        .update({ status: 'pending' })
-        .eq('id', contractId);
-
-      if (contractError) {
-        console.error('Error updating contract status:', {
-          message: contractError.message,
-          details: contractError.details,
-          hint: contractError.hint,
-          code: contractError.code
-        });
-        toast.error(t('Approval request sent but failed to update contract status'));
-      } else {
+      // Update contract status to pending using contractsApi
+      try {
+        await contractsApi.update(contractId, { status: 'pending' });
         toast.success(t('Approval request submitted successfully!'));
         setApprovalMessage('');
         setShowForm(false);
         onStatusUpdate && onStatusUpdate('pending');
+      } catch (contractError) {
+        console.error('Error updating contract status:', contractError);
+        toast.error(t('Approval request sent but failed to update contract status'));
       }
     } catch (err) {
       console.error('Error submitting approval request:', {

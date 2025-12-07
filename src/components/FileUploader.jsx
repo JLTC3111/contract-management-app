@@ -6,6 +6,26 @@ import { useTheme } from '../hooks/useTheme';
 import { Loader2, Upload, Check, X, UploadCloud } from 'lucide-react';
 import { isOfficeFile, isImageFile, isTextFile, getFileTypeCategory } from '../utils/fileViewerUtils';
 
+// Helper to check demo mode
+const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
+
+// Demo file storage key
+const DEMO_FILES_KEY = 'demo_files';
+
+// Get demo files from localStorage
+const getDemoFiles = () => {
+  const stored = localStorage.getItem(DEMO_FILES_KEY);
+  return stored ? JSON.parse(stored) : [];
+};
+
+// Save demo files to localStorage
+const setDemoFiles = (files) => {
+  localStorage.setItem(DEMO_FILES_KEY, JSON.stringify(files));
+};
+
+// Generate demo file ID
+const generateDemoFileId = () => `demo-file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
 const sanitizeFileName = (name) =>
   name.normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -62,6 +82,65 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
   const { t } = useTranslation();
   const { darkMode } = useTheme();
 
+  // Demo mode file upload handler
+  const handleDemoUpload = async (file, filePath) => {
+    return new Promise((resolve) => {
+      // Simulate upload progress
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 30 + 10;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          
+          // Create demo file entry
+          const demoFile = {
+            id: generateDemoFileId(),
+            name: file.name,
+            path: filePath,
+            size: file.size,
+            type: file.type,
+            contractId: contract.id,
+            uploadedAt: new Date().toISOString(),
+            category: getFileTypeCategory(file.name),
+            // For images, create a data URL so they can be previewed
+            dataUrl: null,
+          };
+
+          // Store file metadata
+          const demoFiles = getDemoFiles();
+          demoFiles.push(demoFile);
+          setDemoFiles(demoFiles);
+
+          // Update progress UI
+          setUploadProgress(prev => {
+            const newState = { ...prev };
+            delete newState[file.name];
+            return newState;
+          });
+          setCompletedUploads(prev => [...prev, file.name]);
+          setTimeout(() => {
+            setCompletedUploads(prev => prev.filter(name => name !== file.name));
+          }, 5000);
+
+          resolve({
+            url: `demo://files/${demoFile.id}`,
+            name: file.name,
+            type: file.type,
+            path: filePath,
+            size: file.size,
+            category: demoFile.category
+          });
+        } else {
+          setUploadProgress(prev => ({
+            ...prev,
+            [file.name]: `${Math.round(progress)}`
+          }));
+        }
+      }, 100);
+    });
+  };
+
   const handleUpload = async (event) => {
     const files = event.target?.files;
     if (!files || files.length === 0) {
@@ -89,6 +168,23 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
       const cleanedPath = (currentPath?.startsWith('uploads/') ? currentPath : `${defaultPath}/${currentPath}`).replace(/^\/+|\/+$/g, '');
       const filePath = `${cleanedPath}/${timestamp}-${sanitizedFileName}`;
 
+      // Handle demo mode upload
+      if (isDemoMode()) {
+        try {
+          const result = await handleDemoUpload(file, filePath);
+          uploads.push(result);
+          toast.success(`✅ ${file.name} ${t('uploader_uploaded')}!`);
+          successCount++;
+          if (onUploadSuccess) onUploadSuccess();
+        } catch (error) {
+          console.error(`Demo upload error for ${file.name}:`, error);
+          toast.error(`❌ ${t('upload_error_for')} ${file.name}`);
+          errorCount++;
+        }
+        continue;
+      }
+
+      // Regular Supabase upload
       try {
         const { data: signedUrlData, error: signedUrlError } = await supabase
           .storage
