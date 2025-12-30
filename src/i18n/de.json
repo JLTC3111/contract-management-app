@@ -218,8 +218,10 @@
     "searchContracts": "Verträge suchen..."
   },
   "contractTable": {
+    "expiry": "Ablaufdatum",
     "title": "Titel",
     "status": {
+      "label": "Zustand",
       "draft": "Entwurf",
       "approved": "Genehmigt",
       "pending": "Ausstehend",
@@ -227,7 +229,8 @@
       "expiring": "Läuft bald ab",
       "expired": "Abgelaufen"
     },
-    "version": "Version",
+    "version": "Variante",
+    "updated": "Aktualisiert",
     "lastUpdated": "Zuletzt aktualisiert",
     "author": "Autor",
     "expiryDate": "Ablaufdatum",
@@ -235,6 +238,7 @@
     "all": "Alle",
     "clear": "Löschen"
   },
+
   "newContract": "Neuer Vertrag",
   "createContract": "Vertrag erstellen",
   "edit": "Bearbeiten",

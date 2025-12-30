@@ -219,10 +219,10 @@
   },
   "clear": "クリア",
   "contractTable": {
-    "all": "すべて",
-    "clear": "クリア",
+    "expiry": "有効期限",
     "title": "タイトル",
     "status": {
+      "label": "状態",
       "draft": "下書き",
       "approved": "承認済み",
       "pending": "保留中",
@@ -231,10 +231,13 @@
       "expired": "期限切れ"
     },
     "version": "バージョン",
-    "lastUpdated": "最終更新日",
+    "updated": "更新済み",
+    "lastUpdated": "最終更新",
     "author": "作成者",
     "expiryDate": "有効期限",
-    "headerStatus": "ステータス"
+    "headerStatus": "ステータス",
+    "all": "すべて",
+    "clear": "クリア"
   },
   "upload_completed": "アップロードが完了しました",
   "upload_failed": "アップロードに失敗しました",

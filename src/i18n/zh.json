@@ -210,8 +210,10 @@
   },
   "clear": "清除",
   "contractTable": {
+    "expiry": "到期日期",
     "title": "标题",
     "status": {
+      "label": "状态",
       "draft": "草稿",
       "approved": "已批准",
       "pending": "待处理",
@@ -220,6 +222,7 @@
       "expired": "已过期"
     },
     "version": "版本",
+    "updated": "已更新",
     "lastUpdated": "最后更新",
     "author": "作者",
     "expiryDate": "到期日期",

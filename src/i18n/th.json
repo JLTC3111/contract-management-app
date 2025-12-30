@@ -219,16 +219,19 @@
   },
   "clear": "ล้าง",
   "contractTable": {
+    "expiry": "วันหมดอายุ",
     "title": "ชื่อเรื่อง",
     "status": {
+      "label": "สถานะ",
       "draft": "ฉบับร่าง",
       "approved": "อนุมัติแล้ว",
       "pending": "รอดำเนินการ",
       "rejected": "ถูกปฏิเสธ",
       "expiring": "ใกล้หมดอายุ",
-      "expired": "หมดอายุ"
+      "expired": "หมดอายุแล้ว"
     },
     "version": "เวอร์ชัน",
+    "updated": "อัปเดตแล้ว",
     "lastUpdated": "อัปเดตล่าสุด",
     "author": "ผู้เขียน",
     "expiryDate": "วันหมดอายุ",

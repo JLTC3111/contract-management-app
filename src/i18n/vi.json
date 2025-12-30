@@ -220,22 +220,24 @@
   "clear": "Xóa",
   
   "contractTable": {
-    "title": "Tiêu Đề",
-    "headerStatus": "Trạng Thái",
+    "expiry": "Ngày hết hạn",
+    "title": "Tiêu đề",
     "status": {
-      "expired": "Đã Hết Hạn",
-      "status": "Trạng Thái",
-      "draft": "Nháp",
-      "approved": "Đã Duyệt",
-      "pending": "Đang Chờ",
-      "rejected": "Bị Từ Chối",
-      "expiring": "Sắp Hết Hạn"
+      "label": "Trạng thái",
+      "draft": "Bản nháp",
+      "approved": "Đã phê duyệt",
+      "pending": "Đang chờ",
+      "rejected": "Bị từ chối",
+      "expiring": "Sắp hết hạn",
+      "expired": "Đã hết hạn"
     },
-    "version": "Phiên Bản",
-    "lastUpdated": "Cập Nhật",
-    "author": "Người Tạo",
-    "expiryDate": "Ngày Hết Hạn",
-    "all": "Tất Cả",
+    "version": "Phiên bản",
+    "updated": "Đã cập nhật",
+    "lastUpdated": "Cập nhật lần cuối",
+    "author": "Tác giả",
+    "expiryDate": "Ngày hết hạn",
+    "headerStatus": "Trạng thái",
+    "all": "Tất cả",
     "clear": "Xóa"
   },
   "upload_completed": "Đã Tải Thành Công",

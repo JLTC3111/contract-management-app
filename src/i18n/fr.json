@@ -218,8 +218,10 @@
     "searchContracts": "Rechercher des contrats..."
   },
   "contractTable": {
+    "expiry": "Date d’expiration",
     "title": "Titre",
     "status": {
+      "label": "Statut",
       "draft": "Brouillon",
       "approved": "Approuvé",
       "pending": "En attente",
@@ -228,9 +230,10 @@
       "expired": "Expiré"
     },
     "version": "Version",
+    "updated": "Mis à jour",
     "lastUpdated": "Dernière mise à jour",
     "author": "Auteur",
-    "expiryDate": "Date d'expiration",
+    "expiryDate": "Date d’expiration",
     "headerStatus": "Statut",
     "all": "Tous",
     "clear": "Effacer"

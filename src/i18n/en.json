@@ -244,9 +244,11 @@
   },
   "clear": "Clear",
   "contractTable": {
+    "expiry": "Expiry Date",
     "untitledContract": "Untitled Contract",
     "title": "Title",
     "status": {
+      "label": "Status",
       "draft": "Draft",
       "approved": "Approved",
       "pending": "Pending",
@@ -255,6 +257,7 @@
       "expired": "Expired"
     },
     "version": "Version",
+    "updated": "Updated",
     "lastUpdated": "Last Updated",
     "author": "Author",
     "expiryDate": "Expiry Date",

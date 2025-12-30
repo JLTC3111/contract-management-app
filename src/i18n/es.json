@@ -218,8 +218,25 @@
     "searchContracts": "Buscar contratos..."
   },
   "contractTable": {
+    "expiry": "Fecha de vencimiento",
+    "title": "Título",
+    "status": {
+      "label": "Estado",
+      "draft": "Borrador",
+      "approved": "Aprobado",
+      "pending": "Pendiente",
+      "rejected": "Rechazado",
+      "expiring": "Próximo a vencer",
+      "expired": "Vencido"
+    },
+    "version": "Variante",
+    "updated": "Actualizado",
+    "lastUpdated": "Última actualización",
+    "author": "Autor",
+    "expiryDate": "Fecha de vencimiento",
+    "headerStatus": "Estado",
     "all": "Todos",
-    "clear": "Limpiar"
+    "clear": "Eliminar"
   },
   "newContract": "Nuevo contrato",
   "createContract": "Crear contrato",
