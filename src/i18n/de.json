@@ -443,6 +443,9 @@
     "draft": "Entwurf"
   },
   "phaseManagement": {
+    "selectContractMessage": "Wählen Sie einen Vertrag aus dem Dropdown-Menü, um seine Phasen zu verwalten.",
+    "noContractSelected": "Kein Vertrag ausgewählt",
+    "goToDashboard": "Zum Dashboard gehen",
     "title": "Phasenmanagement",
     "trackProjectPhases": "Projektphasen und Lieferobjekte verfolgen",
     "viewContractPerformance": "Vertragsleistung und -trends anzeigen",

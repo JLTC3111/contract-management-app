@@ -446,6 +446,9 @@
     "draft": "Brouillon"
   },
   "phaseManagement": {
+    "selectContractMessage": "Sélectionnez un contrat dans le menu déroulant pour gérer ses phases.",
+    "noContractSelected": "Aucun contrat sélectionné",
+    "goToDashboard": "Aller au Tableau de Bord",
     "title": "Gestion des Phases",
     "trackProjectPhases": "Suivre les phases et livrables du projet",
     "viewContractPerformance": "Voir les performances et tendances du contrat",

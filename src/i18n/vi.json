@@ -446,6 +446,9 @@
     "draft": "Bản nháp"
   },
   "phaseManagement": {
+    "selectContractMessage": "Vui lòng chọn một hợp đồng để quản lý các giai đoạn của nó.",
+    "noContractSelected": "Chưa Có Hợp Đồng Nào Được Chọn",
+    "goToDashboard": "Đi Tới Bảng Điều Khiển",
     "title": "Quản lý Giai đoạn",
     "trackProjectPhases": "Theo dõi các giai đoạn và sản phẩm của dự án",
     "viewContractPerformance": "Xem hiệu suất và xu hướng hợp đồng",

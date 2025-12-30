@@ -447,6 +447,9 @@
     "draft": "下書き"
   },
   "phaseManagement": {
+    "selectContractMessage": "契約を選択して段階管理を開始してください",
+    "noContractSelected": "契約が選択されていません",
+    "goToDashboard": "ダッシュボードへ移動",
     "title": "段階管理",
     "trackProjectPhases": "プロジェクトの段階と成果物を追跡",
     "viewContractPerformance": "契約のパフォーマンスとトレンドを表示",

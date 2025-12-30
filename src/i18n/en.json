@@ -561,6 +561,9 @@
     "draft": "Draft"
   },
   "phaseManagement": {
+    "selectContractMessage": "Select a contract from the dropdown to manage its phases.",
+    "noContractSelected": "No Contract Selected",
+    "goToDashboard": "Go to Dashboard",
     "title": "Phase Management",
     "trackProjectPhases": "Track project phases and deliverables",
     "viewContractPerformance": "View contract performance and trends",

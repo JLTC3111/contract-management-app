@@ -437,6 +437,9 @@
     "draft": "草稿"
   },
   "phaseManagement": {
+    "selectContractMessage": "请选择下拉菜单中的合同以管理其阶段。",
+    "noContractSelected": "未选择合同",
+    "goToDashboard": "前往仪表板",
     "title": "阶段管理",
     "trackProjectPhases": "跟踪项目阶段和交付成果",
     "viewContractPerformance": "查看合同性能和趋势",

@@ -135,7 +135,7 @@ const ContractLifecycleManager = () => {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Clock size={48} style={{ color: 'var(--primary-color)', marginBottom: '1rem' }} />
           <p style={{ color: 'var(--text)', fontSize: '1.1rem' }}>
             {t('Loading contract lifecycle data...')}
@@ -334,6 +334,10 @@ const ContractLifecycleManager = () => {
         {activeTab === 'phases' && !contract && (
           <div style={{
             padding: '4rem 2rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
             textAlign: 'center',
             background: 'var(--card-bg)',
             borderRadius: '12px',

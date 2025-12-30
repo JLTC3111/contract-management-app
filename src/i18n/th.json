@@ -436,6 +436,9 @@
     "draft": "ร่าง"
   },
   "phaseManagement": {
+    "selectContractMessage": "โปรดเลือกสัญญาเพื่อดูและจัดการขั้นตอน",
+    "noContractSelected": "ไม่ได้เลือกสัญญา",
+    "goToDashboard": "ไปที่แดชบอร์ด",
     "title": "การจัดการขั้นตอน",
     "trackProjectPhases": "ติดตามขั้นตอนโครงการและผลส่งมอบ",
     "viewContractPerformance": "ดูประสิทธิภาพและแนวโน้มสัญญา",
