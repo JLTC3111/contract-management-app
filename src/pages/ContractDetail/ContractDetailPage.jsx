@@ -26,6 +26,9 @@ const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
 // Demo file storage key
 const DEMO_FILES_KEY = 'demo_files';
 
+const MIN_WIDTH = 360;
+const DEFAULT_WIDTH = 800;
+
 // Get demo files from localStorage
 const getDemoFiles = () => {
   const stored = localStorage.getItem(DEMO_FILES_KEY);
@@ -55,6 +58,10 @@ const ContractDetailPage = () => {
   const [editMode, setEditMode] = useState(false);
   const [updated, setUpdated] = useState({});
   const [actionLoading, setActionLoading] = useState(false);
+
+  const [containerWidth, setContainerWidth] = useState(DEFAULT_WIDTH);
+  const [isResizing, setIsResizing] = useState(false);
+  const containerRef = useRef(null);
 
   // File browser state
   const [files, setFiles] = useState([]);
@@ -731,6 +738,59 @@ const ContractDetailPage = () => {
     }
   }, [editMode, showFolderInput, files, currentPath, contract]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const maxWidth = window.innerWidth * 0.95;
+    const initialWidth = Math.min(Math.max(DEFAULT_WIDTH, MIN_WIDTH), maxWidth);
+    setContainerWidth(initialWidth);
+  }, []);
+
+  useEffect(() => {
+    if (!isResizing) return undefined;
+
+    const handleMove = (event) => {
+      if (!containerRef.current) return;
+      const containerLeft = containerRef.current.getBoundingClientRect().left;
+      const maxWidth = Math.max(MIN_WIDTH, window.innerWidth * 0.95);
+      const nextWidth = Math.min(Math.max(event.clientX - containerLeft, MIN_WIDTH), maxWidth);
+      setContainerWidth(nextWidth);
+    };
+
+    const stopResizing = () => setIsResizing(false);
+
+    window.addEventListener('pointermove', handleMove);
+    window.addEventListener('pointerup', stopResizing);
+
+    const { style } = document.body;
+    const previousCursor = style.cursor;
+    const previousUserSelect = style.userSelect;
+    style.cursor = 'ew-resize';
+    style.userSelect = 'none';
+
+    return () => {
+      window.removeEventListener('pointermove', handleMove);
+      window.removeEventListener('pointerup', stopResizing);
+      style.cursor = previousCursor;
+      style.userSelect = previousUserSelect;
+    };
+  }, [isResizing]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      const maxWidth = Math.max(MIN_WIDTH, window.innerWidth * 0.95);
+      setContainerWidth((prev) => Math.min(prev, maxWidth));
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, []);
+
+  const startResize = (event) => {
+    event.preventDefault();
+    setIsResizing(true);
+  };
+
   // ========== Loading States ==========
 
   if (userLoading) return <p>Loading user...</p>;
@@ -742,13 +802,32 @@ const ContractDetailPage = () => {
 
   return (
     <div
+      ref={containerRef}
       style={{
-        width: 'clamp(350px, 95vw, 800px)',
+        width: `${Math.round(containerWidth)}px`,
+        maxWidth: '95vw',
+        minWidth: `${MIN_WIDTH}px`,
         margin: '0 auto',
         border: '1px solid var(--card-border)',
         padding: '1rem',
+        position: 'relative',
       }}
     >
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        onPointerDown={startResize}
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: -8,
+          width: 16,
+          height: '100%',
+          cursor: 'ew-resize',
+          touchAction: 'none',
+          zIndex: 2,
+        }}
+      />
       {/* CSS Animation for gradient effect */}
       <style>
         {`
