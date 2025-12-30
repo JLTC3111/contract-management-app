@@ -6,7 +6,6 @@
  * - SidebarNav.jsx (SidebarButton, SubMenu) - src/components/layout/SidebarNav.jsx
  * - PasswordChangeModal.jsx - src/components/layout/PasswordChangeModal.jsx
  * - UserProfileSection.jsx - src/components/layout/UserProfileSection.jsx
- * 
  * This file re-exports for backwards compatibility.
  * New code should import from './layout/Sidebar' or './layout'
  */

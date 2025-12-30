@@ -12,7 +12,7 @@ import {
   Moon,
   Sun,
   Settings,
-  MessageSquare,
+  Lightbulb,
   BarChart3,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -137,7 +137,7 @@ const Sidebar = () => {
     if (!isResizing) return;
     const newWidth = e.clientX;
     const minWidth = 220;
-    const maxWidth = 280;
+    const maxWidth = 360;
     if (newWidth >= minWidth && newWidth <= maxWidth) {
       setSidebarWidth(newWidth);
     }
@@ -202,17 +202,17 @@ const Sidebar = () => {
   const profileMenuItems = [
     {
       label: isMobile ? t('sidebar_mobile.password') : t('sidebar.changePassword'),
-      icon: <Settings size={14} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
+      icon: <Settings size={16} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
       onClick: () => setShowPasswordModal(true),
     },
     {
       label: isMobile ? t('sidebar_mobile.manual') : t('sidebar.manual'),
-      icon: <BookOpen size={14} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
+      icon: <BookOpen size={14.5} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
       onClick: handleReadManual,
     },
     {
       label: isMobile ? t('sidebar_mobile.feedback') : t('sidebar.sendFeedback'),
-      icon: <MessageSquare size={14} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
+      icon: <Lightbulb size={16} style={{ marginRight: isMobile ? '-1rem' : '.5rem' }} />,
       onClick: handleSendFeedback,
     },
   ];
@@ -324,7 +324,7 @@ const Sidebar = () => {
         {/* Navigation Content */}
         <div style={{ 
           display: 'flex', 
-          fontSize: 'clamp(0.7rem, 2.5vw, 1.25rem)',
+          fontSize: 'clamp(0.7rem, 2.25vw, 1.15rem)',
           flexDirection: isMobile ? 'row' : 'column', 
           alignItems: isMobile ? 'center' : 'flex-start', 
           flex: 1, 

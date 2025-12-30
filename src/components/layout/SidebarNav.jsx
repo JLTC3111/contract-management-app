@@ -183,7 +183,7 @@ export const SubMenu = ({ items }) => {
             <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
               {icon}
             </span>
-            <span style={{ flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ textAlign: 'left', flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {label}
             </span>
           </li>
