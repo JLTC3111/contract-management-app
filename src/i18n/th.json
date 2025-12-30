@@ -400,7 +400,10 @@
   },
   "no_permission_create_contract": "คุณไม่มีสิทธิ์ในการสร้างสัญญาใหม่",
   "analytics": {
-    "title": "การวิเคราะห์สัญญา",
+    "showing": "แสดง",
+     "exportCSV": "ส่งออก CSV",
+    "allStatuses": "สถานะทั้งหมด",
+    "recentHistory": "ประวัติสัญญาล่าสุด",
     "errorLoadingContractData": "ข้อผิดพลาดในการโหลดข้อมูลสัญญา",
     "noContractsAvailable": "ไม่มีสัญญาสำหรับการวิเคราะห์",
     "contractAnalyticsHistory": "การวิเคราะห์และประวัติสัญญา",

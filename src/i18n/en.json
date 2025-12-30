@@ -524,6 +524,10 @@
     "strong": "Strong"
   },
   "analytics": {
+    "showing": "Showing",
+     "exportCSV": "Export to CSV",
+    "allStatuses": "All Statuses",
+    "recentHistory": "Recent History",
     "title": "Contract Analytics",
     "errorLoadingContractData": "Error loading contract data",
     "noContractsAvailable": "No contracts available for analysis",

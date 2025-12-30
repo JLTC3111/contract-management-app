@@ -409,6 +409,10 @@
   },
   "no_permission_create_contract": "Vous n'avez pas la permission de créer de nouveaux contrats.",
   "analytics": {
+    "showing": "Affichage",
+     "exportCSV": "Exporter vers CSV",
+    "allStatuses": "Tous les Statuts",
+    "recentHistory": "Historique Récent",
     "title": "Analytiques des Contrats",
     "errorLoadingContractData": "Erreur lors du chargement des données de contrat",
     "noContractsAvailable": "Aucun contrat disponible pour l'analyse",

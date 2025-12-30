@@ -410,6 +410,10 @@
   },
   "no_permission_create_contract": "新しい契約を作成する権限がありません。",
   "analytics": {
+    "showing": "表示中",
+    "exportCSV": "CSVにエクスポート",
+    "allStatuses": "すべてのステータス",
+    "recentHistory": "最近の履歴",
     "title": "契約分析",
     "errorLoadingContractData": "契約データの読み込みエラー",
     "noContractsAvailable": "分析用の契約がありません",

@@ -424,6 +424,10 @@
     "expires": "Vence"
   },
   "analytics": {
+    "showing": "Mostrando",
+     "exportCSV": "Exportar a CSV",
+    "allStatuses": "Todos los Estados",
+    "recentHistory": "Historial Reciente",
     "title": "Análisis e Historial de Contratos",
     "lastMonth": "Último Mes",
     "last3Months": "Últimos 3 Meses",

@@ -305,7 +305,7 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
             style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: '#10b981', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}
           >
             <Download size={16} />
-            {t('analytics.export', 'Export CSV')}
+            {t('analytics.exportCSV', 'Export CSV')}
           </button>
 
           {/* Refresh button */}

@@ -400,6 +400,10 @@
   },
   "no_permission_create_contract": "您没有权限创建新合同。",
   "analytics": {
+    "showing": "显示",
+     "exportCSV": "导出为CSV",
+    "allStatuses": "所有状态",
+    "recentHistory": "最近合同历史",
     "title": "合同分析",
     "errorLoadingContractData": "加载合同数据错误",
     "noContractsAvailable": "没有可供分析的合同",

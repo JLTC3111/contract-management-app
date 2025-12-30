@@ -409,6 +409,10 @@
   },
   "no_permission_create_contract": "Bạn không có quyền tạo hợp đồng mới.",
   "analytics": {
+    "showing": "Hiển Thị",
+     "exportCSV": "Xuất Sang CSV",
+    "allStatuses": "Tất Cả Trạng Thái",
+    "recentHistory": "Lịch Sử Gần Đây",
     "title": "Phân tích Hợp đồng",
     "errorLoadingContractData": "Lỗi tải dữ liệu hợp đồng",
     "noContractsAvailable": "Không có hợp đồng nào để phân tích",

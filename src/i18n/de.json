@@ -406,6 +406,10 @@
   },
   "no_permission_create_contract": "Sie haben keine Berechtigung, neue Verträge zu erstellen.",
   "analytics": {
+    "showing": "Anzeigen",
+    "exportCSV": "CSV exportieren",
+    "allStatuses": "Alle Status",
+    "recentHistory": "Aktueller Verlauf",
     "title": "Vertragsanalyse",
     "errorLoadingContractData": "Fehler beim Laden der Vertragsdaten",
     "noContractsAvailable": "Keine Verträge für die Analyse verfügbar",
