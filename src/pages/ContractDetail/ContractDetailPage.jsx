@@ -586,7 +586,6 @@ const ContractDetailPage = () => {
     setActionLoading(true);
 
     try {
-      // Use contractsApi which handles demo mode
       const updatedContract = await contractsApi.update(contract.id, {
         title: updated.title?.trim(),
         version: updated.version?.trim(),

@@ -9,6 +9,8 @@
     "newFolder": "Thư Mục Mới"
   },
   "sidebar": {
+    "visitIcueTooltip": "Truy cập iCUE!",
+    "visitIcue": "Truy cập iCUE!",
     "dashboard": "Bảng điều khiển",
     "approvals": "Phê duyệt",
     "manual": "Hướng dẫn",
@@ -43,6 +45,18 @@
     "phaseManagement": "Quản lý Giai đoạn",
     "demoMode": "Chế độ demo",
     "exitDemo": "Thoát"
+  },
+  "demoSamples": {
+    "title": "Sample Projects",
+    "description": "Preloaded sample projects to explore application features.",
+    "projects": {
+      "sample_contract_a": "Sample Contract A",
+      "sample_contract_b": "Sample Contract B",
+      "sample_contract_c": "Sample Contract C"
+    },
+    "loadSample": "Load Sample",
+    "clearSamples": "Clear Demo Samples",
+    "noSamples": "No demo samples available"
   },
   "buttons": {
     "delete": "Xóa",

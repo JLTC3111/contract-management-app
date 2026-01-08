@@ -9,7 +9,7 @@
     "newFolder": "New Folder"
   },
   "sidebar": {
-    "visitIcue": "Visit iCUE!",
+    "visitIcueTooltip": "Visit iCUE!",
     "home": "Home",
     "dashboard": "Dashboard",
     "approvals": "Approvals",
@@ -40,11 +40,22 @@
       "viewer": "Read-only access to all contracts.",
       "unknown": "Role not recognized."
     },
-    "visitIcueTooltip": "Visit iCUE!",
     "analytics": "Analytics & History",
     "phaseManagement": "Phase Management",
     "demoMode": "Demo Mode",
     "exitDemo": "Exit"
+  },
+  "demoSamples": {
+    "title": "Sample Projects",
+    "description": "Preloaded sample projects to explore application features.",
+    "projects": {
+      "sample_contract_a": "Sample Contract A",
+      "sample_contract_b": "Sample Contract B",
+      "sample_contract_c": "Sample Contract C"
+    },
+    "loadSample": "Load Sample",
+    "clearSamples": "Clear Demo Samples",
+    "noSamples": "No demo samples available"
   },
   "buttons": {
     "delete": "Delete",

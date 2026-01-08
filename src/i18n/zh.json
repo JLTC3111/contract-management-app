@@ -1,5 +1,7 @@
 {
   "sidebar": {
+    "visitIcueTooltip": "访问 iCUE！",
+    "visitIcue": "访问 iCUE！",
     "dashboard": "仪表板",
     "approvals": "审批",
     "manual": "手册",
@@ -34,6 +36,18 @@
     "phaseManagement": "阶段管理",
     "demoMode": "演示模式",
     "exitDemo": "退出"
+  },
+  "demoSamples": {
+    "title": "Sample Projects",
+    "description": "Preloaded sample projects to explore application features.",
+    "projects": {
+      "sample_contract_a": "Sample Contract A",
+      "sample_contract_b": "Sample Contract B",
+      "sample_contract_c": "Sample Contract C"
+    },
+    "loadSample": "Load Sample",
+    "clearSamples": "Clear Demo Samples",
+    "noSamples": "No demo samples available"
   },
   "buttons": {
     "delete": "删除",

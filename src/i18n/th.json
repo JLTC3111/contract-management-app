@@ -9,6 +9,8 @@
     "newFolder": "โฟลเดอร์ใหม่"
   },
   "sidebar": {
+    "visitIcueTooltip": "เยี่ยมชม iCUE!",
+    "visitIcue": "เยี่ยมชม iCUE!",
     "dashboard": "แดชบอร์ด",
     "approvals": "การอนุมัติ",
     "manual": "คู่มือ",
@@ -43,6 +45,18 @@
     "phaseManagement": "การจัดการขั้นตอน",
     "demoMode": "โหมดสาธิต",
     "exitDemo": "ออก"
+  },
+  "demoSamples": {
+    "title": "Sample Projects",
+    "description": "Preloaded sample projects to explore application features.",
+    "projects": {
+      "sample_contract_a": "Sample Contract A",
+      "sample_contract_b": "Sample Contract B",
+      "sample_contract_c": "Sample Contract C"
+    },
+    "loadSample": "Load Sample",
+    "clearSamples": "Clear Demo Samples",
+    "noSamples": "No demo samples available"
   },
   "buttons": {
     "delete": "ลบ",

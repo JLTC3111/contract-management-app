@@ -9,6 +9,8 @@
     "newFolder": "Nueva carpeta"
   },
   "sidebar": {
+    "visitIcueTooltip": "¡Visitar iCUE!",
+    "visitIcue": "¡Visitar iCUE!",
     "dashboard": "Panel de control",
     "approvals": "Aprobaciones",
     "manual": "Manual",
@@ -43,6 +45,18 @@
     "phaseManagement": "Gestión de Fases",
     "demoMode": "Modo demo",
     "exitDemo": "Salir"
+  },
+  "demoSamples": {
+    "title": "Sample Projects",
+    "description": "Preloaded sample projects to explore application features.",
+    "projects": {
+      "sample_contract_a": "Sample Contract A",
+      "sample_contract_b": "Sample Contract B",
+      "sample_contract_c": "Sample Contract C"
+    },
+    "loadSample": "Load Sample",
+    "clearSamples": "Clear Demo Samples",
+    "noSamples": "No demo samples available"
   },
   "buttons": {
     "delete": "Eliminar",

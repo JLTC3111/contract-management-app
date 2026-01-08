@@ -9,6 +9,8 @@
     "newFolder": "新しいフォルダー"
   },
   "sidebar": {
+    "visitIcueTooltip": "iCUEにアクセス！",
+    "visitIcue": "iCUEにアクセス！",
     "dashboard": "ダッシュボード",
     "approvals": "承認",
     "manual": "マニュアル",
@@ -43,6 +45,18 @@
     "phaseManagement": "段階管理",
     "demoMode": "デモモード",
     "exitDemo": "終了"
+  },
+  "demoSamples": {
+    "title": "Sample Projects",
+    "description": "Preloaded sample projects to explore application features.",
+    "projects": {
+      "sample_contract_a": "Sample Contract A",
+      "sample_contract_b": "Sample Contract B",
+      "sample_contract_c": "Sample Contract C"
+    },
+    "loadSample": "Load Sample",
+    "clearSamples": "Clear Demo Samples",
+    "noSamples": "No demo samples available"
   },
   "buttons": {
     "delete": "削除",
