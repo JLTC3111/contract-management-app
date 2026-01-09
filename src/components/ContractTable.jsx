@@ -11,7 +11,7 @@ import './Table.css';
 
 // Centralized utilities
 import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS, getStatusColor } from '../utils/constants';
-import { formatDate, getDaysUntilExpiry } from '../utils/formatters';
+import { formatDate, getDaysUntilExpiry, getI18nOrFallback } from '../utils/formatters';
 import { StatusBadge } from './common';
 
 const ICON_COMPONENTS = {
@@ -444,7 +444,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               }}
               onClick={() => navigate(`/contracts/${contract.id}`)}
             >
-              <td>{highlight(contract.title || t('contractTable.untitledContract'), searchQuery)}</td>
+              <td>{highlight(getI18nOrFallback(t, contract, 'title_i18n', 'title') || t('contractTable.untitledContract'), searchQuery)}</td>
               <td>
                 {(() => {
                   const rawStatus = contract.status?.toLowerCase();

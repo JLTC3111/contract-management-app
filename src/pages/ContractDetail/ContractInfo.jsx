@@ -88,7 +88,7 @@ const ContractInfo = ({
             style={inputStyle}
           />
         ) : (
-          <span style={valueStyle}>{contract.title}</span>
+          <span style={valueStyle}>{t(contract.title_i18n, contract.title)}</span>
         )}
       </div>
 

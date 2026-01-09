@@ -5,6 +5,7 @@ import {
   Play, CheckCheck, RotateCcw, RefreshCw
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { getI18nOrFallback } from '../utils/formatters';
 import { useTheme } from '../hooks/useTheme';
 import { supabase } from '../utils/supaBaseClient';
 import toast from 'react-hot-toast';
@@ -366,7 +367,7 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
             {t('phaseManagement.title', 'Contract Phase Management')}
           </h1>
           {contract?.title && (
-            <p style={{ color: 'var(--text)', opacity: 0.7, margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>{contract.title}</p>
+            <p style={{ color: 'var(--text)', opacity: 0.7, margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>{getI18nOrFallback(t, contract, 'title_i18n', 'title')}</p>
           )}
         </div>
         {saving && (

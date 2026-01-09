@@ -50,13 +50,42 @@
     "title": "Sample Projects",
     "description": "Preloaded sample projects to explore application features.",
     "projects": {
-      "sample_contract_a": "Sample Contract A",
-      "sample_contract_b": "Sample Contract B",
-      "sample_contract_c": "Sample Contract C"
+      "sample_contract_1": "ウェブサイト再設計契約",
+      "sample_contract_1_description": "レスポンシブデザインと新しいブランディングを含む企業サイトの完全な再設計。",
+      "sample_contract_2": "ソフトウェアライセンス契約",
+      "sample_contract_2_description": "社内開発ツールおよびIDEの年間ライセンス。",
+      "sample_contract_3": "コンサルティングサービス契約",
+      "sample_contract_3_description": "デジタルトランスフォーメーション戦略に関するコンサルティング契約の草案。",
+      "sample_contract_4": "オフィス賃貸契約",
+      "sample_contract_4_description": "123 Business Ave. の中心部オフィススペースの賃貸契約。",
+      "sample_contract_5": "HVAC保守契約",
+      "sample_contract_5_description": "オフィスビルの年間HVAC保守契約。",
+      "sample_contract_6": "マーケティングキャンペーン契約",
+      "sample_contract_6_description": "ソーシャルメディア、PPC、コンテンツマーケティングを含むQ1キャンペーン。"
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
-    "noSamples": "No demo samples available"
+    "noSamples": "No demo samples available",
+    "comments": {
+      "comment_1": "契約は法務チームによって確認・承認されました。",
+      "comment_2": "更新された条件についてクライアントの署名を待っています。",
+      "comment_3": "賃貸契約の期限が近づいています！更新条件を交渉する必要があります。"
+    },
+    "phases": {
+      "phase_1": "調査と計画",
+      "phase_2": "設計と開発",
+      "phase_3": "テストとローンチ"
+    },
+    "approvals": {
+      "approval_1": "更新されたライセンス条件を確認し、承認してください。"
+    },
+    "files": {
+      "file_1": "contract-agreement.pdf",
+      "file_2": "design-mockups.zip",
+      "file_3": "license-terms.docx",
+      "file_4": "budget-breakdown.xlsx",
+      "file_5": "project-logo.png"
+    }
   },
   "buttons": {
     "delete": "削除",

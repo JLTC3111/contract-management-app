@@ -50,13 +50,42 @@
     "title": "Sample Projects",
     "description": "Preloaded sample projects to explore application features.",
     "projects": {
-      "sample_contract_a": "Sample Contract A",
-      "sample_contract_b": "Sample Contract B",
-      "sample_contract_c": "Sample Contract C"
+      "sample_contract_1": "Contrato de Rediseño del Sitio Web",
+      "sample_contract_1_description": "Rediseño completo del sitio web corporativo, incluido diseño responsive y nueva identidad de marca.",
+      "sample_contract_2": "Acuerdo de Licencia de Software",
+      "sample_contract_2_description": "Licencia anual de software para herramientas de desarrollo internas y suscripciones de IDE.",
+      "sample_contract_3": "Acuerdo de Servicios de Consultoría",
+      "sample_contract_3_description": "Borrador de compromiso de consultoría para la estrategia de transformación digital.",
+      "sample_contract_4": "Contrato de Arrendamiento de Oficina",
+      "sample_contract_4_description": "Contrato de arrendamiento de oficina en el centro en 123 Business Ave.",
+      "sample_contract_5": "Contrato de Mantenimiento HVAC",
+      "sample_contract_5_description": "Contrato anual de mantenimiento HVAC para el edificio de oficinas.",
+      "sample_contract_6": "Acuerdo de Campaña de Marketing",
+      "sample_contract_6_description": "Campaña de marketing del Q1 que incluye redes sociales, PPC y marketing de contenidos."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
-    "noSamples": "No demo samples available"
+    "noSamples": "No demo samples available",
+    "comments": {
+      "comment_1": "El contrato ha sido revisado y aprobado por el equipo legal.",
+      "comment_2": "Esperando la firma del cliente sobre los términos actualizados.",
+      "comment_3": "¡El contrato de arrendamiento vence pronto! Necesitamos negociar la renovación."
+    },
+    "phases": {
+      "phase_1": "Descubrimiento y Planificación",
+      "phase_2": "Diseño y Desarrollo",
+      "phase_3": "Pruebas y Lanzamiento"
+    },
+    "approvals": {
+      "approval_1": "Por favor, revise y apruebe los términos de licencia actualizados."
+    },
+    "files": {
+      "file_1": "contract-agreement.pdf",
+      "file_2": "design-mockups.zip",
+      "file_3": "license-terms.docx",
+      "file_4": "budget-breakdown.xlsx",
+      "file_5": "project-logo.png"
+    }
   },
   "buttons": {
     "delete": "Eliminar",

@@ -15,6 +15,7 @@ if (typeof window !== 'undefined' && !window.gsap) {
   window.gsap = gsap;
 }
 import { useTranslation } from 'react-i18next';
+import { getI18nOrFallback } from '../utils/formatters';
 import { useTheme } from '../hooks/useTheme';
 import JSZip from 'jszip';
 import CommentSection from '../components/CommentSection';
@@ -223,8 +224,8 @@ useEffect(() => {
             const isLast = index === displayParts.length - 1;
     
             const displayLabel = isContractId
-              ? ` ${contract.title || 'Contract'}`
-              : part;
+                  ? ` ${getI18nOrFallback(t, contract, 'title_i18n', 'title') || 'Contract'}`
+                  : part;
     
             const pathSlice = parts.slice(0, (parts[0] === 'uploads' ? 1 : 0) + index + 1).join('/');
     
@@ -911,7 +912,7 @@ return (
               style={{ fontSize: 'clamp(1.1rem, 4vw, 2rem)' }}
             />
           ) : (
-            <span style={{ fontSize: 'clamp(1.1rem, 3vw, 1.8rem)' }}>{contract.title}</span>
+            <span style={{ fontSize: 'clamp(1.1rem, 3vw, 1.8rem)' }}>{getI18nOrFallback(t, contract, 'title_i18n', 'title')}</span>
           )}
         </h2>
   

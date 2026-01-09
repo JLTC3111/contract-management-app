@@ -5,6 +5,7 @@ import {
   FileText, Settings, Download, Share2
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { getI18nOrFallback } from '../utils/formatters';
 import { useTheme } from '../hooks/useTheme';
 import { useUser } from '../hooks/useUser';
 import { supabase } from '../utils/supaBaseClient';
@@ -219,7 +220,7 @@ const ContractLifecycleManager = () => {
                     fontSize: '1.3rem',
                     fontWeight: '600'
                   }}>
-                    {contract.title}
+                    {getI18nOrFallback(t, contract, 'title_i18n', 'title')}
                   </h2>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
                     <span style={{

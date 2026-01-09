@@ -50,13 +50,42 @@
     "title": "Sample Projects",
     "description": "Preloaded sample projects to explore application features.",
     "projects": {
-      "sample_contract_a": "Sample Contract A",
-      "sample_contract_b": "Sample Contract B",
-      "sample_contract_c": "Sample Contract C"
+      "sample_contract_1": "Hợp đồng Thiết kế Lại Website",
+      "sample_contract_1_description": "Thiết kế lại toàn bộ trang web công ty bao gồm giao diện đáp ứng và thương hiệu mới.",
+      "sample_contract_2": "Hợp đồng Cấp phép Phần mềm",
+      "sample_contract_2_description": "Bản quyền phần mềm hàng năm cho công cụ phát triển nội bộ và đăng ký IDE.",
+      "sample_contract_3": "Hợp đồng Dịch vụ Tư vấn",
+      "sample_contract_3_description": "Bản nháp hợp đồng tư vấn về chiến lược chuyển đổi số.",
+      "sample_contract_4": "Hợp đồng Thuê Văn phòng",
+      "sample_contract_4_description": "Hợp đồng thuê văn phòng ở trung tâm tại 123 Business Ave.",
+      "sample_contract_5": "Hợp đồng Bảo trì HVAC",
+      "sample_contract_5_description": "Hợp đồng bảo trì HVAC hàng năm cho tòa nhà văn phòng.",
+      "sample_contract_6": "Hợp đồng Chiến dịch Marketing",
+      "sample_contract_6_description": "Chiến dịch marketing quý 1 bao gồm mạng xã hội, PPC và nội dung marketing."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
-    "noSamples": "No demo samples available"
+    "noSamples": "No demo samples available",
+    "comments": {
+      "comment_1": "Hợp đồng đã được đội pháp lý xem xét và phê duyệt.",
+      "comment_2": "Đang chờ chữ ký của khách hàng về các điều khoản đã cập nhật.",
+      "comment_3": "Hợp đồng thuê sắp hết hạn! Cần đàm phán điều khoản gia hạn."
+    },
+    "phases": {
+      "phase_1": "Khám phá & Lập kế hoạch",
+      "phase_2": "Thiết kế & Phát triển",
+      "phase_3": "Kiểm thử & Ra mắt"
+    },
+    "approvals": {
+      "approval_1": "Vui lòng xem xét và phê duyệt các điều khoản cấp phép đã cập nhật."
+    },
+    "files": {
+      "file_1": "contract-agreement.pdf",
+      "file_2": "design-mockups.zip",
+      "file_3": "license-terms.docx",
+      "file_4": "budget-breakdown.xlsx",
+      "file_5": "project-logo.png"
+    }
   },
   "buttons": {
     "delete": "Xóa",

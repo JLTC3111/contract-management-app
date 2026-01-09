@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
+import { getI18nOrFallback } from '../utils/formatters';
 import gsap from 'gsap';
 
 const COLORS = ['#10b981', '#f59e0b', '#ef4444', '#6b7280', '#8b5cf6', '#06b6d4'];
@@ -432,7 +433,7 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
             <tbody>
               {paginatedContracts.map((contract) => (
                 <tr key={contract.id} style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                  <td style={{ padding: '1rem', color: 'var(--text)' }}>{contract.title}</td>
+                  <td style={{ padding: '1rem', color: 'var(--text)' }}>{getI18nOrFallback(t, contract, 'title_i18n', 'title')}</td>
                   <td style={{ padding: '1rem' }}>
                     <span style={{ padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.85rem', backgroundColor: `${STATUS_COLORS[contract.status] || '#6b7280'}20`, color: STATUS_COLORS[contract.status] || '#6b7280' }}>
                       {t(`contractTable.status.${contract.status}`, contract.status)}

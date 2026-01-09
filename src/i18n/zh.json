@@ -41,13 +41,42 @@
     "title": "Sample Projects",
     "description": "Preloaded sample projects to explore application features.",
     "projects": {
-      "sample_contract_a": "Sample Contract A",
-      "sample_contract_b": "Sample Contract B",
-      "sample_contract_c": "Sample Contract C"
+      "sample_contract_1": "网站改版合同",
+      "sample_contract_1_description": "对公司网站进行全面改版，包括响应式设计和新的品牌形象。",
+      "sample_contract_2": "软件许可协议",
+      "sample_contract_2_description": "用于内部开发工具和IDE订阅的年度软件许可。",
+      "sample_contract_3": "咨询服务协议",
+      "sample_contract_3_description": "关于数字化转型策略的咨询服务协议草案。",
+      "sample_contract_4": "办公租赁合同",
+      "sample_contract_4_description": "位于市中心123 Business Ave的办公空间租赁合同。",
+      "sample_contract_5": "暖通维护合同",
+      "sample_contract_5_description": "办公楼的年度暖通（HVAC）维护合同。",
+      "sample_contract_6": "营销活动合同",
+      "sample_contract_6_description": "包含社交媒体、PPC和内容营销的第一季度营销活动。"
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
-    "noSamples": "No demo samples available"
+    "noSamples": "No demo samples available",
+    "comments": {
+      "comment_1": "合同已由法律团队审查并批准。",
+      "comment_2": "正在等待客户对更新条款的签署。",
+      "comment_3": "租约即将到期！需要协商续约条款。"
+    },
+    "phases": {
+      "phase_1": "调研与规划",
+      "phase_2": "设计与开发",
+      "phase_3": "测试与上线"
+    },
+    "approvals": {
+      "approval_1": "请审阅并批准更新后的许可条款。"
+    },
+    "files": {
+      "file_1": "contract-agreement.pdf",
+      "file_2": "design-mockups.zip",
+      "file_3": "license-terms.docx",
+      "file_4": "budget-breakdown.xlsx",
+      "file_5": "project-logo.png"
+    }
   },
   "buttons": {
     "delete": "删除",

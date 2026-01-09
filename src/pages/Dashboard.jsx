@@ -9,6 +9,7 @@ import { useUser } from '../hooks/useUser';
 import { Search, FilePenLine, CheckCircle } from 'lucide-react';
 import NotificationDropdown from '../components/NotificationDropdown';
 import { useTranslation } from 'react-i18next';
+import { getI18nOrFallback } from '../utils/formatters';
 
 
 const Dashboard = () => {
@@ -192,14 +193,14 @@ const Dashboard = () => {
             return;
           }
           let results = [];
-          for (const contract of contracts) {
+                for (const contract of contracts) {
             const basePath = `uploads/${contract.id}`;
             const allItems = await listAllFilesRecursive(basePath);
             for (const item of allItems) {
               if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
                 results.push({
                   contractId: contract.id,
-                  contractTitle: contract.title,
+                        contractTitle: getI18nOrFallback(t, contract, 'title_i18n', 'title'),
                   name: item.name,
                   isFolder: item.isFolder,
                   path: item.basePath,

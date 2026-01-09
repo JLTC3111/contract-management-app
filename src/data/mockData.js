@@ -9,7 +9,8 @@ const DEMO_APPROVALS_KEY = 'demo_approvals';
 const INITIAL_MOCK_CONTRACTS = [
   {
     id: 'demo-contract-1',
-    title: 'Website Redesign Contract',
+    title_i18n: 'demoSamples.projects.sample_contract_1',
+    description_i18n: 'demoSamples.projects.sample_contract_1_description',
     status: 'approved',
     author: 'Demo User',
     author_id: 'demo-user-id',
@@ -25,7 +26,8 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-2',
-    title: 'Software License Agreement',
+    title_i18n: 'demoSamples.projects.sample_contract_2',
+    description_i18n: 'demoSamples.projects.sample_contract_2_description',
     status: 'pending',
     author: 'Demo User',
     author_id: 'demo-user-id',
@@ -41,7 +43,8 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-3',
-    title: 'Consulting Services Agreement',
+    title_i18n: 'demoSamples.projects.sample_contract_3',
+    description_i18n: 'demoSamples.projects.sample_contract_3_description',
     status: 'draft',
     author: 'Demo User',
     author_id: 'demo-user-id',
@@ -57,7 +60,8 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-4',
-    title: 'Office Lease Agreement',
+    title_i18n: 'demoSamples.projects.sample_contract_4',
+    description_i18n: 'demoSamples.projects.sample_contract_4_description',
     status: 'expiring',
     author: 'Demo User',
     author_id: 'demo-user-id',
@@ -73,7 +77,8 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-5',
-    title: 'HVAC Maintenance Contract',
+    title_i18n: 'demoSamples.projects.sample_contract_5',
+    description_i18n: 'demoSamples.projects.sample_contract_5_description',
     status: 'expired',
     author: 'Demo User',
     author_id: 'demo-user-id',
@@ -89,7 +94,8 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-6',
-    title: 'Marketing Campaign Agreement',
+    title_i18n: 'demoSamples.projects.sample_contract_6',
+    description_i18n: 'demoSamples.projects.sample_contract_6_description',
     status: 'approved',
     author: 'Demo User',
     author_id: 'demo-user-id',
@@ -113,6 +119,7 @@ const INITIAL_MOCK_COMMENTS = [
     user_id: 'demo-user-id',
     user_name: 'Demo User',
     content: 'Contract has been reviewed and approved by legal team.',
+    content_i18n: 'demoSamples.comments.comment_1',
     created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
   },
   {
@@ -121,6 +128,7 @@ const INITIAL_MOCK_COMMENTS = [
     user_id: 'demo-user-id',
     user_name: 'Demo User',
     content: 'Waiting for client signature on the updated terms.',
+    content_i18n: 'demoSamples.comments.comment_2',
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
   },
   {
@@ -129,6 +137,7 @@ const INITIAL_MOCK_COMMENTS = [
     user_id: 'demo-user-id',
     user_name: 'Demo User',
     content: 'Lease expires soon! Need to negotiate renewal terms.',
+    content_i18n: 'demoSamples.comments.comment_3',
     created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
   },
 ];
@@ -140,6 +149,7 @@ const INITIAL_MOCK_PHASES = [
     contract_id: 'demo-contract-1',
     phase_number: 1,
     name: 'Discovery & Planning',
+    name_i18n: 'demoSamples.phases.phase_1',
     status: 'completed',
     start_date: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
     end_date: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
@@ -149,6 +159,7 @@ const INITIAL_MOCK_PHASES = [
     contract_id: 'demo-contract-1',
     phase_number: 2,
     name: 'Design & Development',
+    name_i18n: 'demoSamples.phases.phase_2',
     status: 'in_progress',
     start_date: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
     end_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
@@ -158,6 +169,7 @@ const INITIAL_MOCK_PHASES = [
     contract_id: 'demo-contract-1',
     phase_number: 3,
     name: 'Testing & Launch',
+    name_i18n: 'demoSamples.phases.phase_3',
     status: 'pending',
     start_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
     end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
@@ -173,6 +185,7 @@ const INITIAL_MOCK_APPROVALS = [
     requested_by_name: 'Demo User',
     status: 'pending',
     message: 'Please review and approve the updated license terms.',
+    message_i18n: 'demoSamples.approvals.approval_1',
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
   },
 ];
@@ -182,6 +195,7 @@ const INITIAL_MOCK_FILES = [
   {
     id: 'demo-file-1',
     name: 'contract-agreement.pdf',
+    name_i18n: 'demoSamples.files.file_1',
     path: 'uploads/demo-contract-1/contract-agreement.pdf',
     size: 245000,
     type: 'application/pdf',
@@ -192,6 +206,7 @@ const INITIAL_MOCK_FILES = [
   {
     id: 'demo-file-2',
     name: 'design-mockups.zip',
+    name_i18n: 'demoSamples.files.file_2',
     path: 'uploads/demo-contract-1/design-mockups.zip',
     size: 15000000,
     type: 'application/zip',
@@ -202,6 +217,7 @@ const INITIAL_MOCK_FILES = [
   {
     id: 'demo-file-3',
     name: 'license-terms.docx',
+    name_i18n: 'demoSamples.files.file_3',
     path: 'uploads/demo-contract-2/license-terms.docx',
     size: 85000,
     type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -212,6 +228,7 @@ const INITIAL_MOCK_FILES = [
   {
     id: 'demo-file-4',
     name: 'budget-breakdown.xlsx',
+    name_i18n: 'demoSamples.files.file_4',
     path: 'uploads/demo-contract-3/budget-breakdown.xlsx',
     size: 125000,
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -222,6 +239,7 @@ const INITIAL_MOCK_FILES = [
   {
     id: 'demo-file-5',
     name: 'project-logo.png',
+    name_i18n: 'demoSamples.files.file_5',
     path: 'uploads/demo-contract-1/project-logo.png',
     size: 450000,
     type: 'image/png',
@@ -243,7 +261,34 @@ export const MOCK_USER = {
 export const getDemoContracts = () => {
   const stored = localStorage.getItem(DEMO_CONTRACTS_KEY);
   if (stored) {
-    return JSON.parse(stored);
+    try {
+      const parsed = JSON.parse(stored);
+      // Merge missing i18n keys from defaults so translations resolve
+      const defaultsById = (INITIAL_MOCK_CONTRACTS || []).reduce((acc, c) => {
+        if (c && c.id) acc[c.id] = c;
+        return acc;
+      }, {});
+
+      const merged = parsed.map(item => {
+        const def = defaultsById[item.id] || {};
+        return {
+          // Defaults first, then stored values override runtime fields
+          ...def,
+          ...item,
+          // Ensure i18n keys exist when available in defaults
+          title_i18n: item.title_i18n || def.title_i18n,
+          description_i18n: item.description_i18n || def.description_i18n,
+        };
+      });
+
+      // Persist merged back to localStorage to keep consistency
+      localStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(merged));
+      return merged;
+    } catch (e) {
+      console.error('Failed to parse stored demo contracts, resetting to defaults', e);
+      localStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(INITIAL_MOCK_CONTRACTS));
+      return INITIAL_MOCK_CONTRACTS;
+    }
   }
   // Initialize with default data
   localStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(INITIAL_MOCK_CONTRACTS));

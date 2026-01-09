@@ -49,13 +49,42 @@
     "title": "Sample Projects",
     "description": "Preloaded sample projects to explore application features.",
     "projects": {
-      "sample_contract_a": "Sample Contract A",
-      "sample_contract_b": "Sample Contract B",
-      "sample_contract_c": "Sample Contract C"
+      "sample_contract_1": "Vertrag zur Neugestaltung der Website",
+      "sample_contract_1_description": "Komplette Neugestaltung der Firmenwebsite, einschließlich responsivem Design und neuem Branding.",
+      "sample_contract_2": "Softwarelizenzvertrag",
+      "sample_contract_2_description": "Jährliche Softwarelizenz für interne Entwicklungstools und IDE-Abonnements.",
+      "sample_contract_3": "Beratungsleistungsvertrag",
+      "sample_contract_3_description": "Entwurf für ein anstehendes Beratungsprojekt zur Strategie der digitalen Transformation.",
+      "sample_contract_4": "Büromietvertrag",
+      "sample_contract_4_description": "Mietvertrag für Büroräume in der Innenstadt, 123 Business Ave.",
+      "sample_contract_5": "Wartungsvertrag für HLK-Anlagen",
+      "sample_contract_5_description": "Jährlicher Wartungsvertrag für HLK-Anlagen des Bürogebäudes.",
+      "sample_contract_6": "Vertrag zur Marketingkampagne",
+      "sample_contract_6_description": "Marketingkampagne für Q1, einschließlich Social Media, PPC und Content-Marketing."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
-    "noSamples": "No demo samples available"
+    "noSamples": "No demo samples available",
+    "comments": {
+      "comment_1": "Der Vertrag wurde vom Rechtsteam geprüft und genehmigt.",
+      "comment_2": "Warten auf die Unterschrift des Kunden zu den aktualisierten Bedingungen.",
+      "comment_3": "Der Mietvertrag läuft bald ab! Erneuerungsbedingungen verhandeln."
+    },
+    "phases": {
+      "phase_1": "Erkundung & Planung",
+      "phase_2": "Design & Entwicklung",
+      "phase_3": "Test & Einführung"
+    },
+    "approvals": {
+      "approval_1": "Bitte überprüfen und genehmigen Sie die aktualisierten Lizenzbedingungen."
+    },
+    "files": {
+      "file_1": "contract-agreement.pdf",
+      "file_2": "design-mockups.zip",
+      "file_3": "license-terms.docx",
+      "file_4": "budget-breakdown.xlsx",
+      "file_5": "project-logo.png"
+    }
   },
   "buttons": {
     "delete": "Löschen",

@@ -285,3 +285,19 @@ export const toTitleCase = (str) => {
     .replace(/^./, (char) => char.toUpperCase())
     .trim();
 };
+
+/**
+ * Return a translated string when an i18n key field exists on an object,
+ * otherwise return a fallback string field.
+ * @param {Function} t - i18next translation function
+ * @param {object} obj - object containing i18n and fallback fields
+ * @param {string} i18nField - name of the field that holds the i18n key (e.g. 'title_i18n')
+ * @param {string} fallbackField - name of the fallback field (e.g. 'title')
+ * @returns {string}
+ */
+export const getI18nOrFallback = (t, obj = {}, i18nField = 'title_i18n', fallbackField = 'title') => {
+  if (!t) return obj[fallbackField] || '';
+  const key = obj && obj[i18nField];
+  if (key) return t(key, obj[fallbackField] || '');
+  return obj[fallbackField] || '';
+};

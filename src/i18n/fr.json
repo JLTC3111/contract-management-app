@@ -50,13 +50,42 @@
     "title": "Sample Projects",
     "description": "Preloaded sample projects to explore application features.",
     "projects": {
-      "sample_contract_a": "Sample Contract A",
-      "sample_contract_b": "Sample Contract B",
-      "sample_contract_c": "Sample Contract C"
+      "sample_contract_1": "Contrat de refonte du site Web",
+      "sample_contract_1_description": "Refonte complète du site d'entreprise, incluant design responsive et nouvelle identité de marque.",
+      "sample_contract_2": "Contrat de licence logicielle",
+      "sample_contract_2_description": "Licence logicielle annuelle pour les outils de développement internes et abonnements IDE.",
+      "sample_contract_3": "Contrat de services de conseil",
+      "sample_contract_3_description": "Brouillon d'engagement de conseil couvrant la stratégie de transformation numérique.",
+      "sample_contract_4": "Contrat de location de bureau",
+      "sample_contract_4_description": "Contrat de location pour des bureaux au centre-ville, 123 Business Ave.",
+      "sample_contract_5": "Contrat de maintenance CVC",
+      "sample_contract_5_description": "Contrat annuel de maintenance CVC pour le bâtiment de bureaux.",
+      "sample_contract_6": "Contrat de campagne marketing",
+      "sample_contract_6_description": "Campagne marketing T1 incluant réseaux sociaux, PPC et marketing de contenu."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
-    "noSamples": "No demo samples available"
+    "noSamples": "No demo samples available",
+    "comments": {
+      "comment_1": "Le contrat a été examiné et approuvé par l'équipe juridique.",
+      "comment_2": "En attente de la signature du client sur les conditions mises à jour.",
+      "comment_3": "Le bail expire bientôt ! Besoin de renégocier les conditions de renouvellement."
+    },
+    "phases": {
+      "phase_1": "Découverte & Planification",
+      "phase_2": "Conception & Développement",
+      "phase_3": "Tests & Lancement"
+    },
+    "approvals": {
+      "approval_1": "Veuillez examiner et approuver les conditions de licence mises à jour."
+    },
+    "files": {
+      "file_1": "contract-agreement.pdf",
+      "file_2": "design-mockups.zip",
+      "file_3": "license-terms.docx",
+      "file_4": "budget-breakdown.xlsx",
+      "file_5": "project-logo.png"
+    }
   },
   "buttons": {
     "delete": "Supprimer",

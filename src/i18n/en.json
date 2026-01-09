@@ -49,13 +49,42 @@
     "title": "Sample Projects",
     "description": "Preloaded sample projects to explore application features.",
     "projects": {
-      "sample_contract_a": "Sample Contract A",
-      "sample_contract_b": "Sample Contract B",
-      "sample_contract_c": "Sample Contract C"
+      "sample_contract_1": "Website Redesign Contract",
+      "sample_contract_1_description": "Complete redesign of the corporate website including responsive design and new branding.",
+      "sample_contract_2": "Software License Agreement",
+      "sample_contract_2_description": "Annual software license for internal development tools and IDE subscriptions.",
+      "sample_contract_3": "Consulting Services Agreement",
+      "sample_contract_3_description": "Draft consulting engagement covering digital transformation strategy.",
+      "sample_contract_4": "Office Lease Agreement",
+      "sample_contract_4_description": "Lease agreement for downtown office space at 123 Business Ave.",
+      "sample_contract_5": "HVAC Maintenance Contract",
+      "sample_contract_5_description": "Annual HVAC maintenance agreement for office building.",
+      "sample_contract_6": "Marketing Campaign Agreement",
+      "sample_contract_6_description": "Q1 marketing campaign including social media, PPC, and content marketing."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
-    "noSamples": "No demo samples available"
+    "noSamples": "No demo samples available",
+    "comments": {
+      "comment_1": "Contract has been reviewed and approved by legal team.",
+      "comment_2": "Waiting for client signature on the updated terms.",
+      "comment_3": "Lease expires soon! Need to negotiate renewal terms."
+    },
+    "phases": {
+      "phase_1": "Discovery & Planning",
+      "phase_2": "Design & Development",
+      "phase_3": "Testing & Launch"
+    },
+    "approvals": {
+      "approval_1": "Please review and approve the updated license terms."
+    },
+    "files": {
+      "file_1": "contract-agreement.pdf",
+      "file_2": "design-mockups.zip",
+      "file_3": "license-terms.docx",
+      "file_4": "budget-breakdown.xlsx",
+      "file_5": "project-logo.png"
+    }
   },
   "buttons": {
     "delete": "Delete",

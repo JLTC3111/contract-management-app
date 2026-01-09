@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import gsap from 'gsap';
 
 import { getFileIcon, getOriginalFileName } from './fileUtils';
+import { getI18nOrFallback } from '../../utils/formatters';
 
 const FileBrowser = ({
   contract,
@@ -106,7 +107,7 @@ const FileBrowser = ({
         {displayParts.map((part, index) => {
           const isContractId = part === String(contract.id);
           const isLast = index === displayParts.length - 1;
-          const displayLabel = isContractId ? ` ${contract.title || 'Contract'}` : part;
+          const displayLabel = isContractId ? ` ${getI18nOrFallback(t, contract, 'title_i18n', 'title') || 'Contract'}` : part;
           const pathSlice = parts.slice(0, (parts[0] === 'uploads' ? 1 : 0) + index + 1).join('/');
 
           return (

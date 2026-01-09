@@ -50,13 +50,42 @@
     "title": "Sample Projects",
     "description": "Preloaded sample projects to explore application features.",
     "projects": {
-      "sample_contract_a": "Sample Contract A",
-      "sample_contract_b": "Sample Contract B",
-      "sample_contract_c": "Sample Contract C"
+      "sample_contract_1": "สัญญาการปรับโฉมเว็บไซต์",
+      "sample_contract_1_description": "การปรับโฉมเว็บไซต์องค์กรทั้งหมด รวมถึงการออกแบบตอบสนองและแบรนด์ใหม่",
+      "sample_contract_2": "สัญญาอนุญาตใช้ซอฟต์แวร์",
+      "sample_contract_2_description": "ใบอนุญาตซอฟต์แวร์ประจำปีสำหรับเครื่องมือพัฒนาภายในและการสมัคร IDE",
+      "sample_contract_3": "สัญญาบริการให้คำปรึกษา",
+      "sample_contract_3_description": "ร่างข้อตกลงการให้คำปรึกษาสำหรับกลยุทธ์การเปลี่ยนแปลงดิจิทัล",
+      "sample_contract_4": "สัญญาเช่าสำนักงาน",
+      "sample_contract_4_description": "สัญญาเช่าสำนักงานใจกลางเมืองที่ 123 Business Ave.",
+      "sample_contract_5": "สัญญาบำรุงรักษาระบบปรับอากาศ (HVAC)",
+      "sample_contract_5_description": "สัญญาบำรุงรักษา HVAC ประจำปีสำหรับอาคารสำนักงาน",
+      "sample_contract_6": "สัญญาแคมเปญการตลาด",
+      "sample_contract_6_description": "แคมเปญการตลาดไตรมาส 1 รวมโซเชียลมีเดีย PPC และการตลาดเนื้อหา"
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
-    "noSamples": "No demo samples available"
+    "noSamples": "No demo samples available",
+    "comments": {
+      "comment_1": "สัญญาได้รับการตรวจสอบและอนุมัติโดยทีมกฎหมายแล้ว",
+      "comment_2": "รอการลงนามจากลูกค้าในเงื่อนไขที่ได้รับการอัปเดต",
+      "comment_3": "สัญญาเช่ากำลังจะหมดอายุ! จำเป็นต้องเจรจาต่ออายุ"
+    },
+    "phases": {
+      "phase_1": "การค้นหา & การวางแผน",
+      "phase_2": "การออกแบบ & การพัฒนา",
+      "phase_3": "การทดสอบ & การเปิดตัว"
+    },
+    "approvals": {
+      "approval_1": "กรุณาตรวจสอบและอนุมัติข้อกำหนดใบอนุญาตที่อัปเดตแล้ว"
+    },
+    "files": {
+      "file_1": "contract-agreement.pdf",
+      "file_2": "design-mockups.zip",
+      "file_3": "license-terms.docx",
+      "file_4": "budget-breakdown.xlsx",
+      "file_5": "project-logo.png"
+    }
   },
   "buttons": {
     "delete": "ลบ",
