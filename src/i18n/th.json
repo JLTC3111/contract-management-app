@@ -88,7 +88,8 @@
     }
   },
   "buttons": {
-    "delete": "ลบ",
+    "deleteContract": "ลบสัญญา",
+    "delete": "ลบไฟล์",
     "download": "ดาวน์โหลด",
     "downloadAll": "ดาวน์โหลดทั้งหมด",
     "newFolder": "โฟลเดอร์ใหม่",

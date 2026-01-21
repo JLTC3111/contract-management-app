@@ -87,7 +87,8 @@
     }
   },
   "buttons": {
-    "delete": "Löschen",
+    "deleteContract": "Vertrag löschen",
+    "delete": "Datei löschen",
     "download": "Herunterladen",
     "downloadAll": "Alle herunterladen",
     "newFolder": "Neuer Ordner",

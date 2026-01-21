@@ -88,7 +88,8 @@
     }
   },
   "buttons": {
-    "delete": "削除",
+    "deleteContract": "契約を削除",
+    "delete": "ファイルを削除",
     "download": "ダウンロード",
     "downloadAll": "すべてダウンロード",
     "newFolder": "新しいフォルダー",

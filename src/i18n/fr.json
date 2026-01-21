@@ -88,7 +88,8 @@
     }
   },
   "buttons": {
-    "delete": "Supprimer",
+    "deleteContract": "Supprimer le contrat",
+    "delete": "Supprimer le fichier",
     "download": "Télécharger",
     "downloadAll": "Tout télécharger",
     "newFolder": "Nouveau dossier",

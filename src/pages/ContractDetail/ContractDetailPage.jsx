@@ -350,6 +350,11 @@ const ContractDetailPage = () => {
       filesToDelete = [filesToDelete];
     }
 
+    if (filesToDelete.length === 0) {
+      toast.error(t('contract_detail_no_files_selected', 'No files selected for deletion.'));
+      return;
+    }
+
     const folder = `uploads/${contract.id}`;
 
     let folders = 0;
@@ -373,11 +378,7 @@ const ContractDetailPage = () => {
       promptMessage = t('contract_detail_delete_item') + (filesToDelete.length > 1 ? t('contract_detail_delete_items') : '') + '?';
     }
 
-    const confirmed = confirm(
-      filesToDelete.length > 0
-        ? promptMessage
-        : t('contract_detail_delete_all_files_for_this_contract') + '?'
-    );
+    const confirmed = confirm(promptMessage);
 
     if (!confirmed) return;
 
@@ -394,8 +395,12 @@ const ContractDetailPage = () => {
           demoFiles = demoFiles.filter(f => {
             const fileName = f.name;
             const filePath = f.path || '';
+            const inContract = filePath.startsWith(`${folder}/`);
+            if (!inContract) return true;
+            const isDirectMatch = `${folder}/${fileName}` === `${folder}/${itemName}` || fileName === itemName;
+            const isInFolder = filePath.startsWith(`${folder}/${itemName}/`);
             // Don't delete if it matches the item name or is in a folder with that name
-            return fileName !== itemName && !filePath.includes(`/${itemName}/`) && !filePath.endsWith(`/${itemName}`);
+            return !isDirectMatch && !isInFolder;
           });
           deleteCount += beforeCount - demoFiles.length;
         }
@@ -430,23 +435,6 @@ const ContractDetailPage = () => {
             deletePaths.push(fullPath);
           }
         }
-      } else {
-        const { data: allFiles, error: listError } = await supabase.storage
-          .from('contracts')
-          .list(folder, { limit: 1000 });
-
-        if (listError) {
-          console.error('Error listing all files:', listError.message);
-          toast.error('❌ Failed to list files.');
-          return;
-        }
-
-        if (!allFiles || allFiles.length === 0) {
-          toast.error('🚫 No files found to delete.');
-          return;
-        }
-
-        deletePaths = allFiles.map((f) => `${folder}/${f.name}`);
       }
 
       const { error: deleteError } = await supabase.storage

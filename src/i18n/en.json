@@ -87,6 +87,7 @@
     }
   },
   "buttons": {
+    "deleteContract": "Delete Contract",
     "delete": "Delete",
     "download": "Download",
     "downloadAll": "Download All",

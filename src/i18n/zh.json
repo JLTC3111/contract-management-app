@@ -79,7 +79,8 @@
     }
   },
   "buttons": {
-    "delete": "删除",
+    "deleteContract": "删除合同",
+    "delete": "删除文件",
     "download": "下载",
     "downloadAll": "全部下载",
     "newFolder": "新建文件夹",

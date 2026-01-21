@@ -154,7 +154,7 @@ const ContractHeader = ({
                   }}
                 >
                   <Trash size={16} />
-                  {t('buttons.delete', 'Delete')}
+                  {t('buttons.deleteContract', 'Delete')}
                 </button>
               </>
             )}
@@ -215,6 +215,7 @@ const ContractHeader = ({
 
               {canEdit && (
                 <button
+                  type="button"
                   onClick={onDeleteFiles}
                   className="btn-hover-effect"
                   style={{

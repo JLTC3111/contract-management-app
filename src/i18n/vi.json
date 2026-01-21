@@ -88,8 +88,9 @@
     }
   },
   "buttons": {
-    "delete": "Xóa",
-    "download": "Tải xuống",
+    "deleteContract": "Xóa hợp đồng",
+    "delete": "Xóa Tệp",
+    "download": "Tải Xuống",
     "downloadAll": "Tải Xuống Tất Cả",
     "newFolder": "Thư Mục Mới",
     "login": "Đăng nhập",
