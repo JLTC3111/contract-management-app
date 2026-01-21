@@ -463,8 +463,8 @@ export const contractsApi = {
     }
     
     const now = new Date().toISOString();
-    
-    const { data, error } = await supabase
+
+    let { data, error } = await supabase
       .from('contracts')
       .insert({
         ...contract,
@@ -473,7 +473,21 @@ export const contractsApi = {
       })
       .select()
       .single();
-    
+
+    if (error) {
+      const message = error.message || '';
+      const missingCreatedAt = message.includes("created_at") || message.includes('schema cache');
+      if (missingCreatedAt) {
+        ({ data, error } = await supabase
+          .from('contracts')
+          .insert({
+            ...contract
+          })
+          .select()
+          .single());
+      }
+    }
+
     if (error) throw error;
     return data;
   },

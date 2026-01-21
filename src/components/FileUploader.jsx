@@ -83,7 +83,25 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
   const { darkMode } = useTheme();
 
   // Demo mode file upload handler
+  const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
   const handleDemoUpload = async (file, filePath) => {
+    const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+    const shouldStoreDataUrl = isPdf || isImageFile(file.name) || isTextFile(file.name);
+    let dataUrl = null;
+    if (shouldStoreDataUrl) {
+      try {
+        dataUrl = await readFileAsDataUrl(file);
+      } catch (error) {
+        console.warn('Demo preview data URL generation failed:', error);
+      }
+    }
+
     return new Promise((resolve) => {
       // Simulate upload progress
       let progress = 0;
@@ -104,7 +122,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
             uploadedAt: new Date().toISOString(),
             category: getFileTypeCategory(file.name),
             // For images, create a data URL so they can be previewed
-            dataUrl: null,
+            dataUrl,
           };
 
           // Store file metadata
@@ -129,7 +147,8 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
             type: file.type,
             path: filePath,
             size: file.size,
-            category: demoFile.category
+            category: demoFile.category,
+            dataUrl
           });
         } else {
           setUploadProgress(prev => ({

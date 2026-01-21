@@ -63,10 +63,13 @@ const FileBrowser = ({
 
   const handleFileClick = async (file) => {
     const fileName = file.name;
-    const publicUrl = supabase
-      .storage
-      .from('contracts')
-      .getPublicUrl(`${currentPath}/${fileName}`).data.publicUrl;
+    const isDemoFile = file?.isDemo;
+    const publicUrl = isDemoFile
+      ? file?.demoUrl || null
+      : supabase
+          .storage
+          .from('contracts')
+          .getPublicUrl(`${currentPath}/${fileName}`).data.publicUrl;
 
     const isPdf = fileName.toLowerCase().endsWith('.pdf');
     const isExcel = fileName.toLowerCase().endsWith('.xlsx') || fileName.toLowerCase().endsWith('.xls');
@@ -75,19 +78,43 @@ const FileBrowser = ({
     const isImage = /\.(png|jpe?g|gif|bmp|webp|svg|tiff?|ico|avif)$/i.test(fileName);
 
     if (isPdf) {
+      if (isDemoFile && !publicUrl) {
+        toast.error(t('demo_preview_unavailable', 'Preview not available for this demo file.'));
+        return;
+      }
       onPreview(publicUrl, 'pdf');
     } else if (isExcel) {
+      if (isDemoFile && !publicUrl) {
+        toast.error(t('demo_preview_unavailable', 'Preview not available for this demo file.'));
+        return;
+      }
       onPreview(publicUrl, 'excel');
     } else if (isDocx) {
+      if (isDemoFile && !publicUrl) {
+        toast.error(t('demo_preview_unavailable', 'Preview not available for this demo file.'));
+        return;
+      }
       onPreview(publicUrl, 'docx');
     } else if (isPptx) {
+      if (isDemoFile && !publicUrl) {
+        toast.error(t('demo_preview_unavailable', 'Preview not available for this demo file.'));
+        return;
+      }
       onPreview(publicUrl, 'pptx');
     } else if (isImage) {
+      if (isDemoFile && !publicUrl) {
+        toast.error(t('demo_preview_unavailable', 'Preview not available for this demo file.'));
+        return;
+      }
       onPreview(publicUrl, 'image');
     } else {
       // For other files, trigger download
       if (window.confirm(`Download "${getOriginalFileName(fileName)}"?`)) {
-        window.open(publicUrl, '_blank');
+        if (publicUrl) {
+          window.open(publicUrl, '_blank');
+        } else if (isDemoFile) {
+          toast.error(t('demo_preview_unavailable', 'Preview not available for this demo file.'));
+        }
       }
     }
   };

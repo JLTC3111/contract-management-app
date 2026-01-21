@@ -152,7 +152,9 @@ const ContractDetailPage = () => {
             metadata: { mimetype: f.type, size: f.size },
             created_at: f.uploadedAt,
             updated_at: f.uploadedAt,
-            isDemo: true
+            isDemo: true,
+            demoUrl: f.dataUrl || null,
+            path: f.path || null
           });
         } else if (parts.length > 1) {
           // File is in a subfolder - show the folder entry

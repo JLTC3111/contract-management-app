@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
+const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
+
 const NotificationDropdown = () => {
   const { user } = useUser();
   const { darkMode } = useTheme();
@@ -29,6 +31,11 @@ const NotificationDropdown = () => {
   // Fetch approval requests for approver users
   const fetchNotifications = async () => {
     if (!user) return;
+    if (isDemoMode()) {
+      setNotifications([]);
+      setUnreadCount(0);
+      return;
+    }
     
     // If user is not an approver or admin, just set empty notifications
     if (user.role !== 'approver' && user.role !== 'admin') {
@@ -95,6 +102,11 @@ const NotificationDropdown = () => {
     if (!user || user.role !== 'editor') {
       return;
     }
+    if (isDemoMode()) {
+      setCommentNotifications([]);
+      setCommentCount(0);
+      return;
+    }
     
     try {
       // Get recent comments (last 24 hours)
@@ -151,6 +163,11 @@ const NotificationDropdown = () => {
   // Fetch general notifications for the current user
   const fetchGeneralNotifications = async () => {
     if (!user) return;
+    if (isDemoMode()) {
+      setGeneralNotifications([]);
+      setGeneralCount(0);
+      return;
+    }
     
     try {
       // Get unread notifications for the current user
@@ -177,6 +194,11 @@ const NotificationDropdown = () => {
   // Fetch approval status notifications for editor users
   const fetchApprovalStatusNotifications = async () => {
     if (!user || user.role !== 'editor') {
+      return;
+    }
+    if (isDemoMode()) {
+      setApprovalStatusNotifications([]);
+      setApprovalStatusCount(0);
       return;
     }
     
@@ -233,6 +255,10 @@ const NotificationDropdown = () => {
 
   // Handle approval/rejection
   const handleApprovalAction = async (requestId, action) => {
+    if (isDemoMode()) {
+      toast.info(t('demo_action_not_available', 'This action is not available in demo mode.'));
+      return;
+    }
     try {
       // Update the approval request status
       const { error: requestError } = await supabase
@@ -280,6 +306,7 @@ const NotificationDropdown = () => {
   // Mark notification as read
   const markNotificationAsRead = async (notificationId) => {
     setReadNotifications(prev => new Set([...prev, notificationId]));
+    if (isDemoMode()) return;
     
     // Check if this is a general notification that needs to be marked as read in the database
     const generalNotification = generalNotifications.find(n => n.id === notificationId);
@@ -304,6 +331,7 @@ const NotificationDropdown = () => {
       ...generalNotifications.map(n => n.id)
     ];
     setReadNotifications(prev => new Set([...prev, ...allNotificationIds]));
+    if (isDemoMode()) return;
     
     // Mark all general notifications as read in the database
     if (generalNotifications.length > 0) {

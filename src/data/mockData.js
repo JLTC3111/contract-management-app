@@ -9,6 +9,7 @@ const DEMO_APPROVALS_KEY = 'demo_approvals';
 const INITIAL_MOCK_CONTRACTS = [
   {
     id: 'demo-contract-1',
+    title: 'Website Redesign Project',
     title_i18n: 'demoSamples.projects.sample_contract_1',
     description_i18n: 'demoSamples.projects.sample_contract_1_description',
     status: 'approved',
@@ -26,6 +27,7 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-2',
+    title: 'Software License Agreement',
     title_i18n: 'demoSamples.projects.sample_contract_2',
     description_i18n: 'demoSamples.projects.sample_contract_2_description',
     status: 'pending',
@@ -43,6 +45,7 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-3',
+    title: 'Consulting Services Contract',
     title_i18n: 'demoSamples.projects.sample_contract_3',
     description_i18n: 'demoSamples.projects.sample_contract_3_description',
     status: 'draft',
@@ -60,6 +63,7 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-4',
+    title: 'Office Space Lease',
     title_i18n: 'demoSamples.projects.sample_contract_4',
     description_i18n: 'demoSamples.projects.sample_contract_4_description',
     status: 'expiring',
@@ -77,6 +81,7 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-5',
+    title: 'HVAC Maintenance Agreement',
     title_i18n: 'demoSamples.projects.sample_contract_5',
     description_i18n: 'demoSamples.projects.sample_contract_5_description',
     status: 'expired',
@@ -94,6 +99,7 @@ const INITIAL_MOCK_CONTRACTS = [
   },
   {
     id: 'demo-contract-6',
+    title: 'Q1 Marketing Campaign',
     title_i18n: 'demoSamples.projects.sample_contract_6',
     description_i18n: 'demoSamples.projects.sample_contract_6_description',
     status: 'approved',
