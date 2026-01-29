@@ -157,6 +157,7 @@
     "error": "エラー",
     "success": "成功",
     "cancel": "キャンセル",
+    "confirm": "確認",
     "save": "保存",
     "edit": "編集",
     "approve": "承認",
@@ -568,6 +569,8 @@
       "financialClosure": "財務終了"
     },
     "reopenPhase": "段階を再開",
+    "confirmComplete": "この段階を完了しますか？",
+    "completeWarning": "すべてのタスクが完了としてマークされ、次の段階が有効になります。",
     "confirmReopen": "この段階を再開しますか？",
     "reopenWarning": "これにより、段階がアクティブステータスに戻ります。"
   },

@@ -157,6 +157,7 @@
     "error": "Erreur",
     "success": "Succès",
     "cancel": "Annuler",
+    "confirm": "Confirmer",
     "save": "Enregistrer",
     "edit": "Modifier",
     "approve": "Approuver",
@@ -564,6 +565,8 @@
       "financialClosure": "Clôture financière"
     },
     "reopenPhase": "Rouvrir la Phase",
+    "confirmComplete": "Terminer cette phase?",
+    "completeWarning": "Toutes les tâches seront marquées comme terminées et la phase suivante sera activée.",
     "confirmReopen": "Rouvrir cette phase?",
     "reopenWarning": "Cela remettra la phase au statut actif."
   },

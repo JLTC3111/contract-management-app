@@ -10,7 +10,6 @@
   },
   "sidebar": {
     "visitIcueTooltip": "Truy cập iCUE!",
-    "in_progress": "Đang thực hiện",
     "visitIcue": "Truy cập iCUE!",
     "dashboard": "Bảng điều khiển",
     "approvals": "Phê duyệt",
@@ -25,7 +24,7 @@
     "statusUpdated": "✅ Đã cập nhật trạng thái!",
     "contractsUpdated": "hợp đồng đã cập nhật",
     "cronTriggerFailed": "🚨 Không thể kích hoạt cron job. Kiểm tra mạng hoặc cài đặt CORS.",
-      "in_progress": "Đang thực hiện",
+    "in_progress": "Đang thực hiện",
     "home": "Trang chủ",
     "logged_in_as": "Đăng nhập:",
     "role": "Vai trò",
@@ -158,6 +157,7 @@
     "error": "Lỗi",
     "success": "Thành công",
     "cancel": "Hủy",
+    "confirm": "Xác nhận",
     "save": "Lưu",
     "edit": "Chỉnh sửa",
     "approve": "Phê duyệt",
@@ -567,6 +567,8 @@
       "financialClosure": "Kết thúc tài chính"
     },
     "reopenPhase": "Mở lại Giai đoạn",
+    "confirmComplete": "Hoàn thành giai đoạn này?",
+    "completeWarning": "Tất cả các nhiệm vụ sẽ được đánh dấu là hoàn thành và giai đoạn tiếp theo sẽ được kích hoạt.",
     "confirmReopen": "Mở lại giai đoạn này?",
     "reopenWarning": "Điều này sẽ đặt giai đoạn trở lại trạng thái đang hoạt động."
   },

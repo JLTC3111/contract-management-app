@@ -232,6 +232,7 @@
     "noMetricsAvailable": "No metrics available."
   },
   "common": {
+    "confirm": "Confirm",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
@@ -678,6 +679,8 @@
       "financialClosure": "Financial closure"
     },
     "reopenPhase": "Reopen Phase",
+    "confirmComplete": "Complete this phase?",
+    "completeWarning": "All tasks will be marked as complete and the next phase will be activated.",
     "confirmReopen": "Reopen this phase?",
     "reopenWarning": "This will set the phase back to active status."
   },

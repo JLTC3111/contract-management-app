@@ -148,6 +148,7 @@
     "error": "错误",
     "success": "成功",
     "cancel": "取消",
+    "confirm": "确认",
     "save": "保存",
     "edit": "编辑",
     "approve": "批准",
@@ -557,6 +558,8 @@
       "financialClosure": "财务结算"
     },
     "reopenPhase": "重新打开阶段",
+    "confirmComplete": "完成此阶段？",
+    "completeWarning": "所有任务将被标记为完成，并且将激活下一阶段。",
     "confirmReopen": "重新打开此阶段？",
     "reopenWarning": "这会将阶段设置回活动状态。"
   },

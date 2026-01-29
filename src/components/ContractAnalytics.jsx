@@ -35,12 +35,15 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   const [tablePage, setTablePage] = useState(0);
   const [sortField, setSortField] = useState('updated_at');
   const [sortDir, setSortDir] = useState('desc');
+  const [containerWidth, setContainerWidth] = useState(1400);
+  const [isResizing, setIsResizing] = useState(false);
   const itemsPerPage = 10;
 
-  // Refs for GSAP animations
+  // Refs for GSAP animations and resizing
   const containerRef = useRef(null);
   const metricsRef = useRef([]);
   const chartsRef = useRef([]);
+  const resizeHandleRef = useRef(null);
 
   // GSAP entrance animations
   useEffect(() => {
@@ -58,6 +61,41 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
       { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: 'power2.out', delay: 0.3 }
     );
   }, [loading, contracts.length]);
+
+  // Handle resize functionality
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isResizing) return;
+      
+      // Calculate new width based on mouse position relative to viewport center
+      const viewportCenter = window.innerWidth / 2;
+      const distanceFromCenter = Math.abs(e.clientX - viewportCenter);
+      const newWidth = Math.max(800, Math.min(2400, distanceFromCenter * 2));
+      setContainerWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = 'ew-resize';
+      document.body.style.userSelect = 'none';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing, containerWidth]);
+
+  const handleResizeStart = () => {
+    setIsResizing(true);
+  };
 
   // Filter contracts based on period and status
   const filteredContracts = useMemo(() => {
@@ -258,7 +296,8 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   }
 
   return (
-    <div ref={containerRef} style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto' }}>
+    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>
+      <div ref={containerRef} style={{ padding: '2rem', maxWidth: `${containerWidth}px`, width: '100%', position: 'relative', transition: isResizing ? 'none' : 'max-width 0.3s ease' }}>
       {/* Header with controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <h1 style={{ color: 'var(--text)', margin: 0, fontSize: 'clamp(1.25rem, 4vw, 1.75rem)' }}>
@@ -476,6 +515,72 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
           </div>
         )}
       </div>
+      
+      {/* Resize handles */}
+      <div
+        ref={resizeHandleRef}
+        onMouseDown={handleResizeStart}
+        style={{
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: '8px',
+          cursor: 'ew-resize',
+          background: isResizing ? 'var(--primary)' : 'transparent',
+          transition: 'background 0.2s',
+          zIndex: 10,
+          opacity: 0.3,
+          '&:hover': {
+            opacity: 1
+          }
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+        onMouseLeave={(e) => !isResizing && (e.currentTarget.style.opacity = '0.3')}
+      >
+        <div style={{
+          position: 'absolute',
+          right: '2px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '4px',
+          height: '40px',
+          background: 'var(--primary)',
+          borderRadius: '2px',
+          opacity: 0.6
+        }} />
+      </div>
+      
+      <div
+        onMouseDown={handleResizeStart}
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: '8px',
+          cursor: 'ew-resize',
+          background: isResizing ? 'var(--primary)' : 'transparent',
+          transition: 'background 0.2s',
+          zIndex: 10,
+          opacity: 0.3
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+        onMouseLeave={(e) => !isResizing && (e.currentTarget.style.opacity = '0.3')}
+      >
+        <div style={{
+          position: 'absolute',
+          left: '2px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '4px',
+          height: '40px',
+          background: 'var(--primary)',
+          borderRadius: '2px',
+          opacity: 0.6
+        }} />
+      </div>
+    </div>
     </div>
   );
 };

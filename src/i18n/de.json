@@ -234,6 +234,7 @@
     "error": "Fehler",
     "success": "Erfolg",
     "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
     "save": "Speichern",
     "edit": "Bearbeiten",
     "approve": "Genehmigen",
@@ -563,6 +564,8 @@
       "financialClosure": "Finanzabschluss"
     },
     "reopenPhase": "Phase erneut öffnen",
+    "confirmComplete": "Diese Phase abschließen?",
+    "completeWarning": "Alle Aufgaben werden als abgeschlossen markiert und die nächste Phase wird aktiviert.",
     "confirmReopen": "Diese Phase erneut öffnen?",
     "reopenWarning": "Dies setzt die Phase auf den Status 'Aktiv' zurück."
   },
