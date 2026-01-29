@@ -99,6 +99,39 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
   const [editingTask, setEditingTask] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(null);
 
+  // Map task text to translation keys for backward compatibility
+  const getTaskTranslationKey = (taskText) => {
+    const taskMap = {
+      // Current 6-phase tasks
+      'Prepare bid package': 'phaseManagement.tasks.prepareBid',
+      'Submit tender documents': 'phaseManagement.tasks.submitBid',
+      'Obtain legal approvals': 'phaseManagement.tasks.legalApprovals',
+      'Issue assignment decisions': 'phaseManagement.tasks.assignmentDecision',
+      'Draft joint venture agreement': 'phaseManagement.tasks.jvAgreement',
+      'Collect partner signatures': 'phaseManagement.tasks.jvSignoff',
+      'Draft contract and appendices': 'phaseManagement.tasks.contractDraft',
+      'Sign contract & amendments': 'phaseManagement.tasks.contractSign',
+      'Assign project team': 'phaseManagement.tasks.assignTeam',
+      'Collect internal deliverables': 'phaseManagement.tasks.internalDeliverables',
+      'Submit payment proposal': 'phaseManagement.tasks.paymentProposal',
+      'Issue invoices and handover': 'phaseManagement.tasks.invoiceAndHandover',
+      // Legacy 3-phase tasks (from earlier versions)
+      'Initial client meeting': 'phaseManagement.tasks.initialClientMeeting',
+      'Requirements gathering': 'phaseManagement.tasks.requirementsGathering',
+      'Preliminary drawings': 'phaseManagement.tasks.preliminaryDrawings',
+      'Client feedback session': 'phaseManagement.tasks.clientFeedback',
+      'Design revisions': 'phaseManagement.tasks.designRevisions',
+      'Final design approval': 'phaseManagement.tasks.finalDesignApproval',
+      'Work commencement': 'phaseManagement.tasks.workCommencement',
+      'Progress monitoring': 'phaseManagement.tasks.progressMonitoring',
+      'Quality control checks': 'phaseManagement.tasks.qualityControl',
+      'Client progress updates': 'phaseManagement.tasks.clientProgressUpdates',
+      'Issue resolution': 'phaseManagement.tasks.issueResolution',
+      'Final delivery & inspection': 'phaseManagement.tasks.finalDelivery'
+    };
+    return taskMap[taskText] || null;
+  };
+
   // Refs for animations
   const containerRef = useRef(null);
   const phaseRefs = useRef([]);
@@ -157,11 +190,14 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
         contract_id: contractId,
         phase_number: phaseTemplate.number,
         name: phaseTemplate.name,
+        nameKey: phaseTemplate.nameKey,
         description: phaseTemplate.description,
+        descriptionKey: phaseTemplate.descriptionKey,
         status: phaseTemplate.number === 1 ? 'active' : 'pending',
         tasks: phaseTemplate.tasks.map(task => ({
           id: crypto.randomUUID(),
           text: task.text,
+          textKey: task.textKey,
           completed: false,
           assigned_to: null,
           due_date: null,
@@ -478,10 +514,10 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
                 <StatusIcon size={24} color={statusColor} />
                 <div>
                   <h3 style={{ color: 'var(--text)', margin: 0, fontSize: 'clamp(1rem, 3vw, 1.15rem)' }}>
-                    {t('phaseManagement.phase', 'Phase')} {phase.phase_number}: {phase.name}
+                    {t('phaseManagement.phase', 'Phase')} {phase.phase_number}: {t(phase.nameKey || `phaseTimeline.phase${phase.phase_number}.name`, phase.name)}
                   </h3>
                   <p style={{ color: 'var(--text)', opacity: 0.6, margin: '0.25rem 0 0 0', fontSize: '0.85rem' }}>
-                    {phase.description}
+                    {t(phase.descriptionKey || `phaseTimeline.phase${phase.phase_number}.description`, phase.description)}
                   </p>
                 </div>
               </div>
@@ -561,7 +597,11 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
                             textDecoration: task.completed ? 'line-through' : 'none',
                             opacity: task.completed ? 0.6 : 1
                           }}>
-                            {task.text}
+                            {task.textKey 
+                              ? t(task.textKey, task.text)
+                              : (getTaskTranslationKey(task.text) 
+                                  ? t(getTaskTranslationKey(task.text), task.text)
+                                  : task.text)}
                           </span>
                           
                           {task.custom && (

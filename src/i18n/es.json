@@ -497,7 +497,8 @@
     "approved": "Aprobado",
     "pending": "Pendiente",
     "rejected": "Rechazado",
-    "draft": "Borrador"
+    "draft": "Borrador",
+    "clickToViewTimeline": "Haga clic para ver la línea de tiempo"
   },
   "phases": {
     "title": "Gestión de Fases del Contrato",
@@ -541,7 +542,43 @@
     "failedToLoadPhases": "Error al cargar las fases del contrato",
     "failedToInitializePhases": "Error al inicializar las fases del contrato",
     "phaseUpdatedSuccessfully": "Fase actualizada correctamente",
-    "failedToUpdatePhase": "Error al actualizar la fase"
+    "failedToUpdatePhase": "Error al actualizar la fase",
+    "status": {
+      "completed": "Completado",
+      "active": "Activo",
+      "pending": "Pendiente",
+      "delayed": "Retrasado"
+    },
+    "tasks": {
+      "prepareBid": "Preparar paquete de oferta",
+      "submitBid": "Presentar documentos de licitación",
+      "legalApprovals": "Obtener aprobaciones legales",
+      "assignmentDecision": "Emitir decisiones de asignación",
+      "jvAgreement": "Redactar acuerdo de empresa conjunta",
+      "jvSignoff": "Recopilar firmas de socios",
+      "contractDraft": "Redactar contrato y anexos",
+      "contractSign": "Firmar contrato y enmiendas",
+      "assignTeam": "Asignar equipo de proyecto",
+      "internalDeliverables": "Recopilar entregables internos",
+      "paymentProposal": "Presentar propuesta de pago",
+      "invoiceAndHandover": "Emitir facturas y entregar",
+      "initialClientMeeting": "Reunión inicial con cliente",
+      "requirementsGathering": "Recopilación de requisitos",
+      "preliminaryDrawings": "Dibujos preliminares",
+      "clientFeedback": "Sesión de retroalimentación del cliente",
+      "designRevisions": "Revisiones de diseño",
+      "finalDesignApproval": "Aprobación final del diseño",
+      "workCommencement": "Inicio de trabajos",
+      "progressMonitoring": "Monitoreo de progreso",
+      "qualityControl": "Controles de calidad",
+      "clientProgressUpdates": "Actualizaciones de progreso al cliente",
+      "issueResolution": "Resolución de problemas",
+      "finalDelivery": "Entrega final e inspección"
+    }
+  },
+  "lifecycle": {
+    "selectContract": "Seleccionar Contrato",
+    "chooseContract": "Elija un contrato para ver su ciclo de vida"
   },
   "errorLoadingContractData": "Error al cargar datos de contratos",
   "failedToLoadContractsForAnalytics": "Error al cargar contratos para análisis",
@@ -572,5 +609,38 @@
     "weak": "Débil",
     "medium": "Medio",
     "strong": "Fuerte"
+  },
+  "phaseTimeline": {
+    "title": "Línea de Tiempo de Fases del Contrato",
+    "complete": "Completo",
+    "status": {
+      "completed": "Completado",
+      "active": "Activo",
+      "pending": "Pendiente"
+    },
+    "phase1": {
+      "name": "Documentos de Licitación",
+      "description": "Preparación y presentación de documentos de licitación"
+    },
+    "phase2": {
+      "name": "Documentos Legales",
+      "description": "Documentación legal y cumplimiento"
+    },
+    "phase3": {
+      "name": "Documentos de Asociación",
+      "description": "Acuerdos de empresa conjunta y asociaciones"
+    },
+    "phase4": {
+      "name": "Contrato y Anexos",
+      "description": "Contrato principal y acuerdos suplementarios"
+    },
+    "phase5": {
+      "name": "Archivos del Grupo del Proyecto",
+      "description": "Documentación del equipo del proyecto"
+    },
+    "phase6": {
+      "name": "Pago del Propietario",
+      "description": "Documentación de facturación y pagos"
+    }
   }
 }

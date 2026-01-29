@@ -487,7 +487,8 @@
     "approved": "Đã phê duyệt",
     "pending": "Chờ xử lý",
     "rejected": "Đã từ chối",
-    "draft": "Bản nháp"
+    "draft": "Bản nháp",
+    "clickToViewTimeline": "Nhấp để xem tiến trình"
   },
   "phaseManagement": {
     "selectContractMessage": "Vui lòng chọn một hợp đồng để quản lý các giai đoạn của nó.",
@@ -511,7 +512,39 @@
     "failedToLoadPhases": "Không thể tải các giai đoạn hợp đồng",
     "failedToInitializePhases": "Không thể khởi tạo các giai đoạn hợp đồng",
     "phaseUpdatedSuccessfully": "Giai đoạn đã được cập nhật thành công",
-    "failedToUpdatePhase": "Không thể cập nhật giai đoạn"
+    "failedToUpdatePhase": "Không thể cập nhật giai đoạn",
+    "status": {
+      "completed": "Hoàn thành",
+      "active": "Đang hoạt động",
+      "pending": "Đang chờ",
+      "delayed": "Bị trì hoãn"
+    },
+    "tasks": {
+      "prepareBid": "Chuẩn bị gói thầu",
+      "submitBid": "Nộp hồ sơ dự thầu",
+      "legalApprovals": "Xin phê duyệt pháp lý",
+      "assignmentDecision": "Ban hành quyết định giao việc",
+      "jvAgreement": "Soạn thảo thỏa thuận liên doanh",
+      "jvSignoff": "Thu thập chữ ký đối tác",
+      "contractDraft": "Soạn thảo hợp đồng và phụ lục",
+      "contractSign": "Ký hợp đồng & sửa đổi",
+      "assignTeam": "Phân công nhóm dự án",
+      "internalDeliverables": "Thu thập sản phẩm nội bộ",
+      "paymentProposal": "Nộp đề xuất thanh toán",
+      "invoiceAndHandover": "Phát hành hóa đơn và bàn giao",
+      "initialClientMeeting": "Họp khách hàng ban đầu",
+      "requirementsGathering": "Thu thập yêu cầu",
+      "preliminaryDrawings": "Bản vẽ sơ bộ",
+      "clientFeedback": "Phiên phản hồi khách hàng",
+      "designRevisions": "Sửa đổi thiết kế",
+      "finalDesignApproval": "Phê duyệt thiết kế cuối cùng",
+      "workCommencement": "Khởi công công việc",
+      "progressMonitoring": "Theo dõi tiến độ",
+      "qualityControl": "Kiểm tra chất lượng",
+      "clientProgressUpdates": "Cập nhật tiến độ cho khách hàng",
+      "issueResolution": "Giải quyết vấn đề",
+      "finalDelivery": "Bàn giao & kiểm tra cuối cùng"
+    }
   },
   "lifecycle": {
     "contractLifecycleManagement": "Quản lý Chu kỳ Sống Hợp đồng",
@@ -522,7 +555,9 @@
     "contractNotFoundMessage": "Hợp đồng được yêu cầu không thể được tìm thấy hoặc bạn có thể không có quyền truy cập vào nó.",
     "expires": "Hết hạn",
     "export": "Xuất",
-    "share": "Chia sẻ"
+    "share": "Chia sẻ",
+    "selectContract": "Chọn Hợp Đồng",
+    "chooseContract": "-- Chọn một hợp đồng --"
   },
   "phaseTimeline": {
     "title": "Tiến Trình Chu Kỳ Hợp Đồng",

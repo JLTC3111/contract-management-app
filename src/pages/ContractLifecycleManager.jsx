@@ -285,7 +285,7 @@ const ContractLifecycleManager = () => {
                       color: getStatusColor(contract.status),
                       border: `1px solid ${getStatusColor(contract.status)}40`
                     }}>
-                      {contract.status.charAt(0).toUpperCase() + contract.status.slice(1)}
+                      {t(`contractTable.status.${contract.status}`, contract.status.charAt(0).toUpperCase() + contract.status.slice(1))}
                     </span>
                     {contract.expiry_date && (
                       <span style={{
@@ -297,7 +297,7 @@ const ContractLifecycleManager = () => {
                         gap: '0.5rem'
                       }}>
                         <Calendar size={16} />
-                        {t('Expires')}: {new Date(contract.expiry_date).toLocaleDateString()}
+                        {t('lifecycle.expires', 'Expires')}: {new Date(contract.expiry_date).toLocaleDateString()}
                       </span>
                     )}
                   </div>

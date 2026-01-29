@@ -488,7 +488,8 @@
     "approved": "承認済み",
     "pending": "保留中",
     "rejected": "拒否済み",
-    "draft": "下書き"
+    "draft": "下書き",
+    "clickToViewTimeline": "クリックしてタイムラインを表示"
   },
   "phaseManagement": {
     "selectContractMessage": "契約を選択して段階管理を開始してください",
@@ -512,9 +513,43 @@
     "failedToLoadPhases": "契約段階の読み込みに失敗",
     "failedToInitializePhases": "契約段階の初期化に失敗",
     "phaseUpdatedSuccessfully": "段階が正常に更新されました",
-    "failedToUpdatePhase": "段階の更新に失敗"
+    "failedToUpdatePhase": "段階の更新に失敗",
+    "status": {
+      "completed": "完了済み",
+      "active": "進行中",
+      "pending": "保留中",
+      "delayed": "遅延"
+    },
+    "tasks": {
+      "prepareBid": "入札パッケージを準備",
+      "submitBid": "入札書類を提出",
+      "legalApprovals": "法的承認を取得",
+      "assignmentDecision": "割当決定を発行",
+      "jvAgreement": "ジョイントベンチャー契約を起草",
+      "jvSignoff": "パートナーの署名を収集",
+      "contractDraft": "契約と付録を起草",
+      "contractSign": "契約と修正に署名",
+      "assignTeam": "プロジェクトチームを割り当て",
+      "internalDeliverables": "内部成果物を収集",
+      "paymentProposal": "支払い提案を提出",
+      "invoiceAndHandover": "請求書を発行して引き渡し",
+      "initialClientMeeting": "初回クライアントミーティング",
+      "requirementsGathering": "要件収集",
+      "preliminaryDrawings": "予備図面",
+      "clientFeedback": "クライアントフィードバックセッション",
+      "designRevisions": "デザイン修正",
+      "finalDesignApproval": "最終デザイン承認",
+      "workCommencement": "作業開始",
+      "progressMonitoring": "進捗監視",
+      "qualityControl": "品質管理チェック",
+      "clientProgressUpdates": "クライアント進捗更新",
+      "issueResolution": "問題解決",
+      "finalDelivery": "最終納品と検査"
+    }
   },
   "lifecycle": {
+    "selectContract": "契約を選択",
+    "chooseContract": "ライフサイクルを表示する契約を選択してください",
     "contractLifecycleManagement": "契約ライフサイクル管理",
     "failedToLoadContractDetails": "契約詳細の読み込みに失敗",
     "failedToLoadContractsForAnalytics": "分析用契約の読み込みに失敗",
@@ -524,5 +559,38 @@
     "expires": "期限切れ",
     "export": "エクスポート",
     "share": "共有"
+  },
+  "phaseTimeline": {
+    "title": "契約段階タイムライン",
+    "complete": "完了",
+    "status": {
+      "completed": "完了済み",
+      "active": "進行中",
+      "pending": "保留中"
+    },
+    "phase1": {
+      "name": "入札書類",
+      "description": "入札書類の準備と提出"
+    },
+    "phase2": {
+      "name": "法的文書",
+      "description": "法的文書とコンプライアンス"
+    },
+    "phase3": {
+      "name": "ジョイントベンチャー文書",
+      "description": "ジョイントベンチャー契約とパートナーシップ"
+    },
+    "phase4": {
+      "name": "契約と付録",
+      "description": "主契約と補足契約"
+    },
+    "phase5": {
+      "name": "プロジェクトグループファイル",
+      "description": "プロジェクトチームの文書"
+    },
+    "phase6": {
+      "name": "発注者支払い",
+      "description": "請求および支払いの文書"
+    }
   }
 } 

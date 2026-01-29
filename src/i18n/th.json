@@ -477,7 +477,8 @@
     "approved": "อนุมัติแล้ว",
     "pending": "รอดำเนินการ",
     "rejected": "ปฏิเสธแล้ว",
-    "draft": "ร่าง"
+    "draft": "ร่าง",
+    "clickToViewTimeline": "คลิกเพื่อดูไทม์ไลน์"
   },
   "phaseManagement": {
     "selectContractMessage": "โปรดเลือกสัญญาเพื่อดูและจัดการขั้นตอน",
@@ -501,9 +502,43 @@
     "failedToLoadPhases": "ไม่สามารถโหลดขั้นตอนสัญญา",
     "failedToInitializePhases": "ไม่สามารถเริ่มต้นขั้นตอนสัญญา",
     "phaseUpdatedSuccessfully": "อัปเดตขั้นตอนสำเร็จ",
-    "failedToUpdatePhase": "ไม่สามารถอัปเดตขั้นตอน"
+    "failedToUpdatePhase": "ไม่สามารถอัปเดตขั้นตอน",
+    "status": {
+      "completed": "เสร็จสมบูรณ์",
+      "active": "กำลังดำเนินการ",
+      "pending": "รอดำเนินการ",
+      "delayed": "ล่าช้า"
+    },
+    "tasks": {
+      "prepareBid": "เตรียมแพ็คเกจประกวดราคา",
+      "submitBid": "ยื่นเอกสารประกวดราคา",
+      "legalApprovals": "ขออนุมัติทางกฎหมาย",
+      "assignmentDecision": "ออกคำสั่งมอบหมาย",
+      "jvAgreement": "ร่างข้อตกลงร่วมทุน",
+      "jvSignoff": "รวบรวมลายเซ็นคู่ค้า",
+      "contractDraft": "ร่างสัญญาและภาคผนวก",
+      "contractSign": "ลงนามสัญญาและการแก้ไข",
+      "assignTeam": "มอบหมายทีมโครงการ",
+      "internalDeliverables": "รวบรวมผลงานภายใน",
+      "paymentProposal": "ยื่นข้อเสนอการชำระเงิน",
+      "invoiceAndHandover": "ออกใบแจ้งหนี้และส่งมอบ",
+      "initialClientMeeting": "ประชุมลูกค้าครั้งแรก",
+      "requirementsGathering": "รวบรวมความต้องการ",
+      "preliminaryDrawings": "แบบร่างเบื้องต้น",
+      "clientFeedback": "รับฟีดแบ็กจากลูกค้า",
+      "designRevisions": "แก้ไขการออกแบบ",
+      "finalDesignApproval": "อนุมัติการออกแบบขั้นสุดท้าย",
+      "workCommencement": "เริ่มงาน",
+      "progressMonitoring": "ติดตามความคืบหน้า",
+      "qualityControl": "ตรวจสอบคุณภาพ",
+      "clientProgressUpdates": "อัปเดตความคืบหน้าแก่ลูกค้า",
+      "issueResolution": "แก้ไขปัญหา",
+      "finalDelivery": "ส่งมอบและตรวจสอบขั้นสุดท้าย"
+    }
   },
   "lifecycle": {
+    "selectContract": "เลือกสัญญา",
+    "chooseContract": "เลือกสัญญาเพื่อดูวงจรชีวิต",
     "contractLifecycleManagement": "การจัดการวงจรชีวิตสัญญา",
     "failedToLoadContractDetails": "ไม่สามารถโหลดรายละเอียดสัญญา",
     "failedToLoadContractsForAnalytics": "ไม่สามารถโหลดสัญญาสำหรับการวิเคราะห์",
@@ -513,5 +548,38 @@
     "expires": "หมดอายุ",
     "export": "ส่งออก",
     "share": "แชร์"
+  },
+  "phaseTimeline": {
+    "title": "ไทม์ไลน์ขั้นตอนสัญญา",
+    "complete": "เสร็จสิ้น",
+    "status": {
+      "completed": "เสร็จสมบูรณ์",
+      "active": "กำลังดำเนินการ",
+      "pending": "รอดำเนินการ"
+    },
+    "phase1": {
+      "name": "เอกสารประกวดราคา",
+      "description": "การเตรียมและการยื่นเอกสารประกวดราคา"
+    },
+    "phase2": {
+      "name": "เอกสารทางกฎหมาย",
+      "description": "เอกสารทางกฎหมายและการปฏิบัติตามกฎระเบียบ"
+    },
+    "phase3": {
+      "name": "เอกสารร่วมทุน",
+      "description": "ข้อตกลงร่วมทุนและหุ้นส่วน"
+    },
+    "phase4": {
+      "name": "สัญญาและภาคผนวก",
+      "description": "สัญญาหลักและข้อตกลงเพิ่มเติม"
+    },
+    "phase5": {
+      "name": "ไฟล์กลุ่มโครงการ",
+      "description": "เอกสารทีมโครงการ"
+    },
+    "phase6": {
+      "name": "การชำระเงินของเจ้าของ",
+      "description": "เอกสารการเรียกเก็บเงินและการชำระเงิน"
+    }
   }
 } 

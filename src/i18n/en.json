@@ -599,7 +599,8 @@
     "approved": "Approved",
     "pending": "Pending",
     "rejected": "Rejected",
-    "draft": "Draft"
+    "draft": "Draft",
+    "clickToViewTimeline": "Click to view timeline"
   },
   "phaseManagement": {
     "selectContractMessage": "Select a contract from the dropdown to manage its phases.",
@@ -623,7 +624,39 @@
     "failedToLoadPhases": "Failed to load contract phases",
     "failedToInitializePhases": "Failed to initialize contract phases",
     "phaseUpdatedSuccessfully": "Phase updated successfully",
-    "failedToUpdatePhase": "Failed to update phase"
+    "failedToUpdatePhase": "Failed to update phase",
+    "status": {
+      "completed": "Completed",
+      "active": "Active",
+      "pending": "Pending",
+      "delayed": "Delayed"
+    },
+    "tasks": {
+      "prepareBid": "Prepare bid package",
+      "submitBid": "Submit tender documents",
+      "legalApprovals": "Obtain legal approvals",
+      "assignmentDecision": "Issue assignment decisions",
+      "jvAgreement": "Draft joint venture agreement",
+      "jvSignoff": "Collect partner signatures",
+      "contractDraft": "Draft contract and appendices",
+      "contractSign": "Sign contract & amendments",
+      "assignTeam": "Assign project team",
+      "internalDeliverables": "Collect internal deliverables",
+      "paymentProposal": "Submit payment proposal",
+      "invoiceAndHandover": "Issue invoices and handover",
+      "initialClientMeeting": "Initial client meeting",
+      "requirementsGathering": "Requirements gathering",
+      "preliminaryDrawings": "Preliminary drawings",
+      "clientFeedback": "Client feedback session",
+      "designRevisions": "Design revisions",
+      "finalDesignApproval": "Final design approval",
+      "workCommencement": "Work commencement",
+      "progressMonitoring": "Progress monitoring",
+      "qualityControl": "Quality control checks",
+      "clientProgressUpdates": "Client progress updates",
+      "issueResolution": "Issue resolution",
+      "finalDelivery": "Final delivery & inspection"
+    }
   },
   "lifecycle": {
     "contractLifecycleManagement": "Contract Lifecycle Management",
@@ -634,7 +667,9 @@
     "contractNotFoundMessage": "The requested contract could not be found or you may not have access to it.",
     "expires": "Expires",
     "export": "Export",
-    "share": "Share"
+    "share": "Share",
+    "selectContract": "Select Contract",
+    "chooseContract": "-- Choose a contract --"
   },
   "phaseTimeline": {
     "title": "Contract Lifecycle Timeline",

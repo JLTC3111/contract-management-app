@@ -478,7 +478,8 @@
     "approved": "已批准",
     "pending": "待处理",
     "rejected": "已拒绝",
-    "draft": "草稿"
+    "draft": "草稿",
+    "clickToViewTimeline": "点击查看时间线"
   },
   "phaseManagement": {
     "selectContractMessage": "请选择下拉菜单中的合同以管理其阶段。",
@@ -502,9 +503,43 @@
     "failedToLoadPhases": "加载合同阶段失败",
     "failedToInitializePhases": "初始化合同阶段失败",
     "phaseUpdatedSuccessfully": "阶段更新成功",
-    "failedToUpdatePhase": "更新阶段失败"
+    "failedToUpdatePhase": "更新阶段失败",
+    "status": {
+      "completed": "已完成",
+      "active": "进行中",
+      "pending": "待处理",
+      "delayed": "延迟"
+    },
+    "tasks": {
+      "prepareBid": "准备投标包",
+      "submitBid": "提交招标文件",
+      "legalApprovals": "获取法律批准",
+      "assignmentDecision": "发布分配决定",
+      "jvAgreement": "起草合资协议",
+      "jvSignoff": "收集合作伙伴签名",
+      "contractDraft": "起草合同和附录",
+      "contractSign": "签署合同和修订",
+      "assignTeam": "分配项目团队",
+      "internalDeliverables": "收集内部交付成果",
+      "paymentProposal": "提交付款建议",
+      "invoiceAndHandover": "开具发票并交接",
+      "initialClientMeeting": "初次客户会议",
+      "requirementsGathering": "需求收集",
+      "preliminaryDrawings": "初步图纸",
+      "clientFeedback": "客户反馈会议",
+      "designRevisions": "设计修订",
+      "finalDesignApproval": "最终设计批准",
+      "workCommencement": "开工",
+      "progressMonitoring": "进度监控",
+      "qualityControl": "质量控制检查",
+      "clientProgressUpdates": "客户进度更新",
+      "issueResolution": "问题解决",
+      "finalDelivery": "最终交付与检验"
+    }
   },
   "lifecycle": {
+    "selectContract": "选择合同",
+    "chooseContract": "选择合同以查看其生命周期",
     "contractLifecycleManagement": "合同生命周期管理",
     "failedToLoadContractDetails": "加载合同详情失败",
     "failedToLoadContractsForAnalytics": "加载分析合同失败",
@@ -514,5 +549,38 @@
     "expires": "到期",
     "export": "导出",
     "share": "分享"
+  },
+  "phaseTimeline": {
+    "title": "合同阶段时间线",
+    "complete": "完成",
+    "status": {
+      "completed": "已完成",
+      "active": "进行中",
+      "pending": "待处理"
+    },
+    "phase1": {
+      "name": "招标文件",
+      "description": "招标文件的准备和提交"
+    },
+    "phase2": {
+      "name": "法律文件",
+      "description": "法律文件和合规性"
+    },
+    "phase3": {
+      "name": "联合企业文件",
+      "description": "联合企业协议和合作伙伴关系"
+    },
+    "phase4": {
+      "name": "合同与附录",
+      "description": "主合同和补充协议"
+    },
+    "phase5": {
+      "name": "项目组文件",
+      "description": "项目团队文档"
+    },
+    "phase6": {
+      "name": "业主付款",
+      "description": "账单和付款文档"
+    }
   }
 } 

@@ -487,7 +487,8 @@
     "approved": "Approuvé",
     "pending": "En Attente",
     "rejected": "Rejeté",
-    "draft": "Brouillon"
+    "draft": "Brouillon",
+    "clickToViewTimeline": "Cliquez pour voir la chronologie"
   },
   "phaseManagement": {
     "selectContractMessage": "Sélectionnez un contrat dans le menu déroulant pour gérer ses phases.",
@@ -511,9 +512,43 @@
     "failedToLoadPhases": "Échec du chargement des phases du contrat",
     "failedToInitializePhases": "Échec de l'initialisation des phases du contrat",
     "phaseUpdatedSuccessfully": "Phase mise à jour avec succès",
-    "failedToUpdatePhase": "Échec de la mise à jour de la phase"
+    "failedToUpdatePhase": "Échec de la mise à jour de la phase",
+    "status": {
+      "completed": "Terminé",
+      "active": "Actif",
+      "pending": "En Attente",
+      "delayed": "Retardé"
+    },
+    "tasks": {
+      "prepareBid": "Préparer le dossier d'offre",
+      "submitBid": "Soumettre les documents d'appel d'offres",
+      "legalApprovals": "Obtenir les approbations légales",
+      "assignmentDecision": "Émettre les décisions d'attribution",
+      "jvAgreement": "Rédiger l'accord de coentreprise",
+      "jvSignoff": "Collecter les signatures des partenaires",
+      "contractDraft": "Rédiger le contrat et les annexes",
+      "contractSign": "Signer le contrat et les modifications",
+      "assignTeam": "Affecter l'équipe de projet",
+      "internalDeliverables": "Collecter les livrables internes",
+      "paymentProposal": "Soumettre la proposition de paiement",
+      "invoiceAndHandover": "Émettre les factures et remettre",
+      "initialClientMeeting": "Réunion initiale avec le client",
+      "requirementsGathering": "Collecte des exigences",
+      "preliminaryDrawings": "Dessins préliminaires",
+      "clientFeedback": "Session de retour client",
+      "designRevisions": "Révisions de conception",
+      "finalDesignApproval": "Approbation finale de la conception",
+      "workCommencement": "Commencement des travaux",
+      "progressMonitoring": "Surveillance des progrès",
+      "qualityControl": "Contrôles de qualité",
+      "clientProgressUpdates": "Mises à jour de progrès client",
+      "issueResolution": "Résolution des problèmes",
+      "finalDelivery": "Livraison finale et inspection"
+    }
   },
   "lifecycle": {
+    "selectContract": "Sélectionner le Contrat",
+    "chooseContract": "Choisissez un contrat pour voir son cycle de vie",
     "contractLifecycleManagement": "Gestion du Cycle de Vie du Contrat",
     "failedToLoadContractDetails": "Échec du chargement des détails du contrat",
     "failedToLoadContractsForAnalytics": "Échec du chargement des contrats pour l'analytique",
@@ -523,5 +558,38 @@
     "expires": "Expire",
     "export": "Exporter",
     "share": "Partager"
+  },
+  "phaseTimeline": {
+    "title": "Chronologie des Phases du Contrat",
+    "complete": "Complet",
+    "status": {
+      "completed": "Terminé",
+      "active": "Actif",
+      "pending": "En Attente"
+    },
+    "phase1": {
+      "name": "Documents d'Appel d'Offres",
+      "description": "Préparation et soumission des documents d'appel d'offres"
+    },
+    "phase2": {
+      "name": "Documents Juridiques",
+      "description": "Documentation juridique et conformité"
+    },
+    "phase3": {
+      "name": "Documents de Coentreprise",
+      "description": "Accords de coentreprise et partenariats"
+    },
+    "phase4": {
+      "name": "Contrat et Annexes",
+      "description": "Contrat principal et accords supplémentaires"
+    },
+    "phase5": {
+      "name": "Fichiers du Groupe de Projet",
+      "description": "Documentation de l'équipe de projet"
+    },
+    "phase6": {
+      "name": "Paiement du Propriétaire",
+      "description": "Documentation de facturation et de paiement"
+    }
   }
 } 

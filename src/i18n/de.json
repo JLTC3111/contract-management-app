@@ -483,7 +483,8 @@
     "approved": "Genehmigt",
     "pending": "Ausstehend",
     "rejected": "Abgelehnt",
-    "draft": "Entwurf"
+    "draft": "Entwurf",
+    "clickToViewTimeline": "Klicken Sie, um die Zeitleiste anzuzeigen"
   },
   "phaseManagement": {
     "selectContractMessage": "Wählen Sie einen Vertrag aus dem Dropdown-Menü, um seine Phasen zu verwalten.",
@@ -507,9 +508,43 @@
     "failedToLoadPhases": "Vertragsphasen konnten nicht geladen werden",
     "failedToInitializePhases": "Vertragsphasen konnten nicht initialisiert werden",
     "phaseUpdatedSuccessfully": "Phase erfolgreich aktualisiert",
-    "failedToUpdatePhase": "Phase konnte nicht aktualisiert werden"
+    "failedToUpdatePhase": "Phase konnte nicht aktualisiert werden",
+    "status": {
+      "completed": "Abgeschlossen",
+      "active": "Aktiv",
+      "pending": "Ausstehend",
+      "delayed": "Verzögert"
+    },
+    "tasks": {
+      "prepareBid": "Angebotspaket vorbereiten",
+      "submitBid": "Ausschreibungsunterlagen einreichen",
+      "legalApprovals": "Rechtliche Genehmigungen einholen",
+      "assignmentDecision": "Zuweisungsentscheidungen treffen",
+      "jvAgreement": "Joint-Venture-Vereinbarung entwerfen",
+      "jvSignoff": "Partnerunterschriften sammeln",
+      "contractDraft": "Vertrag und Anhänge entwerfen",
+      "contractSign": "Vertrag & Änderungen unterzeichnen",
+      "assignTeam": "Projektteam zuweisen",
+      "internalDeliverables": "Interne Liefergegenstände sammeln",
+      "paymentProposal": "Zahlungsvorschlag einreichen",
+      "invoiceAndHandover": "Rechnungen ausstellen und übergeben",
+      "initialClientMeeting": "Erstes Kundengespräch",
+      "requirementsGathering": "Anforderungsaufnahme",
+      "preliminaryDrawings": "Vorentwürfe",
+      "clientFeedback": "Kunden-Feedback-Sitzung",
+      "designRevisions": "Design-Überarbeitungen",
+      "finalDesignApproval": "Endgültige Design-Freigabe",
+      "workCommencement": "Arbeitsbeginn",
+      "progressMonitoring": "Fortschrittsüberwachung",
+      "qualityControl": "Qualitätskontrolle",
+      "clientProgressUpdates": "Fortschrittsmeldungen an Kunden",
+      "issueResolution": "Problemlösung",
+      "finalDelivery": "Endabnahme & Inspektion"
+    }
   },
   "lifecycle": {
+    "selectContract": "Vertrag auswählen",
+    "chooseContract": "Wählen Sie einen Vertrag aus, um seinen Lebenszyklus anzuzeigen",
     "contractLifecycleManagement": "Vertragslebenszyklus-Management",
     "failedToLoadContractDetails": "Vertragsdetails konnten nicht geladen werden",
     "failedToLoadContractsForAnalytics": "Verträge für Analysen konnten nicht geladen werden",
@@ -519,5 +554,38 @@
     "expires": "Läuft ab",
     "export": "Exportieren",
     "share": "Teilen"
+  },
+  "phaseTimeline": {
+    "title": "Vertragsphasen-Zeitleiste",
+    "complete": "Abgeschlossen",
+    "status": {
+      "completed": "Abgeschlossen",
+      "active": "Aktiv",
+      "pending": "Ausstehend"
+    },
+    "phase1": {
+      "name": "Ausschreibungsunterlagen",
+      "description": "Vorbereitung und Einreichung von Ausschreibungsunterlagen"
+    },
+    "phase2": {
+      "name": "Rechtsdokumente",
+      "description": "Rechtliche Dokumentation und Compliance"
+    },
+    "phase3": {
+      "name": "Joint-Venture-Dokumente",
+      "description": "Joint-Venture-Vereinbarungen und Partnerschaften"
+    },
+    "phase4": {
+      "name": "Vertrag & Anhänge",
+      "description": "Hauptvertrag und Zusatzvereinbarungen"
+    },
+    "phase5": {
+      "name": "Projektgruppendateien",
+      "description": "Projektteam-Dokumentation"
+    },
+    "phase6": {
+      "name": "Eigentümerzahlung",
+      "description": "Abrechnungs- und Zahlungsdokumentation"
+    }
   }
 } 
