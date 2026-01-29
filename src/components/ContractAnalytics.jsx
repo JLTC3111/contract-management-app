@@ -11,13 +11,14 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
-import { getI18nOrFallback } from '../utils/formatters';
+import { getI18nOrFallback, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
 import gsap from 'gsap';
 
 const COLORS = ['#10b981', '#f59e0b', '#ef4444', '#6b7280', '#8b5cf6', '#06b6d4'];
 const STATUS_COLORS = {
   approved: '#10b981',
   pending: '#f59e0b',
+  in_progress: '#3b82f6',
   rejected: '#ef4444',
   draft: '#6b7280',
   expiring: '#f97316',
@@ -444,9 +445,15 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
                 >
                   <td style={{ padding: '1rem', color: 'var(--text)' }}>{getI18nOrFallback(t, contract, 'title_i18n', 'title')}</td>
                   <td style={{ padding: '1rem' }}>
-                    <span style={{ padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.85rem', backgroundColor: `${STATUS_COLORS[contract.status] || '#6b7280'}20`, color: STATUS_COLORS[contract.status] || '#6b7280' }}>
-                      {t(`contractTable.status.${contract.status}`, contract.status)}
-                    </span>
+                    {(() => {
+                      const normalizedStatus = normalizeContractStatus(contract.status) || 'draft';
+                      const color = STATUS_COLORS[normalizedStatus] || '#6b7280';
+                      return (
+                        <span style={{ padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.85rem', backgroundColor: `${color}20`, color }}>
+                          {t(`contractTable.status.${normalizedStatus}`, humanizeContractStatus(normalizedStatus) || String(contract.status || ''))}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td style={{ padding: '1rem', color: 'var(--text)' }}>{contract.updated_at ? new Date(contract.updated_at).toLocaleDateString() : '-'}</td>
                   <td style={{ padding: '1rem', color: 'var(--text)' }}>{contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString() : '-'}</td>

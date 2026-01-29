@@ -11,7 +11,7 @@ import './Table.css';
 
 // Centralized utilities
 import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS, getStatusColor } from '../utils/constants';
-import { formatDate, getDaysUntilExpiry, getI18nOrFallback } from '../utils/formatters';
+import { formatDate, getDaysUntilExpiry, getI18nOrFallback, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
 import { StatusBadge } from './common';
 
 const ICON_COMPONENTS = {
@@ -79,14 +79,16 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
   // Filtering logic
   const filtered = contracts.filter((c) => {
     const query = searchQuery.toLowerCase();
+    const normalizedStatus = normalizeContractStatus(c.status);
     const matchesSearch =
       c.title?.toLowerCase().includes(query) ||
       c.status?.toLowerCase().includes(query) ||
+      normalizedStatus.includes(query) ||
       c.version?.toLowerCase().includes(query) ||
       c.author?.toLowerCase().includes(query) ||
       (c.expiry_date && new Date(c.expiry_date).toLocaleDateString().toLowerCase().includes(query));
     const matchesTitle = !filters.title || c.title?.toLowerCase().includes(filters.title.toLowerCase());
-    const matchesStatus = !filters.status || c.status === filters.status;
+    const matchesStatus = !filters.status || normalizedStatus === filters.status;
     const matchesVersion = !filters.version || c.version === filters.version;
     const matchesAuthor = !filters.author || c.author === filters.author;
     const matchesUpdated = !filters.updated || (c.updated_at && c.updated_at.slice(0, 10) === filters.updated);
@@ -97,7 +99,9 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
   // Unique values for dropdowns
   const uniqueVersions = getUnique(contracts, 'version');
   const uniqueAuthors = getUnique(contracts, 'author');
-  const uniqueStatuses = getUnique(contracts, 'status');
+  const uniqueStatuses = Array.from(
+    new Set((contracts || []).map((c) => normalizeContractStatus(c.status)).filter(Boolean))
+  );
 
   // GSAP Animation for table rows
   useEffect(() => {
@@ -255,7 +259,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                 >
                   <option value="">{t('contractTable.all')}</option>
                   {uniqueStatuses.map(s => (
-                    <option key={s} value={s}>{t(`contractTable.status.${s.toLowerCase()}`)}</option>
+                    <option key={s} value={s}>{t(`contractTable.status.${s}`, humanizeContractStatus(s))}</option>
                   ))}
                 </select>
               ))}
@@ -447,8 +451,8 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
               <td>{highlight(getI18nOrFallback(t, contract, 'title_i18n', 'title') || t('contractTable.untitledContract'), searchQuery)}</td>
               <td>
                 {(() => {
-                  const rawStatus = contract.status?.toLowerCase();
-                  const isNearExpiry = isExpiringSoon(contract.expiry_date, contract.status);
+                  const rawStatus = normalizeContractStatus(contract.status) || 'draft';
+                  const isNearExpiry = isExpiringSoon(contract.expiry_date, rawStatus);
                   const finalStatus = rawStatus === 'approved' && isNearExpiry ? 'expiring' : 
                                      rawStatus === 'draft' && isNearExpiry ? 'expiring' :
                                      rawStatus === 'pending' && isNearExpiry ? 'expiring' :
@@ -475,8 +479,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                       }}
                     >
                       <IconComponent size={14} />
-                      {t(`contractTable.status.${finalStatus}`)}
-                      {finalStatus === 'expiring'}
+                      {t(`contractTable.status.${finalStatus}`, humanizeContractStatus(finalStatus))}
                     </span>
                   );
                 })()}

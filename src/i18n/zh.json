@@ -115,6 +115,7 @@
   },
   "status": {
     "approved": "已批准",
+    "in_progress": "进行中",
     "pending": "待处理",
     "draft": "草稿",
     "rejected": "已拒绝",
@@ -261,6 +262,7 @@
       "draft": "草稿",
       "approved": "已批准",
       "pending": "待处理",
+      "in_progress": "进行中",
       "rejected": "已拒绝",
       "expiring": "即将到期",
       "expired": "已过期"
@@ -576,6 +578,7 @@
     "complete": "完成",
     "status": {
       "completed": "已完成",
+      "in_progress": "进行中",
       "active": "进行中",
       "pending": "待处理"
     },

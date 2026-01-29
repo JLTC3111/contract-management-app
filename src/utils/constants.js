@@ -7,6 +7,7 @@
 export const STATUS_COLORS = {
   approved: '#10b981',
   pending: '#f59e0b',
+  in_progress: '#3b82f6',
   rejected: '#ef4444',
   draft: '#6b7280',
   expiring: '#f97316',
@@ -21,6 +22,7 @@ export const STATUS_COLORS = {
 export const STATUS_ICONS = {
   approved: 'CheckCircle',
   pending: 'Clock',
+  in_progress: 'PlayCircle',
   draft: 'FileText',
   rejected: 'XCircle',
   expired: 'AlertOctagon',
@@ -69,6 +71,7 @@ export const FILE_CONSTRAINTS = {
 export const CONTRACT_STATUSES = [
   { value: 'draft', labelKey: 'contractTable.status.draft' },
   { value: 'pending', labelKey: 'contractTable.status.pending' },
+  { value: 'in_progress', labelKey: 'contractTable.status.in_progress' },
   { value: 'approved', labelKey: 'contractTable.status.approved' },
   { value: 'rejected', labelKey: 'contractTable.status.rejected' },
   { value: 'expiring', labelKey: 'contractTable.status.expiring' },

@@ -124,6 +124,7 @@
   },
   "status": {
     "approved": "Approuvé",
+    "in_progress": "En cours",
     "pending": "En attente",
     "draft": "Brouillon",
     "rejected": "Rejeté",
@@ -269,6 +270,7 @@
       "draft": "Brouillon",
       "approved": "Approuvé",
       "pending": "En attente",
+      "in_progress": "En cours",
       "rejected": "Rejeté",
       "expiring": "Expire bientôt",
       "expired": "Expiré"
@@ -412,8 +414,7 @@
   "contract_detail_close_preview": "Fermer l'aperçu",
   "failed_to_upload": "Échec du téléchargement.",
   "upload_error_for": "Erreur de téléchargement pour",
-  "uploader_uploaded": "téléversé"
-  ,
+  "uploader_uploaded": "téléversé",
   "sidebar_mobile": {
     "password": "Passe",
     "manual": "Manuel",
@@ -518,18 +519,17 @@
     "status": {
       "completed": "Terminé",
       "active": "Actif",
-      "pending": "En Attente",
-      "delayed": "Retardé"
+      "delayed": "Retardé",
+      "label": "Statut",
+      "draft": "Brouillon",
+      "approved": "Approuvé",
+      "pending": "En attente",
+      "in_progress": "En cours",
+      "rejected": "Rejeté",
+      "expiring": "Bientôt expiré",
+      "expired": "Expiré"
     },
     "tasks": {
-      "prepareBid": "Préparer le dossier d'offre",
-      "submitBid": "Soumettre les documents d'appel d'offres",
-      "legalApprovals": "Obtenir les approbations légales",
-      "assignmentDecision": "Émettre les décisions d'attribution",
-      "jvAgreement": "Rédiger l'accord de coentreprise",
-      "jvSignoff": "Collecter les signatures des partenaires",
-      "contractDraft": "Rédiger le contrat et les annexes",
-      "contractSign": "Signer le contrat et les modifications",
       "assignTeam": "Affecter l'équipe de projet",
       "internalDeliverables": "Collecter les livrables internes",
       "paymentProposal": "Soumettre la proposition de paiement",
@@ -585,6 +585,7 @@
     "complete": "Complet",
     "status": {
       "completed": "Terminé",
+      "in_progress": "En cours",
       "active": "Actif",
       "pending": "En Attente"
     },

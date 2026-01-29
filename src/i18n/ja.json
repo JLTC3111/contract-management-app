@@ -124,6 +124,7 @@
   },
   "status": {
     "approved": "承認済み",
+    "in_progress": "進行中",
     "pending": "保留中",
     "draft": "下書き",
     "rejected": "却下",
@@ -270,6 +271,7 @@
       "draft": "下書き",
       "approved": "承認済み",
       "pending": "保留中",
+      "in_progress": "進行中",
       "rejected": "却下",
       "expiring": "まもなく期限切れ",
       "expired": "期限切れ"
@@ -505,6 +507,7 @@
     "overallContractProgress": "全体的な契約進捗",
     "phase": "段階",
     "complete": "完了",
+    "in_progress": "進行中",
     "started": "開始済み",
     "completed": "完了済み",
     "tasksDeliverables": "タスクと成果物",

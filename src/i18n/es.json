@@ -124,6 +124,7 @@
   },
   "status": {
     "approved": "Aprobado",
+    "in_progress": "En progreso",
     "pending": "Pendiente",
     "draft": "Borrador",
     "rejected": "Rechazado",
@@ -269,6 +270,7 @@
       "draft": "Borrador",
       "approved": "Aprobado",
       "pending": "Pendiente",
+      "in_progress": "En progreso",
       "rejected": "Rechazado",
       "expiring": "Próximo a vencer",
       "expired": "Vencido"
@@ -636,6 +638,7 @@
     "complete": "Completo",
     "status": {
       "completed": "Completado",
+      "in_progress": "En progreso",
       "active": "Activo",
       "pending": "Pendiente"
     },

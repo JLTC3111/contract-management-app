@@ -64,6 +64,7 @@ const ContractInfo = ({
   const statusOptions = [
     { value: 'draft', label: t('contractTable.status.draft', 'Draft') },
     { value: 'pending', label: t('contractTable.status.pending', 'Pending') },
+    { value: 'in_progress', label: t('contractTable.status.in_progress', 'In Progress') },
     { value: 'approved', label: t('contractTable.status.approved', 'Approved') },
     { value: 'rejected', label: t('contractTable.status.rejected', 'Rejected') },
     { value: 'expiring', label: t('contractTable.status.expiring', 'Expiring') },

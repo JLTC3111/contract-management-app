@@ -212,6 +212,7 @@ const NewContract = () => {
           >
             <option value="draft">{t('contractTable.status.draft')}</option>
             <option value="pending">{t('contractTable.status.pending')}</option>
+            <option value="in_progress">{t('contractTable.status.in_progress')}</option>
             <option value="approved">{t('contractTable.status.approved')}</option>
             <option value="rejected">{t('contractTable.status.rejected')}</option>
             <option value="expiring">{t('contractTable.status.expiring')}</option>

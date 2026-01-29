@@ -10,6 +10,7 @@
   },
   "sidebar": {
     "visitIcueTooltip": "Truy cập iCUE!",
+    "in_progress": "Đang thực hiện",
     "visitIcue": "Truy cập iCUE!",
     "dashboard": "Bảng điều khiển",
     "approvals": "Phê duyệt",
@@ -24,6 +25,7 @@
     "statusUpdated": "✅ Đã cập nhật trạng thái!",
     "contractsUpdated": "hợp đồng đã cập nhật",
     "cronTriggerFailed": "🚨 Không thể kích hoạt cron job. Kiểm tra mạng hoặc cài đặt CORS.",
+      "in_progress": "Đang thực hiện",
     "home": "Trang chủ",
     "logged_in_as": "Đăng nhập:",
     "role": "Vai trò",
@@ -271,6 +273,7 @@
       "draft": "Bản nháp",
       "approved": "Đã phê duyệt",
       "pending": "Đang chờ",
+      "in_progress": "Đang thực hiện",
       "rejected": "Bị từ chối",
       "expiring": "Sắp hết hạn",
       "expired": "Đã hết hạn"
@@ -585,6 +588,7 @@
     "complete": "hoàn thành",
     "status": {
       "completed": "Đã hoàn thành",
+      "in_progress": "Đang thực hiện",
       "active": "Đang thực hiện",
       "pending": "Chờ xử lý"
     },

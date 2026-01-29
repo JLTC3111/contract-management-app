@@ -208,6 +208,58 @@ export const formatFileName = (filename, maxLength = 30) => {
 };
 
 /**
+ * Normalize a contract status coming from DB/UI into a canonical key.
+ * Handles variants like "In_progress" and mistakenly-stored i18n keys like
+ * "ContractTable.Status.In_progress".
+ *
+ * @param {unknown} rawStatus
+ * @returns {string} normalized status (e.g., 'in_progress')
+ */
+export const normalizeContractStatus = (rawStatus) => {
+  if (rawStatus === null || rawStatus === undefined) return '';
+
+  let status = String(rawStatus).trim();
+  if (!status) return '';
+
+  // Strip known i18n key prefixes or dotted namespaces.
+  // Examples:
+  // - contractTable.status.in_progress
+  // - ContractTable.Status.In_progress
+  status = status.replace(/^contractTable\.status\./i, '');
+  status = status.replace(/^contracttable\.status\./i, '');
+  status = status.replace(/^ContractTable\.Status\./, '');
+  if (status.includes('.')) status = status.split('.').pop() || status;
+
+  status = status
+    .replace(/[\s-]+/g, '_')
+    .replace(/[^a-zA-Z0-9_]/g, '_')
+    .toLowerCase();
+
+  // Canonicalize common variants.
+  if (status === 'inprogress' || status === 'in__progress') status = 'in_progress';
+  if (status === 'in_progress') return 'in_progress';
+  if (status === 'inprogress_') return 'in_progress';
+  if (status === 'in__progress') return 'in_progress';
+
+  return status;
+};
+
+/**
+ * Humanize a normalized status for display as a fallback.
+ * @param {unknown} rawStatus
+ * @returns {string}
+ */
+export const humanizeContractStatus = (rawStatus) => {
+  const normalized = normalizeContractStatus(rawStatus);
+  if (!normalized) return '';
+  return normalized
+    .split('_')
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+};
+
+/**
  * Get days until expiry
  * @param {string|Date} expiryDate - Expiry date
  * @returns {number|null} Days until expiry (negative if expired)

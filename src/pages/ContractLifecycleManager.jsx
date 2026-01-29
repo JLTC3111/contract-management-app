@@ -5,7 +5,7 @@ import {
   FileText, Settings, Download, Share2
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { getI18nOrFallback } from '../utils/formatters';
+import { getI18nOrFallback, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
 import { useTheme } from '../hooks/useTheme';
 import { useUser } from '../hooks/useUser';
 import { supabase } from '../utils/supaBaseClient';
@@ -281,11 +281,14 @@ const ContractLifecycleManager = () => {
                       borderRadius: '20px',
                       fontSize: '0.85rem',
                       fontWeight: '600',
-                      backgroundColor: getStatusColor(contract.status) + '20',
-                      color: getStatusColor(contract.status),
-                      border: `1px solid ${getStatusColor(contract.status)}40`
+                      backgroundColor: getStatusColor(normalizeContractStatus(contract.status)) + '20',
+                      color: getStatusColor(normalizeContractStatus(contract.status)),
+                      border: `1px solid ${getStatusColor(normalizeContractStatus(contract.status))}40`
                     }}>
-                      {t(`contractTable.status.${contract.status}`, contract.status.charAt(0).toUpperCase() + contract.status.slice(1))}
+                      {t(
+                        `contractTable.status.${normalizeContractStatus(contract.status)}`,
+                        humanizeContractStatus(normalizeContractStatus(contract.status)) || String(contract.status || '')
+                      )}
                     </span>
                     {contract.expiry_date && (
                       <span style={{
@@ -354,14 +357,14 @@ const ContractLifecycleManager = () => {
                   }}
                   onMouseEnter={(e) => {
                     if (activeTab !== tab.id) {
-                      e.target.style.background = 'var(--hover-bg)';
-                      e.target.style.opacity = '1';
+                      e.currentTarget.style.background = 'var(--hover-bg)';
+                      e.currentTarget.style.opacity = '1';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (activeTab !== tab.id) {
-                      e.target.style.background = 'transparent';
-                      e.target.style.opacity = '0.8';
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.opacity = '0.8';
                     }
                   }}
                 >

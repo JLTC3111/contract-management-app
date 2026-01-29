@@ -203,6 +203,7 @@
   },
   "status": {
     "approved": "Approved",
+    "in_progress": "In Progress",
     "pending": "Pending",
     "draft": "Draft",
     "rejected": "Rejected",
@@ -293,6 +294,7 @@
       "draft": "Draft",
       "approved": "Approved",
       "pending": "Pending",
+      "in_progress": "In Progress",
       "rejected": "Rejected",
       "expiring": "Expiring Soon!",
       "expired": "Expired"
@@ -697,6 +699,7 @@
     "complete": "complete",
     "status": {
       "completed": "Completed",
+      "in_progress": "In Progress",
       "active": "Active",
       "pending": "Pending"
     },

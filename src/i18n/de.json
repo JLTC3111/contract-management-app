@@ -201,6 +201,7 @@
   },
   "status": {
     "approved": "Genehmigt",
+    "in_progress": "In Bearbeitung",
     "pending": "Ausstehend",
     "draft": "Entwurf",
     "rejected": "Abgelehnt",
@@ -268,6 +269,7 @@
       "draft": "Entwurf",
       "approved": "Genehmigt",
       "pending": "Ausstehend",
+      "in_progress": "In Bearbeitung",
       "rejected": "Abgelehnt",
       "expiring": "Läuft bald ab",
       "expired": "Abgelaufen"
@@ -521,7 +523,8 @@
       "prepareBid": "Angebotspaket vorbereiten",
       "submitBid": "Ausschreibungsunterlagen einreichen",
       "legalApprovals": "Rechtliche Genehmigungen einholen",
-      "assignmentDecision": "Zuweisungsentscheidungen treffen",
+      "pending": "Ausstehend",
+      "in_progress": "In Bearbeitung",
       "jvAgreement": "Joint-Venture-Vereinbarung entwerfen",
       "jvSignoff": "Partnerunterschriften sammeln",
       "contractDraft": "Vertrag und Anhänge entwerfen",
@@ -581,6 +584,7 @@
     "complete": "Abgeschlossen",
     "status": {
       "completed": "Abgeschlossen",
+      "in_progress": "In Bearbeitung",
       "active": "Aktiv",
       "pending": "Ausstehend"
     },
