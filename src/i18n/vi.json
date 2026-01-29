@@ -491,6 +491,8 @@
     "clickToViewTimeline": "Nhấp để xem tiến trình"
   },
   "phaseManagement": {
+    "addTask": "Thêm Nhiệm Vụ",
+    "overallProgress": "Tiến Độ Tổng thể",
     "selectContractMessage": "Vui lòng chọn một hợp đồng để quản lý các giai đoạn của nó.",
     "noContractSelected": "Chưa Có Hợp Đồng Nào Được Chọn",
     "goToDashboard": "Đi Tới Bảng Điều Khiển",

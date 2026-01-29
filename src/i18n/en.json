@@ -603,6 +603,8 @@
     "clickToViewTimeline": "Click to view timeline"
   },
   "phaseManagement": {
+    "addTask": "Add Task",
+    "overallProgress": "Overall Progress",
     "selectContractMessage": "Select a contract from the dropdown to manage its phases.",
     "noContractSelected": "No Contract Selected",
     "goToDashboard": "Go to Dashboard",

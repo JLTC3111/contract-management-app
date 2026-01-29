@@ -521,6 +521,8 @@
     "delayed": "Retrasado"
   },
   "phaseManagement": {
+    "addTask": "Agregar Tarea",
+    "overallProgress": "Progreso General",
     "selectContractMessage": "Seleccione un contrato del menú desplegable para gestionar sus fases.",
     "noContractSelected": "Ningún contrato seleccionado",
     "goToDashboard": "Ir al panel",

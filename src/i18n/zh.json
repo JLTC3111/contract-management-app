@@ -482,6 +482,8 @@
     "clickToViewTimeline": "点击查看时间线"
   },
   "phaseManagement": {
+    "addTask": "添加任务",
+    "overallProgress": "整体进度",
     "selectContractMessage": "请选择下拉菜单中的合同以管理其阶段。",
     "noContractSelected": "未选择合同",
     "goToDashboard": "前往仪表板",

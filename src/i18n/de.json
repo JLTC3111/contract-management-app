@@ -487,6 +487,8 @@
     "clickToViewTimeline": "Klicken Sie, um die Zeitleiste anzuzeigen"
   },
   "phaseManagement": {
+    "addTask": "Aufgabe hinzufügen",
+    "overallProgress": "Gesamtfortschritt",
     "selectContractMessage": "Wählen Sie einen Vertrag aus dem Dropdown-Menü, um seine Phasen zu verwalten.",
     "noContractSelected": "Kein Vertrag ausgewählt",
     "goToDashboard": "Zum Dashboard gehen",

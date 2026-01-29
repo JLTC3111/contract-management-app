@@ -492,6 +492,8 @@
     "clickToViewTimeline": "クリックしてタイムラインを表示"
   },
   "phaseManagement": {
+    "addTask": "タスクを追加",
+    "overallProgress": "全体進捗",
     "selectContractMessage": "契約を選択して段階管理を開始してください",
     "noContractSelected": "契約が選択されていません",
     "goToDashboard": "ダッシュボードへ移動",

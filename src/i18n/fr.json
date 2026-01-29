@@ -491,6 +491,8 @@
     "clickToViewTimeline": "Cliquez pour voir la chronologie"
   },
   "phaseManagement": {
+    "addTask": "Ajouter une tâche",
+    "overallProgress": "Progrès Global",
     "selectContractMessage": "Sélectionnez un contrat dans le menu déroulant pour gérer ses phases.",
     "noContractSelected": "Aucun contrat sélectionné",
     "goToDashboard": "Aller au Tableau de Bord",

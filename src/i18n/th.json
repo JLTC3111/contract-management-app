@@ -481,6 +481,8 @@
     "clickToViewTimeline": "คลิกเพื่อดูไทม์ไลน์"
   },
   "phaseManagement": {
+    "addTask": "เพิ่มงาน",
+    "overallProgress": "ความคืบหน้าโดยรวม",
     "selectContractMessage": "โปรดเลือกสัญญาเพื่อดูและจัดการขั้นตอน",
     "noContractSelected": "ไม่ได้เลือกสัญญา",
     "goToDashboard": "ไปที่แดชบอร์ด",
