@@ -44,6 +44,7 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   const metricsRef = useRef([]);
   const chartsRef = useRef([]);
   const resizeHandleRef = useRef(null);
+  const resizeCenterXRef = useRef(0);
 
   // GSAP entrance animations
   useEffect(() => {
@@ -66,10 +67,12 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!isResizing) return;
-      
-      // Calculate new width based on mouse position relative to viewport center
-      const viewportCenter = window.innerWidth / 2;
-      const distanceFromCenter = Math.abs(e.clientX - viewportCenter);
+
+      // Calculate width relative to the container's center (stable even with sidebar layouts)
+      const centerX = resizeCenterXRef.current;
+      if (!centerX) return;
+
+      const distanceFromCenter = Math.abs(e.clientX - centerX);
       const newWidth = Math.max(800, Math.min(2400, distanceFromCenter * 2));
       setContainerWidth(newWidth);
     };
@@ -93,7 +96,14 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
     };
   }, [isResizing, containerWidth]);
 
-  const handleResizeStart = () => {
+  const handleResizeStart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    resizeCenterXRef.current = rect.left + rect.width / 2;
+
     setIsResizing(true);
   };
 
@@ -525,15 +535,13 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
           right: 0,
           top: 0,
           bottom: 0,
-          width: '8px',
+          width: '12px',
           cursor: 'ew-resize',
           background: isResizing ? 'var(--primary)' : 'transparent',
           transition: 'background 0.2s',
           zIndex: 10,
-          opacity: 0.3,
-          '&:hover': {
-            opacity: 1
-          }
+          opacity: 0.25,
+          userSelect: 'none'
         }}
         onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
         onMouseLeave={(e) => !isResizing && (e.currentTarget.style.opacity = '0.3')}
@@ -558,12 +566,13 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
           left: 0,
           top: 0,
           bottom: 0,
-          width: '8px',
+          width: '12px',
           cursor: 'ew-resize',
           background: isResizing ? 'var(--primary)' : 'transparent',
           transition: 'background 0.2s',
           zIndex: 10,
-          opacity: 0.3
+          opacity: 0.25,
+          userSelect: 'none'
         }}
         onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
         onMouseLeave={(e) => !isResizing && (e.currentTarget.style.opacity = '0.3')}
