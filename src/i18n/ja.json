@@ -546,8 +546,27 @@
       "qualityControl": "品質管理チェック",
       "clientProgressUpdates": "クライアント進捗更新",
       "issueResolution": "問題解決",
-      "finalDelivery": "最終納品と検査"
-    }
+      "finalDelivery": "最終納品と検査",
+      "invoiceGeneration": "請求書作成",
+      "paymentTracking": "支払い追跡",
+      "documentationCompilation": "文書編集",
+      "clientSatisfactionSurvey": "顧客満足度調査",
+      "lessonsLearned": "教訓セッション",
+      "contractClosure": "契約終了",
+      "contractReview": "契約のレビューと交渉",
+      "legalReview": "法務レビューと承認",
+      "distributeCopies": "署名済みコピーを配布",
+      "archiveContract": "原本契約をアーカイブ",
+      "kickoffMeeting": "プロジェクトキックオフミーティング",
+      "createProjectPlan": "プロジェクト計画を作成",
+      "setupCommunication": "コミュニケーションチャネルを設定",
+      "projectDocumentation": "プロジェクトドキュメントを完成",
+      "paymentReconciliation": "支払い照合",
+      "financialClosure": "財務終了"
+    },
+    "reopenPhase": "段階を再開",
+    "confirmReopen": "この段階を再開しますか？",
+    "reopenWarning": "これにより、段階がアクティブステータスに戻ります。"
   },
   "lifecycle": {
     "selectContract": "契約を選択",

@@ -535,8 +535,27 @@
       "qualityControl": "ตรวจสอบคุณภาพ",
       "clientProgressUpdates": "อัปเดตความคืบหน้าแก่ลูกค้า",
       "issueResolution": "แก้ไขปัญหา",
-      "finalDelivery": "ส่งมอบและตรวจสอบขั้นสุดท้าย"
-    }
+      "finalDelivery": "ส่งมอบและตรวจสอบขั้นสุดท้าย",
+      "invoiceGeneration": "สร้างใบแจ้งหนี้",
+      "paymentTracking": "ติดตามการชำระเงิน",
+      "documentationCompilation": "รวบรวมเอกสาร",
+      "clientSatisfactionSurvey": "แบบสำรวจความพึงพอใจของลูกค้า",
+      "lessonsLearned": "เซสชั่นบทเรียนที่ได้เรียนรู้",
+      "contractClosure": "ปิดสัญญา",
+      "contractReview": "ตรวจสอบและเจรจาสัญญา",
+      "legalReview": "ตรวจสอบและอนุมัติทางกฎหมาย",
+      "distributeCopies": "แจกจ่ายสำเนาที่ลงนามแล้ว",
+      "archiveContract": "เก็บสัญญาต้นฉบับ",
+      "kickoffMeeting": "ประชุมเริ่มโครงการ",
+      "createProjectPlan": "สร้างแผนโครงการ",
+      "setupCommunication": "ตั้งค่าช่องทางการสื่อสาร",
+      "projectDocumentation": "เสร็จสิ้นเอกสารโครงการ",
+      "paymentReconciliation": "การกระทบยอดการชำระเงิน",
+      "financialClosure": "ปิดการเงิน"
+    },
+    "reopenPhase": "เปิดขั้นตอนอีกครั้ง",
+    "confirmReopen": "เปิดขั้นตอนนี้อีกครั้ง?",
+    "reopenWarning": "การดำเนินการนี้จะตั้งค่าขั้นตอนกลับไปเป็นสถานะที่ใช้งานอยู่"
   },
   "lifecycle": {
     "selectContract": "เลือกสัญญา",

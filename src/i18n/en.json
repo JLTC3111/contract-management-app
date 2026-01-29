@@ -657,8 +657,27 @@
       "qualityControl": "Quality control checks",
       "clientProgressUpdates": "Client progress updates",
       "issueResolution": "Issue resolution",
-      "finalDelivery": "Final delivery & inspection"
-    }
+      "finalDelivery": "Final delivery & inspection",
+      "invoiceGeneration": "Invoice generation",
+      "paymentTracking": "Payment tracking",
+      "documentationCompilation": "Documentation compilation",
+      "clientSatisfactionSurvey": "Client satisfaction survey",
+      "lessonsLearned": "Lessons learned session",
+      "contractClosure": "Contract closure",
+      "contractReview": "Contract review and negotiation",
+      "legalReview": "Legal review and approval",
+      "distributeCopies": "Distribute signed copies",
+      "archiveContract": "Archive original contract",
+      "kickoffMeeting": "Project kickoff meeting",
+      "createProjectPlan": "Create project plan",
+      "setupCommunication": "Setup communication channels",
+      "projectDocumentation": "Complete project documentation",
+      "paymentReconciliation": "Payment reconciliation",
+      "financialClosure": "Financial closure"
+    },
+    "reopenPhase": "Reopen Phase",
+    "confirmReopen": "Reopen this phase?",
+    "reopenWarning": "This will set the phase back to active status."
   },
   "lifecycle": {
     "contractLifecycleManagement": "Contract Lifecycle Management",

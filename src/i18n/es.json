@@ -575,8 +575,27 @@
       "qualityControl": "Controles de calidad",
       "clientProgressUpdates": "Actualizaciones de progreso al cliente",
       "issueResolution": "Resolución de problemas",
-      "finalDelivery": "Entrega final e inspección"
-    }
+      "finalDelivery": "Entrega final e inspección",
+      "invoiceGeneration": "Generación de facturas",
+      "paymentTracking": "Seguimiento de pagos",
+      "documentationCompilation": "Compilación de documentación",
+      "clientSatisfactionSurvey": "Encuesta de satisfacción del cliente",
+      "lessonsLearned": "Sesión de lecciones aprendidas",
+      "contractClosure": "Cierre de contrato",
+      "contractReview": "Revisión y negociación del contrato",
+      "legalReview": "Revisión y aprobación legal",
+      "distributeCopies": "Distribuir copias firmadas",
+      "archiveContract": "Archivar contrato original",
+      "kickoffMeeting": "Reunión de inicio del proyecto",
+      "createProjectPlan": "Crear plan del proyecto",
+      "setupCommunication": "Configurar canales de comunicación",
+      "projectDocumentation": "Completar documentación del proyecto",
+      "paymentReconciliation": "Conciliación de pagos",
+      "financialClosure": "Cierre financiero"
+    },
+    "reopenPhase": "Reabrir Fase",
+    "confirmReopen": "¿Reabrir esta fase?",
+    "reopenWarning": "Esto establecerá la fase de nuevo al estado activo."
   },
   "lifecycle": {
     "selectContract": "Seleccionar Contrato",

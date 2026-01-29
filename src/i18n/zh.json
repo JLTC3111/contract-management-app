@@ -536,8 +536,27 @@
       "qualityControl": "质量控制检查",
       "clientProgressUpdates": "客户进度更新",
       "issueResolution": "问题解决",
-      "finalDelivery": "最终交付与检验"
-    }
+      "finalDelivery": "最终交付与检验",
+      "invoiceGeneration": "发票生成",
+      "paymentTracking": "付款跟踪",
+      "documentationCompilation": "文档汇编",
+      "clientSatisfactionSurvey": "客户满意度调查",
+      "lessonsLearned": "经验教训会议",
+      "contractClosure": "合同关闭",
+      "contractReview": "合同审查与谈判",
+      "legalReview": "法律审查与批准",
+      "distributeCopies": "分发签署副本",
+      "archiveContract": "归档原始合同",
+      "kickoffMeeting": "项目启动会议",
+      "createProjectPlan": "创建项目计划",
+      "setupCommunication": "设置沟通渠道",
+      "projectDocumentation": "完成项目文档",
+      "paymentReconciliation": "付款对账",
+      "financialClosure": "财务结算"
+    },
+    "reopenPhase": "重新打开阶段",
+    "confirmReopen": "重新打开此阶段？",
+    "reopenWarning": "这会将阶段设置回活动状态。"
   },
   "lifecycle": {
     "selectContract": "选择合同",

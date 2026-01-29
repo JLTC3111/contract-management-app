@@ -545,8 +545,27 @@
       "qualityControl": "Kiểm tra chất lượng",
       "clientProgressUpdates": "Cập nhật tiến độ cho khách hàng",
       "issueResolution": "Giải quyết vấn đề",
-      "finalDelivery": "Bàn giao & kiểm tra cuối cùng"
-    }
+      "finalDelivery": "Bàn giao & kiểm tra cuối cùng",
+      "invoiceGeneration": "Tạo hóa đơn",
+      "paymentTracking": "Theo dõi thanh toán",
+      "documentationCompilation": "Biên soạn tài liệu",
+      "clientSatisfactionSurvey": "Khảo sát sự hài lòng của khách hàng",
+      "lessonsLearned": "Phiên học hỏi kinh nghiệm",
+      "contractClosure": "Đóng hợp đồng",
+      "contractReview": "Xem xét và đàm phán hợp đồng",
+      "legalReview": "Xem xét và phê duyệt pháp lý",
+      "distributeCopies": "Phân phối bản sao đã ký",
+      "archiveContract": "Lưu trữ hợp đồng gốc",
+      "kickoffMeeting": "Họp khởi động dự án",
+      "createProjectPlan": "Tạo kế hoạch dự án",
+      "setupCommunication": "Thiết lập kênh liên lạc",
+      "projectDocumentation": "Hoàn thành tài liệu dự án",
+      "paymentReconciliation": "Đối chiếu thanh toán",
+      "financialClosure": "Kết thúc tài chính"
+    },
+    "reopenPhase": "Mở lại Giai đoạn",
+    "confirmReopen": "Mở lại giai đoạn này?",
+    "reopenWarning": "Điều này sẽ đặt giai đoạn trở lại trạng thái đang hoạt động."
   },
   "lifecycle": {
     "contractLifecycleManagement": "Quản lý Chu kỳ Sống Hợp đồng",

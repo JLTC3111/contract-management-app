@@ -54,7 +54,11 @@ const DEFAULT_PHASES = [
     description: 'Main contract, amendments, and supplemental agreements',
     tasks: [
       { textKey: 'phaseManagement.tasks.contractDraft', text: 'Draft contract and appendices' },
-      { textKey: 'phaseManagement.tasks.contractSign', text: 'Sign contract & amendments' }
+      { textKey: 'phaseManagement.tasks.contractReview', text: 'Contract review and negotiation' },
+      { textKey: 'phaseManagement.tasks.legalReview', text: 'Legal review and approval' },
+      { textKey: 'phaseManagement.tasks.contractSign', text: 'Sign contract & amendments' },
+      { textKey: 'phaseManagement.tasks.distributeCopies', text: 'Distribute signed copies' },
+      { textKey: 'phaseManagement.tasks.archiveContract', text: 'Archive original contract' }
     ]
   },
   {
@@ -65,7 +69,11 @@ const DEFAULT_PHASES = [
     description: 'Project team assignments and documentation',
     tasks: [
       { textKey: 'phaseManagement.tasks.assignTeam', text: 'Assign project team' },
-      { textKey: 'phaseManagement.tasks.internalDeliverables', text: 'Collect internal deliverables' }
+      { textKey: 'phaseManagement.tasks.kickoffMeeting', text: 'Project kickoff meeting' },
+      { textKey: 'phaseManagement.tasks.createProjectPlan', text: 'Create project plan' },
+      { textKey: 'phaseManagement.tasks.setupCommunication', text: 'Setup communication channels' },
+      { textKey: 'phaseManagement.tasks.internalDeliverables', text: 'Collect internal deliverables' },
+      { textKey: 'phaseManagement.tasks.projectDocumentation', text: 'Complete project documentation' }
     ]
   },
   {
@@ -76,7 +84,11 @@ const DEFAULT_PHASES = [
     description: 'Settlement proposals, invoices, and payment records',
     tasks: [
       { textKey: 'phaseManagement.tasks.paymentProposal', text: 'Submit payment proposal' },
-      { textKey: 'phaseManagement.tasks.invoiceAndHandover', text: 'Issue invoices and handover' }
+      { textKey: 'phaseManagement.tasks.invoiceGeneration', text: 'Invoice generation' },
+      { textKey: 'phaseManagement.tasks.paymentTracking', text: 'Payment tracking' },
+      { textKey: 'phaseManagement.tasks.paymentReconciliation', text: 'Payment reconciliation' },
+      { textKey: 'phaseManagement.tasks.invoiceAndHandover', text: 'Issue invoices and handover' },
+      { textKey: 'phaseManagement.tasks.financialClosure', text: 'Financial closure' }
     ]
   }
 ];
@@ -127,7 +139,26 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
       'Quality control checks': 'phaseManagement.tasks.qualityControl',
       'Client progress updates': 'phaseManagement.tasks.clientProgressUpdates',
       'Issue resolution': 'phaseManagement.tasks.issueResolution',
-      'Final delivery & inspection': 'phaseManagement.tasks.finalDelivery'
+      'Final delivery & inspection': 'phaseManagement.tasks.finalDelivery',
+      'Invoice generation': 'phaseManagement.tasks.invoiceGeneration',
+      'Payment tracking': 'phaseManagement.tasks.paymentTracking',
+      'Documentation compilation': 'phaseManagement.tasks.documentationCompilation',
+      'Client satisfaction survey': 'phaseManagement.tasks.clientSatisfactionSurvey',
+      'Lessons learned session': 'phaseManagement.tasks.lessonsLearned',
+      'Contract closure': 'phaseManagement.tasks.contractClosure',
+      // Phase 4 expanded tasks
+      'Contract review and negotiation': 'phaseManagement.tasks.contractReview',
+      'Legal review and approval': 'phaseManagement.tasks.legalReview',
+      'Distribute signed copies': 'phaseManagement.tasks.distributeCopies',
+      'Archive original contract': 'phaseManagement.tasks.archiveContract',
+      // Phase 5 expanded tasks
+      'Project kickoff meeting': 'phaseManagement.tasks.kickoffMeeting',
+      'Create project plan': 'phaseManagement.tasks.createProjectPlan',
+      'Setup communication channels': 'phaseManagement.tasks.setupCommunication',
+      'Complete project documentation': 'phaseManagement.tasks.projectDocumentation',
+      // Phase 6 expanded tasks
+      'Payment reconciliation': 'phaseManagement.tasks.paymentReconciliation',
+      'Financial closure': 'phaseManagement.tasks.financialClosure'
     };
     return taskMap[taskText] || null;
   };
@@ -169,6 +200,58 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
       if (error) throw error;
 
       if (existingPhases?.length > 0) {
+        // Check if we need to add missing phases (migration from 3-phase to 6-phase)
+        if (existingPhases.length < 6) {
+          const missingPhaseNumbers = [];
+          for (let i = 1; i <= 6; i++) {
+            if (!existingPhases.find(p => p.phase_number === i)) {
+              missingPhaseNumbers.push(i);
+            }
+          }
+
+          if (missingPhaseNumbers.length > 0) {
+            const missingPhases = missingPhaseNumbers.map(phaseNum => {
+              const template = DEFAULT_PHASES.find(p => p.number === phaseNum);
+              return {
+                contract_id: contractId,
+                phase_number: phaseNum,
+                name: template.name,
+                description: template.description,
+                status: 'pending',
+                tasks: template.tasks.map(task => ({
+                  id: crypto.randomUUID(),
+                  text: task.text,
+                  textKey: task.textKey,
+                  completed: false,
+                  assigned_to: null,
+                  due_date: null,
+                  notes: '',
+                  created_at: new Date().toISOString()
+                })),
+                start_date: null,
+                end_date: null,
+                progress: 0
+              };
+            });
+
+            const { data: insertedPhases, error: insertError } = await supabase
+              .from('contract_phases')
+              .insert(missingPhases)
+              .select();
+
+            if (insertError) {
+              console.error('Error adding missing phases:', insertError);
+            } else {
+              // Merge existing and newly inserted phases
+              const allPhases = [...existingPhases, ...insertedPhases].sort((a, b) => a.phase_number - b.phase_number);
+              setPhases(allPhases);
+              const activePhase = allPhases.find(p => p.status === 'active');
+              if (activePhase) setExpandedPhases(new Set([activePhase.id]));
+              return;
+            }
+          }
+        }
+
         setPhases(existingPhases);
         // Auto-expand active phase
         const activePhase = existingPhases.find(p => p.status === 'active');
@@ -190,9 +273,7 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
         contract_id: contractId,
         phase_number: phaseTemplate.number,
         name: phaseTemplate.name,
-        nameKey: phaseTemplate.nameKey,
         description: phaseTemplate.description,
-        descriptionKey: phaseTemplate.descriptionKey,
         status: phaseTemplate.number === 1 ? 'active' : 'pending',
         tasks: phaseTemplate.tasks.map(task => ({
           id: crypto.randomUUID(),
