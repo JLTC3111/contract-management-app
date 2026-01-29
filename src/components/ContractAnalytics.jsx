@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell, AreaChart, Area
@@ -26,6 +27,7 @@ const STATUS_COLORS = {
 const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   const { t } = useTranslation();
   const { darkMode } = useTheme();
+  const navigate = useNavigate();
   const [selectedPeriod, setSelectedPeriod] = useState('6months');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [showDetailedView, setShowDetailedView] = useState(false);
@@ -432,7 +434,14 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
             </thead>
             <tbody>
               {paginatedContracts.map((contract) => (
-                <tr key={contract.id} style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                <tr 
+                  key={contract.id} 
+                  style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s', cursor: 'pointer' }} 
+                  onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'} 
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  onClick={() => navigate(`/lifecycle/${contract.id}`)}
+                  title={t('analytics.clickToViewTimeline', 'Click to view timeline')}
+                >
                   <td style={{ padding: '1rem', color: 'var(--text)' }}>{getI18nOrFallback(t, contract, 'title_i18n', 'title')}</td>
                   <td style={{ padding: '1rem' }}>
                     <span style={{ padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.85rem', backgroundColor: `${STATUS_COLORS[contract.status] || '#6b7280'}20`, color: STATUS_COLORS[contract.status] || '#6b7280' }}>

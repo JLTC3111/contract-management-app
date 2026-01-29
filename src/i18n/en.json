@@ -635,5 +635,38 @@
     "expires": "Expires",
     "export": "Export",
     "share": "Share"
+  },
+  "phaseTimeline": {
+    "title": "Contract Lifecycle Timeline",
+    "complete": "complete",
+    "status": {
+      "completed": "Completed",
+      "active": "Active",
+      "pending": "Pending"
+    },
+    "phase1": {
+      "name": "Tender Documents",
+      "description": "Proposal, bidding documents, and tender submissions"
+    },
+    "phase2": {
+      "name": "Legal Documents",
+      "description": "Decisions, assignments, and legal documentation"
+    },
+    "phase3": {
+      "name": "Joint Venture Documents",
+      "description": "Consortium agreements and linked documentation"
+    },
+    "phase4": {
+      "name": "Contract & Appendices",
+      "description": "Main contract, amendments, and supplemental agreements"
+    },
+    "phase5": {
+      "name": "Project Group Files",
+      "description": "Project team assignments and documentation"
+    },
+    "phase6": {
+      "name": "Owner Payment Documents",
+      "description": "Settlement proposals, invoices, and payment records"
+    }
   }
 } 

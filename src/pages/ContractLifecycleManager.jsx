@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, BarChart3, Calendar, Clock, Users, 
   FileText, Settings, Download, Share2
@@ -11,17 +11,21 @@ import { useUser } from '../hooks/useUser';
 import { supabase } from '../utils/supaBaseClient';
 import ContractPhaseManager from '../components/ContractPhaseManager';
 import ContractAnalytics from '../components/ContractAnalytics';
+import PhaseTimeline from '../components/PhaseTimeline';
 import toast from 'react-hot-toast';
 
 const ContractLifecycleManager = () => {
   const { contractId } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { darkMode } = useTheme();
   const { user } = useUser();
   const [contract, setContract] = useState(null);
+  const [phasesForHeader, setPhasesForHeader] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('phases');
   const [allContracts, setAllContracts] = useState([]);
+  const [selectedContractId, setSelectedContractId] = useState(contractId || '');
 
   useEffect(() => {
     if (contractId) {
@@ -34,11 +38,9 @@ const ContractLifecycleManager = () => {
   }, [contractId]);
 
   useEffect(() => {
-    // Only fetch all contracts when analytics tab is active or no specific contract
-    if (activeTab === 'analytics' || !contractId) {
-      fetchAllContracts();
-    }
-  }, [activeTab, contractId, user]);
+    // Always fetch list so user can switch contracts
+    if (user) fetchAllContracts();
+  }, [user]);
 
   const fetchContractDetails = async () => {
     try {
@@ -51,6 +53,16 @@ const ContractLifecycleManager = () => {
 
       if (error) throw error;
       setContract(data);
+
+      // Fetch phases for header timeline
+      const { data: phaseData, error: phaseError } = await supabase
+        .from('contract_phases')
+        .select('*')
+        .eq('contract_id', contractId)
+        .order('phase_number');
+
+      if (phaseError) throw phaseError;
+      setPhasesForHeader(phaseData || []);
     } catch (error) {
       console.error('Error fetching contract:', error);
       toast.error(t('lifecycle.failedToLoadContractDetails'));
@@ -85,6 +97,13 @@ const ContractLifecycleManager = () => {
         toast.error(t('lifecycle.failedToLoadContractsForAnalytics'));
       }
     }
+  };
+
+  const getCurrentPhaseNumber = () => {
+    if (!phasesForHeader || phasesForHeader.length === 0) return 1;
+    const active = phasesForHeader.find(p => p.status === 'active');
+    const pending = phasesForHeader.find(p => p.status === 'pending');
+    return active?.phase_number || pending?.phase_number || (phasesForHeader[0]?.phase_number ?? 1);
   };
 
   const tabs = [
@@ -196,7 +215,6 @@ const ContractLifecycleManager = () => {
                 <button
                   onClick={() => window.history.back()}
                   style={{
-                    background: 'none',
                     border: 'none',
                     cursor: 'pointer',
                     marginRight: '1rem',
@@ -208,8 +226,43 @@ const ContractLifecycleManager = () => {
                   <ArrowLeft size={20} color="var(--text)" />
                 </button>
                 <h1 style={{ color: 'var(--text)', margin: 0, fontSize: '1.8rem' }}>
-                  {t('lifecycle.contractLifecycleManagement', 'Quản Lý Vòng Đời Hợp Đồng')}
+                  {t('lifecycle.contractLifecycleManagement', 'Contract Lifecycle Management')}
                 </h1>
+              </div>
+
+              {/* Contract selector dropdown */}
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ color: 'var(--text)', marginRight: '0.5rem', fontSize: '0.9rem' }}>
+                  {t('lifecycle.selectContract', 'Select Contract')}:
+                </label>
+                <select
+                  value={selectedContractId}
+                  onChange={(e) => {
+                    const newId = e.target.value;
+                    setSelectedContractId(newId);
+                    if (newId) {
+                      navigate(`/lifecycle/${newId}`);
+                    } else {
+                      navigate('/lifecycle');
+                    }
+                  }}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '6px',
+                    border: '1px solid var(--card-border)',
+                    background: 'var(--card-bg)',
+                    color: 'var(--text)',
+                    fontSize: '0.95rem',
+                    minWidth: '250px'
+                  }}
+                >
+                  <option value="">{t('lifecycle.chooseContract', '-- Choose a contract --')}</option>
+                  {allContracts.map(c => (
+                    <option key={c.id} value={c.id}>
+                      {c.title || `Contract #${c.id}`}
+                    </option>
+                  ))}
+                </select>
               </div>
               
               {contract && (
@@ -323,6 +376,17 @@ const ContractLifecycleManager = () => {
 
       {/* Content Section */}
       <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 2rem' }}>
+        {/* High-level timeline overview (optional) */}
+        {contract && (
+          <div style={{ marginBottom: '1.5rem' }}>
+            <PhaseTimeline 
+              phases={phasesForHeader}
+              currentPhaseNumber={getCurrentPhaseNumber()}
+              compact
+            />
+          </div>
+        )}
+
         {activeTab === 'phases' && contract && (
           <ContractPhaseManager 
             contractId={contract.id} 

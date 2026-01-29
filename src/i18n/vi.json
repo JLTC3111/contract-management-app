@@ -523,5 +523,38 @@
     "expires": "Hết hạn",
     "export": "Xuất",
     "share": "Chia sẻ"
+  },
+  "phaseTimeline": {
+    "title": "Tiến Trình Chu Kỳ Hợp Đồng",
+    "complete": "hoàn thành",
+    "status": {
+      "completed": "Đã hoàn thành",
+      "active": "Đang thực hiện",
+      "pending": "Chờ xử lý"
+    },
+    "phase1": {
+      "name": "Hồ Sơ Dự Thầu",
+      "description": "Bao gồm hồ sơ dự thầu, tài liệu đấu thầu và đề xuất"
+    },
+    "phase2": {
+      "name": "Văn Bản Pháp Lý",
+      "description": "Quyết định giao nhiệm vụ, Quyết định kết quả lựa chọn nhà thầu"
+    },
+    "phase3": {
+      "name": "Hồ Sơ Liên Danh",
+      "description": "Thỏa thuận liên danh, Hồ sơ liên kết (nếu có)"
+    },
+    "phase4": {
+      "name": "Hợp Đồng, Phụ Lục Hợp Đồng",
+      "description": "Hợp đồng chính, các Phụ lục hợp đồng, Biên bản nghiệm thu khối lượng"
+    },
+    "phase5": {
+      "name": "Hồ Sơ Nhóm Dự Án",
+      "description": "Hợp đồng giao khoán, Hồ sơ thành toán cho nhóm dự án"
+    },
+    "phase6": {
+      "name": "Hồ Sơ Thanh Toán Chủ Đầu Tư",
+      "description": "Công văn đề nghị thanh toán, Biên bản nghiệm thu khối lượng, Hóa đơn"
+    }
   }
 } 

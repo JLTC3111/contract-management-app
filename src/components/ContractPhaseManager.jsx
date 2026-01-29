@@ -8,53 +8,75 @@ import { useTranslation } from 'react-i18next';
 import { getI18nOrFallback } from '../utils/formatters';
 import { useTheme } from '../hooks/useTheme';
 import { supabase } from '../utils/supaBaseClient';
+import PhaseTimeline from './PhaseTimeline';
 import toast from 'react-hot-toast';
 import gsap from 'gsap';
 
 const DEFAULT_PHASES = [
   {
     number: 1,
-    nameKey: 'phaseManagement.phases.designPlanning',
-    name: 'Design & Planning',
-    descriptionKey: 'phaseManagement.phases.designPlanningDesc',
-    description: 'Initial drawings, client meetings, feedback collection',
+    nameKey: 'phaseTimeline.phase1.name',
+    name: 'Tender Documents',
+    descriptionKey: 'phaseTimeline.phase1.description',
+    description: 'Proposal, bidding documents, and tender submissions',
     tasks: [
-      { textKey: 'phaseManagement.tasks.initialMeeting', text: 'Initial client meeting' },
-      { textKey: 'phaseManagement.tasks.requirements', text: 'Requirements gathering' },
-      { textKey: 'phaseManagement.tasks.preliminaryDrawings', text: 'Preliminary drawings' },
-      { textKey: 'phaseManagement.tasks.feedbackSession', text: 'Client feedback session' },
-      { textKey: 'phaseManagement.tasks.designRevisions', text: 'Design revisions' },
-      { textKey: 'phaseManagement.tasks.finalApproval', text: 'Final design approval' }
+      { textKey: 'phaseManagement.tasks.prepareBid', text: 'Prepare bid package' },
+      { textKey: 'phaseManagement.tasks.submitBid', text: 'Submit tender documents' }
     ]
   },
   {
     number: 2,
-    nameKey: 'phaseManagement.phases.executionQC',
-    name: 'Execution & Quality Control',
-    descriptionKey: 'phaseManagement.phases.executionQCDesc',
-    description: 'Work completion, quality checks, reporting',
+    nameKey: 'phaseTimeline.phase2.name',
+    name: 'Legal Documents',
+    descriptionKey: 'phaseTimeline.phase2.description',
+    description: 'Decisions, assignments, and legal documentation',
     tasks: [
-      { textKey: 'phaseManagement.tasks.workStart', text: 'Work commencement' },
-      { textKey: 'phaseManagement.tasks.progressMonitoring', text: 'Progress monitoring' },
-      { textKey: 'phaseManagement.tasks.qualityChecks', text: 'Quality control checks' },
-      { textKey: 'phaseManagement.tasks.clientUpdates', text: 'Client progress updates' },
-      { textKey: 'phaseManagement.tasks.issueResolution', text: 'Issue resolution' },
-      { textKey: 'phaseManagement.tasks.finalDelivery', text: 'Final delivery & inspection' }
+      { textKey: 'phaseManagement.tasks.legalApprovals', text: 'Obtain legal approvals' },
+      { textKey: 'phaseManagement.tasks.assignmentDecision', text: 'Issue assignment decisions' }
     ]
   },
   {
     number: 3,
-    nameKey: 'phaseManagement.phases.billingClosure',
-    name: 'Billing & Closure',
-    descriptionKey: 'phaseManagement.phases.billingClosureDesc',
-    description: 'Financial processing, documentation, lessons learned',
+    nameKey: 'phaseTimeline.phase3.name',
+    name: 'Joint Venture Documents',
+    descriptionKey: 'phaseTimeline.phase3.description',
+    description: 'Consortium agreements and linked documentation',
     tasks: [
-      { textKey: 'phaseManagement.tasks.invoiceGeneration', text: 'Invoice generation' },
-      { textKey: 'phaseManagement.tasks.paymentTracking', text: 'Payment tracking' },
-      { textKey: 'phaseManagement.tasks.documentation', text: 'Documentation compilation' },
-      { textKey: 'phaseManagement.tasks.satisfactionSurvey', text: 'Client satisfaction survey' },
-      { textKey: 'phaseManagement.tasks.lessonsLearned', text: 'Lessons learned session' },
-      { textKey: 'phaseManagement.tasks.contractClosure', text: 'Contract closure' }
+      { textKey: 'phaseManagement.tasks.jvAgreement', text: 'Draft joint venture agreement' },
+      { textKey: 'phaseManagement.tasks.jvSignoff', text: 'Collect partner signatures' }
+    ]
+  },
+  {
+    number: 4,
+    nameKey: 'phaseTimeline.phase4.name',
+    name: 'Contract & Appendices',
+    descriptionKey: 'phaseTimeline.phase4.description',
+    description: 'Main contract, amendments, and supplemental agreements',
+    tasks: [
+      { textKey: 'phaseManagement.tasks.contractDraft', text: 'Draft contract and appendices' },
+      { textKey: 'phaseManagement.tasks.contractSign', text: 'Sign contract & amendments' }
+    ]
+  },
+  {
+    number: 5,
+    nameKey: 'phaseTimeline.phase5.name',
+    name: 'Project Group Files',
+    descriptionKey: 'phaseTimeline.phase5.description',
+    description: 'Project team assignments and documentation',
+    tasks: [
+      { textKey: 'phaseManagement.tasks.assignTeam', text: 'Assign project team' },
+      { textKey: 'phaseManagement.tasks.internalDeliverables', text: 'Collect internal deliverables' }
+    ]
+  },
+  {
+    number: 6,
+    nameKey: 'phaseTimeline.phase6.name',
+    name: 'Owner Payment Documents',
+    descriptionKey: 'phaseTimeline.phase6.description',
+    description: 'Settlement proposals, invoices, and payment records',
+    tasks: [
+      { textKey: 'phaseManagement.tasks.paymentProposal', text: 'Submit payment proposal' },
+      { textKey: 'phaseManagement.tasks.invoiceAndHandover', text: 'Issue invoices and handover' }
     ]
   }
 ];
@@ -323,6 +345,12 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
     ? Math.round(phases.reduce((acc, p) => acc + p.progress, 0) / phases.length)
     : 0;
 
+  const activePhase = phases.find(p => p.status === 'active');
+  const firstPending = phases.find(p => p.status === 'pending');
+  const currentPhaseNumber = activePhase?.phase_number
+    || firstPending?.phase_number
+    || (phases[0]?.phase_number ?? 1);
+
   const cardStyle = {
     background: 'var(--card-bg)',
     border: '1px solid var(--card-border)',
@@ -378,10 +406,15 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
         )}
       </div>
 
-      {/* Overall Progress Card */}
+      {/* Overall Progress Card with timeline */}
       <div ref={progressRef} style={{ ...cardStyle, padding: '1.5rem', marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3 style={{ color: 'var(--text)', margin: 0 }}>{t('phaseManagement.overallProgress', 'Overall Progress')}</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', gap: '1rem', flexWrap: 'wrap' }}>
+          <div>
+            <h3 style={{ color: 'var(--text)', margin: 0 }}>{t('phaseManagement.overallProgress', 'Overall Progress')}</h3>
+            <p style={{ color: 'var(--text)', opacity: 0.65, margin: 0, fontSize: '0.9rem' }}>
+              {t('phaseManagement.trackProjectPhases', 'Track project phases and deliverables')}
+            </p>
+          </div>
           <span style={{ color: overallProgress === 100 ? '#10b981' : 'var(--text)', fontWeight: 'bold', fontSize: '1.25rem' }}>
             {overallProgress}%
           </span>
@@ -398,53 +431,22 @@ const ContractPhaseManager = ({ contractId, contract, onUpdate }) => {
           }} />
         </div>
 
-        {/* Phase summary cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-          {phases.map(phase => {
-            const StatusIcon = STATUS_CONFIG[phase.status]?.icon || Clock;
-            const statusColor = STATUS_CONFIG[phase.status]?.color || '#6b7280';
-            
-            return (
-              <div 
-                key={phase.id}
-                onClick={() => togglePhaseExpand(phase.id)}
-                style={{
-                  padding: '1rem',
-                  background: expandedPhases.has(phase.id) ? `${statusColor}15` : 'var(--hover-bg)',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  border: `2px solid ${expandedPhases.has(phase.id) ? statusColor : 'transparent'}`,
-                  transition: 'all 0.2s'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                  <StatusIcon size={18} color={statusColor} />
-                  <span style={{ color: 'var(--text)', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                    {t('phaseManagement.phase', 'Phase')} {phase.phase_number}
-                  </span>
-                </div>
-                <div style={{ color: 'var(--text)', fontSize: '0.85rem', marginBottom: '0.5rem', opacity: 0.8 }}>
-                  {phase.name}
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ color: statusColor, fontSize: '0.8rem', fontWeight: 'bold' }}>
-                    {phase.progress}%
-                  </span>
-                  <span style={{ 
-                    background: `${statusColor}20`, 
-                    color: statusColor, 
-                    padding: '0.15rem 0.5rem', 
-                    borderRadius: '10px', 
-                    fontSize: '0.7rem',
-                    fontWeight: 'bold'
-                  }}>
-                    {t(STATUS_CONFIG[phase.status]?.labelKey, phase.status)}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* Timeline visualization */}
+        <PhaseTimeline 
+          phases={phases}
+          currentPhaseNumber={currentPhaseNumber}
+          compact
+          onPhaseClick={(phase) => togglePhaseExpand(phase.id)}
+        />
+      </div>
+
+      {/* Full timeline view for clarity */}
+      <div style={{ marginBottom: '2rem' }}>
+        <PhaseTimeline 
+          phases={phases}
+          currentPhaseNumber={currentPhaseNumber}
+          onPhaseClick={(phase) => togglePhaseExpand(phase.id)}
+        />
       </div>
 
       {/* Phase Details */}
