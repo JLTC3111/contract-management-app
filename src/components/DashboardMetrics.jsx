@@ -5,6 +5,7 @@ import { METRIC_CSS_CLASSES, getMetricLabel } from '../utils/contractMetrics';
 const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
   const { t } = useTranslation();
   const cardRefs = useRef([]);
+  const hasFilter = Boolean(activeFilter);
 
   cardRefs.current = [];
 
@@ -30,6 +31,9 @@ const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
               duration: 0.6,
               ease: 'back.out(1.7)',
               delay: index * 0.15,
+              onComplete: () => {
+                gsap.set(card, { clearProps: 'transform,opacity' });
+              },
             }
           );
         });
@@ -40,26 +44,38 @@ const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
   if (!data || data.length === 0) return <p>{t('metrics.noMetricsAvailable')}</p>;
 
   return (
-    <div className="dashboard-metrics">
+    <div className={`dashboard-metrics${hasFilter ? ' dashboard-metrics--filter-active' : ''}`}>
       {data.map(({ key, count }, idx) => {
-        const isActive = activeFilter === key;
+        const isSelected = activeFilter === key;
         const cssClass = METRIC_CSS_CLASSES[key] || '';
 
         return (
           <div
             key={key}
             ref={(el) => setCardRef(el, idx)}
-            className={`metric-card btn-hover-preview ${cssClass} ${isActive ? 'metric-active' : ''}`.trim()}
-            style={{ cursor: 'pointer' }}
+            className={[
+              'metric-card',
+              'btn-hover-preview',
+              cssClass,
+              isSelected ? 'metric-card--selected' : '',
+              hasFilter && !isSelected ? 'metric-card--dimmed' : '',
+            ].filter(Boolean).join(' ')}
             onClick={(e) => {
               e.stopPropagation();
               onMetricClick?.(key);
             }}
+            role="button"
+            tabIndex={0}
+            aria-pressed={isSelected}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onMetricClick?.(key);
+              }
+            }}
           >
-            <h4 style={{ color: 'var(--text)', fontSize: 'clamp(0.5rem, 2.5vw, 1rem)' }}>
-              {getMetricLabel(t, key)}
-            </h4>
-            <p style={{ color: 'var(--text)', fontSize: 'clamp(0.5rem, 2.5vw, 1rem)' }}>{count}</p>
+            <h4 className="metric-card__label">{getMetricLabel(t, key)}</h4>
+            <p className="metric-card__count">{count}</p>
           </div>
         );
       })}
