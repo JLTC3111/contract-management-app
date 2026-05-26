@@ -204,11 +204,12 @@
   "status": {
     "approved": "Approved",
     "in_progress": "In Progress",
-    "pending": "Pending",
+    "pending": "Pending Approval",
     "draft": "Draft",
     "rejected": "Rejected",
     "expired": "Expired",
-    "expiring": "Expiring"
+    "expiring": "Expiring Soon",
+    "completed": "Completed"
   },
   "table": {
     "title": "Title",
@@ -223,12 +224,14 @@
     "noContractsFound": "No contracts found."
   },
   "metrics": {
-    "active": "Active",
-    "pending": "Pending",
-    "expiring": "Expiring",
-    "drafts": "Drafts",
+    "approved": "Approved",
+    "pending": "Pending Approval",
+    "in_progress": "In Progress",
+    "expiring": "Expiring Soon",
+    "drafts": "Draft",
     "rejected": "Rejected",
     "expired": "Expired",
+    "completed": "Completed",
     "noMetricsAvailable": "No metrics available."
   },
   "common": {
@@ -294,11 +297,12 @@
       "label": "Status",
       "draft": "Draft",
       "approved": "Approved",
-      "pending": "Pending",
+      "pending": "Pending Approval",
       "in_progress": "In Progress",
       "rejected": "Rejected",
-      "expiring": "Expiring Soon!",
-      "expired": "Expired"
+      "expiring": "Expiring Soon",
+      "expired": "Expired",
+      "completed": "Completed"
     },
     "version": "Version",
     "updated": "Updated",
@@ -618,23 +622,23 @@
     "contractPhaseManagement": "Contract Phase Management",
     "overallContractProgress": "Overall Contract Progress",
     "phase": "Phase",
-    "complete": "Complete",
+    "phaseComplete": "Phase Complete",
     "started": "Started",
     "completed": "Completed",
     "tasksDeliverables": "Tasks & Deliverables",
     "custom": "Custom",
     "addCustomTask": "Add custom task...",
     "startPhase": "Start Phase",
-    "markComplete": "Mark Complete",
+    "markComplete": "Mark Phase Complete",
     "failedToLoadPhases": "Failed to load contract phases",
     "failedToInitializePhases": "Failed to initialize contract phases",
     "phaseUpdatedSuccessfully": "Phase updated successfully",
     "failedToUpdatePhase": "Failed to update phase",
     "status": {
-      "completed": "Completed",
-      "active": "Active",
-      "pending": "Pending",
-      "delayed": "Delayed"
+      "completed": "Phase Completed",
+      "active": "Phase Active",
+      "pending": "Phase Pending",
+      "delayed": "Phase Delayed"
     },
     "tasks": {
       "prepareBid": "Prepare bid package",
@@ -680,7 +684,7 @@
     },
     "reopenPhase": "Reopen Phase",
     "confirmComplete": "Complete this phase?",
-    "completeWarning": "All tasks will be marked as complete and the next phase will be activated.",
+    "completeWarning": "All tasks will be marked as done and the next phase will be activated.",
     "confirmReopen": "Reopen this phase?",
     "reopenWarning": "This will set the phase back to active status."
   },
@@ -699,12 +703,12 @@
   },
   "phaseTimeline": {
     "title": "Contract Lifecycle Timeline",
-    "complete": "complete",
+    "percentDone": "done",
     "status": {
-      "completed": "Completed",
+      "completed": "Phase Completed",
       "in_progress": "In Progress",
-      "active": "Active",
-      "pending": "Pending"
+      "active": "Phase Active",
+      "pending": "Phase Pending"
     },
     "phase1": {
       "name": "Tender Documents",

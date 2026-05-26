@@ -1,24 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { useRef, useEffect } from 'react';
-
-const metricClassMap = {
-  'Active': 'metric-approved',
-  'Pending': 'metric-pending',
-  'Expiring': 'metric-expiring',
-  'Drafts': 'metric-draft',
-  'Rejected': 'metric-rejected',
-  'Expired': 'metric-expired',
-};
+import { METRIC_CSS_CLASSES, getMetricLabel } from '../utils/contractMetrics';
 
 const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
   const { t } = useTranslation();
   const cardRefs = useRef([]);
-  // Reset refs before rendering
+
   cardRefs.current = [];
-  // Stable ref assignment
+
   const setCardRef = (el, idx) => {
     if (el) cardRefs.current[idx] = el;
   };
+
   useEffect(() => {
     if (cardRefs.current.length) {
       import('gsap').then(({ default: gsap }) => {
@@ -42,31 +35,30 @@ const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
         });
       });
     }
-  }, [data && data.length]);
+  }, [data?.length]);
 
-  if (!data || data.length === 0) return <p>{t('no_metrics_available')}</p>;
+  if (!data || data.length === 0) return <p>{t('metrics.noMetricsAvailable')}</p>;
 
-  const handleMetricClick = (label) => {
-    if (onMetricClick) {
-      onMetricClick(label);
-    }
-  };
-  console.log('Metrics data:', data);
   return (
     <div className="dashboard-metrics">
-      {data.map(({ label, count }, idx) => {
-        const isActive = activeFilter === label;
+      {data.map(({ key, count }, idx) => {
+        const isActive = activeFilter === key;
+        const cssClass = METRIC_CSS_CLASSES[key] || '';
+
         return (
           <div
-            key={label}
-            ref={el => setCardRef(el, idx)}
-            className={`metric-card btn-hover-preview ${metricClassMap[label] || ''}`.trim()}
-            style={{
-              cursor: 'pointer',
+            key={key}
+            ref={(el) => setCardRef(el, idx)}
+            className={`metric-card btn-hover-preview ${cssClass} ${isActive ? 'metric-active' : ''}`.trim()}
+            style={{ cursor: 'pointer' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onMetricClick?.(key);
             }}
-            onClick={() => handleMetricClick(label)}
           >
-            <h4 style={{ color: 'var(--text)', fontSize: 'clamp(0.5rem, 2.5vw, 1rem)' }}>{t(`metrics.${label.toLowerCase()}`)}</h4>
+            <h4 style={{ color: 'var(--text)', fontSize: 'clamp(0.5rem, 2.5vw, 1rem)' }}>
+              {getMetricLabel(t, key)}
+            </h4>
             <p style={{ color: 'var(--text)', fontSize: 'clamp(0.5rem, 2.5vw, 1rem)' }}>{count}</p>
           </div>
         );

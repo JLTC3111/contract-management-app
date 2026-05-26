@@ -33,10 +33,11 @@ const initI18n = () => {
       },
       lng: savedLanguage || defaultLanguage,
       fallbackLng: 'en',
+      contextSeparator: '::',
       interpolation: { 
         escapeValue: false,
       },
-      debug: true,
+      debug: false,
     });
 
   // Save language preference whenever it changes

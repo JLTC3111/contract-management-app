@@ -116,11 +116,12 @@
   "status": {
     "approved": "已批准",
     "in_progress": "进行中",
-    "pending": "待处理",
+    "pending": "待审批",
     "draft": "草稿",
     "rejected": "已拒绝",
     "expired": "已过期",
-    "expiring": "即将过期"
+    "expiring": "即将过期",
+    "completed": "已完成"
   },
   "table": {
     "title": "标题",
@@ -135,12 +136,14 @@
     "noContractsFound": "未找到合同。"
   },
   "metrics": {
-    "active": "有效",
-    "pending": "待处理",
+    "approved": "已批准",
+    "pending": "待审批",
+    "in_progress": "进行中",
     "expiring": "即将过期",
     "drafts": "草稿",
     "rejected": "已拒绝",
     "expired": "已过期",
+    "completed": "已完成",
     "noMetricsAvailable": "没有可用的指标。"
   },
   "common": {
@@ -265,8 +268,9 @@
       "pending": "待处理",
       "in_progress": "进行中",
       "rejected": "已拒绝",
-      "expiring": "即将到期",
-      "expired": "已过期"
+      "expiring": "即将过期",
+      "expired": "已过期",
+      "completed": "已完成"
     },
     "version": "版本",
     "updated": "已更新",

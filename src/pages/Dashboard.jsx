@@ -1,6 +1,6 @@
 import DashboardMetrics from '../components/DashboardMetrics';
 import ContractTable from '../components/ContractTable';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import { contractsApi } from '../api/contracts';
 import { useNavigate } from 'react-router-dom';
@@ -9,12 +9,12 @@ import { useUser } from '../hooks/useUser';
 import { Search, FilePenLine, CheckCircle } from 'lucide-react';
 import NotificationDropdown from '../components/NotificationDropdown';
 import { useTranslation } from 'react-i18next';
-import { getI18nOrFallback } from '../utils/formatters';
+import { getI18nOrFallback, normalizeContractStatus } from '../utils/formatters';
+import { buildDashboardMetrics, filterContractsByMetric } from '../utils/contractMetrics';
 
 
 const Dashboard = () => {
   const [contracts, setContracts] = useState([]);
-  const [filteredContracts, setFilteredContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { darkMode } = useTheme();
@@ -30,104 +30,16 @@ const Dashboard = () => {
   const debounceTimeout = useRef();
   const { t } = useTranslation();
 
-  const metrics = [
-    { label: t('dashboard.active', 'Active'), count: contracts.filter(c => c.status === 'approved').length },
-    { label: t('dashboard.pending', 'Pending'), count: contracts.filter(c => c.status === 'pending').length },
-    { label: t('dashboard.expiring', 'Expiring'), count: contracts.filter(c => {
-      // Include both explicitly set 'expiring' status AND any contracts expiring within their respective timeframes
-      if (c.status === 'expiring') return true;
-      if (!c.expiry_date) return false;
-      const expiry = new Date(c.expiry_date);
-      const now = new Date();
-      const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
-      // Different timeframes based on status: draft (21 days), pending (14 days), approved/rejected (7 days)
-      if (c.status === 'draft') return diffDays > 0 && diffDays <= 21;
-      if (c.status === 'pending') return diffDays > 0 && diffDays <= 14;
-      if (['approved', 'rejected'].includes(c.status)) return diffDays > 0 && diffDays <= 7;
-      return false;
-    }).length },
-    { label: t('dashboard.drafts', 'Drafts'), count: contracts.filter(c => c.status === 'draft').length },
-    { label: t('dashboard.rejected', 'Rejected'), count: contracts.filter(c => c.status === 'rejected').length },
-    { label: t('dashboard.expired', 'Expired'), count: contracts.filter(c => c.status === 'expired').length },
-  ];
+  const metrics = useMemo(() => buildDashboardMetrics(contracts), [contracts]);
 
-  // Handle metric card clicks
-  const handleMetricClick = (label) => {
-    if (activeFilter === label) {
-      // If clicking the same filter, clear it
-      setActiveFilter(null);
-      setFilteredContracts(contracts);
-    } else {
-      // Apply new filter
-      setActiveFilter(label);
-      
-      let filtered;
-      if (label === 'Expiring') {
-        // Include both explicitly set 'expiring' status AND any contracts expiring within their respective timeframes
-        filtered = contracts.filter(c => {
-          if (c.status === 'expiring') return true;
-          if (!c.expiry_date) return false;
-          const expiry = new Date(c.expiry_date);
-          const now = new Date();
-          const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
-          // Different timeframes based on status: draft (21 days), pending (14 days), approved/rejected (7 days)
-          if (c.status === 'draft') return diffDays > 0 && diffDays <= 21;
-          if (c.status === 'pending') return diffDays > 0 && diffDays <= 14;
-          if (['approved', 'rejected'].includes(c.status)) return diffDays > 0 && diffDays <= 7;
-          return false;
-        });
-      } else {
-        // For other statuses, use direct status matching
-        const statusMap = {
-          'Active': 'approved',
-          'Pending': 'pending',
-          'Drafts': 'draft',
-          'Rejected': 'rejected',
-          'Expired': 'expired',
-        };
-        const status = statusMap[label];
-        filtered = contracts.filter(c => c.status === status);
-      }
-      
-      setFilteredContracts(filtered);
-    }
-  };
-
-  // Update filtered contracts when contracts change
-  useEffect(() => {
-    if (activeFilter) {
-      let filtered;
-      if (activeFilter === 'Expiring') {
-        // Include both explicitly set 'expiring' status AND any contracts expiring within their respective timeframes
-        filtered = contracts.filter(c => {
-          if (c.status === 'expiring') return true;
-          if (!c.expiry_date) return false;
-          const expiry = new Date(c.expiry_date);
-          const now = new Date();
-          const diffDays = (expiry - now) / (1000 * 60 * 60 * 24);
-          // Different timeframes based on status: draft (21 days), pending (14 days), approved/rejected (7 days)
-          if (c.status === 'draft') return diffDays > 0 && diffDays <= 21;
-          if (c.status === 'pending') return diffDays > 0 && diffDays <= 14;
-          if (['approved', 'rejected'].includes(c.status)) return diffDays > 0 && diffDays <= 7;
-          return false;
-        });
-      } else {
-        // For other statuses, use direct status matching
-        const statusMap = {
-          'Active': 'approved',
-          'Pending': 'pending',
-          'Drafts': 'draft',
-          'Rejected': 'rejected',
-          'Expired': 'expired',
-        };
-        const status = statusMap[activeFilter];
-        filtered = contracts.filter(c => c.status === status);
-      }
-      setFilteredContracts(filtered);
-    } else {
-      setFilteredContracts(contracts);
-    }
+  const filteredContracts = useMemo(() => {
+    if (!activeFilter) return contracts;
+    return filterContractsByMetric(contracts, activeFilter);
   }, [contracts, activeFilter]);
+
+  const handleMetricClick = (metricKey) => {
+    setActiveFilter((current) => (current === metricKey ? null : metricKey));
+  };
 
   // Helper: recursively list all files/folders under a base path
   async function listAllFilesRecursive(basePath) {
@@ -161,9 +73,13 @@ const Dashboard = () => {
           setLoading(false);
           return;
         }
+
+        const normalizedData = data.map((contract) => ({
+          ...contract,
+          status: normalizeContractStatus(contract.status) || contract.status || 'draft',
+        }));
   
-        setContracts(data);
-        setFilteredContracts(data);
+        setContracts(normalizedData);
       } catch (error) {
         console.error('Error fetching contracts:', error.message);
       }
@@ -227,27 +143,23 @@ const Dashboard = () => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowDropdown(false);
       }
-      
-      // Clear filter if clicking outside metrics, but not on contract table
-      if (activeFilter && metricsRef.current && !metricsRef.current.contains(e.target)) {
-        // Check if the click is on the contract table or its children
-        const isClickOnTable = e.target.closest('.contract-table-wrapper') || 
-                              e.target.closest('.contract-table') ||
-                              e.target.closest('table') ||
-                              e.target.closest('tbody') ||
-                              e.target.closest('tr') ||
-                              e.target.closest('td') ||
-                              e.target.closest('th');
-        
-        if (!isClickOnTable) {
-          setActiveFilter(null);
-          setFilteredContracts(contracts);
-        }
-      }
+
+      if (!activeFilter) return;
+
+      if (metricsRef.current?.contains(e.target)) return;
+
+      const isClickOnTable = e.target.closest('.contract-table-wrapper')
+        || e.target.closest('.contract-table')
+        || e.target.closest('table');
+
+      if (isClickOnTable) return;
+
+      setActiveFilter(null);
     };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [activeFilter, contracts]);
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [activeFilter]);
 
   return (
     <>

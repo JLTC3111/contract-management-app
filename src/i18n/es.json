@@ -125,11 +125,12 @@
   "status": {
     "approved": "Aprobado",
     "in_progress": "En progreso",
-    "pending": "Pendiente",
+    "pending": "Pendiente de aprobación",
     "draft": "Borrador",
     "rejected": "Rechazado",
     "expired": "Vencido",
-    "expiring": "Próximo a vencer"
+    "expiring": "Próximo a vencer",
+    "completed": "Completado"
   },
   "table": {
     "title": "Título",
@@ -144,12 +145,14 @@
     "noContractsFound": "No se encontraron contratos."
   },
   "metrics": {
-    "active": "Activo",
-    "pending": "Pendiente",
+    "approved": "Aprobado",
+    "pending": "Pendiente de aprobación",
+    "in_progress": "En progreso",
     "expiring": "Próximo a vencer",
-    "drafts": "Borradores",
+    "drafts": "Borrador",
     "rejected": "Rechazado",
     "expired": "Vencido",
+    "completed": "Completado",
     "noMetricsAvailable": "No hay métricas disponibles."
   },
   "common": {
@@ -274,7 +277,8 @@
       "in_progress": "En progreso",
       "rejected": "Rechazado",
       "expiring": "Próximo a vencer",
-      "expired": "Vencido"
+      "expired": "Vencido",
+      "completed": "Completado"
     },
     "version": "Variante",
     "updated": "Actualizado",

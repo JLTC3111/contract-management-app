@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { STATUS_COLORS, getStatusColor } from '../../utils/constants';
-import { humanizeContractStatus, normalizeContractStatus } from '../../utils/formatters';
+import { normalizeContractStatus, getContractStatusLabel } from '../../utils/formatters';
 
 /**
  * Reusable status badge component
@@ -35,10 +35,7 @@ const StatusBadge = ({
   
   const sizeStyle = sizes[size] || sizes.md;
   
-  const label = customLabel || t(
-    `contractTable.status.${normalizedStatus}`,
-    humanizeContractStatus(normalizedStatus) || String(status)
-  );
+  const label = customLabel || getContractStatusLabel(t, status);
   
   return (
     <span

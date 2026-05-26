@@ -125,11 +125,12 @@
   "status": {
     "approved": "อนุมัติแล้ว",
     "in_progress": "กำลังดำเนินการ",
-    "pending": "รอดำเนินการ",
+    "pending": "รอการอนุมัติ",
     "draft": "ฉบับร่าง",
     "rejected": "ถูกปฏิเสธ",
     "expired": "หมดอายุ",
-    "expiring": "ใกล้หมดอายุ"
+    "expiring": "ใกล้หมดอายุ",
+    "completed": "เสร็จสมบูรณ์"
   },
   "table": {
     "title": "ชื่อเรื่อง",
@@ -144,12 +145,14 @@
     "noContractsFound": "ไม่พบสัญญา"
   },
   "metrics": {
-    "active": "ใช้งานอยู่",
-    "pending": "รอดำเนินการ",
+    "approved": "อนุมัติแล้ว",
+    "pending": "รอการอนุมัติ",
+    "in_progress": "กำลังดำเนินการ",
     "expiring": "ใกล้หมดอายุ",
     "drafts": "ฉบับร่าง",
     "rejected": "ถูกปฏิเสธ",
     "expired": "หมดอายุ",
+    "completed": "เสร็จสมบูรณ์",
     "noMetricsAvailable": "ไม่มีข้อมูลเมตริกส์"
   },
   "common": {
@@ -275,7 +278,8 @@
       "in_progress": "กำลังดำเนินการ",
       "rejected": "ถูกปฏิเสธ",
       "expiring": "ใกล้หมดอายุ",
-      "expired": "หมดอายุแล้ว"
+      "expired": "หมดอายุแล้ว",
+      "completed": "เสร็จสมบูรณ์"
     },
     "version": "เวอร์ชัน",
     "updated": "อัปเดตแล้ว",

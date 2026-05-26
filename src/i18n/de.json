@@ -202,11 +202,12 @@
   "status": {
     "approved": "Genehmigt",
     "in_progress": "In Bearbeitung",
-    "pending": "Ausstehend",
+    "pending": "Genehmigung ausstehend",
     "draft": "Entwurf",
     "rejected": "Abgelehnt",
     "expired": "Abgelaufen",
-    "expiring": "Läuft bald ab"
+    "expiring": "Läuft bald ab",
+    "completed": "Abgeschlossen"
   },
   "table": {
     "title": "Titel",
@@ -221,12 +222,14 @@
     "noContractsFound": "Keine Verträge gefunden."
   },
   "metrics": {
-    "active": "Aktiv",
-    "pending": "Ausstehend",
+    "approved": "Genehmigt",
+    "pending": "Genehmigung ausstehend",
+    "in_progress": "In Bearbeitung",
     "expiring": "Läuft bald ab",
-    "drafts": "Entwürfe",
+    "drafts": "Entwurf",
     "rejected": "Abgelehnt",
     "expired": "Abgelaufen",
+    "completed": "Abgeschlossen",
     "noMetricsAvailable": "Keine Metriken verfügbar."
   },
   "common": {
@@ -273,7 +276,8 @@
       "in_progress": "In Bearbeitung",
       "rejected": "Abgelehnt",
       "expiring": "Läuft bald ab",
-      "expired": "Abgelaufen"
+      "expired": "Abgelaufen",
+      "completed": "Abgeschlossen"
     },
     "version": "Variante",
     "updated": "Aktualisiert",

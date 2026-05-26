@@ -125,11 +125,13 @@
   },
   "status": {
     "approved": "Đã Duyệt",
+    "in_progress": "Đang thực hiện",
     "pending": "Chờ Duyệt",
     "draft": "Bản Nháp",
     "rejected": "Bị Từ Chối",
     "expired": "Đã Hết Hạn",
-    "expiring": "Sắp Hết Hạn"
+    "expiring": "Sắp Hết Hạn",
+    "completed": "Đã hoàn thành"
   },
   "table": {
     "title": "Tiêu Đề",
@@ -144,12 +146,14 @@
     "noContractsFound": "Không Tìm Thấy Hợp Đồng Nào."
   },
   "metrics": {
-    "active": "Hoạt động",
-    "pending": "Đang chờ",
+    "approved": "Đã phê duyệt",
+    "pending": "Chờ phê duyệt",
+    "in_progress": "Đang thực hiện",
     "expiring": "Sắp hết hạn",
-    "drafts": "Nháp",
+    "drafts": "Bản nháp",
     "rejected": "Bị từ chối",
     "expired": "Đã hết hạn",
+    "completed": "Đã hoàn thành",
     "noMetricsAvailable": "Không có số liệu nào."
   },
   "common": {
@@ -276,7 +280,8 @@
       "in_progress": "Đang thực hiện",
       "rejected": "Bị từ chối",
       "expiring": "Sắp hết hạn",
-      "expired": "Đã hết hạn"
+      "expired": "Đã hết hạn",
+      "completed": "Đã hoàn thành"
     },
     "version": "Phiên bản",
     "updated": "Đã cập nhật",

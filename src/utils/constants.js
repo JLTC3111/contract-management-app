@@ -39,6 +39,7 @@ export const EXPIRY_THRESHOLDS = {
   pending: 14,
   approved: 7,
   rejected: 7,
+  in_progress: 14,
   default: 14
 };
 
@@ -75,7 +76,8 @@ export const CONTRACT_STATUSES = [
   { value: 'approved', labelKey: 'contractTable.status.approved' },
   { value: 'rejected', labelKey: 'contractTable.status.rejected' },
   { value: 'expiring', labelKey: 'contractTable.status.expiring' },
-  { value: 'expired', labelKey: 'contractTable.status.expired' }
+  { value: 'expired', labelKey: 'contractTable.status.expired' },
+  { value: 'completed', labelKey: 'contractTable.status.completed' },
 ];
 
 // Phase statuses
@@ -145,7 +147,7 @@ export const getStatusIcon = (status) => {
 
 // Helper function to check if status is terminal
 export const isTerminalStatus = (status) => {
-  return ['approved', 'rejected', 'expired', 'cancelled'].includes(status);
+  return ['approved', 'rejected', 'expired', 'completed', 'cancelled'].includes(status);
 };
 
 // Helper function to get expiry threshold for a status

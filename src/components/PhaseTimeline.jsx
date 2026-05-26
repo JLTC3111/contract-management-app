@@ -256,7 +256,7 @@ const PhaseTimeline = ({
                         />
                       </div>
                       <p className={`text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                        {phase.progress || 0}% {t('phaseTimeline.complete', 'complete')}
+                        {phase.progress || 0}% {t('phaseTimeline.percentDone', 'done')}
                       </p>
                     </div>
                   )}

@@ -125,11 +125,12 @@
   "status": {
     "approved": "承認済み",
     "in_progress": "進行中",
-    "pending": "保留中",
+    "pending": "承認待ち",
     "draft": "下書き",
     "rejected": "却下",
     "expired": "期限切れ",
-    "expiring": "まもなく期限切れ"
+    "expiring": "まもなく期限切れ",
+    "completed": "完了済み"
   },
   "table": {
     "title": "タイトル",
@@ -144,12 +145,14 @@
     "noContractsFound": "契約が見つかりません。"
   },
   "metrics": {
-    "active": "有効",
-    "pending": "保留中",
+    "approved": "承認済み",
+    "pending": "承認待ち",
+    "in_progress": "進行中",
     "expiring": "まもなく期限切れ",
     "drafts": "下書き",
     "rejected": "却下",
     "expired": "期限切れ",
+    "completed": "完了済み",
     "noMetricsAvailable": "利用可能なメトリクスがありません。"
   },
   "common": {
@@ -275,7 +278,8 @@
       "in_progress": "進行中",
       "rejected": "却下",
       "expiring": "まもなく期限切れ",
-      "expired": "期限切れ"
+      "expired": "期限切れ",
+      "completed": "完了済み"
     },
     "version": "バージョン",
     "updated": "更新済み",

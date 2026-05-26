@@ -236,12 +236,19 @@ export const normalizeContractStatus = (rawStatus) => {
     .toLowerCase();
 
   // Canonicalize common variants.
-  if (status === 'inprogress' || status === 'in__progress') status = 'in_progress';
-  if (status === 'in_progress') return 'in_progress';
-  if (status === 'inprogress_') return 'in_progress';
-  if (status === 'in__progress') return 'in_progress';
+  if (status === 'inprogress' || status === 'in__progress' || status === 'inprogress_') {
+    status = 'in_progress';
+  }
+  if (status === 'to_be_completed') status = 'in_progress';
+  if (status === 'complete') status = 'completed';
 
-  return status;
+  const STATUS_ALIASES = {
+    active: 'approved',
+    pending_approval: 'pending',
+    expiring_soon: 'expiring',
+  };
+
+  return STATUS_ALIASES[status] || status;
 };
 
 /**
@@ -257,6 +264,31 @@ export const humanizeContractStatus = (rawStatus) => {
     .filter(Boolean)
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
+};
+
+/**
+ * Resolve a translated contract status label.
+ * @param {Function} t - i18next translation function
+ * @param {unknown} rawStatus
+ * @returns {string}
+ */
+export const getContractStatusLabel = (t, rawStatus) => {
+  const normalized = normalizeContractStatus(rawStatus);
+  if (!normalized) return '';
+
+  const labelKeys = [
+    `contractTable.status.${normalized}`,
+    `status.${normalized}`,
+  ];
+
+  for (const labelKey of labelKeys) {
+    const translated = t(labelKey);
+    if (translated && translated !== labelKey) {
+      return translated;
+    }
+  }
+
+  return humanizeContractStatus(normalized);
 };
 
 /**

@@ -11,7 +11,7 @@ import './Table.css';
 
 // Centralized utilities
 import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS, getStatusColor } from '../utils/constants';
-import { formatDate, getDaysUntilExpiry, getI18nOrFallback, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
+import { formatDate, getDaysUntilExpiry, getI18nOrFallback, getContractStatusLabel, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
 import { StatusBadge } from './common';
 
 const ICON_COMPONENTS = {
@@ -259,7 +259,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                 >
                   <option value="">{t('contractTable.all')}</option>
                   {uniqueStatuses.map(s => (
-                    <option key={s} value={s}>{t(`contractTable.status.${s}`, humanizeContractStatus(s))}</option>
+                    <option key={s} value={s}>{getContractStatusLabel(t, s)}</option>
                   ))}
                 </select>
               ))}
@@ -456,6 +456,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                   const finalStatus = rawStatus === 'approved' && isNearExpiry ? 'expiring' : 
                                      rawStatus === 'draft' && isNearExpiry ? 'expiring' :
                                      rawStatus === 'pending' && isNearExpiry ? 'expiring' :
+                                     rawStatus === 'in_progress' && isNearExpiry ? 'expiring' :
                                      rawStatus === 'rejected' && isNearExpiry ? 'expiring' : rawStatus;
                   const style = statusStyles[finalStatus] || {
                     color: '#374151',
@@ -479,7 +480,7 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
                       }}
                     >
                       <IconComponent size={14} />
-                      {t(`contractTable.status.${finalStatus}`, humanizeContractStatus(finalStatus))}
+                      {getContractStatusLabel(t, finalStatus)}
                     </span>
                   );
                 })()}
