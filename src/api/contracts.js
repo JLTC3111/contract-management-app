@@ -5,6 +5,7 @@
  */
 
 import { supabase } from '../utils/supaBaseClient';
+import { partialSearchMatch } from '../utils/searchUtils';
 import { 
   getDemoContracts, 
   setDemoContracts, 
@@ -34,11 +35,13 @@ const demoContractsApi = {
     }
     
     if (options.search) {
-      const searchLower = options.search.toLowerCase();
-      data = data.filter(c => 
-        c.title?.toLowerCase().includes(searchLower) ||
-        c.author?.toLowerCase().includes(searchLower) ||
-        c.client_name?.toLowerCase().includes(searchLower)
+      const searchTerm = options.search;
+      data = data.filter((c) =>
+        partialSearchMatch(c.title, searchTerm) ||
+        partialSearchMatch(c.author, searchTerm) ||
+        partialSearchMatch(c.client_name, searchTerm) ||
+        partialSearchMatch(c.version, searchTerm) ||
+        partialSearchMatch(c.status, searchTerm)
       );
     }
     

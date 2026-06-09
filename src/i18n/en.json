@@ -311,7 +311,8 @@
     "expiryDate": "Expiry Date",
     "headerStatus": "Status",
     "all": "All",
-    "clear": "Clear"
+    "clear": "Clear",
+    "noContractsFound": "No contracts found."
   },
   "upload_completed": "Upload completed",
   "uploading": "Uploading...",

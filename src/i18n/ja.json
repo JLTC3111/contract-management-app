@@ -288,7 +288,8 @@
     "expiryDate": "有効期限",
     "headerStatus": "ステータス",
     "all": "すべて",
-    "clear": "クリア"
+    "clear": "クリア",
+    "noContractsFound": "契約が見つかりません。"
   },
   "upload_completed": "アップロードが完了しました",
   "upload_failed": "アップロードに失敗しました",

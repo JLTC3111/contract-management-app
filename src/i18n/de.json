@@ -286,7 +286,8 @@
     "expiryDate": "Ablaufdatum",
     "headerStatus": "Status",
     "all": "Alle",
-    "clear": "Löschen"
+    "clear": "Löschen",
+    "noContractsFound": "Keine Verträge gefunden."
   },
 
   "newContract": "Neuer Vertrag",

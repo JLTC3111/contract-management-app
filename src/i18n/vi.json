@@ -290,7 +290,8 @@
     "expiryDate": "Ngày hết hạn",
     "headerStatus": "Trạng thái",
     "all": "Tất cả",
-    "clear": "Xóa"
+    "clear": "Xóa",
+    "noContractsFound": "Không Tìm Thấy Hợp Đồng Nào."
   },
   "upload_completed": "Đã Tải Thành Công",
   "upload_failed": "Tải lên không thành công",

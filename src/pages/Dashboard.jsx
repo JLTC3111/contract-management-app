@@ -10,6 +10,10 @@ import NotificationDropdown from '../components/NotificationDropdown';
 import { useTranslation } from 'react-i18next';
 import { getI18nOrFallback, normalizeContractStatus } from '../utils/formatters';
 import {
+  getBestRelevanceScore,
+  searchMultipleFields,
+} from '../utils/searchUtils';
+import {
   buildDashboardMetrics,
   DEFAULT_DASHBOARD_METRIC_FILTER,
   filterContractsByMetric,
@@ -113,22 +117,38 @@ const Dashboard = () => {
             return;
           }
           let results = [];
-                for (const contract of contracts) {
+          for (const contract of contracts) {
             const basePath = `uploads/${contract.id}`;
+            const contractTitle = getI18nOrFallback(t, contract, 'title_i18n', 'title');
             const allItems = await listAllFilesRecursive(basePath);
             for (const item of allItems) {
-              if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+              const relativePath = item.fullPath
+                .replace(`uploads/${contract.id}/`, '')
+                .replace(/\/$/, '');
+              const searchFields = [
+                item.name,
+                contractTitle,
+                contract.title,
+                relativePath,
+                item.fullPath,
+              ];
+
+              if (searchMultipleFields(searchFields, searchTerm)) {
                 results.push({
                   contractId: contract.id,
-                        contractTitle: getI18nOrFallback(t, contract, 'title_i18n', 'title'),
+                  contractTitle,
                   name: item.name,
                   isFolder: item.isFolder,
                   path: item.basePath,
                   fullPath: item.fullPath,
+                  relativePath,
+                  score: getBestRelevanceScore(searchFields, searchTerm),
                 });
               }
             }
           }
+
+          results.sort((a, b) => b.score - a.score);
           if (active) setSearchResults(results);
         } catch (error) {
           console.error('Search error:', error);
@@ -254,7 +274,14 @@ const Dashboard = () => {
                         >
                           <span>{result.isFolder ? '📁' : '📄'}</span>
                           <span className="dashboard-page__search-result-name">{result.name}</span>
-                          <span className="dashboard-page__search-result-contract">{result.contractTitle}</span>
+                          {result.relativePath && result.relativePath !== result.name && (
+                            <span className="dashboard-page__search-result-path" title={result.relativePath}>
+                              {result.relativePath}
+                            </span>
+                          )}
+                          <span className="dashboard-page__search-result-contract" title={result.contractTitle}>
+                            {result.contractTitle}
+                          </span>
                         </div>
                       ))}
                       {!searchLoading && searchResults.length === 0 && (

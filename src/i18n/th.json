@@ -288,7 +288,8 @@
     "expiryDate": "วันหมดอายุ",
     "headerStatus": "สถานะ",
     "all": "ทั้งหมด",
-    "clear": "ล้าง"
+    "clear": "ล้าง",
+    "noContractsFound": "ไม่พบสัญญา"
   },
   "upload_completed": "อัปโหลดเสร็จสิ้น",
   "upload_failed": "อัปโหลดล้มเหลว",

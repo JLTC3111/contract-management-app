@@ -12,6 +12,7 @@ import './Table.css';
 // Centralized utilities
 import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS, getStatusColor } from '../utils/constants';
 import { formatDate, getDaysUntilExpiry, getI18nOrFallback, getContractStatusLabel, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
+import { getSearchHighlightSegments, searchMultipleFields } from '../utils/searchUtils';
 import { StatusBadge } from './common';
 
 const ICON_COMPONENTS = {
@@ -41,13 +42,11 @@ const isExpiringSoon = (dateStr, status) => {
 
 const getUnique = (arr, key) => Array.from(new Set(arr.map(c => c[key]).filter(Boolean)));
 
-const highlight = (text, query) => {
-  if (!query) return text;
-  const parts = text.split(new RegExp(`(${query})`, 'gi'));
-  return parts.map((part, i) =>
-    part.toLowerCase() === query.toLowerCase()
-      ? <mark key={i} style={{ backgroundColor: '#fef08a' }}>{part}</mark>
-      : part
+const renderSearchHighlight = (text, query) => {
+  return getSearchHighlightSegments(text, query).map((segment, index) =>
+    segment.highlight
+      ? <mark key={index} style={{ backgroundColor: '#fef08a' }}>{segment.text}</mark>
+      : <span key={index}>{segment.text}</span>
   );
 };
 
@@ -82,15 +81,23 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
 
   // Filtering logic
   const filtered = contracts.filter((c) => {
-    const query = searchQuery.toLowerCase();
     const normalizedStatus = normalizeContractStatus(c.status);
-    const matchesSearch =
-      c.title?.toLowerCase().includes(query) ||
-      c.status?.toLowerCase().includes(query) ||
-      normalizedStatus.includes(query) ||
-      c.version?.toLowerCase().includes(query) ||
-      c.author?.toLowerCase().includes(query) ||
-      (c.expiry_date && new Date(c.expiry_date).toLocaleDateString().toLowerCase().includes(query));
+    const localizedTitle = getI18nOrFallback(t, c, 'title_i18n', 'title');
+    const statusLabel = getContractStatusLabel(t, normalizedStatus);
+    const searchFields = [
+      localizedTitle,
+      c.title,
+      c.status,
+      normalizedStatus,
+      statusLabel,
+      c.version,
+      c.author,
+      c.expiry_date ? formatDate(c.expiry_date) : '',
+      c.expiry_date,
+      c.updated_at ? formatDate(c.updated_at) : '',
+      c.updated_at,
+    ].filter(Boolean);
+    const matchesSearch = !searchQuery.trim() || searchMultipleFields(searchFields, searchQuery);
     const matchesTitle = !filters.title || c.title?.toLowerCase().includes(filters.title.toLowerCase());
     const matchesStatus = !filters.status || normalizedStatus === filters.status;
     const matchesVersion = !filters.version || c.version === filters.version;
@@ -444,63 +451,65 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
                 <Search size={20} /> {t('contractTable.noContractsFound')}
               </div>
             </td></tr>
-          ) : filtered.map(contract => (
-            <tr
-              key={contract.id}
-              style={{
-                cursor: 'pointer',
-              }}
-              onClick={() => navigate(`/phases/${contract.id}`)}
-            >
-              <td>{highlight(getI18nOrFallback(t, contract, 'title_i18n', 'title') || t('contractTable.untitledContract'), searchQuery)}</td>
-              <td>
-                {(() => {
-                  const rawStatus = normalizeContractStatus(contract.status) || 'draft';
-                  const isNearExpiry = isExpiringSoon(contract.expiry_date, rawStatus);
-                  const finalStatus = rawStatus === 'approved' && isNearExpiry ? 'expiring' : 
-                                     rawStatus === 'draft' && isNearExpiry ? 'expiring' :
-                                     rawStatus === 'pending' && isNearExpiry ? 'expiring' :
-                                     rawStatus === 'in_progress' && isNearExpiry ? 'expiring' :
-                                     rawStatus === 'rejected' && isNearExpiry ? 'expiring' : rawStatus;
-                  const style = statusStyles[finalStatus] || {
-                    color: '#374151',
-                    backgroundColor: '#f3f4f6',
-                    icon: 'HelpCircle',
-                  };
-                  
-                  const IconComponent = ICON_COMPONENTS[style.icon] || HelpCircle;
-
-                  return (
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        fontWeight: 'bold',
-                        fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
-                        padding: '0.25rem 0.5rem',
-                        borderRadius: '6px',
-                        ...style,
-                      }}
-                    >
-                      <IconComponent size={14} />
-                      {getContractStatusLabel(t, finalStatus)}
-                    </span>
-                  );
-                })()}
-              </td>
-              <td>{contract.version || '—'}</td>
-              <td>{contract.updated_at ? new Date(contract.updated_at).toLocaleDateString(i18n.language, {
+          ) : filtered.map(contract => {
+            const rawStatus = normalizeContractStatus(contract.status) || 'draft';
+            const isNearExpiry = isExpiringSoon(contract.expiry_date, rawStatus);
+            const finalStatus = rawStatus === 'approved' && isNearExpiry ? 'expiring' :
+              rawStatus === 'draft' && isNearExpiry ? 'expiring' :
+              rawStatus === 'pending' && isNearExpiry ? 'expiring' :
+              rawStatus === 'in_progress' && isNearExpiry ? 'expiring' :
+              rawStatus === 'rejected' && isNearExpiry ? 'expiring' : rawStatus;
+            const statusLabel = getContractStatusLabel(t, finalStatus);
+            const updatedLabel = contract.updated_at
+              ? new Date(contract.updated_at).toLocaleDateString(i18n.language, {
                 day: '2-digit',
                 month: 'short',
                 year: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
-              }) : '—'}</td>
-              <td>{contract.author || '—'}</td>
-              <td>{contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString(i18n.language) : '—'}</td>
-            </tr>
-          ))}
+              })
+              : '—';
+            const expiryLabel = contract.expiry_date
+              ? new Date(contract.expiry_date).toLocaleDateString(i18n.language)
+              : '—';
+            const statusStyle = statusStyles[finalStatus] || {
+              color: '#374151',
+              backgroundColor: '#f3f4f6',
+              icon: 'HelpCircle',
+            };
+            const StatusIcon = ICON_COMPONENTS[statusStyle.icon] || HelpCircle;
+
+            return (
+              <tr
+                key={contract.id}
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate(`/phases/${contract.id}`)}
+              >
+                <td>{renderSearchHighlight(getI18nOrFallback(t, contract, 'title_i18n', 'title') || t('contractTable.untitledContract'), searchQuery)}</td>
+                <td>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontWeight: 'bold',
+                      fontSize: 'clamp(0.7rem, 1.25vw, 0.85rem)',
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: '6px',
+                      ...statusStyle,
+                    }}
+                  >
+                    <StatusIcon size={14} />
+                    {renderSearchHighlight(statusLabel, searchQuery)}
+                  </span>
+                </td>
+                <td>{renderSearchHighlight(contract.version || '—', searchQuery)}</td>
+                <td>{renderSearchHighlight(updatedLabel, searchQuery)}</td>
+                <td>{renderSearchHighlight(contract.author || '—', searchQuery)}</td>
+                <td>{renderSearchHighlight(expiryLabel, searchQuery)}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

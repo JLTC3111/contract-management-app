@@ -287,7 +287,8 @@
     "expiryDate": "Date d’expiration",
     "headerStatus": "Statut",
     "all": "Tous",
-    "clear": "Effacer"
+    "clear": "Effacer",
+    "noContractsFound": "Aucun contrat trouvé."
   },
   "upload_completed": "Téléchargement terminé",
   "upload_failed": "Échec du téléchargement",

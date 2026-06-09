@@ -287,7 +287,8 @@
     "expiryDate": "Fecha de vencimiento",
     "headerStatus": "Estado",
     "all": "Todos",
-    "clear": "Eliminar"
+    "clear": "Eliminar",
+    "noContractsFound": "No se encontraron contratos."
   },
   "newContract": "Nuevo contrato",
   "createContract": "Crear contrato",
