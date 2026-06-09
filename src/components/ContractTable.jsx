@@ -450,7 +450,7 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
               style={{
                 cursor: 'pointer',
               }}
-              onClick={() => navigate(`/contracts/${contract.id}`)}
+              onClick={() => navigate(`/phases/${contract.id}`)}
             >
               <td>{highlight(getI18nOrFallback(t, contract, 'title_i18n', 'title') || t('contractTable.untitledContract'), searchQuery)}</td>
               <td>
