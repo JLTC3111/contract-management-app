@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import NewContract from './pages/NewContract';
 import ApprovalsBoard from './pages/ApprovalsBoard';
 import ContractLifecycleManager from './pages/ContractLifecycleManager';
+import PhaseManagementPage from './pages/PhaseManagementPage';
 import ManualViewer from './components/ManualViewer';
 import ForcePasswordChange from './components/ForcePasswordChange';
 import Layout from './components/Layout';
@@ -72,6 +73,8 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/new" element={<NewContract />} />
           <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
+          <Route path="/phases/:contractId" element={<PhaseManagementPage />} />
+          <Route path="/phases" element={<PhaseManagementPage />} />
           <Route path="/lifecycle/:contractId" element={<ContractLifecycleManager />} />
           <Route path="/lifecycle" element={<ContractLifecycleManager />} />
           <Route path="/approvals" element={<ApprovalsBoard />} />

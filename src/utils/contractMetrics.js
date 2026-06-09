@@ -1,6 +1,8 @@
 import { EXPIRY_THRESHOLDS } from './constants';
 import { getDaysUntilExpiry, humanizeContractStatus, normalizeContractStatus } from './formatters';
 
+export const DEFAULT_DASHBOARD_METRIC_FILTER = 'in_progress';
+
 export const DASHBOARD_METRIC_KEYS = [
   'approved',
   'pending',

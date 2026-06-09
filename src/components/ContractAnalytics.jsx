@@ -12,6 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import { getI18nOrFallback, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
+import { DEFAULT_DASHBOARD_METRIC_FILTER } from '../utils/contractMetrics';
 import gsap from 'gsap';
 
 const COLORS = ['#10b981', '#f59e0b', '#ef4444', '#6b7280', '#8b5cf6', '#06b6d4'];
@@ -30,7 +31,7 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   const { darkMode } = useTheme();
   const navigate = useNavigate();
   const [selectedPeriod, setSelectedPeriod] = useState('6months');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState(DEFAULT_DASHBOARD_METRIC_FILTER);
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [tablePage, setTablePage] = useState(0);
   const [sortField, setSortField] = useState('updated_at');
@@ -126,7 +127,8 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
     return contracts.filter(contract => {
       if (!contract || !contract.updated_at) return false;
       const dateValid = new Date(contract.updated_at) >= cutoffDate;
-      const statusValid = selectedStatus === 'all' || contract.status === selectedStatus;
+      const statusValid = selectedStatus === 'all'
+        || normalizeContractStatus(contract.status) === selectedStatus;
       return dateValid && statusValid;
     });
   }, [contracts, selectedPeriod, selectedStatus]);
@@ -335,6 +337,7 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
             style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: 'var(--card-bg)', color: 'var(--text)', fontSize: '0.9rem' }}
           >
             <option value="all">{t('analytics.allStatuses', 'All Statuses')}</option>
+            <option value="in_progress">{t('contractTable.status.in_progress', 'In Progress')}</option>
             <option value="approved">{t('contractTable.status.approved', 'Approved')}</option>
             <option value="pending">{t('contractTable.status.pending', 'Pending')}</option>
             <option value="rejected">{t('contractTable.status.rejected', 'Rejected')}</option>
@@ -489,7 +492,7 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
                   style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s', cursor: 'pointer' }} 
                   onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'} 
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                  onClick={() => navigate(`/lifecycle/${contract.id}`)}
+                  onClick={() => navigate(`/phases/${contract.id}`)}
                   title={t('analytics.clickToViewTimeline', 'Click to view timeline')}
                 >
                   <td style={{ padding: '1rem', color: 'var(--text)' }}>{getI18nOrFallback(t, contract, 'title_i18n', 'title')}</td>

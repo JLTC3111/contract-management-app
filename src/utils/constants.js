@@ -132,6 +132,8 @@ export const ROUTES = {
   approvals: '/approvals',
   lifecycle: '/lifecycle',
   lifecycleWithId: '/lifecycle/:contractId',
+  phases: '/phases',
+  phasesWithId: '/phases/:contractId',
   manual: '/manual'
 };
 

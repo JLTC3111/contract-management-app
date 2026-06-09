@@ -686,7 +686,15 @@
     "confirmComplete": "Complete this phase?",
     "completeWarning": "All tasks will be marked as done and the next phase will be activated.",
     "confirmReopen": "Reopen this phase?",
-    "reopenWarning": "This will set the phase back to active status."
+    "reopenWarning": "This will set the phase back to active status.",
+    "showOpenOnly": "Open only",
+    "showAll": "Show all",
+    "showOpenPhasesOnly": "Open phases only",
+    "showOpenTasksOnly": "Open tasks only",
+    "noOpenPhases": "No open phases for this contract.",
+    "noOpenTasks": "No open tasks in this phase.",
+    "noContractsAvailable": "No contracts available",
+    "createContractFirst": "Create a contract on the dashboard to manage phases."
   },
   "lifecycle": {
     "contractLifecycleManagement": "Contract Lifecycle Management",

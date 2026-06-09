@@ -13,6 +13,7 @@ import {
   Sun,
   Settings,
   Lightbulb,
+  Clock,
   BarChart3,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -403,6 +404,16 @@ const Sidebar = () => {
               collapsed={collapsed}
               currentPath={location.pathname}
               onClick={() => navigate('/approvals')}
+            />
+
+            {/* Phase Management */}
+            <SidebarButton
+              icon={<Clock size={20} />}
+              label={t('sidebar.phaseManagement', 'Phase Management')}
+              path="/phases"
+              collapsed={collapsed}
+              currentPath={location.pathname}
+              onClick={() => navigate('/phases')}
             />
 
             {/* Analytics */}

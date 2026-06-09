@@ -51,12 +51,12 @@ const highlight = (text, query) => {
   );
 };
 
-const ContractTable = ({ contracts, searchQuery = '' }) => {
+const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const [filters, setFilters] = useState({
     title: '',
-    status: '',
+    status: statusFilter,
     version: '',
     author: '',
     updated: '',
@@ -66,6 +66,10 @@ const ContractTable = ({ contracts, searchQuery = '' }) => {
   const [closingFilter, setClosingFilter] = useState(null);
   const popoverRefs = useRef({});
   const tbodyRef = useRef();
+
+  useEffect(() => {
+    setFilters((current) => ({ ...current, status: statusFilter }));
+  }, [statusFilter]);
 
   // Close popover on outside click
   document.onclick = (e) => {

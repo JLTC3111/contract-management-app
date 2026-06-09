@@ -9,7 +9,11 @@ import { Search, FilePenLine, CheckCircle } from 'lucide-react';
 import NotificationDropdown from '../components/NotificationDropdown';
 import { useTranslation } from 'react-i18next';
 import { getI18nOrFallback, normalizeContractStatus } from '../utils/formatters';
-import { buildDashboardMetrics, filterContractsByMetric } from '../utils/contractMetrics';
+import {
+  buildDashboardMetrics,
+  DEFAULT_DASHBOARD_METRIC_FILTER,
+  filterContractsByMetric,
+} from '../utils/contractMetrics';
 
 
 const Dashboard = () => {
@@ -22,7 +26,7 @@ const Dashboard = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
-  const [activeFilter, setActiveFilter] = useState(null);
+  const [activeFilter, setActiveFilter] = useState(DEFAULT_DASHBOARD_METRIC_FILTER);
   const searchRef = useRef();
   const metricsRef = useRef();
   const debounceTimeout = useRef();
@@ -36,7 +40,9 @@ const Dashboard = () => {
   }, [contracts, activeFilter]);
 
   const handleMetricClick = (metricKey) => {
-    setActiveFilter((current) => (current === metricKey ? null : metricKey));
+    setActiveFilter((current) => (
+      current === metricKey ? DEFAULT_DASHBOARD_METRIC_FILTER : metricKey
+    ));
   };
 
   // Helper: recursively list all files/folders under a base path
@@ -152,7 +158,7 @@ const Dashboard = () => {
 
       if (isClickOnTable) return;
 
-      setActiveFilter(null);
+      setActiveFilter(DEFAULT_DASHBOARD_METRIC_FILTER);
     };
 
     document.addEventListener('click', handleClick);
@@ -272,7 +278,11 @@ const Dashboard = () => {
               </div>
 
               <div className="dashboard-page__table">
-                <ContractTable contracts={filteredContracts} searchQuery={searchQuery} />
+                <ContractTable
+                  contracts={filteredContracts}
+                  searchQuery={searchQuery}
+                  statusFilter={activeFilter}
+                />
               </div>
             </>
           )}
