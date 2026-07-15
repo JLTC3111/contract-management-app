@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { 
   CheckCircle, Clock, FileText, XCircle, AlertOctagon, 
   AlertTriangle, CheckSquare, PlayCircle, PauseCircle, Ban, 
-  HelpCircle, Search 
+  HelpCircle, Search, Eye 
 } from 'lucide-react';
 import './Table.css';
 
@@ -442,11 +442,14 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
                 />
               ))}
             </th>
+            <th style={{ whiteSpace: 'nowrap' }}>
+              {t('contractTable.actions', 'Actions')}
+            </th>
           </tr>
         </thead>
         <tbody ref={tbodyRef}>
           {filtered.length === 0 ? (
-            <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>
+            <tr><td colSpan={7} style={{ textAlign: 'center', padding: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                 <Search size={20} /> {t('contractTable.noContractsFound')}
               </div>
@@ -478,14 +481,20 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
               icon: 'HelpCircle',
             };
             const StatusIcon = ICON_COMPONENTS[statusStyle.icon] || HelpCircle;
+            const openDetails = () => navigate(`/contracts/${contract.id}`);
 
             return (
               <tr
                 key={contract.id}
                 style={{ cursor: 'pointer' }}
-                onClick={() => navigate(`/contracts/${contract.id}`)}
+                onClick={openDetails}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--hover-bg)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                title={t('contractTable.viewDetailsHint', 'Open contract details and documents')}
               >
-                <td>{renderSearchHighlight(getI18nOrFallback(t, contract, 'title_i18n', 'title') || t('contractTable.untitledContract'), searchQuery)}</td>
+                <td style={{ color: '#2563eb', fontWeight: 600 }}>
+                  {renderSearchHighlight(getI18nOrFallback(t, contract, 'title_i18n', 'title') || t('contractTable.untitledContract'), searchQuery)}
+                </td>
                 <td>
                   <span
                     style={{
@@ -507,6 +516,34 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
                 <td>{renderSearchHighlight(updatedLabel, searchQuery)}</td>
                 <td>{renderSearchHighlight(contract.author || '—', searchQuery)}</td>
                 <td>{renderSearchHighlight(expiryLabel, searchQuery)}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="btn-hover-effect"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDetails();
+                    }}
+                    aria-label={t('contractTable.viewDetails', 'View details')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      padding: '0.35rem 0.7rem',
+                      borderRadius: '6px',
+                      border: '1px solid var(--card-border)',
+                      background: 'var(--card-bg)',
+                      color: 'var(--text)',
+                      cursor: 'pointer',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    <Eye size={14} />
+                    {t('contractTable.viewDetails', 'View details')}
+                  </button>
+                </td>
               </tr>
             );
           })}

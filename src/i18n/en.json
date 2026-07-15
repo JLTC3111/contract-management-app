@@ -324,7 +324,10 @@
     "description": "Description",
     "descriptionPlaceholder": "Add a short summary of this contract…",
     "primaryDocument": "Primary Document",
-    "noPrimaryDocument": "No primary document set"
+    "noPrimaryDocument": "No primary document set",
+    "actions": "Actions",
+    "viewDetails": "View details",
+    "viewDetailsHint": "Open contract details and documents"
   },
   "upload_completed": "Upload completed",
   "uploading": "Uploading...",
