@@ -6,7 +6,9 @@
     "cancel": "キャンセル",
     "delete": "削除",
     "downloadAll": "すべてダウンロード",
-    "newFolder": "新しいフォルダー"
+    "newFolder": "新しいフォルダー",
+    "managePhases": "フェーズ管理",
+    "documents": "書類"
   },
   "sidebar": {
     "visitIcueTooltip": "iCUEにアクセス！",
@@ -289,7 +291,20 @@
     "headerStatus": "ステータス",
     "all": "すべて",
     "clear": "クリア",
-    "noContractsFound": "契約が見つかりません。"
+    "noContractsFound": "契約が見つかりません。",
+    "created": "作成日",
+    "category": "カテゴリ",
+    "categoryPlaceholder": "例: サービス",
+    "client": "取引先",
+    "clientEmail": "取引先メール",
+    "contractValue": "契約金額",
+    "description": "説明",
+    "descriptionPlaceholder": "この契約の簡単な概要を追加…",
+    "primaryDocument": "主文書",
+    "noPrimaryDocument": "主文書が設定されていません",
+    "actions": "操作",
+    "viewDetails": "詳細を表示",
+    "viewDetailsHint": "契約の詳細と書類を開く"
   },
   "upload_completed": "アップロードが完了しました",
   "upload_failed": "アップロードに失敗しました",
@@ -421,8 +436,7 @@
   "contract_detail_close_preview": "プレビューを閉じる",
   "failed_to_upload": "アップロードに失敗しました。",
   "upload_error_for": "アップロードエラー：",
-  "uploader_uploaded": "アップロード済み"
-,
+  "uploader_uploaded": "アップロード済み",
   "sidebar_mobile": {
     "password": "パスワー",
     "manual": "マニュアル",
@@ -497,7 +511,8 @@
     "pending": "保留中",
     "rejected": "拒否済み",
     "draft": "下書き",
-    "clickToViewTimeline": "クリックしてタイムラインを表示"
+    "clickToViewTimeline": "クリックしてタイムラインを表示",
+    "clickToViewDetails": "クリックして契約詳細を表示"
   },
   "phaseManagement": {
     "addTask": "タスクを追加",
@@ -577,7 +592,8 @@
     "confirmComplete": "この段階を完了しますか？",
     "completeWarning": "すべてのタスクが完了としてマークされ、次の段階が有効になります。",
     "confirmReopen": "この段階を再開しますか？",
-    "reopenWarning": "これにより、段階がアクティブステータスに戻ります。"
+    "reopenWarning": "これにより、段階がアクティブステータスに戻ります。",
+    "viewDetails": "詳細と書類を表示"
   },
   "lifecycle": {
     "selectContract": "契約を選択",
@@ -624,5 +640,6 @@
       "name": "発注者支払い",
       "description": "請求および支払いの文書"
     }
-  }
-} 
+  },
+  "newcontract.viewDetails": "詳細を表示"
+}

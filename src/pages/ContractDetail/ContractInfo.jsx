@@ -1,6 +1,6 @@
 /**
  * Contract Info Section Component
- * Displays and edits contract metadata (title, status, client, documents pointers, etc.)
+ * Displays and edits contract metadata (status, client, documents pointers, etc.)
  */
 
 import React, { useRef } from 'react';
@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Calendar, FileText } from 'lucide-react';
 import { CONTRACT_STATUSES } from '../../utils/constants';
 import { StatusBadge } from '../../components/common';
-import { getI18nOrFallback } from '../../utils/formatters';
+import { getI18nOrFallback, formatDateTime } from '../../utils/formatters';
 import { getOriginalFileName } from './fileUtils';
 
 const formatCurrency = (value, language) => {
@@ -20,6 +20,40 @@ const formatCurrency = (value, language) => {
     currency: 'USD',
     maximumFractionDigits: 0,
   }).format(num);
+};
+
+/**
+ * Resolve a creation timestamp from contract fields / primary file path.
+ * Production schema historically lacked created_at — fall back to file upload
+ * timestamps embedded in storage paths, then updated_at.
+ */
+export const resolveContractCreatedAt = (contract) => {
+  if (!contract) return null;
+
+  const direct =
+    contract.created_at ||
+    contract.createdAt ||
+    contract.inserted_at ||
+    null;
+  if (direct) return direct;
+
+  const pathCandidates = [contract.file_name, contract.file_url, contract.file_path]
+    .filter(Boolean)
+    .map(String);
+
+  for (const path of pathCandidates) {
+    const match = path.match(/(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}Z)/);
+    if (match) {
+      const iso = match[1].replace(
+        /^(\d{4}-\d{2}-\d{2}T)(\d{2})-(\d{2})-(\d{2})-(\d{3}Z)$/,
+        '$1$2:$3:$4.$5'
+      );
+      const parsed = new Date(iso);
+      if (!Number.isNaN(parsed.getTime())) return parsed.toISOString();
+    }
+  }
+
+  return contract.updated_at || null;
 };
 
 const ContractInfo = ({
@@ -82,7 +116,10 @@ const ContractInfo = ({
   }));
 
   const display = editMode ? updated : contract;
-  const description = getI18nOrFallback(t, display, 'description_i18n', 'description');
+  const description =
+    getI18nOrFallback(t, display, 'description_i18n', 'description') ||
+    display?.content ||
+    '';
   const storedFileName = display?.file_name;
   const fileBaseName = storedFileName?.includes('/')
     ? storedFileName.split('/').pop()
@@ -91,6 +128,8 @@ const ContractInfo = ({
     ? getOriginalFileName(fileBaseName)
     : null;
   const formattedValue = formatCurrency(display?.contract_value, i18n.language);
+  const createdAt = resolveContractCreatedAt(contract);
+  const updatedAt = contract?.updated_at || null;
 
   return (
     <div style={{ marginBottom: '2rem' }}>
@@ -109,23 +148,8 @@ const ContractInfo = ({
         gap: '1rem',
         marginBottom: '1rem'
       }}>
-        {/* Title */}
-        <div ref={(el) => setInfoRef(el, 0)} style={cardStyle}>
-          <label style={labelStyle}>{t('contractTable.title', 'Title')}</label>
-          {editMode ? (
-            <input
-              type="text"
-              value={updated.title || ''}
-              onChange={(e) => onFieldChange('title', e.target.value)}
-              style={inputStyle}
-            />
-          ) : (
-            <span style={valueStyle}>{t(contract.title_i18n, contract.title)}</span>
-          )}
-        </div>
-
         {/* Status */}
-        <div ref={(el) => setInfoRef(el, 1)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 0)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.status.label', 'Status')}</label>
           {editMode ? (
             <select
@@ -143,7 +167,7 @@ const ContractInfo = ({
         </div>
 
         {/* Version */}
-        <div ref={(el) => setInfoRef(el, 2)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 1)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.version', 'Version')}</label>
           {editMode ? (
             <input
@@ -158,7 +182,7 @@ const ContractInfo = ({
         </div>
 
         {/* Author */}
-        <div ref={(el) => setInfoRef(el, 3)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 2)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.author', 'Author')}</label>
           {editMode ? (
             <input
@@ -173,7 +197,7 @@ const ContractInfo = ({
         </div>
 
         {/* Category */}
-        <div ref={(el) => setInfoRef(el, 4)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 3)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.category', 'Category')}</label>
           {editMode ? (
             <input
@@ -189,7 +213,7 @@ const ContractInfo = ({
         </div>
 
         {/* Client */}
-        <div ref={(el) => setInfoRef(el, 5)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 4)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.client', 'Client')}</label>
           {editMode ? (
             <input
@@ -204,7 +228,7 @@ const ContractInfo = ({
         </div>
 
         {/* Client Email */}
-        <div ref={(el) => setInfoRef(el, 6)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 5)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.clientEmail', 'Client Email')}</label>
           {editMode ? (
             <input
@@ -219,7 +243,7 @@ const ContractInfo = ({
         </div>
 
         {/* Contract Value */}
-        <div ref={(el) => setInfoRef(el, 7)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 6)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.contractValue', 'Contract Value')}</label>
           {editMode ? (
             <input
@@ -239,14 +263,14 @@ const ContractInfo = ({
         </div>
 
         {/* Expiry Date */}
-        <div ref={(el) => setInfoRef(el, 8)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 7)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.expiry', 'Expiry Date')}</label>
           {editMode ? (
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
               <input
                 ref={dateInputRef}
                 type="date"
-                value={updated.expiry_date?.split('T')[0] || ''}
+                value={(updated.expiry_date || updated.expiration_date)?.split?.('T')?.[0] || ''}
                 onChange={(e) => onFieldChange('expiry_date', e.target.value)}
                 style={{
                   ...inputStyle,
@@ -278,35 +302,31 @@ const ContractInfo = ({
             </div>
           ) : (
             <span style={valueStyle}>
-              {contract.expiry_date
-                ? new Date(contract.expiry_date).toLocaleDateString()
+              {(contract.expiry_date || contract.expiration_date)
+                ? new Date(contract.expiry_date || contract.expiration_date).toLocaleDateString(i18n.language)
                 : '-'}
             </span>
           )}
         </div>
 
         {/* Created */}
-        <div ref={(el) => setInfoRef(el, 9)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 8)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.created', 'Created')}</label>
           <span style={valueStyle}>
-            {contract.created_at
-              ? new Date(contract.created_at).toLocaleString()
-              : '-'}
+            {createdAt ? formatDateTime(createdAt, i18n.language) : '-'}
           </span>
         </div>
 
         {/* Last Updated */}
-        <div ref={(el) => setInfoRef(el, 10)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 9)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.updated', 'Last Updated')}</label>
           <span style={valueStyle}>
-            {contract.updated_at
-              ? new Date(contract.updated_at).toLocaleString()
-              : '-'}
+            {updatedAt ? formatDateTime(updatedAt, i18n.language) : '-'}
           </span>
         </div>
 
         {/* Primary document */}
-        <div ref={(el) => setInfoRef(el, 11)} style={cardStyle}>
+        <div ref={(el) => setInfoRef(el, 10)} style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.primaryDocument', 'Primary Document')}</label>
           <span style={{ ...valueStyle, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
             {primaryFileName ? (
@@ -322,11 +342,11 @@ const ContractInfo = ({
       </div>
 
       {/* Description — full width */}
-      <div ref={(el) => setInfoRef(el, 12)} style={cardStyle}>
+      <div ref={(el) => setInfoRef(el, 11)} style={cardStyle}>
         <label style={labelStyle}>{t('contractTable.description', 'Description')}</label>
         {editMode ? (
           <textarea
-            value={updated.description || ''}
+            value={updated.description || updated.content || ''}
             onChange={(e) => onFieldChange('description', e.target.value)}
             rows={3}
             style={{

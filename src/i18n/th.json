@@ -6,7 +6,9 @@
     "cancel": "ยกเลิก",
     "delete": "ลบ",
     "downloadAll": "ดาวน์โหลดทั้งหมด",
-    "newFolder": "โฟลเดอร์ใหม่"
+    "newFolder": "โฟลเดอร์ใหม่",
+    "managePhases": "จัดการระยะ",
+    "documents": "เอกสาร"
   },
   "sidebar": {
     "visitIcueTooltip": "เยี่ยมชม iCUE!",
@@ -289,7 +291,20 @@
     "headerStatus": "สถานะ",
     "all": "ทั้งหมด",
     "clear": "ล้าง",
-    "noContractsFound": "ไม่พบสัญญา"
+    "noContractsFound": "ไม่พบสัญญา",
+    "created": "สร้างเมื่อ",
+    "category": "หมวดหมู่",
+    "categoryPlaceholder": "เช่น บริการ",
+    "client": "ลูกค้า",
+    "clientEmail": "อีเมลลูกค้า",
+    "contractValue": "มูลค่าสัญญา",
+    "description": "คำอธิบาย",
+    "descriptionPlaceholder": "เพิ่มสรุปสั้นๆ ของสัญญานี้…",
+    "primaryDocument": "เอกสารหลัก",
+    "noPrimaryDocument": "ยังไม่ได้ตั้งเอกสารหลัก",
+    "actions": "การดำเนินการ",
+    "viewDetails": "ดูรายละเอียด",
+    "viewDetailsHint": "เปิดรายละเอียดสัญญาและเอกสาร"
   },
   "upload_completed": "อัปโหลดเสร็จสิ้น",
   "upload_failed": "อัปโหลดล้มเหลว",
@@ -453,7 +468,7 @@
   "no_permission_create_contract": "คุณไม่มีสิทธิ์ในการสร้างสัญญาใหม่",
   "analytics": {
     "showing": "แสดง",
-     "exportCSV": "ส่งออก CSV",
+    "exportCSV": "ส่งออก CSV",
     "allStatuses": "สถานะทั้งหมด",
     "recentHistory": "ประวัติสัญญาล่าสุด",
     "errorLoadingContractData": "ข้อผิดพลาดในการโหลดข้อมูลสัญญา",
@@ -486,7 +501,8 @@
     "pending": "รอดำเนินการ",
     "rejected": "ปฏิเสธแล้ว",
     "draft": "ร่าง",
-    "clickToViewTimeline": "คลิกเพื่อดูไทม์ไลน์"
+    "clickToViewTimeline": "คลิกเพื่อดูไทม์ไลน์",
+    "clickToViewDetails": "คลิกเพื่อดูรายละเอียดสัญญา"
   },
   "phaseManagement": {
     "addTask": "เพิ่มงาน",
@@ -565,7 +581,8 @@
     "confirmComplete": "เสร็จสิ้นขั้นตอนนี้หรือไม่?",
     "completeWarning": "งานทั้งหมดจะถูกทำเครื่องหมายว่าเสร็จสมบูรณ์ และขั้นตอนถัดไปจะถูกเปิดใช้งาน",
     "confirmReopen": "เปิดขั้นตอนนี้อีกครั้ง?",
-    "reopenWarning": "การดำเนินการนี้จะตั้งค่าขั้นตอนกลับไปเป็นสถานะที่ใช้งานอยู่"
+    "reopenWarning": "การดำเนินการนี้จะตั้งค่าขั้นตอนกลับไปเป็นสถานะที่ใช้งานอยู่",
+    "viewDetails": "ดูรายละเอียดและเอกสาร"
   },
   "lifecycle": {
     "selectContract": "เลือกสัญญา",
@@ -613,5 +630,6 @@
       "name": "การชำระเงินของเจ้าของ",
       "description": "เอกสารการเรียกเก็บเงินและการชำระเงิน"
     }
-  }
-} 
+  },
+  "newcontract.viewDetails": "ดูรายละเอียด"
+}

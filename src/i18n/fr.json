@@ -6,7 +6,9 @@
     "cancel": "Annuler",
     "delete": "Supprimer",
     "downloadAll": "Tout télécharger",
-    "newFolder": "Nouveau dossier"
+    "newFolder": "Nouveau dossier",
+    "managePhases": "Gérer les phases",
+    "documents": "Documents"
   },
   "sidebar": {
     "visitIcueTooltip": "Visiter iCUE !",
@@ -288,7 +290,20 @@
     "headerStatus": "Statut",
     "all": "Tous",
     "clear": "Effacer",
-    "noContractsFound": "Aucun contrat trouvé."
+    "noContractsFound": "Aucun contrat trouvé.",
+    "created": "Créé le",
+    "category": "Catégorie",
+    "categoryPlaceholder": "ex. Services",
+    "client": "Client",
+    "clientEmail": "E-mail du client",
+    "contractValue": "Valeur du contrat",
+    "description": "Description",
+    "descriptionPlaceholder": "Ajoutez un court résumé de ce contrat…",
+    "primaryDocument": "Document principal",
+    "noPrimaryDocument": "Aucun document principal défini",
+    "actions": "Actions",
+    "viewDetails": "Voir les détails",
+    "viewDetailsHint": "Ouvrir les détails et documents du contrat"
   },
   "upload_completed": "Téléchargement terminé",
   "upload_failed": "Échec du téléchargement",
@@ -461,7 +476,7 @@
   "no_permission_create_contract": "Vous n'avez pas la permission de créer de nouveaux contrats.",
   "analytics": {
     "showing": "Affichage",
-     "exportCSV": "Exporter vers CSV",
+    "exportCSV": "Exporter vers CSV",
     "allStatuses": "Tous les Statuts",
     "recentHistory": "Historique Récent",
     "title": "Analytiques des Contrats",
@@ -495,7 +510,8 @@
     "pending": "En Attente",
     "rejected": "Rejeté",
     "draft": "Brouillon",
-    "clickToViewTimeline": "Cliquez pour voir la chronologie"
+    "clickToViewTimeline": "Cliquez pour voir la chronologie",
+    "clickToViewDetails": "Cliquer pour voir les détails du contrat"
   },
   "phaseManagement": {
     "addTask": "Ajouter une tâche",
@@ -573,7 +589,8 @@
     "confirmComplete": "Terminer cette phase?",
     "completeWarning": "Toutes les tâches seront marquées comme terminées et la phase suivante sera activée.",
     "confirmReopen": "Rouvrir cette phase?",
-    "reopenWarning": "Cela remettra la phase au statut actif."
+    "reopenWarning": "Cela remettra la phase au statut actif.",
+    "viewDetails": "Voir les détails et documents"
   },
   "lifecycle": {
     "selectContract": "Sélectionner le Contrat",
@@ -621,5 +638,6 @@
       "name": "Paiement du Propriétaire",
       "description": "Documentation de facturation et de paiement"
     }
-  }
-} 
+  },
+  "newcontract.viewDetails": "Voir les détails"
+}

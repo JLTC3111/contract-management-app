@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 const ContractHeader = ({
   contract,
+  updated,
   editMode,
   canEdit,
   onBack,
@@ -12,6 +13,7 @@ const ContractHeader = ({
   onCancel,
   onDelete,
   onManagePhases,
+  onFieldChange,
   actionLoading,
   headerRef,
   darkMode,
@@ -60,14 +62,37 @@ const ContractHeader = ({
         flexWrap: 'wrap',
         gap: '1rem'
       }}>
-        <h1 style={{
-          color: 'var(--text)',
-          margin: 0,
-          fontSize: 'clamp(1.25rem, 4vw, 2rem)',
-          wordBreak: 'break-word'
-        }}>
-          {contract?.title || 'Untitled Contract'}
-        </h1>
+        {editMode ? (
+          <input
+            type="text"
+            value={updated?.title || ''}
+            onChange={(e) => onFieldChange?.('title', e.target.value)}
+            aria-label={t('contractTable.title', 'Title')}
+            style={{
+              flex: 1,
+              minWidth: '220px',
+              color: 'var(--text)',
+              margin: 0,
+              fontSize: 'clamp(1.25rem, 4vw, 2rem)',
+              fontWeight: 700,
+              wordBreak: 'break-word',
+              padding: '0.35rem 0.6rem',
+              borderRadius: '8px',
+              border: '1px solid var(--card-border)',
+              background: 'var(--card-bg)',
+              outline: 'none',
+            }}
+          />
+        ) : (
+          <h1 style={{
+            color: 'var(--text)',
+            margin: 0,
+            fontSize: 'clamp(1.25rem, 4vw, 2rem)',
+            wordBreak: 'break-word'
+          }}>
+            {contract?.title || t('contractTable.untitledContract', 'Untitled Contract')}
+          </h1>
+        )}
 
         {/* Contract Action Buttons */}
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>

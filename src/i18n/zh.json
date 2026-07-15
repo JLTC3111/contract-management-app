@@ -280,7 +280,20 @@
     "headerStatus": "状态",
     "all": "全部",
     "clear": "清除",
-    "noContractsFound": "未找到合同。"
+    "noContractsFound": "未找到合同。",
+    "created": "创建时间",
+    "category": "类别",
+    "categoryPlaceholder": "例如：服务",
+    "client": "客户",
+    "clientEmail": "客户邮箱",
+    "contractValue": "合同金额",
+    "description": "描述",
+    "descriptionPlaceholder": "添加此合同的简短摘要…",
+    "primaryDocument": "主文档",
+    "noPrimaryDocument": "未设置主文档",
+    "actions": "操作",
+    "viewDetails": "查看详情",
+    "viewDetailsHint": "打开合同详情与文档"
   },
   "upload_completed": "上传完成",
   "upload_failed": "上传失败",
@@ -411,8 +424,7 @@
   "contract_detail_close_preview": "关闭预览",
   "failed_to_upload": "上传失败。",
   "upload_error_for": "上传错误：",
-  "uploader_uploaded": "已上传"
-,
+  "uploader_uploaded": "已上传",
   "sidebar_mobile": {
     "password": "更改密码",
     "manual": "手册",
@@ -453,7 +465,7 @@
   "no_permission_create_contract": "您没有权限创建新合同。",
   "analytics": {
     "showing": "显示",
-     "exportCSV": "导出为CSV",
+    "exportCSV": "导出为CSV",
     "allStatuses": "所有状态",
     "recentHistory": "最近合同历史",
     "title": "合同分析",
@@ -487,7 +499,8 @@
     "pending": "待处理",
     "rejected": "已拒绝",
     "draft": "草稿",
-    "clickToViewTimeline": "点击查看时间线"
+    "clickToViewTimeline": "点击查看时间线",
+    "clickToViewDetails": "点击查看合同详情"
   },
   "phaseManagement": {
     "addTask": "添加任务",
@@ -566,7 +579,8 @@
     "confirmComplete": "完成此阶段？",
     "completeWarning": "所有任务将被标记为完成，并且将激活下一阶段。",
     "confirmReopen": "重新打开此阶段？",
-    "reopenWarning": "这会将阶段设置回活动状态。"
+    "reopenWarning": "这会将阶段设置回活动状态。",
+    "viewDetails": "查看详情和文档"
   },
   "lifecycle": {
     "selectContract": "选择合同",
@@ -614,5 +628,10 @@
       "name": "业主付款",
       "description": "账单和付款文档"
     }
-  }
-} 
+  },
+  "contractHeader": {
+    "managePhases": "管理阶段",
+    "documents": "文档"
+  },
+  "newcontract.viewDetails": "查看详情"
+}

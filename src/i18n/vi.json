@@ -6,7 +6,9 @@
     "cancel": "Hủy",
     "delete": "Xóa",
     "downloadAll": "Tải Xuống Tất Cả",
-    "newFolder": "Thư Mục Mới"
+    "newFolder": "Thư Mục Mới",
+    "managePhases": "Quản lý giai đoạn",
+    "documents": "Tài liệu"
   },
   "sidebar": {
     "visitIcueTooltip": "Truy cập iCUE!",
@@ -268,7 +270,6 @@
     "searchContracts": "Tìm kiếm hợp đồng..."
   },
   "clear": "Xóa",
-  
   "contractTable": {
     "expiry": "Ngày hết hạn",
     "title": "Tiêu đề",
@@ -291,7 +292,20 @@
     "headerStatus": "Trạng thái",
     "all": "Tất cả",
     "clear": "Xóa",
-    "noContractsFound": "Không Tìm Thấy Hợp Đồng Nào."
+    "noContractsFound": "Không Tìm Thấy Hợp Đồng Nào.",
+    "created": "Ngày tạo",
+    "category": "Danh mục",
+    "categoryPlaceholder": "vd: Dịch vụ",
+    "client": "Khách hàng",
+    "clientEmail": "Email khách hàng",
+    "contractValue": "Giá trị hợp đồng",
+    "description": "Mô tả",
+    "descriptionPlaceholder": "Thêm mô tả ngắn về hợp đồng này…",
+    "primaryDocument": "Tài liệu chính",
+    "noPrimaryDocument": "Chưa có tài liệu chính",
+    "actions": "Thao tác",
+    "viewDetails": "Xem chi tiết",
+    "viewDetailsHint": "Mở chi tiết hợp đồng và tài liệu"
   },
   "upload_completed": "Đã Tải Thành Công",
   "upload_failed": "Tải lên không thành công",
@@ -463,7 +477,7 @@
   "no_permission_create_contract": "Bạn không có quyền tạo hợp đồng mới.",
   "analytics": {
     "showing": "Hiển Thị",
-     "exportCSV": "Xuất Sang CSV",
+    "exportCSV": "Xuất Sang CSV",
     "allStatuses": "Tất Cả Trạng Thái",
     "recentHistory": "Lịch Sử Gần Đây",
     "title": "Phân tích Hợp đồng",
@@ -497,7 +511,8 @@
     "pending": "Chờ xử lý",
     "rejected": "Đã từ chối",
     "draft": "Bản nháp",
-    "clickToViewTimeline": "Nhấp để xem tiến trình"
+    "clickToViewTimeline": "Nhấp để xem tiến trình",
+    "clickToViewDetails": "Nhấp để xem chi tiết hợp đồng"
   },
   "phaseManagement": {
     "addTask": "Thêm Nhiệm Vụ",
@@ -576,7 +591,8 @@
     "confirmComplete": "Hoàn thành giai đoạn này?",
     "completeWarning": "Tất cả các nhiệm vụ sẽ được đánh dấu là hoàn thành và giai đoạn tiếp theo sẽ được kích hoạt.",
     "confirmReopen": "Mở lại giai đoạn này?",
-    "reopenWarning": "Điều này sẽ đặt giai đoạn trở lại trạng thái đang hoạt động."
+    "reopenWarning": "Điều này sẽ đặt giai đoạn trở lại trạng thái đang hoạt động.",
+    "viewDetails": "Xem chi tiết & tài liệu"
   },
   "lifecycle": {
     "contractLifecycleManagement": "Quản lý Chu kỳ Sống Hợp đồng",
@@ -624,5 +640,6 @@
       "name": "Hồ Sơ Thanh Toán Chủ Đầu Tư",
       "description": "Công văn đề nghị thanh toán, Biên bản nghiệm thu khối lượng, Hóa đơn"
     }
-  }
-} 
+  },
+  "newcontract.viewDetails": "Xem chi tiết"
+}

@@ -586,6 +586,7 @@ const ContractDetailPage = () => {
         author: updated.author?.trim(),
         expiry_date: updated.expiry_date || null,
         description: updated.description?.trim() || null,
+        content: updated.description?.trim() || updated.content || null,
         client_name: updated.client_name?.trim() || null,
         client_email: updated.client_email?.trim() || null,
         contract_value: updated.contract_value ?? null,
@@ -836,6 +837,7 @@ const ContractDetailPage = () => {
       {/* Header with navigation and actions */}
       <ContractHeader
         contract={contract}
+        updated={updated}
         user={user}
         canEdit={canEdit}
         editMode={editMode}
@@ -848,6 +850,7 @@ const ContractDetailPage = () => {
         actionLoading={actionLoading}
         onBack={() => navigate(-1)}
         onManagePhases={() => navigate(`/phases/${contractId}`)}
+        onFieldChange={handleChange}
         onEdit={() => setEditMode(true)}
         onSave={handleSave}
         onCancel={() => {

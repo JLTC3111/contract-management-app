@@ -22,6 +22,23 @@ import {
 const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
 
 /**
+ * Normalize contract rows from Supabase for consistent UI fields.
+ * Production historically used `content` / `expiration_date` without `created_at`.
+ */
+const normalizeContractRow = (row) => {
+  if (!row) return row;
+  return {
+    ...row,
+    description: row.description ?? row.content ?? null,
+    expiry_date: row.expiry_date ?? row.expiration_date ?? null,
+    created_at: row.created_at ?? row.createdAt ?? null,
+  };
+};
+
+const normalizeContractRows = (rows) =>
+  Array.isArray(rows) ? rows.map(normalizeContractRow) : rows;
+
+/**
  * Demo Contracts API
  * All demo contract-related localStorage operations
  */
@@ -430,7 +447,7 @@ export const contractsApi = {
     const { data, error } = await query;
     
     if (error) throw error;
-    return data || [];
+    return normalizeContractRows(data || []);
   },
 
   /**
@@ -451,7 +468,7 @@ export const contractsApi = {
       .single();
     
     if (error) throw error;
-    return data;
+    return normalizeContractRow(data);
   },
 
   /**
@@ -506,19 +523,26 @@ export const contractsApi = {
     if (isDemoMode()) {
       return demoContractsApi.update(id, updates);
     }
+
+    const payload = {
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+
+    // Keep legacy `content` column in sync when description is edited
+    if (Object.prototype.hasOwnProperty.call(updates, 'description') && updates.content === undefined) {
+      payload.content = updates.description;
+    }
     
     const { data, error } = await supabase
       .from('contracts')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString()
-      })
+      .update(payload)
       .eq('id', id)
       .select()
       .single();
     
     if (error) throw error;
-    return data;
+    return normalizeContractRow(data);
   },
 
   /**

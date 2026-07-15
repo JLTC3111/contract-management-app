@@ -6,7 +6,9 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "downloadAll": "Descargar todo",
-    "newFolder": "Nueva carpeta"
+    "newFolder": "Nueva carpeta",
+    "managePhases": "Gestionar fases",
+    "documents": "Documentos"
   },
   "sidebar": {
     "visitIcueTooltip": "¡Visitar iCUE!",
@@ -38,7 +40,7 @@
       "admin": "Acceso total: crear, editar, aprobar, comentar y eliminar contratos.",
       "editor": "Puede crear, editar y eliminar contratos pero no aprobar.",
       "approver": "Puede revisar y aprobar contratos. Sin acceso de edición.",
-            "viewer": "Acceso de solo lectura a todos los contratos.",
+      "viewer": "Acceso de solo lectura a todos los contratos.",
       "unknown": "Rol no reconocido en este sistema."
     },
     "analytics": "Análisis e Historial",
@@ -288,7 +290,20 @@
     "headerStatus": "Estado",
     "all": "Todos",
     "clear": "Eliminar",
-    "noContractsFound": "No se encontraron contratos."
+    "noContractsFound": "No se encontraron contratos.",
+    "created": "Creado",
+    "category": "Categoría",
+    "categoryPlaceholder": "p. ej. Servicios",
+    "client": "Cliente",
+    "clientEmail": "Correo del cliente",
+    "contractValue": "Valor del contrato",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Añade un breve resumen de este contrato…",
+    "primaryDocument": "Documento principal",
+    "noPrimaryDocument": "No hay documento principal",
+    "actions": "Acciones",
+    "viewDetails": "Ver detalles",
+    "viewDetailsHint": "Abrir detalles y documentos del contrato"
   },
   "newContract": "Nuevo contrato",
   "createContract": "Crear contrato",
@@ -421,8 +436,7 @@
   "contract_detail_close_preview": "Cerrar vista previa",
   "failed_to_upload": "Error al subir.",
   "upload_error_for": "Error de carga para",
-  "uploader_uploaded": "subido"
-  ,
+  "uploader_uploaded": "subido",
   "sidebar_mobile": {
     "password": "Contraseña",
     "manual": "Manual",
@@ -477,7 +491,7 @@
   },
   "analytics": {
     "showing": "Mostrando",
-     "exportCSV": "Exportar a CSV",
+    "exportCSV": "Exportar a CSV",
     "allStatuses": "Todos los Estados",
     "recentHistory": "Historial Reciente",
     "title": "Análisis e Historial de Contratos",
@@ -506,7 +520,8 @@
     "pending": "Pendiente",
     "rejected": "Rechazado",
     "draft": "Borrador",
-    "clickToViewTimeline": "Haga clic para ver la línea de tiempo"
+    "clickToViewTimeline": "Haga clic para ver la línea de tiempo",
+    "clickToViewDetails": "Haz clic para ver los detalles del contrato"
   },
   "phases": {
     "title": "Gestión de Fases del Contrato",
@@ -605,7 +620,8 @@
     "confirmComplete": "¿Completar esta fase?",
     "completeWarning": "Todas las tareas se marcarán como completadas y se activará la siguiente fase.",
     "confirmReopen": "¿Reabrir esta fase?",
-    "reopenWarning": "Esto establecerá la fase de nuevo al estado activo."
+    "reopenWarning": "Esto establecerá la fase de nuevo al estado activo.",
+    "viewDetails": "Ver detalles y documentos"
   },
   "lifecycle": {
     "selectContract": "Seleccionar Contrato",
@@ -674,5 +690,6 @@
       "name": "Pago del Propietario",
       "description": "Documentación de facturación y pagos"
     }
-  }
+  },
+  "newcontract.viewDetails": "Ver detalles"
 }

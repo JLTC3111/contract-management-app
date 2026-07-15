@@ -6,7 +6,9 @@
     "cancel": "Abbrechen",
     "delete": "Löschen",
     "downloadAll": "Alle herunterladen",
-    "newFolder": "Neuer Ordner"
+    "newFolder": "Neuer Ordner",
+    "managePhases": "Phasen verwalten",
+    "documents": "Dokumente"
   },
   "sidebar": {
     "visitIcueTooltip": "iCUE besuchen!",
@@ -287,9 +289,21 @@
     "headerStatus": "Status",
     "all": "Alle",
     "clear": "Löschen",
-    "noContractsFound": "Keine Verträge gefunden."
+    "noContractsFound": "Keine Verträge gefunden.",
+    "created": "Erstellt",
+    "category": "Kategorie",
+    "categoryPlaceholder": "z. B. Dienstleistungen",
+    "client": "Kunde",
+    "clientEmail": "Kunden-E-Mail",
+    "contractValue": "Vertragswert",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Kurze Zusammenfassung dieses Vertrags hinzufügen…",
+    "primaryDocument": "Hauptdokument",
+    "noPrimaryDocument": "Kein Hauptdokument festgelegt",
+    "actions": "Aktionen",
+    "viewDetails": "Details anzeigen",
+    "viewDetailsHint": "Vertragsdetails und Dokumente öffnen"
   },
-
   "newContract": "Neuer Vertrag",
   "createContract": "Vertrag erstellen",
   "edit": "Bearbeiten",
@@ -492,7 +506,8 @@
     "pending": "Ausstehend",
     "rejected": "Abgelehnt",
     "draft": "Entwurf",
-    "clickToViewTimeline": "Klicken Sie, um die Zeitleiste anzuzeigen"
+    "clickToViewTimeline": "Klicken Sie, um die Zeitleiste anzuzeigen",
+    "clickToViewDetails": "Klicken, um Vertragsdetails anzuzeigen"
   },
   "phaseManagement": {
     "addTask": "Aufgabe hinzufügen",
@@ -572,7 +587,8 @@
     "confirmComplete": "Diese Phase abschließen?",
     "completeWarning": "Alle Aufgaben werden als abgeschlossen markiert und die nächste Phase wird aktiviert.",
     "confirmReopen": "Diese Phase erneut öffnen?",
-    "reopenWarning": "Dies setzt die Phase auf den Status 'Aktiv' zurück."
+    "reopenWarning": "Dies setzt die Phase auf den Status 'Aktiv' zurück.",
+    "viewDetails": "Details & Dokumente anzeigen"
   },
   "lifecycle": {
     "selectContract": "Vertrag auswählen",
@@ -620,5 +636,6 @@
       "name": "Eigentümerzahlung",
       "description": "Abrechnungs- und Zahlungsdokumentation"
     }
-  }
-} 
+  },
+  "newcontract.viewDetails": "Details anzeigen"
+}
