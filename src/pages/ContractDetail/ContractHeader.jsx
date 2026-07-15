@@ -1,6 +1,8 @@
 import React from 'react';
 import { ArrowLeft, Trash, Download, FolderPlus, Trash2, X, Check, GitBranch } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { TextEffect } from '../../../components/motion-primitives/text-effect';
+import { TextShimmer } from '../../../components/motion-primitives/text-shimmer';
 
 const ContractHeader = ({
   contract,
@@ -29,6 +31,7 @@ const ContractHeader = ({
   onCreateFolder
 }) => {
   const { t } = useTranslation();
+  const title = contract?.title || t('contractTable.untitledContract', 'Untitled Contract');
 
   return (
     <div ref={headerRef} style={{ marginBottom: '2rem' }}>
@@ -84,14 +87,15 @@ const ContractHeader = ({
             }}
           />
         ) : (
-          <h1 style={{
-            color: 'var(--text)',
-            margin: 0,
-            fontSize: 'clamp(1.25rem, 4vw, 2rem)',
-            wordBreak: 'break-word'
-          }}>
-            {contract?.title || t('contractTable.untitledContract', 'Untitled Contract')}
-          </h1>
+          <TextEffect
+            as="h1"
+            per="word"
+            preset="fade-in-blur"
+            className="m-0 break-words text-[clamp(1.25rem,4vw,2rem)] font-bold"
+            style={{ color: 'var(--text)' }}
+          >
+            {title}
+          </TextEffect>
         )}
 
         {/* Contract Action Buttons */}
@@ -114,7 +118,13 @@ const ContractHeader = ({
               }}
             >
               <GitBranch size={16} />
-              {t('contractHeader.managePhases', 'Manage Phases')}
+              <TextShimmer
+                as="span"
+                className="text-[0.9rem] font-medium [--base-color:var(--text)] [--base-gradient-color:#3b82f6]"
+                duration={2.4}
+              >
+                {t('contractHeader.managePhases', 'Manage Phases')}
+              </TextShimmer>
             </button>
           )}
 

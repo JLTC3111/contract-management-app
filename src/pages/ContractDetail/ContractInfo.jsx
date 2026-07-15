@@ -10,6 +10,12 @@ import { CONTRACT_STATUSES } from '../../utils/constants';
 import { StatusBadge } from '../../components/common';
 import { getI18nOrFallback, formatDateTime } from '../../utils/formatters';
 import { getOriginalFileName } from './fileUtils';
+import { TextEffect } from '../../../components/motion-primitives/text-effect';
+import { AnimatedGroup } from '../../../components/motion-primitives/animated-group';
+import { AnimatedNumber } from '../../../components/motion-primitives/animated-number';
+import { BorderTrail } from '../../../components/motion-primitives/border-trail';
+import { InView } from '../../../components/motion-primitives/in-view';
+import { cn } from '../../../lib/utils';
 
 const formatCurrency = (value, language) => {
   if (value === null || value === undefined || value === '') return null;
@@ -127,29 +133,41 @@ const ContractInfo = ({
   const primaryFileName = fileBaseName
     ? getOriginalFileName(fileBaseName)
     : null;
+  const numericValue = Number(display?.contract_value);
+  const hasNumericValue = Number.isFinite(numericValue) && display?.contract_value !== null && display?.contract_value !== '';
   const formattedValue = formatCurrency(display?.contract_value, i18n.language);
   const createdAt = resolveContractCreatedAt(contract);
   const updatedAt = contract?.updated_at || null;
 
   return (
     <div style={{ marginBottom: '2rem' }}>
-      <h2 style={{
-        color: 'var(--text)',
-        fontSize: '1.15rem',
-        fontWeight: 600,
-        margin: '0 0 1rem 0'
-      }}>
+      <TextEffect
+        as="h2"
+        per="word"
+        preset="fade"
+        className="mb-4 mt-0 text-[1.15rem] font-semibold"
+        style={{ color: 'var(--text)' }}
+      >
         {t('contractDetails', 'Contract Details')}
-      </h2>
+      </TextEffect>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '1rem',
-        marginBottom: '1rem'
-      }}>
+      <AnimatedGroup
+        className="mb-4 grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]"
+        preset="blur-slide"
+      >
         {/* Status */}
-        <div ref={(el) => setInfoRef(el, 0)} style={cardStyle}>
+        <div
+          ref={(el) => setInfoRef(el, 0)}
+          className={cn('relative overflow-hidden')}
+          style={cardStyle}
+        >
+          {!editMode && (
+            <BorderTrail
+              className="bg-sky-500"
+              size={48}
+              transition={{ repeat: Infinity, duration: 8, ease: 'linear' }}
+            />
+          )}
           <label style={labelStyle}>{t('contractTable.status.label', 'Status')}</label>
           {editMode ? (
             <select
@@ -257,6 +275,15 @@ const ContractInfo = ({
               )}
               style={inputStyle}
             />
+          ) : hasNumericValue ? (
+            <span style={valueStyle} className="inline-flex items-baseline gap-1">
+              <span aria-hidden="true">$</span>
+              <AnimatedNumber
+                value={numericValue}
+                className="tabular-nums"
+                springOptions={{ bounce: 0, duration: 1400 }}
+              />
+            </span>
           ) : (
             <span style={valueStyle}>{formattedValue || '-'}</span>
           )}
@@ -339,30 +366,39 @@ const ContractInfo = ({
             )}
           </span>
         </div>
-      </div>
+      </AnimatedGroup>
 
       {/* Description — full width */}
-      <div ref={(el) => setInfoRef(el, 11)} style={cardStyle}>
-        <label style={labelStyle}>{t('contractTable.description', 'Description')}</label>
-        {editMode ? (
-          <textarea
-            value={updated.description || updated.content || ''}
-            onChange={(e) => onFieldChange('description', e.target.value)}
-            rows={3}
-            style={{
-              ...inputStyle,
-              resize: 'vertical',
-              minHeight: '4.5rem',
-              fontFamily: 'inherit'
-            }}
-            placeholder={t('contractTable.descriptionPlaceholder', 'Add a short summary of this contract…')}
-          />
-        ) : (
-          <span style={{ ...valueStyle, fontWeight: 400, whiteSpace: 'pre-wrap' }}>
-            {description || '-'}
-          </span>
-        )}
-      </div>
+      <InView
+        once
+        variants={{
+          hidden: { opacity: 0, y: 16 },
+          visible: { opacity: 1, y: 0 },
+        }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+      >
+        <div ref={(el) => setInfoRef(el, 11)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.description', 'Description')}</label>
+          {editMode ? (
+            <textarea
+              value={updated.description || updated.content || ''}
+              onChange={(e) => onFieldChange('description', e.target.value)}
+              rows={3}
+              style={{
+                ...inputStyle,
+                resize: 'vertical',
+                minHeight: '4.5rem',
+                fontFamily: 'inherit'
+              }}
+              placeholder={t('contractTable.descriptionPlaceholder', 'Add a short summary of this contract…')}
+            />
+          ) : (
+            <span style={{ ...valueStyle, fontWeight: 400, whiteSpace: 'pre-wrap' }}>
+              {description || '-'}
+            </span>
+          )}
+        </div>
+      </InView>
     </div>
   );
 };

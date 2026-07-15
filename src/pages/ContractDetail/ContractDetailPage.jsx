@@ -19,6 +19,8 @@ import ContractInfo from './ContractInfo';
 import FileBrowser from './FileBrowser';
 import FilePreviewPanel from './FilePreviewPanel';
 import { getOriginalFileName } from './fileUtils';
+import { TextEffect } from '../../../components/motion-primitives/text-effect';
+import { InView } from '../../../components/motion-primitives/in-view';
 
 // Helper to check demo mode
 const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
@@ -893,14 +895,15 @@ const ContractDetailPage = () => {
           t={t}
         />
 
-        <h2 style={{
-          color: 'var(--text)',
-          fontSize: '1.15rem',
-          fontWeight: 600,
-          margin: '0 0 1rem 0'
-        }}>
+        <TextEffect
+          as="h2"
+          per="word"
+          preset="slide"
+          className="m-0 mb-4 text-[1.15rem] font-semibold"
+          style={{ color: 'var(--text)' }}
+        >
           {t('contractHeader.documents', 'Documents')}
-        </h2>
+        </TextEffect>
 
         {/* File Uploader (edit mode only) */}
         {editMode && (
@@ -937,26 +940,35 @@ const ContractDetailPage = () => {
 
         {/* File Browser (view mode only) */}
         {!editMode && (
-          <FileBrowser
-            files={files}
-            currentPath={currentPath}
-            contract={contract}
-            selectedFiles={selectedFiles}
-            highlightedFiles={highlightedFiles}
-            fileItemRefs={fileItemRefs}
-            darkMode={darkMode}
-            onPathChange={setCurrentPath}
-            onFileSelect={(filePath, isSelected) => {
-              setSelectedFiles((prev) =>
-                isSelected ? [...prev, filePath] : prev.filter((p) => p !== filePath)
-              );
+          <InView
+            once
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
             }}
-            onPreview={(url, type) => {
-              setPreviewUrl(url);
-              setPreviewType(type);
-            }}
-            t={t}
-          />
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+          >
+            <FileBrowser
+              files={files}
+              currentPath={currentPath}
+              contract={contract}
+              selectedFiles={selectedFiles}
+              highlightedFiles={highlightedFiles}
+              fileItemRefs={fileItemRefs}
+              darkMode={darkMode}
+              onPathChange={setCurrentPath}
+              onFileSelect={(filePath, isSelected) => {
+                setSelectedFiles((prev) =>
+                  isSelected ? [...prev, filePath] : prev.filter((p) => p !== filePath)
+                );
+              }}
+              onPreview={(url, type) => {
+                setPreviewUrl(url);
+                setPreviewType(type);
+              }}
+              t={t}
+            />
+          </InView>
         )}
 
         {/* File Preview */}

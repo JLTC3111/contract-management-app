@@ -18,7 +18,7 @@ import {
   DEFAULT_DASHBOARD_METRIC_FILTER,
   filterContractsByMetric,
 } from '../utils/contractMetrics';
-
+import { TextEffect } from '../../components/motion-primitives/text-effect';
 
 const Dashboard = () => {
   const [contracts, setContracts] = useState([]);
@@ -205,7 +205,14 @@ const Dashboard = () => {
 
       <div className="dashboard-page">
           <div className="dashboard-page__header">
-            <h1 className="dashboard-page__title">{t('dashboard.title', 'Dashboard')}</h1>
+            <TextEffect
+              as="h1"
+              per="word"
+              preset="fade-in-blur"
+              className="dashboard-page__title m-0"
+            >
+              {t('dashboard.title', 'Dashboard')}
+            </TextEffect>
             <NotificationDropdown />
           </div>
 

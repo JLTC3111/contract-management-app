@@ -1,65 +1,37 @@
 import { useTranslation } from 'react-i18next';
-import { useRef, useEffect } from 'react';
 import { METRIC_CSS_CLASSES, getMetricLabel } from '../utils/contractMetrics';
+import { AnimatedGroup } from '../../components/motion-primitives/animated-group';
+import { AnimatedNumber } from '../../components/motion-primitives/animated-number';
+import { cn } from '../../lib/utils';
 
 const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
   const { t } = useTranslation();
-  const cardRefs = useRef([]);
   const hasFilter = Boolean(activeFilter);
-
-  cardRefs.current = [];
-
-  const setCardRef = (el, idx) => {
-    if (el) cardRefs.current[idx] = el;
-  };
-
-  useEffect(() => {
-    if (cardRefs.current.length) {
-      import('gsap').then(({ default: gsap }) => {
-        cardRefs.current.forEach((card, index) => {
-          gsap.fromTo(
-            card,
-            {
-              rotateY: 90,
-              opacity: 0,
-              transformOrigin: 'center',
-              scale: 0.9,
-            },
-            {
-              rotateY: 0,
-              opacity: 1,
-              duration: 0.6,
-              ease: 'back.out(1.7)',
-              delay: index * 0.15,
-              onComplete: () => {
-                gsap.set(card, { clearProps: 'transform,opacity' });
-              },
-            }
-          );
-        });
-      });
-    }
-  }, [data?.length]);
 
   if (!data || data.length === 0) return <p>{t('metrics.noMetricsAvailable')}</p>;
 
   return (
-    <div className={`dashboard-metrics${hasFilter ? ' dashboard-metrics--filter-active' : ''}`}>
-      {data.map(({ key, count }, idx) => {
+    <AnimatedGroup
+      className={cn(
+        'dashboard-metrics',
+        hasFilter && 'dashboard-metrics--filter-active',
+      )}
+      preset="blur-slide"
+    >
+      {data.map(({ key, count }) => {
         const isSelected = activeFilter === key;
         const cssClass = METRIC_CSS_CLASSES[key] || '';
 
         return (
           <div
             key={key}
-            ref={(el) => setCardRef(el, idx)}
-            className={[
+            className={cn(
               'metric-card',
               'btn-hover-preview',
               cssClass,
-              isSelected ? 'metric-card--selected' : '',
-              hasFilter && !isSelected ? 'metric-card--dimmed' : '',
-            ].filter(Boolean).join(' ')}
+              isSelected && 'metric-card--selected',
+              hasFilter && !isSelected && 'metric-card--dimmed',
+            )}
             onClick={(e) => {
               e.stopPropagation();
               onMetricClick?.(key);
@@ -75,11 +47,16 @@ const DashboardMetrics = ({ data, onMetricClick, activeFilter }) => {
             }}
           >
             <h4 className="metric-card__label">{getMetricLabel(t, key)}</h4>
-            <p className="metric-card__count">{count}</p>
+            <p className="metric-card__count">
+              <AnimatedNumber
+                value={Number(count) || 0}
+                springOptions={{ bounce: 0, duration: 1200 }}
+              />
+            </p>
           </div>
         );
       })}
-    </div>
+    </AnimatedGroup>
   );
 };
 
