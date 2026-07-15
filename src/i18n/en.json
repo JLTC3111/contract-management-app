@@ -6,7 +6,9 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "downloadAll": "Download All",
-    "newFolder": "New Folder"
+    "newFolder": "New Folder",
+    "managePhases": "Manage Phases",
+    "documents": "Documents"
   },
   "sidebar": {
     "visitIcueTooltip": "Visit iCUE!",
@@ -307,12 +309,22 @@
     "version": "Version",
     "updated": "Updated",
     "lastUpdated": "Last Updated",
+    "created": "Created",
     "author": "Author",
     "expiryDate": "Expiry Date",
     "headerStatus": "Status",
     "all": "All",
     "clear": "Clear",
-    "noContractsFound": "No contracts found."
+    "noContractsFound": "No contracts found.",
+    "category": "Category",
+    "categoryPlaceholder": "e.g. Services",
+    "client": "Client",
+    "clientEmail": "Client Email",
+    "contractValue": "Contract Value",
+    "description": "Description",
+    "descriptionPlaceholder": "Add a short summary of this contract…",
+    "primaryDocument": "Primary Document",
+    "noPrimaryDocument": "No primary document set"
   },
   "upload_completed": "Upload completed",
   "uploading": "Uploading...",
@@ -451,6 +463,7 @@
   },
   "newcontract.back": "Back",
   "newcontract.done": "Done",
+  "newcontract.viewDetails": "View Details",
   "title_required": "Title is required",
   "permission_denied": "You do not have permission to create contracts. Please contact your administrator.",
   "duplicate_error": "Error checking for duplicate contract",
@@ -608,7 +621,8 @@
     "pending": "Pending",
     "rejected": "Rejected",
     "draft": "Draft",
-    "clickToViewTimeline": "Click to view timeline"
+    "clickToViewTimeline": "Click to view timeline",
+    "clickToViewDetails": "Click to view contract details"
   },
   "phaseManagement": {
     "addTask": "Add Task",
@@ -619,6 +633,7 @@
     "title": "Phase Management",
     "trackProjectPhases": "Track project phases and deliverables",
     "viewContractPerformance": "View contract performance and trends",
+    "viewDetails": "View Details & Documents",
     "loadingContractPhases": "Loading contract phases...",
     "contractPhaseManagement": "Contract Phase Management",
     "overallContractProgress": "Overall Contract Progress",

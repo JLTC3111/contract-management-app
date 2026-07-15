@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, FileText } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, FileText, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
   getI18nOrFallback,
@@ -261,6 +261,27 @@ const PhaseManagementPage = () => {
                   {t('lifecycle.expires', 'Expires')}: {new Date(contract.expiry_date).toLocaleDateString()}
                 </span>
               )}
+              <button
+                type="button"
+                onClick={() => navigate(`/contracts/${contract.id}`)}
+                className="btn-hover-effect"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  padding: '0.4rem 0.85rem',
+                  borderRadius: '6px',
+                  border: '1px solid var(--card-border)',
+                  background: 'var(--card-bg)',
+                  color: 'var(--text)',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem',
+                  fontWeight: 500,
+                }}
+              >
+                <Eye size={16} />
+                {t('phaseManagement.viewDetails', 'View Details & Documents')}
+              </button>
               {allContracts.length > 1 && (
                 <select
                   value={contract.id}

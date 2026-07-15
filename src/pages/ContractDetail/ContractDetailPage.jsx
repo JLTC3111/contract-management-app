@@ -584,7 +584,12 @@ const ContractDetailPage = () => {
         file_name: updated.file_name,
         file_type: updated.file_type,
         author: updated.author?.trim(),
-        expiry_date: updated.expiry_date,
+        expiry_date: updated.expiry_date || null,
+        description: updated.description?.trim() || null,
+        client_name: updated.client_name?.trim() || null,
+        client_email: updated.client_email?.trim() || null,
+        contract_value: updated.contract_value ?? null,
+        category: updated.category?.trim() || null,
       });
 
       setContract(updatedContract);
@@ -842,6 +847,7 @@ const ContractDetailPage = () => {
         headerRef={headerRef}
         actionLoading={actionLoading}
         onBack={() => navigate(-1)}
+        onManagePhases={() => navigate(`/phases/${contractId}`)}
         onEdit={() => setEditMode(true)}
         onSave={handleSave}
         onCancel={() => {
@@ -880,8 +886,18 @@ const ContractDetailPage = () => {
           headerRef={headerRef}
           infoRefs={infoRefs}
           onFieldChange={handleChange}
+          darkMode={darkMode}
           t={t}
         />
+
+        <h2 style={{
+          color: 'var(--text)',
+          fontSize: '1.15rem',
+          fontWeight: 600,
+          margin: '0 0 1rem 0'
+        }}>
+          {t('contractHeader.documents', 'Documents')}
+        </h2>
 
         {/* File Uploader (edit mode only) */}
         {editMode && (

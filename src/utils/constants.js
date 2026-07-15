@@ -128,7 +128,7 @@ export const ROUTES = {
   login: '/login',
   dashboard: '/',
   newContract: '/new',
-  contractDetail: '/contract/:id',
+  contractDetail: '/contracts/:contractId',
   approvals: '/approvals',
   lifecycle: '/lifecycle',
   lifecycleWithId: '/lifecycle/:contractId',

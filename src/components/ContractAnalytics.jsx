@@ -492,8 +492,8 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
                   style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s', cursor: 'pointer' }} 
                   onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'} 
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                  onClick={() => navigate(`/phases/${contract.id}`)}
-                  title={t('analytics.clickToViewTimeline', 'Click to view timeline')}
+                  onClick={() => navigate(`/contracts/${contract.id}`)}
+                  title={t('analytics.clickToViewDetails', 'Click to view contract details')}
                 >
                   <td style={{ padding: '1rem', color: 'var(--text)' }}>{getI18nOrFallback(t, contract, 'title_i18n', 'title')}</td>
                   <td style={{ padding: '1rem' }}>

@@ -1,13 +1,26 @@
 /**
  * Contract Info Section Component
- * Displays and edits contract metadata (title, status, version, etc.)
+ * Displays and edits contract metadata (title, status, client, documents pointers, etc.)
  */
 
 import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Calendar } from 'lucide-react';
-import { STATUS_COLORS, CONTRACT_STATUSES } from '../../utils/constants';
+import { Calendar, FileText } from 'lucide-react';
+import { CONTRACT_STATUSES } from '../../utils/constants';
 import { StatusBadge } from '../../components/common';
+import { getI18nOrFallback } from '../../utils/formatters';
+import { getOriginalFileName } from './fileUtils';
+
+const formatCurrency = (value, language) => {
+  if (value === null || value === undefined || value === '') return null;
+  const num = Number(value);
+  if (Number.isNaN(num)) return String(value);
+  return new Intl.NumberFormat(language || undefined, {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(num);
+};
 
 const ContractInfo = ({
   contract,
@@ -17,7 +30,7 @@ const ContractInfo = ({
   infoRefs,
   darkMode
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dateInputRef = useRef(null);
 
   const labelStyle = {
@@ -31,7 +44,8 @@ const ContractInfo = ({
   const valueStyle = {
     fontSize: '1rem',
     color: 'var(--text)',
-    fontWeight: 500
+    fontWeight: 500,
+    wordBreak: 'break-word'
   };
 
   const inputStyle = {
@@ -42,7 +56,8 @@ const ContractInfo = ({
     background: 'var(--card-bg)',
     color: 'var(--text)',
     fontSize: '0.95rem',
-    outline: 'none'
+    outline: 'none',
+    boxSizing: 'border-box'
   };
 
   const cardStyle = {
@@ -50,8 +65,8 @@ const ContractInfo = ({
     border: '1px solid var(--card-border)',
     borderRadius: '12px',
     padding: '1.25rem',
-    boxShadow: darkMode 
-      ? '0 2px 8px rgba(255,255,255,0.05)' 
+    boxShadow: darkMode
+      ? '0 2px 8px rgba(255,255,255,0.05)'
       : '0 2px 8px rgba(0,0,0,0.08)'
   };
 
@@ -66,132 +81,267 @@ const ContractInfo = ({
     label: t(labelKey),
   }));
 
+  const display = editMode ? updated : contract;
+  const description = getI18nOrFallback(t, display, 'description_i18n', 'description');
+  const storedFileName = display?.file_name;
+  const fileBaseName = storedFileName?.includes('/')
+    ? storedFileName.split('/').pop()
+    : storedFileName;
+  const primaryFileName = fileBaseName
+    ? getOriginalFileName(fileBaseName)
+    : null;
+  const formattedValue = formatCurrency(display?.contract_value, i18n.language);
+
   return (
-    <div style={{ 
-      display: 'grid', 
-      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-      gap: '1rem',
-      marginBottom: '2rem'
-    }}>
-      {/* Title */}
-      <div ref={(el) => setInfoRef(el, 0)} style={cardStyle}>
-        <label style={labelStyle}>{t('contractTable.title', 'Title')}</label>
-        {editMode ? (
-          <input
-            type="text"
-            value={updated.title || ''}
-            onChange={(e) => onFieldChange('title', e.target.value)}
-            style={inputStyle}
-          />
-        ) : (
-          <span style={valueStyle}>{t(contract.title_i18n, contract.title)}</span>
-        )}
-      </div>
+    <div style={{ marginBottom: '2rem' }}>
+      <h2 style={{
+        color: 'var(--text)',
+        fontSize: '1.15rem',
+        fontWeight: 600,
+        margin: '0 0 1rem 0'
+      }}>
+        {t('contractDetails', 'Contract Details')}
+      </h2>
 
-      {/* Status */}
-      <div ref={(el) => setInfoRef(el, 1)} style={cardStyle}>
-        <label style={labelStyle}>{t('contractTable.status.label', 'Status')}</label>
-        {editMode ? (
-          <select
-            value={updated.status || 'draft'}
-            onChange={(e) => onFieldChange('status', e.target.value)}
-            style={inputStyle}
-          >
-            {statusOptions.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-        ) : (
-          <StatusBadge status={contract.status} size="md" />
-        )}
-      </div>
-
-      {/* Version */}
-      <div ref={(el) => setInfoRef(el, 2)} style={cardStyle}>
-        <label style={labelStyle}>{t('contractTable.version', 'Version')}</label>
-        {editMode ? (
-          <input
-            type="text"
-            value={updated.version || ''}
-            onChange={(e) => onFieldChange('version', e.target.value)}
-            style={inputStyle}
-          />
-        ) : (
-          <span style={valueStyle}>{contract.version || '-'}</span>
-        )}
-      </div>
-
-      {/* Author */}
-      <div ref={(el) => setInfoRef(el, 3)} style={cardStyle}>
-        <label style={labelStyle}>{t('contractTable.author', 'Author')}</label>
-        {editMode ? (
-          <input
-            type="text"
-            value={updated.author || ''}
-            onChange={(e) => onFieldChange('author', e.target.value)}
-            style={inputStyle}
-          />
-        ) : (
-          <span style={valueStyle}>{contract.author || '-'}</span>
-        )}
-      </div>
-
-      {/* Expiry Date */}
-      <div ref={(el) => setInfoRef(el, 4)} style={cardStyle}>
-        <label style={labelStyle}>{t('contractTable.expiry', 'Expiry Date')}</label>
-        {editMode ? (
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '1rem',
+        marginBottom: '1rem'
+      }}>
+        {/* Title */}
+        <div ref={(el) => setInfoRef(el, 0)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.title', 'Title')}</label>
+          {editMode ? (
             <input
-              ref={dateInputRef}
-              type="date"
-              value={updated.expiry_date?.split('T')[0] || ''}
-              onChange={(e) => onFieldChange('expiry_date', e.target.value)}
-              style={{
-                ...inputStyle,
-                paddingRight: '2.5rem',
-                /* Hide native calendar icon */
-                WebkitAppearance: 'none',
-                MozAppearance: 'textfield'
-              }}
+              type="text"
+              value={updated.title || ''}
+              onChange={(e) => onFieldChange('title', e.target.value)}
+              style={inputStyle}
             />
-            <Calendar 
-              size={18} 
-              style={{ 
-                position: 'absolute', 
-                right: '0.75rem', 
-                pointerEvents: 'none',
-                color: 'var(--text)',
-                opacity: 0.6
-              }} 
+          ) : (
+            <span style={valueStyle}>{t(contract.title_i18n, contract.title)}</span>
+          )}
+        </div>
+
+        {/* Status */}
+        <div ref={(el) => setInfoRef(el, 1)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.status.label', 'Status')}</label>
+          {editMode ? (
+            <select
+              value={updated.status || 'draft'}
+              onChange={(e) => onFieldChange('status', e.target.value)}
+              style={inputStyle}
+            >
+              {statusOptions.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          ) : (
+            <StatusBadge status={contract.status} size="md" />
+          )}
+        </div>
+
+        {/* Version */}
+        <div ref={(el) => setInfoRef(el, 2)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.version', 'Version')}</label>
+          {editMode ? (
+            <input
+              type="text"
+              value={updated.version || ''}
+              onChange={(e) => onFieldChange('version', e.target.value)}
+              style={inputStyle}
             />
-            <style>{`
-              input[type="date"]::-webkit-calendar-picker-indicator {
-                opacity: 0;
-                position: absolute;
-                right: 0;
-                width: 100%;
-                height: 100%;
-                cursor: pointer;
-              }
-            `}</style>
-          </div>
-        ) : (
+          ) : (
+            <span style={valueStyle}>{contract.version || '-'}</span>
+          )}
+        </div>
+
+        {/* Author */}
+        <div ref={(el) => setInfoRef(el, 3)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.author', 'Author')}</label>
+          {editMode ? (
+            <input
+              type="text"
+              value={updated.author || ''}
+              onChange={(e) => onFieldChange('author', e.target.value)}
+              style={inputStyle}
+            />
+          ) : (
+            <span style={valueStyle}>{contract.author || '-'}</span>
+          )}
+        </div>
+
+        {/* Category */}
+        <div ref={(el) => setInfoRef(el, 4)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.category', 'Category')}</label>
+          {editMode ? (
+            <input
+              type="text"
+              value={updated.category || ''}
+              onChange={(e) => onFieldChange('category', e.target.value)}
+              style={inputStyle}
+              placeholder={t('contractTable.categoryPlaceholder', 'e.g. Services')}
+            />
+          ) : (
+            <span style={valueStyle}>{contract.category || '-'}</span>
+          )}
+        </div>
+
+        {/* Client */}
+        <div ref={(el) => setInfoRef(el, 5)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.client', 'Client')}</label>
+          {editMode ? (
+            <input
+              type="text"
+              value={updated.client_name || ''}
+              onChange={(e) => onFieldChange('client_name', e.target.value)}
+              style={inputStyle}
+            />
+          ) : (
+            <span style={valueStyle}>{contract.client_name || '-'}</span>
+          )}
+        </div>
+
+        {/* Client Email */}
+        <div ref={(el) => setInfoRef(el, 6)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.clientEmail', 'Client Email')}</label>
+          {editMode ? (
+            <input
+              type="email"
+              value={updated.client_email || ''}
+              onChange={(e) => onFieldChange('client_email', e.target.value)}
+              style={inputStyle}
+            />
+          ) : (
+            <span style={valueStyle}>{contract.client_email || '-'}</span>
+          )}
+        </div>
+
+        {/* Contract Value */}
+        <div ref={(el) => setInfoRef(el, 7)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.contractValue', 'Contract Value')}</label>
+          {editMode ? (
+            <input
+              type="number"
+              min="0"
+              step="1"
+              value={updated.contract_value ?? ''}
+              onChange={(e) => onFieldChange(
+                'contract_value',
+                e.target.value === '' ? null : Number(e.target.value)
+              )}
+              style={inputStyle}
+            />
+          ) : (
+            <span style={valueStyle}>{formattedValue || '-'}</span>
+          )}
+        </div>
+
+        {/* Expiry Date */}
+        <div ref={(el) => setInfoRef(el, 8)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.expiry', 'Expiry Date')}</label>
+          {editMode ? (
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <input
+                ref={dateInputRef}
+                type="date"
+                value={updated.expiry_date?.split('T')[0] || ''}
+                onChange={(e) => onFieldChange('expiry_date', e.target.value)}
+                style={{
+                  ...inputStyle,
+                  paddingRight: '2.5rem',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'textfield'
+                }}
+              />
+              <Calendar
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: '0.75rem',
+                  pointerEvents: 'none',
+                  color: 'var(--text)',
+                  opacity: 0.6
+                }}
+              />
+              <style>{`
+                input[type="date"]::-webkit-calendar-picker-indicator {
+                  opacity: 0;
+                  position: absolute;
+                  right: 0;
+                  width: 100%;
+                  height: 100%;
+                  cursor: pointer;
+                }
+              `}</style>
+            </div>
+          ) : (
+            <span style={valueStyle}>
+              {contract.expiry_date
+                ? new Date(contract.expiry_date).toLocaleDateString()
+                : '-'}
+            </span>
+          )}
+        </div>
+
+        {/* Created */}
+        <div ref={(el) => setInfoRef(el, 9)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.created', 'Created')}</label>
           <span style={valueStyle}>
-            {contract.expiry_date 
-              ? new Date(contract.expiry_date).toLocaleDateString() 
+            {contract.created_at
+              ? new Date(contract.created_at).toLocaleString()
               : '-'}
           </span>
-        )}
+        </div>
+
+        {/* Last Updated */}
+        <div ref={(el) => setInfoRef(el, 10)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.updated', 'Last Updated')}</label>
+          <span style={valueStyle}>
+            {contract.updated_at
+              ? new Date(contract.updated_at).toLocaleString()
+              : '-'}
+          </span>
+        </div>
+
+        {/* Primary document */}
+        <div ref={(el) => setInfoRef(el, 11)} style={cardStyle}>
+          <label style={labelStyle}>{t('contractTable.primaryDocument', 'Primary Document')}</label>
+          <span style={{ ...valueStyle, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+            {primaryFileName ? (
+              <>
+                <FileText size={16} style={{ flexShrink: 0, opacity: 0.7 }} />
+                {primaryFileName}
+              </>
+            ) : (
+              t('contractTable.noPrimaryDocument', 'No primary document set')
+            )}
+          </span>
+        </div>
       </div>
 
-      {/* Last Updated */}
-      <div ref={(el) => setInfoRef(el, 5)} style={cardStyle}>
-        <label style={labelStyle}>{t('contractTable.updated', 'Last Updated')}</label>
-        <span style={valueStyle}>
-          {contract.updated_at 
-            ? new Date(contract.updated_at).toLocaleString() 
-            : '-'}
-        </span>
+      {/* Description — full width */}
+      <div ref={(el) => setInfoRef(el, 12)} style={cardStyle}>
+        <label style={labelStyle}>{t('contractTable.description', 'Description')}</label>
+        {editMode ? (
+          <textarea
+            value={updated.description || ''}
+            onChange={(e) => onFieldChange('description', e.target.value)}
+            rows={3}
+            style={{
+              ...inputStyle,
+              resize: 'vertical',
+              minHeight: '4.5rem',
+              fontFamily: 'inherit'
+            }}
+            placeholder={t('contractTable.descriptionPlaceholder', 'Add a short summary of this contract…')}
+          />
+        ) : (
+          <span style={{ ...valueStyle, fontWeight: 400, whiteSpace: 'pre-wrap' }}>
+            {description || '-'}
+          </span>
+        )}
       </div>
     </div>
   );

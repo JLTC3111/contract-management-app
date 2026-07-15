@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Trash, Download, FolderPlus, Trash2, X, Check } from 'lucide-react';
+import { ArrowLeft, Trash, Download, FolderPlus, Trash2, X, Check, GitBranch } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const ContractHeader = ({
@@ -11,6 +11,7 @@ const ContractHeader = ({
   onSave,
   onCancel,
   onDelete,
+  onManagePhases,
   actionLoading,
   headerRef,
   darkMode,
@@ -69,9 +70,31 @@ const ContractHeader = ({
         </h1>
 
         {/* Contract Action Buttons */}
-        {canEdit && (
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            {editMode ? (
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {!editMode && onManagePhases && (
+            <button
+              onClick={onManagePhases}
+              className="btn-hover-effect"
+              style={{
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                border: '1px solid var(--card-border)',
+                background: 'var(--card-bg)',
+                color: 'var(--text)',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              <GitBranch size={16} />
+              {t('contractHeader.managePhases', 'Manage Phases')}
+            </button>
+          )}
+
+          {canEdit && (
+            editMode ? (
               <>
                 <button
                   onClick={onCancel}
@@ -157,9 +180,9 @@ const ContractHeader = ({
                   {t('buttons.deleteContract', 'Delete')}
                 </button>
               </>
-            )}
-          </div>
-        )}
+            )
+          )}
+        </div>
       </div>
 
       {/* File Actions Toolbar */}
