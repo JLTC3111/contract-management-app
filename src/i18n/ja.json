@@ -105,7 +105,10 @@
     "back": "戻る",
     "newContract": "新しい契約",
     "light": "ライトモード",
-    "dark": "ダークモード"
+    "dark": "ダークモード",
+    "create": "作成",
+    "close": "閉じる",
+    "saving": "保存中..."
   },
   "login": {
     "title": "契約管理システム",
@@ -265,8 +268,83 @@
   "dashboard": {
     "title": "ダッシュボード",
     "approvalRequests": "承認リクエスト",
-    "searchFiles": "ファイルまたはフォルダを検索...",
-    "searchContracts": "契約を検索..."
+    "searchFiles": "ファイル／フォルダを検索...",
+    "searchContracts": "契約を検索...",
+    "notifications": "通知",
+    "expiringItem": "{{name}} が期限切れ間近",
+    "pendingApproval": "承認待ち {{count}} 件",
+    "allClear": "対応が必要な項目はありません。",
+    "newContract": "新規契約",
+    "all": "すべて",
+    "category": "カテゴリ",
+    "stage": "ステージ",
+    "allStages": "すべてのステージ",
+    "view": "表示",
+    "table": "テーブル",
+    "kanban": "カンバン",
+    "selected": "{{count}} 件選択中",
+    "advanceStage": "ステージを進める",
+    "advanceTo": "{{stage}} に進める",
+    "noNextStage": "次のステージはありません",
+    "clearSelection": "選択を解除",
+    "selectAll": "すべて選択",
+    "selectRow": "{{name}} を選択",
+    "noContracts": "この条件に一致する契約はありません。",
+    "counterparty": "取引先",
+    "uncategorized": "未分類",
+    "contract": "契約",
+    "activity": "アクティビティ",
+    "noActivity": "ステージ変更の記録はまだありません。",
+    "noFiles": "この契約にダウンロードできるファイルはありません。",
+    "advanceFailed": "ステージを進められませんでした: {{msg}}",
+    "createFailed": "契約を作成できませんでした: {{msg}}",
+    "loading": "読み込み中...",
+    "col": {
+      "name": "名称",
+      "category": "カテゴリ",
+      "stage": "ステージ",
+      "owner": "担当者",
+      "value": "金額",
+      "expires": "期限"
+    },
+    "stats": {
+      "total": "契約総数",
+      "activeValue": "有効契約額",
+      "expiring": "期限切れ間近",
+      "pending": "承認待ち"
+    },
+    "manageStage": "ステージを管理",
+    "overview": "概要",
+    "docsAndComments": "ドキュメントとコメント",
+    "documents": "ドキュメント",
+    "noDocuments": "ドキュメントはまだありません。",
+    "sendForApproval": "承認に送る",
+    "onlyDraft": "ドラフトの契約のみ承認に送れます。",
+    "comments": "コメント",
+    "noComments": "コメントはまだありません。",
+    "addComment": "コメントを追加...",
+    "postComment": "コメントを投稿",
+    "unknownAuthor": "不明",
+    "movedTo": "{{stage}} に移動",
+    "editContract": "契約を編集",
+    "saveChanges": "変更を保存",
+    "valueUsd": "金額（$）",
+    "confirmDelete": "「{{name}}」を削除しますか？この操作は取り消せません。",
+    "saveFailed": "変更を保存できませんでした: {{msg}}",
+    "deleteFailed": "契約を削除できませんでした: {{msg}}",
+    "approvalFailed": "承認に送れませんでした: {{msg}}",
+    "commentFailed": "コメントを投稿できませんでした: {{msg}}",
+    "selectDate": "日付を選択",
+    "clearDate": "クリア",
+    "today": "今日",
+    "prevMonth": "前の月",
+    "nextMonth": "次の月",
+    "attachFiles": "ファイルを添付",
+    "removeFile": "{{name}} を削除",
+    "resize": "サイズ変更",
+    "fileTooLarge": "{{name}} は {{max}} を超えています",
+    "fileBadType": "{{name}} は対応していないファイル形式です",
+    "uploadFailed": "一部のファイルをアップロードできませんでした: {{names}}"
   },
   "clear": "クリア",
   "contractTable": {
@@ -641,5 +719,24 @@
       "description": "請求および支払いの文書"
     }
   },
-  "newcontract.viewDetails": "詳細を表示"
+  "newcontract.viewDetails": "詳細を表示",
+  "stages": {
+    "draft": "ドラフト",
+    "in_review": "レビュー中",
+    "negotiation": "交渉中",
+    "awaiting_signature": "署名待ち",
+    "executed": "締結済み",
+    "expiring_soon": "期限切れ間近",
+    "expired": "期限切れ"
+  },
+  "categories": {
+    "NDA": "秘密保持契約",
+    "MSA": "基本業務委託契約",
+    "Vendor": "ベンダー契約"
+  },
+  "categoriesShort": {
+    "NDA": "NDA",
+    "MSA": "MSA",
+    "Vendor": "ベンダー"
+  }
 }

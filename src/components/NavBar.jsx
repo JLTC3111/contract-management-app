@@ -4,12 +4,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { contractsApi } from '../api/contracts';
 import { useTheme } from '../hooks/useTheme';
-import { Sun, MoonStar, ChevronDownIcon, Folder, FolderOpen } from 'lucide-react';
+import { ChevronDownIcon, Folder, FolderOpen } from 'lucide-react';
+import SunMoonIcon from './common/SunMoonIcon';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getI18nOrFallback } from '../utils/formatters';
 import { motion, AnimatePresence } from 'framer-motion';
-import { gsap } from 'gsap';
 
 const LANGUAGES = [
   { code: 'en', label: 'English', flag: '/flags/gb.svg' },
@@ -136,65 +136,24 @@ const Navbar = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // GSAP Animations
+  // Type the title out, then reveal the logo.
   useEffect(() => {
-    if (!navbarRef.current) return;
+    const fullTitle = t('navbar.title');
+    let currentIndex = 0;
+    setTitleText('');
+    setLogoVisible(false);
 
-    // Initial state - navbar off-screen to the right
-    gsap.set(navbarRef.current, {
-      x: 50,
-      opacity: 0
-    });
+    const typeInterval = setInterval(() => {
+      if (currentIndex <= fullTitle.length) {
+        setTitleText(fullTitle.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(typeInterval);
+        setLogoVisible(true);
+      }
+    }, 100);
 
-    // Initial state for other elements
-    gsap.set([langSwitcherRef.current, themeToggleRef.current], {
-      opacity: 0,
-      y: 20
-    });
-
-    // Animate navbar sliding in from the right with fade
-    const tl = gsap.timeline();
-    tl.to(navbarRef.current, {
-      x: 0,
-      opacity: 1,
-      duration: 0.8,
-      ease: "power2.out"
-    });
-
-    // Start typing animation for title after navbar animation
-    tl.call(() => {
-      const fullTitle = t('navbar.title');
-      let currentIndex = 0;
-      
-      const typeInterval = setInterval(() => {
-        if (currentIndex <= fullTitle.length) {
-          setTitleText(fullTitle.slice(0, currentIndex));
-          currentIndex++;
-        } else {
-          clearInterval(typeInterval);
-          // Show logo after title typing is complete
-          setLogoVisible(true);
-        }
-      }, 100);
-    }, [], 0.3);
-
-    // Animate logo appearance
-    tl.to(logoRef.current, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.5,
-      ease: "back.out(1.7)"
-    }, 0.8);
-
-    // Animate language switcher and theme toggle
-    tl.to([langSwitcherRef.current, themeToggleRef.current], {
-      opacity: 1,
-      y: 0,
-      duration: 0.6,
-      ease: "power2.out",
-      stagger: 0.1
-    }, 1.0);
-
+    return () => clearInterval(typeInterval);
   }, [t]);
 
   // Don't show on login page
@@ -204,11 +163,14 @@ const Navbar = () => {
     <nav
       ref={navbarRef}
       style={{
-        width: '92.5%',
+        width: '100%',
+        boxSizing: 'border-box',
         marginBottom: '1rem',
         backgroundColor: 'var(--card-bg)',
         color: 'var(--text)',
-        padding: 'clamp(.5rem, 2vw, 1.5rem) clamp(.25rem, 2vw, 2rem)',
+        // Horizontal inset matches .content-area's padding so the navbar's
+        // contents line up with the dashboard's.
+        padding: 'clamp(.5rem, 2vw, 1.5rem) 1rem',
         borderBottom: '1px solid var(--card-border)',
         display: 'flex',
         justifyContent: 'space-between',
@@ -476,58 +438,28 @@ const Navbar = () => {
     padding: isMobile ? '0.25rem' : '0.5rem',
   }}
 >
-  <div
-    style={{
-      position: 'relative',
-      width: isMobile ? '42px' : 'clamp(38px, 8vw, 54px)',
-      height: isMobile ? '18px' : 'clamp(24px, 5vw, 32px)',
-      background: 'var(--card-bg)', // changed from var(--sidebar-hover-bg)
-      borderRadius: '16px',
-      border: '1.5px solid var(--card-border)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      cursor: 'pointer',
-      transition: 'background 0.2s',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-      zIndex: 10,
-      marginRight: isMobile ? '0' : 'auto',
-    }}
+  <button
+    type="button"
     onClick={toggleDarkMode}
     aria-label={t('navbar.themeToggle')}
+    title={t('navbar.themeToggle')}
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'transparent',
+      border: 'none',
+      padding: isMobile ? '4px' : '6px',
+      borderRadius: '50%',
+      color: 'var(--text)',
+      cursor: 'pointer',
+      lineHeight: 0,
+      outline: 'none',
+      marginRight: isMobile ? '0' : 'auto',
+    }}
   >
-    <span
-      style={{
-        position: 'absolute',
-        top: '50%',
-        left: darkMode ? (isMobile ? '24px' : '25px') : '2px',
-        transform: 'translateY(-50%)',
-        width: isMobile ? '16px' : 'clamp(18px, 5vw, 24px)',
-        height: isMobile ? '16px' : 'clamp(18px, 5vw, 24px)',
-        borderRadius: '50%',
-        background: 'var(--theme-toggle-bg)', 
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'var(--text)',
-        fontSize: isMobile ? '1rem' : 'clamp(1rem, 3vw, 1.2rem)',
-        boxShadow: darkMode ? '0 1px 4px rgba(255,255,255,0.8)' : '0 1px 4px rgba(0,0,0,0.8)',
-        transition: 'left 1.75s cubic-bezier(.4,2.2,.2,1), background 0.2s',
-        zIndex: 2,
-      }}
-    >
-        <motion.div 
-         style={{ 
-           position: 'relative', 
-           top: isMobile ? '0px' : darkMode ? '-2.5px' : '0.5px'
-         }}
-         animate={{ rotate: darkMode ? 225 : 0 }}
-         transition={{ duration: 0.5, ease: "linear" }}
-       >
-         {darkMode ? <MoonStar size={isMobile ? 12 : 24} /> : <Sun size={isMobile ? 12 : 22} />}
-       </motion.div>
-    </span>
-  </div>
+    <SunMoonIcon dark={darkMode} size={isMobile ? 18 : 22} />
+  </button>
 </div>
 
     </nav>

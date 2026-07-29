@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { gsap } from 'gsap';
 import { 
   CheckCircle, Clock, FileText, XCircle, AlertOctagon, 
   AlertTriangle, CheckSquare, PlayCircle, PauseCircle, Ban, 
@@ -113,30 +112,6 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
   const uniqueStatuses = Array.from(
     new Set((contracts || []).map((c) => normalizeContractStatus(c.status)).filter(Boolean))
   );
-
-  // GSAP Animation for table rows
-  useEffect(() => {
-    if (tbodyRef.current && filtered.length > 0) {
-      // Set initial state for all rows
-      gsap.set(tbodyRef.current.children, {
-        opacity: 0,
-        x: -50
-      });
-
-      // Animate rows with stagger effect
-      gsap.fromTo(
-        tbodyRef.current.children,
-        { opacity: 0, x: -50 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.6,
-          stagger: 0.15,
-          ease: "power2.out"
-        }
-      );
-    }
-  }, [filtered]); // Re-run animation when filtered data changes
 
   // Popover for each column
   const handleFilterToggle = (key) => {

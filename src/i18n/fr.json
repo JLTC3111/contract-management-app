@@ -105,7 +105,10 @@
     "back": "Retour",
     "newContract": "Nouveau contrat",
     "light": "Mode clair",
-    "dark": "Mode sombre"
+    "dark": "Mode sombre",
+    "create": "Créer",
+    "close": "Fermer",
+    "saving": "Enregistrement..."
   },
   "login": {
     "title": "Gestionnaire de Contrats",
@@ -265,8 +268,83 @@
   "dashboard": {
     "title": "Tableau de bord",
     "approvalRequests": "Demandes d'approbation",
-    "searchFiles": "Rechercher des fichiers ou dossiers...",
-    "searchContracts": "Rechercher des contrats..."
+    "searchFiles": "Rechercher des fichiers/dossiers...",
+    "searchContracts": "Rechercher des contrats...",
+    "notifications": "Notifications",
+    "expiringItem": "{{name}} expire",
+    "pendingApproval": "{{count}} en attente d'approbation",
+    "allClear": "Rien ne requiert votre attention.",
+    "newContract": "Nouveau contrat",
+    "all": "Tous",
+    "category": "Catégorie",
+    "stage": "Étape",
+    "allStages": "Toutes les étapes",
+    "view": "Vue",
+    "table": "Tableau",
+    "kanban": "Kanban",
+    "selected": "{{count}} sélectionné(s)",
+    "advanceStage": "Faire avancer l'étape",
+    "advanceTo": "Avancer vers {{stage}}",
+    "noNextStage": "Aucune étape suivante",
+    "clearSelection": "Effacer la sélection",
+    "selectAll": "Tout sélectionner",
+    "selectRow": "Sélectionner {{name}}",
+    "noContracts": "Aucun contrat ne correspond à ces filtres.",
+    "counterparty": "Contrepartie",
+    "uncategorized": "Sans catégorie",
+    "contract": "Contrat",
+    "activity": "Activité",
+    "noActivity": "Aucun changement d'étape enregistré.",
+    "noFiles": "Ce contrat n'a aucun fichier à télécharger.",
+    "advanceFailed": "Impossible de faire avancer l'étape : {{msg}}",
+    "createFailed": "Impossible de créer le contrat : {{msg}}",
+    "loading": "Chargement...",
+    "col": {
+      "name": "Nom",
+      "category": "Catégorie",
+      "stage": "Étape",
+      "owner": "Responsable",
+      "value": "Valeur",
+      "expires": "Expire"
+    },
+    "stats": {
+      "total": "Contrats au total",
+      "activeValue": "Valeur active",
+      "expiring": "Expire bientôt",
+      "pending": "En attente d'approbation"
+    },
+    "manageStage": "Gérer l'étape",
+    "overview": "Aperçu",
+    "docsAndComments": "Documents et commentaires",
+    "documents": "Documents",
+    "noDocuments": "Aucun document pour l'instant.",
+    "sendForApproval": "Envoyer pour approbation",
+    "onlyDraft": "Seuls les brouillons peuvent être envoyés pour approbation.",
+    "comments": "Commentaires",
+    "noComments": "Aucun commentaire pour l'instant.",
+    "addComment": "Ajouter un commentaire...",
+    "postComment": "Publier le commentaire",
+    "unknownAuthor": "Inconnu",
+    "movedTo": "Passé à {{stage}}",
+    "editContract": "Modifier le contrat",
+    "saveChanges": "Enregistrer les modifications",
+    "valueUsd": "Valeur ($)",
+    "confirmDelete": "Supprimer « {{name}} » ? Cette action est irréversible.",
+    "saveFailed": "Impossible d'enregistrer les modifications : {{msg}}",
+    "deleteFailed": "Impossible de supprimer le contrat : {{msg}}",
+    "approvalFailed": "Impossible d'envoyer pour approbation : {{msg}}",
+    "commentFailed": "Impossible de publier le commentaire : {{msg}}",
+    "selectDate": "Choisir une date",
+    "clearDate": "Effacer",
+    "today": "Aujourd'hui",
+    "prevMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "attachFiles": "Joindre des fichiers",
+    "removeFile": "Retirer {{name}}",
+    "resize": "Redimensionner",
+    "fileTooLarge": "{{name}} dépasse {{max}}",
+    "fileBadType": "{{name}} n'est pas un type de fichier pris en charge",
+    "uploadFailed": "Certains fichiers n'ont pas été envoyés : {{names}}"
   },
   "contractTable": {
     "expiry": "Date d’expiration",
@@ -639,5 +717,24 @@
       "description": "Documentation de facturation et de paiement"
     }
   },
-  "newcontract.viewDetails": "Voir les détails"
+  "newcontract.viewDetails": "Voir les détails",
+  "stages": {
+    "draft": "Brouillon",
+    "in_review": "En révision",
+    "negotiation": "Négociation",
+    "awaiting_signature": "En attente de signature",
+    "executed": "Signé",
+    "expiring_soon": "Expire bientôt",
+    "expired": "Expiré"
+  },
+  "categories": {
+    "NDA": "Accord de confidentialité",
+    "MSA": "Contrat-cadre de services",
+    "Vendor": "Contrat fournisseur"
+  },
+  "categoriesShort": {
+    "NDA": "NDA",
+    "MSA": "MSA",
+    "Vendor": "Fournisseur"
+  }
 }

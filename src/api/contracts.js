@@ -6,6 +6,7 @@
 
 import { supabase } from '../utils/supaBaseClient';
 import { partialSearchMatch } from '../utils/searchUtils';
+import { contractsSchema } from './schemaAdapter';
 import { 
   getDemoContracts, 
   setDemoContracts, 
@@ -445,8 +446,10 @@ export const contractsApi = {
     }
     
     const { data, error } = await query;
-    
+
     if (error) throw error;
+    // Raw row: tells us which columns this deployment actually has.
+    contractsSchema.learnFromRow(data?.[0]);
     return normalizeContractRows(data || []);
   },
 
@@ -466,8 +469,9 @@ export const contractsApi = {
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) throw error;
+    contractsSchema.learnFromRow(data);
     return normalizeContractRow(data);
   },
 
@@ -484,31 +488,12 @@ export const contractsApi = {
     
     const now = new Date().toISOString();
 
-    let { data, error } = await supabase
-      .from('contracts')
-      .insert({
-        ...contract,
-        created_at: now,
-        updated_at: now
-      })
-      .select()
-      .single();
+    const data = await contractsSchema.writeWithFallback(
+      (body) => supabase.from('contracts').insert(body).select().single(),
+      { ...contract, created_at: now, updated_at: now }
+    );
 
-    if (error) {
-      const message = error.message || '';
-      const missingCreatedAt = message.includes("created_at") || message.includes('schema cache');
-      if (missingCreatedAt) {
-        ({ data, error } = await supabase
-          .from('contracts')
-          .insert({
-            ...contract
-          })
-          .select()
-          .single());
-      }
-    }
-
-    if (error) throw error;
+    contractsSchema.learnFromRow(data);
     return data;
   },
 
@@ -529,19 +514,17 @@ export const contractsApi = {
       updated_at: new Date().toISOString(),
     };
 
-    // Keep legacy `content` column in sync when description is edited
+    // Keep the legacy `content` column in sync when description is edited.
     if (Object.prototype.hasOwnProperty.call(updates, 'description') && updates.content === undefined) {
       payload.content = updates.description;
     }
-    
-    const { data, error } = await supabase
-      .from('contracts')
-      .update(payload)
-      .eq('id', id)
-      .select()
-      .single();
-    
-    if (error) throw error;
+
+    const data = await contractsSchema.writeWithFallback(
+      (body) => supabase.from('contracts').update(body).eq('id', id).select().single(),
+      payload
+    );
+
+    contractsSchema.learnFromRow(data);
     return normalizeContractRow(data);
   },
 

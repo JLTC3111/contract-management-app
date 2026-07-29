@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import gsap from 'gsap';
 import JSZip from 'jszip';
 
 import { supabase } from '../../utils/supaBaseClient';
@@ -41,11 +40,6 @@ const getDemoFiles = () => {
 const setDemoFiles = (files) => {
   localStorage.setItem(DEMO_FILES_KEY, JSON.stringify(files));
 };
-
-// Ensure GSAP is properly initialized
-if (typeof window !== 'undefined' && !window.gsap) {
-  window.gsap = gsap;
-}
 
 const ContractDetailPage = () => {
   const { user, loading: userLoading } = useUser();
@@ -681,59 +675,6 @@ const ContractDetailPage = () => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [editMode, contract]);
-
-  // ========== Animations ==========
-
-  useEffect(() => {
-    if (!loading && contract && headerRef.current && infoRefs.current.length && gsap) {
-      try {
-        gsap.fromTo(
-          headerRef.current,
-          { opacity: 0.5, y: 50 },
-          { opacity: 1, y: 0, duration: 0.1, ease: 'power2.out' }
-        );
-        gsap.fromTo(
-          infoRefs.current,
-          { opacity: 0.5, y: 50 },
-          { opacity: 1, y: 0, duration: 0.1, ease: 'power2.out', stagger: 0.05, delay: 0.05 }
-        );
-      } catch (error) {
-        console.warn('GSAP animation error:', error);
-      }
-    }
-  }, [loading, contract]);
-
-  useEffect(() => {
-    if (fileItemRefs.current && fileItemRefs.current.length > 0 && gsap) {
-      try {
-        const validRefs = fileItemRefs.current.filter(Boolean);
-        if (validRefs.length > 0) {
-          gsap.fromTo(
-            validRefs,
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2 }
-          );
-        }
-      } catch (error) {
-        console.warn('GSAP animation error:', error);
-      }
-    }
-  }, [files, currentPath]);
-
-  useEffect(() => {
-    const buttons = document.querySelectorAll('.btn-hover-effect');
-    if (buttons.length > 0 && gsap) {
-      try {
-        gsap.fromTo(
-          buttons,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.25, stagger: 0.15, ease: 'power2.out' }
-        );
-      } catch (error) {
-        console.warn('GSAP animation error:', error);
-      }
-    }
-  }, [editMode, showFolderInput, files, currentPath, contract]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;

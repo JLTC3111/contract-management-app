@@ -105,7 +105,10 @@
     "back": "ย้อนกลับ",
     "newContract": "สัญญาใหม่",
     "light": "โหมดสว่าง",
-    "dark": "โหมดมืด"
+    "dark": "โหมดมืด",
+    "create": "สร้าง",
+    "close": "ปิด",
+    "saving": "กำลังบันทึก..."
   },
   "login": {
     "title": "ผู้จัดการสัญญา",
@@ -265,8 +268,83 @@
   "dashboard": {
     "title": "แดชบอร์ด",
     "approvalRequests": "คำขออนุมัติ",
-    "searchFiles": "ค้นหาไฟล์หรือโฟลเดอร์...",
-    "searchContracts": "ค้นหาสัญญา..."
+    "searchFiles": "ค้นหาไฟล์/โฟลเดอร์...",
+    "searchContracts": "ค้นหาสัญญา...",
+    "notifications": "การแจ้งเตือน",
+    "expiringItem": "{{name}} กำลังจะหมดอายุ",
+    "pendingApproval": "รออนุมัติ {{count}} รายการ",
+    "allClear": "ไม่มีรายการที่ต้องดำเนินการ",
+    "newContract": "สร้างสัญญาใหม่",
+    "all": "ทั้งหมด",
+    "category": "หมวดหมู่",
+    "stage": "ขั้นตอน",
+    "allStages": "ทุกขั้นตอน",
+    "view": "มุมมอง",
+    "table": "ตาราง",
+    "kanban": "คัมบัง",
+    "selected": "เลือกแล้ว {{count}} รายการ",
+    "advanceStage": "เลื่อนขั้นตอน",
+    "advanceTo": "เลื่อนไปยัง {{stage}}",
+    "noNextStage": "ไม่มีขั้นตอนถัดไป",
+    "clearSelection": "ล้างการเลือก",
+    "selectAll": "เลือกทั้งหมด",
+    "selectRow": "เลือก {{name}}",
+    "noContracts": "ไม่มีสัญญาที่ตรงกับตัวกรองนี้",
+    "counterparty": "คู่สัญญา",
+    "uncategorized": "ไม่ระบุหมวดหมู่",
+    "contract": "สัญญา",
+    "activity": "กิจกรรม",
+    "noActivity": "ยังไม่มีการบันทึกการเปลี่ยนขั้นตอน",
+    "noFiles": "สัญญานี้ไม่มีไฟล์ให้ดาวน์โหลด",
+    "advanceFailed": "ไม่สามารถเลื่อนขั้นตอนได้: {{msg}}",
+    "createFailed": "ไม่สามารถสร้างสัญญาได้: {{msg}}",
+    "loading": "กำลังโหลด...",
+    "col": {
+      "name": "ชื่อ",
+      "category": "หมวดหมู่",
+      "stage": "ขั้นตอน",
+      "owner": "ผู้รับผิดชอบ",
+      "value": "มูลค่า",
+      "expires": "หมดอายุ"
+    },
+    "stats": {
+      "total": "สัญญาทั้งหมด",
+      "activeValue": "มูลค่าที่ใช้งาน",
+      "expiring": "ใกล้หมดอายุ",
+      "pending": "รออนุมัติ"
+    },
+    "manageStage": "จัดการขั้นตอน",
+    "overview": "ภาพรวม",
+    "docsAndComments": "เอกสารและความคิดเห็น",
+    "documents": "เอกสาร",
+    "noDocuments": "ยังไม่มีเอกสาร",
+    "sendForApproval": "ส่งเพื่อขออนุมัติ",
+    "onlyDraft": "ส่งขออนุมัติได้เฉพาะสัญญาฉบับร่างเท่านั้น",
+    "comments": "ความคิดเห็น",
+    "noComments": "ยังไม่มีความคิดเห็น",
+    "addComment": "เพิ่มความคิดเห็น...",
+    "postComment": "ส่งความคิดเห็น",
+    "unknownAuthor": "ไม่ทราบ",
+    "movedTo": "ย้ายไปยัง {{stage}}",
+    "editContract": "แก้ไขสัญญา",
+    "saveChanges": "บันทึกการเปลี่ยนแปลง",
+    "valueUsd": "มูลค่า ($)",
+    "confirmDelete": "ลบ \"{{name}}\" หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+    "saveFailed": "ไม่สามารถบันทึกการเปลี่ยนแปลงได้: {{msg}}",
+    "deleteFailed": "ไม่สามารถลบสัญญาได้: {{msg}}",
+    "approvalFailed": "ไม่สามารถส่งขออนุมัติได้: {{msg}}",
+    "commentFailed": "ไม่สามารถส่งความคิดเห็นได้: {{msg}}",
+    "selectDate": "เลือกวันที่",
+    "clearDate": "ล้าง",
+    "today": "วันนี้",
+    "prevMonth": "เดือนก่อนหน้า",
+    "nextMonth": "เดือนถัดไป",
+    "attachFiles": "แนบไฟล์",
+    "removeFile": "ลบ {{name}}",
+    "resize": "ปรับขนาด",
+    "fileTooLarge": "{{name}} มีขนาดเกิน {{max}}",
+    "fileBadType": "{{name}} เป็นชนิดไฟล์ที่ไม่รองรับ",
+    "uploadFailed": "อัปโหลดบางไฟล์ไม่สำเร็จ: {{names}}"
   },
   "clear": "ล้าง",
   "contractTable": {
@@ -631,5 +709,24 @@
       "description": "เอกสารการเรียกเก็บเงินและการชำระเงิน"
     }
   },
-  "newcontract.viewDetails": "ดูรายละเอียด"
+  "newcontract.viewDetails": "ดูรายละเอียด",
+  "stages": {
+    "draft": "ฉบับร่าง",
+    "in_review": "อยู่ระหว่างตรวจสอบ",
+    "negotiation": "อยู่ระหว่างเจรจา",
+    "awaiting_signature": "รอลงนาม",
+    "executed": "ลงนามแล้ว",
+    "expiring_soon": "ใกล้หมดอายุ",
+    "expired": "หมดอายุ"
+  },
+  "categories": {
+    "NDA": "ข้อตกลงไม่เปิดเผยข้อมูล",
+    "MSA": "สัญญาแม่บทการให้บริการ",
+    "Vendor": "สัญญาผู้ขาย"
+  },
+  "categoriesShort": {
+    "NDA": "NDA",
+    "MSA": "MSA",
+    "Vendor": "ผู้ขาย"
+  }
 }

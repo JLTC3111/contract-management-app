@@ -91,7 +91,7 @@
     }
   },
   "buttons": {
-    "deleteContract": "Xóa hợp đồng",
+    "deleteContract": "Xoá HĐ",
     "delete": "Xóa Tệp",
     "download": "Tải Xuống",
     "downloadAll": "Tải Xuống Tất Cả",
@@ -106,7 +106,10 @@
     "back": "Quay lại",
     "newContract": "Hợp đồng mới",
     "light": "Chế độ sáng",
-    "dark": "Chế độ tối"
+    "dark": "Chế độ tối",
+    "create": "Tạo",
+    "close": "Đóng",
+    "saving": "Đang lưu..."
   },
   "login": {
     "title": "Quản Lý Hợp Đồng",
@@ -266,8 +269,83 @@
   "dashboard": {
     "title": "Bảng điều khiển",
     "approvalRequests": "Yêu cầu phê duyệt",
-    "searchFiles": "Tìm kiếm tệp hoặc thư mục...",
-    "searchContracts": "Tìm kiếm hợp đồng..."
+    "searchFiles": "Tìm tệp/thư mục...",
+    "searchContracts": "Tìm hợp đồng...",
+    "notifications": "Thông báo",
+    "expiringItem": "{{name}} sắp hết hạn",
+    "pendingApproval": "{{count}} chờ phê duyệt",
+    "allClear": "Không có mục nào cần xử lý.",
+    "newContract": "Hợp đồng mới",
+    "all": "Tất cả",
+    "category": "Danh mục",
+    "stage": "Giai đoạn",
+    "allStages": "Tất cả giai đoạn",
+    "view": "Hiển thị",
+    "table": "Bảng",
+    "kanban": "Kanban",
+    "selected": "Đã chọn {{count}}",
+    "advanceStage": "Chuyển giai đoạn",
+    "advanceTo": "Chuyển sang {{stage}}",
+    "noNextStage": "Không còn giai đoạn tiếp theo",
+    "clearSelection": "Bỏ chọn",
+    "selectAll": "Chọn tất cả",
+    "selectRow": "Chọn {{name}}",
+    "noContracts": "Không có hợp đồng nào khớp với bộ lọc này.",
+    "counterparty": "Đối tác",
+    "uncategorized": "Chưa phân loại",
+    "contract": "Hợp đồng",
+    "activity": "Hoạt động",
+    "noActivity": "Chưa ghi nhận thay đổi giai đoạn nào.",
+    "noFiles": "Hợp đồng này không có tệp để tải xuống.",
+    "advanceFailed": "Không thể chuyển giai đoạn: {{msg}}",
+    "createFailed": "Không thể tạo hợp đồng: {{msg}}",
+    "loading": "Đang tải...",
+    "col": {
+      "name": "Tên",
+      "category": "Danh mục",
+      "stage": "Giai đoạn",
+      "owner": "Người phụ trách",
+      "value": "Giá trị",
+      "expires": "Hết hạn"
+    },
+    "stats": {
+      "total": "Tổng hợp đồng",
+      "activeValue": "Giá trị đang hiệu lực",
+      "expiring": "Sắp hết hạn",
+      "pending": "Chờ phê duyệt"
+    },
+    "manageStage": "Quản lý giai đoạn",
+    "overview": "Tổng quan",
+    "docsAndComments": "Tài liệu & bình luận",
+    "documents": "Tài liệu",
+    "noDocuments": "Chưa có tài liệu nào.",
+    "sendForApproval": "Gửi phê duyệt",
+    "onlyDraft": "Chỉ hợp đồng bản nháp mới có thể gửi phê duyệt.",
+    "comments": "Bình luận",
+    "noComments": "Chưa có bình luận nào.",
+    "addComment": "Thêm bình luận...",
+    "postComment": "Đăng bình luận",
+    "unknownAuthor": "Không rõ",
+    "movedTo": "Chuyển sang {{stage}}",
+    "editContract": "Sửa hợp đồng",
+    "saveChanges": "Lưu thay đổi",
+    "valueUsd": "Giá trị ($)",
+    "confirmDelete": "Xóa \"{{name}}\"? Thao tác này không thể hoàn tác.",
+    "saveFailed": "Không thể lưu thay đổi: {{msg}}",
+    "deleteFailed": "Không thể xóa hợp đồng: {{msg}}",
+    "approvalFailed": "Không thể gửi phê duyệt: {{msg}}",
+    "commentFailed": "Không thể đăng bình luận: {{msg}}",
+    "selectDate": "Chọn ngày",
+    "clearDate": "Xóa",
+    "today": "Hôm nay",
+    "prevMonth": "Tháng trước",
+    "nextMonth": "Tháng sau",
+    "attachFiles": "Đính kèm tệp",
+    "removeFile": "Xóa {{name}}",
+    "resize": "Thay đổi kích thước",
+    "fileTooLarge": "{{name}} vượt quá {{max}}",
+    "fileBadType": "{{name}} không phải là loại tệp được hỗ trợ",
+    "uploadFailed": "Một số tệp chưa được tải lên: {{names}}"
   },
   "clear": "Xóa",
   "contractTable": {
@@ -641,5 +719,24 @@
       "description": "Công văn đề nghị thanh toán, Biên bản nghiệm thu khối lượng, Hóa đơn"
     }
   },
-  "newcontract.viewDetails": "Xem chi tiết"
+  "newcontract.viewDetails": "Xem chi tiết",
+  "stages": {
+    "draft": "Bản nháp",
+    "in_review": "Đang xem xét",
+    "negotiation": "Đang đàm phán",
+    "awaiting_signature": "Chờ ký",
+    "executed": "Đã Thực Hiện",
+    "expiring_soon": "Sắp hết hạn",
+    "expired": "Đã hết hạn"
+  },
+  "categories": {
+    "NDA": "HĐ Cung Cấp Dịch Vụ",
+    "MSA": "HĐ Tư Vấn",
+    "Vendor": "Hợp đồng nhà cung cấp"
+  },
+  "categoriesShort": {
+    "NDA": "HĐ Cung Cấp Dịch Vụ",
+    "MSA": "HĐ Tư Vấn",
+    "Vendor": "Nhà cung cấp"
+  }
 }

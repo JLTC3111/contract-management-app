@@ -5,7 +5,6 @@ import { getI18nOrFallback } from '../utils/formatters';
 import { supabase } from '../utils/supaBaseClient';
 import PhaseTimeline from './PhaseTimeline';
 import toast from 'react-hot-toast';
-import gsap from 'gsap';
 import {
   DEFAULT_PHASES,
 } from './phase-management/constants';
@@ -25,20 +24,6 @@ const PhaseManagement = ({ contractId, contract, onUpdate }) => {
   const containerRef = useRef(null);
   const phaseRefs = useRef([]);
   const progressRef = useRef(null);
-
-  useEffect(() => {
-    if (loading || !containerRef.current) return;
-
-    gsap.fromTo(progressRef.current,
-      { y: -20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }
-    );
-
-    gsap.fromTo(phaseRefs.current.filter(Boolean),
-      { x: -30, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: 'power2.out', delay: 0.2 }
-    );
-  }, [loading]);
 
   useEffect(() => {
     if (contractId) fetchContractPhases();

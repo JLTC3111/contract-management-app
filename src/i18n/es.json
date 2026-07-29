@@ -105,7 +105,10 @@
     "back": "Atrás",
     "newContract": "Nuevo contrato",
     "light": "Modo claro",
-    "dark": "Modo oscuro"
+    "dark": "Modo oscuro",
+    "create": "Crear",
+    "close": "Cerrar",
+    "saving": "Guardando..."
   },
   "login": {
     "title": "Gestor de Contratos",
@@ -265,8 +268,83 @@
   "dashboard": {
     "title": "Panel de control",
     "approvalRequests": "Solicitudes de aprobación",
-    "searchFiles": "Buscar archivos o carpetas...",
-    "searchContracts": "Buscar contratos..."
+    "searchFiles": "Buscar archivos/carpetas...",
+    "searchContracts": "Buscar contratos...",
+    "notifications": "Notificaciones",
+    "expiringItem": "{{name}} está por vencer",
+    "pendingApproval": "{{count}} pendientes de aprobación",
+    "allClear": "Nada requiere atención.",
+    "newContract": "Nuevo contrato",
+    "all": "Todos",
+    "category": "Categoría",
+    "stage": "Etapa",
+    "allStages": "Todas las etapas",
+    "view": "Vista",
+    "table": "Tabla",
+    "kanban": "Kanban",
+    "selected": "{{count}} seleccionados",
+    "advanceStage": "Avanzar etapa",
+    "advanceTo": "Avanzar a {{stage}}",
+    "noNextStage": "No hay etapa siguiente",
+    "clearSelection": "Borrar selección",
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar {{name}}",
+    "noContracts": "Ningún contrato coincide con estos filtros.",
+    "counterparty": "Contraparte",
+    "uncategorized": "Sin categoría",
+    "contract": "Contrato",
+    "activity": "Actividad",
+    "noActivity": "Aún no hay cambios de etapa registrados.",
+    "noFiles": "Este contrato no tiene archivos para descargar.",
+    "advanceFailed": "No se pudo avanzar la etapa: {{msg}}",
+    "createFailed": "No se pudo crear el contrato: {{msg}}",
+    "loading": "Cargando...",
+    "col": {
+      "name": "Nombre",
+      "category": "Categoría",
+      "stage": "Etapa",
+      "owner": "Responsable",
+      "value": "Valor",
+      "expires": "Vence"
+    },
+    "stats": {
+      "total": "Contratos totales",
+      "activeValue": "Valor activo",
+      "expiring": "Por vencer",
+      "pending": "Pendiente de aprobación"
+    },
+    "manageStage": "Gestionar etapa",
+    "overview": "Resumen",
+    "docsAndComments": "Documentos y comentarios",
+    "documents": "Documentos",
+    "noDocuments": "Aún no hay documentos.",
+    "sendForApproval": "Enviar para aprobación",
+    "onlyDraft": "Solo los borradores pueden enviarse para aprobación.",
+    "comments": "Comentarios",
+    "noComments": "Aún no hay comentarios.",
+    "addComment": "Añadir un comentario...",
+    "postComment": "Publicar comentario",
+    "unknownAuthor": "Desconocido",
+    "movedTo": "Movido a {{stage}}",
+    "editContract": "Editar contrato",
+    "saveChanges": "Guardar cambios",
+    "valueUsd": "Valor ($)",
+    "confirmDelete": "¿Eliminar \"{{name}}\"? Esta acción no se puede deshacer.",
+    "saveFailed": "No se pudieron guardar los cambios: {{msg}}",
+    "deleteFailed": "No se pudo eliminar el contrato: {{msg}}",
+    "approvalFailed": "No se pudo enviar para aprobación: {{msg}}",
+    "commentFailed": "No se pudo publicar el comentario: {{msg}}",
+    "selectDate": "Elegir una fecha",
+    "clearDate": "Borrar",
+    "today": "Hoy",
+    "prevMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "attachFiles": "Adjuntar archivos",
+    "removeFile": "Quitar {{name}}",
+    "resize": "Redimensionar",
+    "fileTooLarge": "{{name}} supera {{max}}",
+    "fileBadType": "{{name}} no es un tipo de archivo admitido",
+    "uploadFailed": "Algunos archivos no se subieron: {{names}}"
   },
   "contractTable": {
     "expiry": "Fecha de vencimiento",
@@ -691,5 +769,24 @@
       "description": "Documentación de facturación y pagos"
     }
   },
-  "newcontract.viewDetails": "Ver detalles"
+  "newcontract.viewDetails": "Ver detalles",
+  "stages": {
+    "draft": "Borrador",
+    "in_review": "En revisión",
+    "negotiation": "Negociación",
+    "awaiting_signature": "Pendiente de firma",
+    "executed": "Ejecutado",
+    "expiring_soon": "Por vencer",
+    "expired": "Vencido"
+  },
+  "categories": {
+    "NDA": "Acuerdo de confidencialidad",
+    "MSA": "Contrato marco de servicios",
+    "Vendor": "Contrato de proveedor"
+  },
+  "categoriesShort": {
+    "NDA": "NDA",
+    "MSA": "MSA",
+    "Vendor": "Proveedor"
+  }
 }

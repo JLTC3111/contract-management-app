@@ -23,7 +23,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 15000,
     client_name: 'Acme Corp',
     client_email: 'contact@acmecorp.com',
-    category: 'Services',
+    category: 'MSA',
   },
   {
     id: 'demo-contract-2',
@@ -41,7 +41,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 5000,
     client_name: 'TechStart Inc',
     client_email: 'legal@techstart.io',
-    category: 'License',
+    category: 'MSA',
   },
   {
     id: 'demo-contract-3',
@@ -59,7 +59,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 25000,
     client_name: 'Global Solutions Ltd',
     client_email: 'projects@globalsolutions.com',
-    category: 'Consulting',
+    category: 'MSA',
   },
   {
     id: 'demo-contract-4',
@@ -77,7 +77,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 120000,
     client_name: 'City Properties LLC',
     client_email: 'leasing@cityproperties.com',
-    category: 'Real Estate',
+    category: 'MSA',
   },
   {
     id: 'demo-contract-5',
@@ -95,7 +95,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 2000,
     client_name: 'CoolAir Systems',
     client_email: 'service@coolairsystems.com',
-    category: 'Maintenance',
+    category: 'MSA',
   },
   {
     id: 'demo-contract-6',
@@ -113,7 +113,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 35000,
     client_name: 'BrandBoost Agency',
     client_email: 'campaigns@brandboost.com',
-    category: 'Marketing',
+    category: 'MSA',
   },
   {
     id: 'demo-contract-7',
@@ -131,7 +131,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 42000,
     client_name: 'PartnerCo',
     client_email: 'legal@partnerco.com',
-    category: 'Partnership',
+    category: 'MSA',
   },
   {
     id: 'demo-contract-8',
@@ -149,7 +149,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 85000,
     client_name: 'TechBuild Ltd',
     client_email: 'projects@techbuild.com',
-    category: 'Services',
+    category: 'MSA',
   },
   {
     id: 'demo-contract-9',
@@ -167,7 +167,7 @@ const INITIAL_MOCK_CONTRACTS = [
     contract_value: 12000,
     client_name: 'RentAll Inc',
     client_email: 'contracts@rentall.com',
-    category: 'Rental',
+    category: 'MSA',
   },
 ];
 

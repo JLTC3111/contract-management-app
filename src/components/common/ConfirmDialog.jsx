@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { X, AlertTriangle, Trash2, CheckCircle, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import gsap from 'gsap';
 
 /**
  * Reusable confirmation dialog component
@@ -57,22 +56,6 @@ const ConfirmDialog = ({
   
   const variantConfig = variants[variant] || variants.danger;
   const Icon = variantConfig.icon;
-  
-  // Animation on open/close
-  useEffect(() => {
-    if (!overlayRef.current || !dialogRef.current) return;
-    
-    if (isOpen) {
-      gsap.fromTo(overlayRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.2 }
-      );
-      gsap.fromTo(dialogRef.current,
-        { scale: 0.9, opacity: 0, y: -20 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.25, ease: 'back.out(1.5)' }
-      );
-    }
-  }, [isOpen]);
   
   // Close on Escape key
   useEffect(() => {

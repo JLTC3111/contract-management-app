@@ -41,32 +41,6 @@ const NewContract = () => {
   const formRef = useRef(null);
   const buttonRefs = useRef([]);
 
-  useEffect(() => {
-    import('gsap').then(({ default: gsap }) => {
-      if (headerRef.current) {
-        gsap.fromTo(
-          headerRef.current,
-          { y: -40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
-        );
-      }
-      if (formRef.current) {
-        gsap.fromTo(
-          formRef.current,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.15 }
-        );
-      }
-      if (buttonRefs.current) {
-        gsap.fromTo(
-          buttonRefs.current,
-          { x: 30, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out', stagger: 0.08, delay: 0.3 }
-        );
-      }
-    });
-  }, []);
-
   if (user && (user.role === 'viewer' || user.role === 'approver')) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>

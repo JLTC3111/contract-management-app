@@ -495,20 +495,6 @@ const Login = () => {
     return () => clearInterval(interval);
   }, [t]);
 
-  // GSAP slide-in animation
-  useEffect(() => {
-    gsap.fromTo(
-      cardRef.current,
-      { y: 80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.2 }
-    );
-    gsap.fromTo(
-      modelRef.current,
-      { y: 80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.45 }
-    );
-  }, []);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password });

@@ -8,12 +8,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { File, FolderOpen, ArrowLeft, FolderPlus, Trash, MoveLeft, Download, CornerLeftUp } from 'lucide-react'; 
 import { useEffect, useState, useRef } from 'react';
-import gsap from 'gsap';
 
 // Ensure GSAP is properly initialized
-if (typeof window !== 'undefined' && !window.gsap) {
-  window.gsap = gsap;
-}
 import { useTranslation } from 'react-i18next';
 import { getI18nOrFallback } from '../utils/formatters';
 import { useTheme } from '../hooks/useTheme';
@@ -390,57 +386,6 @@ useEffect(() => {
   }, [editMode, contract]);
 
   const isPDF = updated.file_type === 'application/pdf';
-
-  useEffect(() => {
-    if (!loading && contract && headerRef.current && infoRefs.current.length && gsap) {
-      try {
-        gsap.fromTo(
-          headerRef.current,
-          { opacity: 0.5, y: 50 },
-          { opacity: 1, y: 0, duration: 0.1, ease: 'power2.out' }
-        );
-        gsap.fromTo(
-          infoRefs.current,
-          { opacity: 0.5, y: 50 },
-          { opacity: 1, y: 0, duration: 0.1, ease: 'power2.out', stagger: 0.05, delay: 0.05 }
-        );
-      } catch (error) {
-        console.warn('GSAP animation error:', error);
-      }
-    }
-  }, [loading, contract]);
-
-  useEffect(() => {
-    if (fileItemRefs.current && fileItemRefs.current.length > 0 && gsap) {
-      try {
-        const validRefs = fileItemRefs.current.filter(Boolean);
-        if (validRefs.length > 0) {
-          gsap.fromTo(
-            validRefs,
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2 }
-          );
-        }
-      } catch (error) {
-        console.warn('GSAP animation error:', error);
-      }
-    }
-  }, [files, currentPath]);
-
-  useEffect(() => {
-    const buttons = document.querySelectorAll('.btn-hover-effect');
-    if (buttons.length > 0 && gsap) {
-      try {
-        gsap.fromTo(
-          buttons,
-          { opacity: 0 },
-          { opacity: 1, duration: .25, stagger: 0.15, ease: 'power2.out' }
-        );
-      } catch (error) {
-        console.warn('GSAP animation error:', error);
-      }
-    }
-  }, [editMode, showFolderInput, files, currentPath, contract]);
 
   if (userLoading) return <p>Loading user...</p>;
   if (!user) return <p>User not available</p>;

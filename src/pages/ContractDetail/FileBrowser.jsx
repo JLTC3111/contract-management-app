@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FolderOpen, CornerLeftUp } from 'lucide-react';
 import { supabase } from '../../utils/supaBaseClient';
 import toast from 'react-hot-toast';
-import gsap from 'gsap';
 
 import { getFileIcon, getOriginalFileName } from './fileUtils';
 import { getI18nOrFallback } from '../../utils/formatters';
@@ -31,24 +30,6 @@ const FileBrowser = ({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Animate file items
-  useEffect(() => {
-    if (fileItemRefs?.current && fileItemRefs.current.length > 0 && gsap) {
-      try {
-        const validRefs = fileItemRefs.current.filter(Boolean);
-        if (validRefs.length > 0) {
-          gsap.fromTo(
-            validRefs,
-            { opacity: 0, y: 50 },
-            { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.2 }
-          );
-        }
-      } catch (error) {
-        console.warn('GSAP animation error:', error);
-      }
-    }
-  }, [files, currentPath]);
 
   const isFolder = (file) => !file.metadata?.mimetype;
 

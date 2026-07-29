@@ -206,48 +206,6 @@ const Approvals = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language, editingRequestId]);
 
-  // GSAP entrance animation
-  useEffect(() => {
-    import('gsap').then(({ default: gsap }) => {
-      if (headerRef.current) {
-        gsap.fromTo(
-          headerRef.current,
-          { y: -40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
-        );
-      }
-      if (cardRefs.current) {
-        gsap.fromTo(
-          cardRefs.current,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', stagger: 0.12 }
-        );
-      }
-      if (buttonRefs.current) {
-        gsap.fromTo(
-          buttonRefs.current,
-          { x: 30, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out', stagger: 0.08, delay: 0.2 }
-        );
-      }
-    });
-  }, [approvalRequests.length, loading]);
-
-  useEffect(() => {
-    if (editingRequestId !== null) {
-      import('gsap').then(({ default: gsap }) => {
-        const idx = approvalRequests.findIndex(r => r.id === editingRequestId);
-        if (editRefs.current[idx]) {
-          gsap.fromTo(
-            editRefs.current[idx],
-            { y: 30, scale: 0.96, opacity: 0 },
-            { y: 0, scale: 1, opacity: 1, duration: 0.7, ease: 'power3.out' }
-          );
-        }
-      });
-    }
-  }, [editingRequestId, approvalRequests]);
-
   // Don't show for non-admin/approver users
   if (!user || (user.role !== 'admin' && user.role !== 'approver' && user.role !== 'editor')) {
     return (

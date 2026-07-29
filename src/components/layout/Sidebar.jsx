@@ -9,8 +9,6 @@ import {
   ChevronsLeft,
   UserLock,
   BookOpen,
-  Moon,
-  Sun,
   Settings,
   Lightbulb,
   Clock,
@@ -19,7 +17,6 @@ import {
 import { AnimatePresence, motion } from 'framer-motion';
 import { useUser } from '../../hooks/useUser';
 import { useTheme } from '../../hooks/useTheme';
-import { gsap } from 'gsap';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 
@@ -38,18 +35,16 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, isDemoMode, disableDemoMode } = useUser();
-  const { darkMode, toggleDarkMode } = useTheme();
+  const { darkMode } = useTheme();
   const { t } = useTranslation();
   const sidebarRef = useRef();
   
   // State
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
-  const [profileOpen, setProfileOpen] = useState(() => {
-    const isMobileInit = typeof window !== 'undefined' && window.innerWidth < 1024;
-    if (isMobileInit) return false;
-    const stored = localStorage.getItem('profileOpen');
-    return stored !== 'false';
-  });
+  // Expanded by default; only a stored 'false' collapses it.
+  const [profileOpen, setProfileOpen] = useState(
+    () => localStorage.getItem('profileOpen') !== 'false'
+  );
   const [sidebarWidth, setSidebarWidth] = useState(() => {
     const saved = localStorage.getItem('sidebarWidth');
     return saved ? parseInt(saved) : 380;
@@ -172,20 +167,6 @@ const Sidebar = () => {
   useEffect(() => {
     if (isMobile) {
       setCollapsed(true);
-    }
-  }, [isMobile]);
-
-  // GSAP entrance animation
-  useEffect(() => {
-    if (sidebarRef.current) {
-      gsap.set(sidebarRef.current, { x: 100, opacity: 0 });
-      gsap.to(sidebarRef.current, {
-        x: 0,
-        opacity: 1,
-        duration: 1.0,
-        ease: 'power2.out',
-        delay: 0.2
-      });
     }
   }, [isMobile]);
 
@@ -473,14 +454,6 @@ const Sidebar = () => {
               )}
             </AnimatePresence>
 
-            {/* Theme Toggle */}
-            <SidebarButton
-              icon={darkMode ? <Sun size={20} /> : <Moon size={20} />}
-              label={darkMode ? t('buttons.light', 'Light Mode') : t('buttons.dark', 'Dark Mode')}
-              collapsed={collapsed}
-              onClick={toggleDarkMode}
-            />
-
             {/* Sign Out */}
             <SidebarButton 
               icon={<LogOutIcon size={20} />}
@@ -506,7 +479,7 @@ const Sidebar = () => {
             onMouseEnter={() => setIsResizeHandleHovered(true)}
             onMouseLeave={() => !isResizing && setIsResizeHandleHovered(false)}
             style={{
-              background: (isResizeHandleHovered || isResizing) ? 'var(--sidebar-hover-bg, #e0e7ff)' : 'transparent'
+              opacity: (isResizeHandleHovered || isResizing) ? 1 : 0.55
             }}
           />
         )}

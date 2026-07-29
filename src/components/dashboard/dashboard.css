@@ -1,0 +1,978 @@
+/* Dashboard ("Ledger") — themed entirely off the app's existing CSS variables. */
+
+.ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  /* No horizontal padding: .content-area already pads by 1rem, and matching the
+     navbar's inset is what keeps the two aligned. */
+  padding: 0 0 1.5rem;
+  width: 100%;
+  color: var(--text);
+}
+
+/* ---------- header ---------- */
+
+.ledger-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.ledger-header__search {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: 1 1 220px;
+  max-width: 380px;
+  padding: 0.42rem 0.65rem;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+}
+
+.ledger-header__search input,
+.ledger-filters__search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.86rem;
+}
+
+.ledger-header__bell { position: relative; }
+
+.ledger-iconbtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.ledger-iconbtn__dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+.ledger-notifications {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  padding: 0.4rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.ledger-notifications__title {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.ledger-notifications__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 0.83rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ledger-notifications__item:hover { background: var(--hover-bg); }
+
+.ledger-notifications__meta,
+.ledger-notifications__empty {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+.ledger-notifications__empty { padding: 0.5rem; }
+
+/* ---------- buttons ---------- */
+
+.ledger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 0.83rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ledger-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ledger-btn--primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.ledger-btn--ghost { background: transparent; }
+
+.ledger-btn--toggle-on {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.ledger-btn__badge {
+  min-width: 1.15rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: rgba(127, 127, 127, 0.22);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ledger-btn--toggle-on .ledger-btn__badge { background: rgba(255, 255, 255, 0.28); }
+
+/* ---------- stat strip ---------- */
+
+.ledger-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.ledger-stats__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.85rem 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+
+.ledger-stats__label {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.ledger-stats__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* ---------- filter row ---------- */
+
+.ledger-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.ledger-filters__search {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: 1 1 200px;
+  max-width: 300px;
+  padding: 0.42rem 0.65rem;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+}
+
+.ledger-filters__chips { display: flex; gap: 0.3rem; }
+
+.ledger-chip {
+  padding: 0.36rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.ledger-chip--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.ledger-filters__stage,
+.ledger-field select,
+.ledger-field input {
+  padding: 0.42rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 0.83rem;
+}
+
+.ledger-viewtoggle {
+  display: flex;
+  margin-left: auto;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ledger-viewtoggle__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.42rem 0.7rem;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.ledger-viewtoggle__btn--active { background: var(--primary); color: #fff; }
+
+/* ---------- bulk bar ---------- */
+
+.ledger-bulkbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.8rem;
+  background: var(--hover-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+
+.ledger-bulkbar__count { font-size: 0.85rem; font-weight: 600; }
+
+/* ---------- tags ---------- */
+
+.ledger-tag {
+  display: inline-block;
+  padding: 0.16rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ledger-tag--stage {
+  color: var(--tag-color);
+  background: color-mix(in srgb, var(--tag-color) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tag-color) 40%, transparent);
+}
+
+.ledger-tag--category {
+  color: var(--text-secondary);
+  border: 1px solid var(--card-border);
+}
+
+/* ---------- table ---------- */
+
+.ledger-table-wrap {
+  overflow-x: auto;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.ledger-table th {
+  padding: 0.6rem 0.75rem;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--card-border);
+  white-space: nowrap;
+}
+
+.ledger-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+  vertical-align: middle;
+}
+
+.ledger-table tbody tr { cursor: pointer; }
+.ledger-table tbody tr:hover { background: var(--hover-bg); }
+.ledger-table__row--selected { background: var(--hover-bg); }
+.ledger-table__check { width: 1px; }
+.ledger-table__num { text-align: right; white-space: nowrap; }
+
+.ledger-table__name { display: block; font-weight: 600; }
+.ledger-table__sub { display: block; font-size: 0.76rem; color: var(--text-secondary); }
+
+/* ---------- kanban ---------- */
+
+.ledger-kanban {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(190px, 1fr);
+  gap: 0.7rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.ledger-kanban__col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.6rem;
+  background: var(--hover-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+
+.ledger-kanban__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 2px solid var(--tag-color);
+}
+
+.ledger-kanban__title { font-size: 0.78rem; font-weight: 700; }
+
+.ledger-kanban__count {
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tag-color) 20%, transparent);
+  color: var(--tag-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.ledger-kanban__cards { display: flex; flex-direction: column; gap: 0.45rem; }
+
+.ledger-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.55rem 0.6rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ledger-card:hover { border-color: var(--primary); }
+.ledger-card__name { font-size: 0.82rem; font-weight: 600; }
+.ledger-card__sub { font-size: 0.74rem; color: var(--text-secondary); }
+
+.ledger-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.ledger-card__expiry { font-size: 0.72rem; color: var(--text-secondary); }
+
+/* ---------- drawer + modal ---------- */
+
+.ledger-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.ledger-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 61;
+  width: min(560px, 96vw);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  background: var(--card-bg);
+  border-left: 1px solid var(--card-border);
+}
+
+.ledger-drawer__head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding-right: 2rem;
+}
+
+.ledger-drawer__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* ---------- tabs ---------- */
+
+.ledger-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.ledger-tabs__tab {
+  padding: 0.5rem 0.8rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ledger-tabs__tab--active {
+  color: var(--text);
+  border-bottom-color: var(--primary);
+}
+
+/* ---------- documents + comments ---------- */
+
+.ledger-docs {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ledger-docs__row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 0.7rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--card-border);
+  color: var(--text);
+  font-size: 0.83rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ledger-docs__row:last-child { border-bottom: none; }
+.ledger-docs__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ledger-docs__size { color: var(--text-secondary); font-size: 0.76rem; white-space: nowrap; }
+
+.ledger-comments { display: flex; flex-direction: column; gap: 0.55rem; margin: 0; padding: 0; list-style: none; }
+
+.ledger-comments__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.55rem 0.65rem;
+  background: var(--hover-bg);
+  border-radius: 8px;
+}
+
+.ledger-comments__author { font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); }
+.ledger-comments__body { font-size: 0.85rem; }
+
+.ledger-textarea {
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+}
+
+.ledger-btn--block { justify-content: center; width: 100%; }
+
+.ledger-btn--danger {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.ledger-drawer__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.ledger-drawer__title { margin: 0; font-size: 1.15rem; font-weight: 700; }
+
+.ledger-drawer__facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0.6rem 0 0;
+  padding: 0.8rem;
+  background: var(--hover-bg);
+  border-radius: 10px;
+}
+
+.ledger-drawer__facts dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.ledger-drawer__facts dd { margin: 0.15rem 0 0; font-size: 0.88rem; font-weight: 600; }
+
+.ledger-drawer__actions { display: flex; gap: 0.5rem; margin-top: 0.3rem; }
+
+.ledger-drawer__section {
+  margin: 0.9rem 0 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.ledger-drawer__empty,
+.ledger-empty {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.ledger-empty { padding: 1.5rem; text-align: center; }
+
+.ledger-timeline { margin: 0; padding: 0; list-style: none; }
+
+.ledger-timeline__item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--card-border);
+  font-size: 0.82rem;
+}
+
+.ledger-timeline__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tag-color);
+  flex-shrink: 0;
+}
+
+.ledger-timeline__name { flex: 1; }
+.ledger-timeline__date { color: var(--text-secondary); font-size: 0.76rem; }
+
+.ledger-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 61;
+  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  width: min(460px, 92vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.ledger-modal__title { grid-column: 1 / -1; margin: 0; font-size: 1.05rem; font-weight: 700; }
+
+.ledger-field { display: flex; flex-direction: column; gap: 0.28rem; min-width: 0; }
+.ledger-field--wide { grid-column: 1 / -1; }
+
+.ledger-field span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.ledger-modal__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+/* ---------- date picker ----------
+   Replaces <input type="date">, whose popup is browser chrome and can't be
+   themed. Everything below is driven by the app's own light/dark variables. */
+
+.ledger-datepicker { position: relative; display: flex; flex-direction: column; gap: 0.4rem; }
+
+.ledger-datepicker__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.42rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.83rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ledger-datepicker__trigger--empty { color: var(--text-secondary); }
+
+.ledger-cal {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
+
+.ledger-cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.ledger-cal__month {
+  flex: 1;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.ledger-cal__nav {
+  display: flex;
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.ledger-cal__grid { width: 100%; border-collapse: collapse; table-layout: fixed; }
+
+.ledger-cal__grid th {
+  padding: 0.25rem 0;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.ledger-cal__grid td { padding: 1px; text-align: center; }
+
+.ledger-cal__day {
+  width: 100%;
+  aspect-ratio: 1;
+  min-height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.ledger-cal__day--today { border-color: var(--primary); font-weight: 700; }
+
+.ledger-cal__day--selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.ledger-cal__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding-top: 0.15rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.ledger-cal__action {
+  padding: 0.28rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--primary);
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ---------- edit modal: floats above the drawer, drag + resize ---------- */
+
+.ledger-scrim--over-drawer { z-index: 70; }
+
+.ledger-modal--floating {
+  position: fixed;
+  z-index: 71;
+  top: auto;
+  left: auto;
+  transform: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: auto;
+  max-height: none;
+  overflow: hidden;
+  padding: 0;
+}
+
+.ledger-modal__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.ledger-modal__bar:active { cursor: grabbing; }
+.ledger-modal__bar .ledger-modal__title { flex: 1; margin: 0; color: var(--text); }
+
+.ledger-modal__close {
+  display: flex;
+  padding: 0.2rem;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.ledger-modal__body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  padding: 0.9rem;
+  overflow-y: auto;
+}
+
+.ledger-modal--floating .ledger-modal__actions {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.ledger-modal__resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  touch-action: none;
+  background:
+    linear-gradient(135deg, transparent 50%, var(--card-border) 50%, var(--card-border) 62%,
+      transparent 62%, transparent 74%, var(--card-border) 74%, var(--card-border) 86%, transparent 86%);
+}
+
+/* ---------- attachments ---------- */
+
+.ledger-attach { display: flex; flex-direction: column; gap: 0.4rem; }
+.ledger-attach__input { display: none; }
+.ledger-attach__list { display: flex; flex-direction: column; gap: 0.25rem; margin: 0; padding: 0; list-style: none; }
+
+.ledger-attach__item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--hover-bg);
+  border-radius: 7px;
+  font-size: 0.78rem;
+}
+
+.ledger-attach__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ledger-attach__size { color: var(--text-secondary); font-size: 0.72rem; white-space: nowrap; }
+
+.ledger-attach__remove {
+  display: flex;
+  padding: 0.15rem;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.ledger-attach__error { margin: 0; color: var(--danger); font-size: 0.74rem; }
+
+/* calendar icon sits at the far right of the trigger */
+.ledger-datepicker__trigger > span { flex: 1; min-width: 0; }
+.ledger-datepicker__icon { flex-shrink: 0; color: var(--text-secondary); }
+
+/* ---------- hover ----------
+   One tint token, flipped per theme: a dark wash over light surfaces, a light
+   wash over dark ones. Hover is suppressed on touch/coarse pointers. */
+
+.ledger {
+  --ledger-hover: rgba(15, 23, 42, 0.06);
+  --ledger-hover-strong: rgba(15, 23, 42, 0.12);
+}
+
+body.dark .ledger {
+  --ledger-hover: rgba(255, 255, 255, 0.08);
+  --ledger-hover-strong: rgba(255, 255, 255, 0.16);
+}
+
+@media (hover: hover) {
+  .ledger-btn:hover:not(:disabled),
+  .ledger-chip:hover,
+  .ledger-iconbtn:hover,
+  .ledger-viewtoggle__btn:hover,
+  .ledger-tabs__tab:hover,
+  .ledger-drawer__close:hover,
+  .ledger-docs__row:hover,
+  .ledger-notifications__item:hover,
+  .ledger-cal__nav:hover,
+  .ledger-cal__action:hover,
+  .ledger-modal__close:hover,
+  .ledger-attach__remove:hover,
+  .ledger-cal__day:hover:not(.ledger-cal__day--selected) {
+    background: var(--ledger-hover);
+  }
+
+  .ledger-datepicker__trigger:hover { border-color: var(--primary); }
+
+  .ledger-chip--active:hover,
+  .ledger-viewtoggle__btn--active:hover,
+  .ledger-btn--primary:hover:not(:disabled),
+  .ledger-btn--toggle-on:hover:not(:disabled) {
+    background: var(--primary);
+    filter: brightness(1.12);
+  }
+
+  .ledger-btn--danger:hover:not(:disabled) {
+    background: var(--danger);
+    color: #fff;
+  }
+
+  .ledger-stats__cell:hover,
+  .ledger-card:hover {
+    background: var(--ledger-hover);
+    border-color: var(--primary);
+  }
+
+  .ledger-table tbody tr:hover { background: var(--ledger-hover); }
+  .ledger-table__row--selected:hover { background: var(--ledger-hover-strong); }
+
+  .ledger-header__search:hover,
+  .ledger-filters__search:hover,
+  .ledger-filters__stage:hover,
+  .ledger-textarea:hover { border-color: var(--primary); }
+}
+
+.ledger-btn,
+.ledger-chip,
+.ledger-iconbtn,
+.ledger-viewtoggle__btn,
+.ledger-tabs__tab,
+.ledger-docs__row,
+.ledger-stats__cell,
+.ledger-card,
+.ledger-table tbody tr,
+.ledger-header__search,
+.ledger-filters__search,
+.ledger-filters__stage,
+.ledger-textarea,
+.ledger-drawer__close,
+.ledger-datepicker__trigger,
+.ledger-cal__day,
+.ledger-cal__nav,
+.ledger-cal__action {
+  transition: background 0.15s ease, border-color 0.15s ease, filter 0.15s ease;
+}
+
+.ledger-table__row--selected { background: var(--ledger-hover); }
+
+@media (max-width: 900px) {
+  .ledger-stats { grid-template-columns: repeat(2, 1fr); }
+  .ledger-viewtoggle { margin-left: 0; }
+}
+
+@media (max-width: 560px) {
+  .ledger-stats { grid-template-columns: 1fr; }
+  .ledger-modal { grid-template-columns: 1fr; }
+}

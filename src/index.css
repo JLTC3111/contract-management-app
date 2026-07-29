@@ -168,11 +168,12 @@ button:focus-visible {
   width: 3px;
   height: 100%;
   cursor: col-resize;
-  background-color: transparent;
+  /* Deliberately not themed - the same blue gradient in light and dark. */
+  background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 45%, #2563eb 100%);
   z-index: 10;
-  transition: background 0.2s;
+  transition: opacity 0.2s;
 }
-/* Hover effect is now handled by inline styles in the component */
+/* Opacity (not colour) is driven by inline styles in the component */
 
 .theme-toggle-bg {
   position: absolute;

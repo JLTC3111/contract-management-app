@@ -94,7 +94,10 @@
     "back": "返回",
     "newContract": "新合同",
     "light": "明亮模式",
-    "dark": "深色模式"
+    "dark": "深色模式",
+    "create": "创建",
+    "close": "关闭",
+    "saving": "保存中..."
   },
   "login": {
     "title": "合同管理器",
@@ -254,8 +257,83 @@
   "dashboard": {
     "title": "仪表板",
     "approvalRequests": "审批请求",
-    "searchFiles": "搜索文件或文件夹...",
-    "searchContracts": "搜索合同..."
+    "searchFiles": "搜索文件/文件夹...",
+    "searchContracts": "搜索合同...",
+    "notifications": "通知",
+    "expiringItem": "{{name}} 即将到期",
+    "pendingApproval": "{{count}} 项待审批",
+    "allClear": "暂无需要处理的事项。",
+    "newContract": "新建合同",
+    "all": "全部",
+    "category": "类别",
+    "stage": "阶段",
+    "allStages": "全部阶段",
+    "view": "视图",
+    "table": "表格",
+    "kanban": "看板",
+    "selected": "已选择 {{count}} 项",
+    "advanceStage": "推进阶段",
+    "advanceTo": "推进到{{stage}}",
+    "noNextStage": "没有后续阶段",
+    "clearSelection": "清除选择",
+    "selectAll": "全选",
+    "selectRow": "选择 {{name}}",
+    "noContracts": "没有符合筛选条件的合同。",
+    "counterparty": "对方当事人",
+    "uncategorized": "未分类",
+    "contract": "合同",
+    "activity": "活动记录",
+    "noActivity": "尚未记录阶段变更。",
+    "noFiles": "此合同没有可下载的文件。",
+    "advanceFailed": "无法推进阶段：{{msg}}",
+    "createFailed": "无法创建合同：{{msg}}",
+    "loading": "加载中...",
+    "col": {
+      "name": "名称",
+      "category": "类别",
+      "stage": "阶段",
+      "owner": "负责人",
+      "value": "金额",
+      "expires": "到期"
+    },
+    "stats": {
+      "total": "合同总数",
+      "activeValue": "有效合同金额",
+      "expiring": "即将到期",
+      "pending": "待审批"
+    },
+    "manageStage": "管理阶段",
+    "overview": "概览",
+    "docsAndComments": "文档与评论",
+    "documents": "文档",
+    "noDocuments": "暂无文档。",
+    "sendForApproval": "提交审批",
+    "onlyDraft": "仅草稿状态的合同可提交审批。",
+    "comments": "评论",
+    "noComments": "暂无评论。",
+    "addComment": "添加评论...",
+    "postComment": "发表评论",
+    "unknownAuthor": "未知",
+    "movedTo": "移至{{stage}}",
+    "editContract": "编辑合同",
+    "saveChanges": "保存更改",
+    "valueUsd": "金额（$）",
+    "confirmDelete": "确定删除“{{name}}”吗？此操作无法撤销。",
+    "saveFailed": "无法保存更改：{{msg}}",
+    "deleteFailed": "无法删除合同：{{msg}}",
+    "approvalFailed": "无法提交审批：{{msg}}",
+    "commentFailed": "无法发表评论：{{msg}}",
+    "selectDate": "选择日期",
+    "clearDate": "清除",
+    "today": "今天",
+    "prevMonth": "上个月",
+    "nextMonth": "下个月",
+    "attachFiles": "添加附件",
+    "removeFile": "移除 {{name}}",
+    "resize": "调整大小",
+    "fileTooLarge": "{{name}} 超过 {{max}}",
+    "fileBadType": "{{name}} 不是受支持的文件类型",
+    "uploadFailed": "部分文件未能上传：{{names}}"
   },
   "clear": "清除",
   "contractTable": {
@@ -633,5 +711,24 @@
     "managePhases": "管理阶段",
     "documents": "文档"
   },
-  "newcontract.viewDetails": "查看详情"
+  "newcontract.viewDetails": "查看详情",
+  "stages": {
+    "draft": "草稿",
+    "in_review": "审阅中",
+    "negotiation": "谈判中",
+    "awaiting_signature": "待签署",
+    "executed": "已签署",
+    "expiring_soon": "即将到期",
+    "expired": "已到期"
+  },
+  "categories": {
+    "NDA": "保密协议",
+    "MSA": "主服务协议",
+    "Vendor": "供应商协议"
+  },
+  "categoriesShort": {
+    "NDA": "NDA",
+    "MSA": "MSA",
+    "Vendor": "供应商"
+  }
 }

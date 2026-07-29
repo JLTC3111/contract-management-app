@@ -111,25 +111,6 @@ export const SubMenu = ({ items }) => {
     if (el) itemRefs.current[idx] = el;
   }, []);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      import('gsap').then(({ default: gsap }) => {
-        gsap.fromTo(
-          containerRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
-        );
-        if (itemRefs.current.length) {
-          gsap.fromTo(
-            itemRefs.current,
-            { opacity: 0, x: 20 },
-            { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out', stagger: 0.1, delay: 0.1 }
-          );
-        }
-      });
-    }
-  }, [items.length]);
-
   return (
     <div className="submenu-container" ref={containerRef}>
       <ul style={{

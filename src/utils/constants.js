@@ -80,6 +80,29 @@ export const CONTRACT_STATUSES = [
   { value: 'completed', labelKey: 'contractTable.status.completed' },
 ];
 
+// Contract categories offered by the dashboard filter chips and create modal.
+// These are the values stored in contracts.category - never translate the value,
+// only its label.
+export const CONTRACT_CATEGORIES = ['All', 'NDA', 'MSA', 'Vendor'];
+
+/**
+ * Full, translated name of a contract type ("Non-disclosure agreement").
+ * Unknown/legacy free-text categories are returned as-is.
+ */
+export const getCategoryLabel = (t, value) => {
+  if (!value) return '—';
+  return t(`categories.${value}`, value);
+};
+
+/**
+ * Compact form for tight spots (chips, table tags). NDA/MSA are recognised
+ * abbreviations, so they stay as-is; the full name goes in the tooltip.
+ */
+export const getCategoryShortLabel = (t, value) => {
+  if (!value) return '—';
+  return t(`categoriesShort.${value}`, value);
+};
+
 // Phase statuses
 export const PHASE_STATUSES = [
   { value: 'pending', labelKey: 'phaseManagement.status.pending' },

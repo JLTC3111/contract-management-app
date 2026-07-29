@@ -104,7 +104,10 @@
     "back": "Zurück",
     "newContract": "Neuer Vertrag",
     "light": "Heller Modus",
-    "dark": "Dunkler Modus"
+    "dark": "Dunkler Modus",
+    "create": "Erstellen",
+    "close": "Schließen",
+    "saving": "Wird gespeichert..."
   },
   "login": {
     "title": "Vertragsmanager",
@@ -264,8 +267,83 @@
   "dashboard": {
     "title": "Dashboard",
     "approvalRequests": "Genehmigungsanfragen",
-    "searchFiles": "Dateien oder Ordner suchen...",
-    "searchContracts": "Verträge suchen..."
+    "searchFiles": "Dateien/Ordner suchen...",
+    "searchContracts": "Verträge suchen...",
+    "notifications": "Benachrichtigungen",
+    "expiringItem": "{{name}} läuft ab",
+    "pendingApproval": "{{count}} Genehmigungen ausstehend",
+    "allClear": "Nichts erfordert Aufmerksamkeit.",
+    "newContract": "Neuer Vertrag",
+    "all": "Alle",
+    "category": "Kategorie",
+    "stage": "Phase",
+    "allStages": "Alle Phasen",
+    "view": "Ansicht",
+    "table": "Tabelle",
+    "kanban": "Kanban",
+    "selected": "{{count}} ausgewählt",
+    "advanceStage": "Phase weiterschalten",
+    "advanceTo": "Weiter zu {{stage}}",
+    "noNextStage": "Keine weitere Phase",
+    "clearSelection": "Auswahl aufheben",
+    "selectAll": "Alle auswählen",
+    "selectRow": "{{name}} auswählen",
+    "noContracts": "Keine Verträge entsprechen diesen Filtern.",
+    "counterparty": "Vertragspartner",
+    "uncategorized": "Nicht kategorisiert",
+    "contract": "Vertrag",
+    "activity": "Aktivität",
+    "noActivity": "Noch keine Phasenwechsel erfasst.",
+    "noFiles": "Für diesen Vertrag gibt es keine Dateien zum Herunterladen.",
+    "advanceFailed": "Phase konnte nicht weitergeschaltet werden: {{msg}}",
+    "createFailed": "Vertrag konnte nicht erstellt werden: {{msg}}",
+    "loading": "Wird geladen...",
+    "col": {
+      "name": "Name",
+      "category": "Kategorie",
+      "stage": "Phase",
+      "owner": "Verantwortlich",
+      "value": "Wert",
+      "expires": "Läuft ab"
+    },
+    "stats": {
+      "total": "Verträge gesamt",
+      "activeValue": "Aktiver Wert",
+      "expiring": "Läuft bald ab",
+      "pending": "Genehmigung ausstehend"
+    },
+    "manageStage": "Phase verwalten",
+    "overview": "Übersicht",
+    "docsAndComments": "Dokumente & Kommentare",
+    "documents": "Dokumente",
+    "noDocuments": "Noch keine Dokumente.",
+    "sendForApproval": "Zur Genehmigung senden",
+    "onlyDraft": "Nur Entwürfe können zur Genehmigung gesendet werden.",
+    "comments": "Kommentare",
+    "noComments": "Noch keine Kommentare.",
+    "addComment": "Kommentar hinzufügen...",
+    "postComment": "Kommentar senden",
+    "unknownAuthor": "Unbekannt",
+    "movedTo": "Verschoben nach {{stage}}",
+    "editContract": "Vertrag bearbeiten",
+    "saveChanges": "Änderungen speichern",
+    "valueUsd": "Wert ($)",
+    "confirmDelete": "„{{name}}\" löschen? Dies kann nicht rückgängig gemacht werden.",
+    "saveFailed": "Änderungen konnten nicht gespeichert werden: {{msg}}",
+    "deleteFailed": "Vertrag konnte nicht gelöscht werden: {{msg}}",
+    "approvalFailed": "Genehmigungsanfrage fehlgeschlagen: {{msg}}",
+    "commentFailed": "Kommentar konnte nicht gesendet werden: {{msg}}",
+    "selectDate": "Datum wählen",
+    "clearDate": "Löschen",
+    "today": "Heute",
+    "prevMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "attachFiles": "Dateien anhängen",
+    "removeFile": "{{name}} entfernen",
+    "resize": "Größe ändern",
+    "fileTooLarge": "{{name}} ist größer als {{max}}",
+    "fileBadType": "{{name}} ist kein unterstützter Dateityp",
+    "uploadFailed": "Einige Dateien wurden nicht hochgeladen: {{names}}"
   },
   "contractTable": {
     "expiry": "Ablaufdatum",
@@ -637,5 +715,24 @@
       "description": "Abrechnungs- und Zahlungsdokumentation"
     }
   },
-  "newcontract.viewDetails": "Details anzeigen"
+  "newcontract.viewDetails": "Details anzeigen",
+  "stages": {
+    "draft": "Entwurf",
+    "in_review": "In Prüfung",
+    "negotiation": "Verhandlung",
+    "awaiting_signature": "Unterschrift ausstehend",
+    "executed": "Unterzeichnet",
+    "expiring_soon": "Läuft bald ab",
+    "expired": "Abgelaufen"
+  },
+  "categories": {
+    "NDA": "Geheimhaltungsvereinbarung",
+    "MSA": "Rahmendienstleistungsvertrag",
+    "Vendor": "Lieferantenvertrag"
+  },
+  "categoriesShort": {
+    "NDA": "NDA",
+    "MSA": "MSA",
+    "Vendor": "Lieferant"
+  }
 }

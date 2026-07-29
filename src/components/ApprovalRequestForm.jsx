@@ -37,18 +37,6 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
   const { t } = useTranslation();
   const rootRef = useRef(null);
   const textareaRef = useRef(null);
-  useEffect(() => {
-    if (rootRef.current) {
-      import('gsap').then(({ default: gsap }) => {
-        gsap.fromTo(
-          rootRef.current,
-          { x: 80, scale: 0.95, opacity: 0 },
-          { x: 0, scale: 1, opacity: 1, duration: 2.5, ease: 'back.out(1.7)' }
-        );
-      });
-    }
-  }, []);
-
   // Check if user already has a pending approval request
   const hasPendingRequest = contract.status === 'pending';
 

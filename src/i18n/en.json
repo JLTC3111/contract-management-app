@@ -89,7 +89,7 @@
     }
   },
   "buttons": {
-    "deleteContract": "Delete Contract",
+    "deleteContract": "Delete",
     "delete": "Delete",
     "download": "Download",
     "downloadAll": "Download All",
@@ -106,7 +106,10 @@
     "light": "Light Mode",
     "dark": "Dark Mode",
     "microsoftOffice": "Microsoft Office",
-    "googleDocs": "Google Docs"
+    "googleDocs": "Google Docs",
+    "create": "Create",
+    "close": "Close",
+    "saving": "Saving..."
   },
   "login": {
     "title": "Contract Manager",
@@ -282,13 +285,85 @@
   "currentlyNoApprovalRequestsWaitingForYourReview": "There are currently no approval requests waiting for your review.",
   "home": "Home",
   "dashboard": {
-    "searching": "Searching...",
-    "noResultsFound": "No results found.",
     "loading": "Loading...",
     "title": "Dashboard",
-    "approvalRequests": "Approval Requests",
-    "searchFiles": "Search files or folders...",
-    "searchContracts": "Search contracts..."
+    "approvalRequests": "Approval requests",
+    "searchFiles": "Search files/folders...",
+    "searchContracts": "Search contracts...",
+    "notifications": "Notifications",
+    "expiringItem": "{{name}} expiring",
+    "pendingApproval": "{{count}} pending approval",
+    "allClear": "Nothing needs attention.",
+    "newContract": "New contract",
+    "category": "Category",
+    "stage": "Stage",
+    "allStages": "All stages",
+    "view": "View",
+    "table": "Table",
+    "kanban": "Kanban",
+    "selected": "{{count}} selected",
+    "advanceStage": "Advance stage",
+    "advanceTo": "Advance to {{stage}}",
+    "noNextStage": "No further stage",
+    "clearSelection": "Clear selection",
+    "selectAll": "Select all",
+    "selectRow": "Select {{name}}",
+    "noContracts": "No contracts match these filters.",
+    "counterparty": "Counterparty",
+    "uncategorized": "Uncategorized",
+    "contract": "Contract",
+    "activity": "Activity",
+    "noActivity": "No recorded stage moves yet.",
+    "noFiles": "This contract has no files to download.",
+    "advanceFailed": "Could not advance stage: {{msg}}",
+    "createFailed": "Could not create contract: {{msg}}",
+    "col": {
+      "name": "Name",
+      "category": "Category",
+      "stage": "Stage",
+      "owner": "Owner",
+      "value": "Value",
+      "expires": "Expires"
+    },
+    "stats": {
+      "total": "Total contracts",
+      "activeValue": "Active value",
+      "expiring": "Expiring soon",
+      "pending": "Pending approval"
+    },
+    "all": "All",
+    "manageStage": "Manage stage",
+    "overview": "Overview",
+    "docsAndComments": "Documents & comments",
+    "documents": "Documents",
+    "noDocuments": "No documents yet.",
+    "sendForApproval": "Send for approval",
+    "onlyDraft": "Only draft contracts can be sent for approval.",
+    "comments": "Comments",
+    "noComments": "No comments yet.",
+    "addComment": "Add a comment...",
+    "postComment": "Post comment",
+    "unknownAuthor": "Unknown",
+    "movedTo": "Moved to {{stage}}",
+    "editContract": "Edit contract",
+    "saveChanges": "Save changes",
+    "valueUsd": "Value ($)",
+    "confirmDelete": "Delete \"{{name}}\"? This cannot be undone.",
+    "saveFailed": "Could not save changes: {{msg}}",
+    "deleteFailed": "Could not delete contract: {{msg}}",
+    "approvalFailed": "Could not send for approval: {{msg}}",
+    "commentFailed": "Could not post comment: {{msg}}",
+    "selectDate": "Select a date",
+    "clearDate": "Clear",
+    "today": "Today",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "attachFiles": "Attach files",
+    "removeFile": "Remove {{name}}",
+    "resize": "Resize",
+    "fileTooLarge": "{{name}} is over {{max}}",
+    "fileBadType": "{{name}} is not a supported file type",
+    "uploadFailed": "Some files did not upload: {{names}}"
   },
   "clear": "Clear",
   "contractTable": {
@@ -760,5 +835,24 @@
       "name": "Owner Payment Documents",
       "description": "Settlement proposals, invoices, and payment records"
     }
+  },
+  "stages": {
+    "draft": "Draft",
+    "in_review": "In Review",
+    "negotiation": "Negotiation",
+    "awaiting_signature": "Awaiting Signature",
+    "executed": "Executed",
+    "expiring_soon": "Expiring Soon",
+    "expired": "Expired"
+  },
+  "categories": {
+    "NDA": "Non-disclosure agreement",
+    "MSA": "Master service agreement",
+    "Vendor": "Vendor agreement"
+  },
+  "categoriesShort": {
+    "NDA": "NDA",
+    "MSA": "MSA",
+    "Vendor": "Vendor"
   }
 }

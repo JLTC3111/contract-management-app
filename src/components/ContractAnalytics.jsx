@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import { getI18nOrFallback, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
 import { DEFAULT_DASHBOARD_METRIC_FILTER } from '../utils/contractMetrics';
-import gsap from 'gsap';
 
 const COLORS = ['#10b981', '#f59e0b', '#ef4444', '#6b7280', '#8b5cf6', '#06b6d4'];
 const STATUS_COLORS = {
@@ -46,23 +45,6 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   const chartsRef = useRef([]);
   const resizeHandleRef = useRef(null);
   const resizeCenterXRef = useRef(0);
-
-  // GSAP entrance animations
-  useEffect(() => {
-    if (!containerRef.current || loading) return;
-    
-    gsap.fromTo(
-      metricsRef.current.filter(Boolean),
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power2.out' }
-    );
-    
-    gsap.fromTo(
-      chartsRef.current.filter(Boolean),
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: 'power2.out', delay: 0.3 }
-    );
-  }, [loading, contracts.length]);
 
   // Handle resize functionality
   useEffect(() => {

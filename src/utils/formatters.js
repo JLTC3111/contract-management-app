@@ -124,6 +124,77 @@ export const formatCurrency = (amount, currency = 'USD', locale = 'en-US') => {
 };
 
 /**
+ * Currency shown for each UI language.
+ *
+ * NOTE: contracts store a bare number with no currency of their own, and nothing
+ * here converts between currencies - the same figure is simply rendered in the
+ * active language's currency. Amounts are therefore only accurate when they were
+ * entered in that currency. A per-contract `currency` column is the real fix.
+ */
+export const LOCALE_CURRENCY = {
+  en: 'USD',
+  de: 'EUR',
+  fr: 'EUR',
+  es: 'EUR',
+  ja: 'JPY',
+  th: 'THB',
+  vi: 'VND',
+  zh: 'CNY',
+};
+
+/**
+ * Currency code for a language tag ('vi', 'de-DE', ...). Falls back to USD.
+ * @param {string} locale - Language tag
+ * @returns {string} ISO currency code
+ */
+export const currencyForLocale = (locale) =>
+  LOCALE_CURRENCY[String(locale || '').split('-')[0].toLowerCase()] || 'USD';
+
+/**
+ * Format a date as month + year only ("Aug 2027"). formatDate always merges in
+ * `day: 'numeric'`, so it can't produce this on its own.
+ * @param {string|Date} date - Date to format
+ * @param {string} locale - Locale string
+ * @returns {string} Formatted month-year string
+ */
+export const formatMonthYear = (date, locale = undefined) => {
+  if (!date) return '-';
+
+  try {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    if (isNaN(dateObj.getTime())) return '-';
+    return new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short' }).format(dateObj);
+  } catch (error) {
+    console.error('Date formatting error:', error);
+    return '-';
+  }
+};
+
+/**
+ * Format a number as compact currency ($2.1M, $250K) for overview surfaces
+ * where full precision is noise. Detail views should use formatCurrency.
+ * @param {number} amount - Amount to format
+ * @param {string} currency - Currency code (default: USD)
+ * @param {string} locale - Locale string
+ * @returns {string} Formatted currency string
+ */
+export const formatCompactCurrency = (amount, currency = 'USD', locale = 'en-US') => {
+  if (amount === null || amount === undefined) return '-';
+
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      notation: 'compact',
+      maximumFractionDigits: 1,
+    }).format(amount);
+  } catch (error) {
+    console.error('Currency formatting error:', error);
+    return formatCurrency(amount, currency, locale);
+  }
+};
+
+/**
  * Format a number with thousand separators
  * @param {number} number - Number to format
  * @param {string} locale - Locale string
