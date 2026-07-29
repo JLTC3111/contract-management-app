@@ -37,17 +37,22 @@
       "viewer": "Người xem",
       "unknown": "Không xác định"
     },
+    "analytics": "Phân tích & lịch sử",
+    "phaseManagement": "Quản lý giai đoạn",
+    "demoMode": "Chế độ demo",
+    "exitDemo": "Thoát",
+    "personal": "Cá nhân",
+    "signedInAs": "Đăng nhập với",
+    "collapse": "Thu gọn thanh bên",
+    "expand": "Mở rộng thanh bên",
+    "navigation": "Điều hướng",
     "role_description": {
       "admin": "Toàn quyền: tạo, chỉnh sửa, phê duyệt, bình luận và xóa hợp đồng.",
       "editor": "Có thể tạo, chỉnh sửa và xóa hợp đồng nhưng không được phê duyệt.",
       "approver": "Có thể xem xét và phê duyệt hợp đồng. Không có quyền chỉnh sửa.",
       "viewer": "Chỉ được xem tất cả hợp đồng.",
       "unknown": "Vai trò không xác định."
-    },
-    "analytics": "Phân tích & Lịch sử",
-    "phaseManagement": "Quản lý Giai đoạn",
-    "demoMode": "Chế độ demo",
-    "exitDemo": "Thoát"
+    }
   },
   "demoSamples": {
     "title": "Sample Projects",
@@ -345,7 +350,9 @@
     "resize": "Thay đổi kích thước",
     "fileTooLarge": "{{name}} vượt quá {{max}}",
     "fileBadType": "{{name}} không phải là loại tệp được hỗ trợ",
-    "uploadFailed": "Một số tệp chưa được tải lên: {{names}}"
+    "uploadFailed": "Một số tệp chưa được tải lên: {{names}}",
+    "pendingApprovalFilter": "Chờ phê duyệt",
+    "clearFilter": "Xoá bộ lọc"
   },
   "clear": "Xóa",
   "contractTable": {

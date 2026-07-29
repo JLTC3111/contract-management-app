@@ -16,13 +16,13 @@
   --text: #1e293b;
   --card-bg: #ffffff;
   --card-border: #e5e7eb;
-  --chevron-hover-bg: #e0e7ff;
+  --chevron-hover-bg: #fee2e2;
   --eye-icon: #000260;
   --eye-border: #360082;
   --hover-bg: #f9f9ff;
   --login-input-text: #1e293b;
   --btn-hover-preview: linear-gradient(90deg, transparent, rgba(225, 225, 225, 0.2), transparent);
-  --primary: #3b82f6;
+  --primary: #dc2626;
   --danger: #ef4444;
   --special-card-bg: #fffcfc;
   --special-card-border: #323232;
@@ -64,7 +64,7 @@ body.dark {
   --chevron-hover-bg: #869397;
   --eye-icon: #000000;
   --eye-border: #4e0000;
-  --primary: #60a5fa;
+  --primary: #ef4444;
   --danger: #f87171;  
   --special-card-bg: #181e29;
   --special-card-border: #fbfbfb;
@@ -78,7 +78,7 @@ body.dark {
   --hover-bg: #232b3b;
   --login-input-text: #000000;
   --btn-hover-preview: linear-gradient(90deg, transparent, rgba(232, 232, 232, 0.5), transparent);
-  --primary: #60a5fa;
+  --primary: #ef4444;
   --danger: #f87171;  
   --special-card-bg: #181e29;
   --special-card-border: #fbfbfb;
@@ -93,7 +93,7 @@ body.dark {
   --sidebar-active-bg: #334155;
   --sidebar-active-text: #fff;
   --theme-toggle-bg: linear-gradient(to bottom, #dbff65 0%, #030045 100%);
-  --fancy-btn-border: #60a5fa;
+  --fancy-btn-border: #ef4444;
   --fancy-btn-shadow: 0 1px 2px rgba(96,165,250,0.45);
 }
 
@@ -169,7 +169,7 @@ button:focus-visible {
   height: 100%;
   cursor: col-resize;
   /* Deliberately not themed - the same blue gradient in light and dark. */
-  background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 45%, #2563eb 100%);
+  background: linear-gradient(180deg, #f87171 0%, #ef4444 45%, #b91c1c 100%);
   z-index: 10;
   transition: opacity 0.2s;
 }
@@ -187,7 +187,7 @@ button:focus-visible {
   transition: background 0.2s;
 }
 .theme-toggle-bg:hover {
-  background: var(--theme-toggle-bg, #e0e7ff);
+  background: var(--theme-toggle-bg, #fee2e2);
 }
 
 .contract-table {
@@ -409,7 +409,7 @@ body.dark .dashboard-metrics--filter-active .metric-card--dimmed {
 }
 
 .metric-card.metric-in-progress.metric-card--selected {
-  border-left-color: #3b82f6 !important;
+  border-left-color: #dc2626 !important;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.14) 0%, var(--card-bg) 55%);
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.45), 0 4px 14px rgba(59, 130, 246, 0.2);
   animation: metric-selected-pulse-in-progress 2.4s ease-in-out infinite;
@@ -760,11 +760,11 @@ body.dark .metric-card:hover {
 }
 
 .metric-approved:hover {
-  border-left-color: #3b82f6; /* green-500 */
+  border-left-color: #dc2626; /* green-500 */
 }
 
 .metric-approved:hover {
-  border-left-color: #60a5fa !important;
+  border-left-color: #ef4444 !important;
 }
 .metric-pending:hover {
   border-left-color: #fde68a !important;
@@ -783,7 +783,7 @@ body.dark .metric-card:hover {
 }
 
 body.dark .dashboard-metrics .metric-approved:hover {
-    border-left-color: #60a5fa !important
+    border-left-color: #ef4444 !important
 }
 body.dark .dashboard-metrics .metric-expiring:hover {
   border-left-color: #fdba74 !important;
@@ -807,7 +807,7 @@ body.dark .dashboard-metrics .metric-expired:hover {
 }
 
 body.dark .dashboard-metrics .metric-in-progress:hover {
-  border-left-color: #60a5fa !important;
+  border-left-color: #ef4444 !important;
 }
 
 body.dark .dashboard-metrics .metric-completed:hover {

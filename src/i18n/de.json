@@ -14,12 +14,12 @@
     "visitIcueTooltip": "iCUE besuchen!",
     "dashboard": "Dashboard",
     "approvals": "Genehmigungen",
-    "manual": "Handbuch",
+    "manual": "Anleitung",
     "sendFeedback": "Feedback senden",
     "changePassword": "Passwort ändern",
     "profile": "Profil",
     "signOut": "Abmelden",
-    "updateStatus": "Status aktualisieren",
+    "updateStatus": "Statusaktualisierung",
     "updatingStatus": "Aktualisiere...",
     "cronFailed": "❌ Cron fehlgeschlagen:",
     "statusUpdated": "✅ Status aktualisiert!",
@@ -35,17 +35,22 @@
       "viewer": "Betrachter",
       "unknown": "Unbekannt"
     },
+    "analytics": "Analysen & Verlauf",
+    "phaseManagement": "Phasenverwaltung",
+    "demoMode": "Demo-Modus",
+    "exitDemo": "Beenden",
+    "personal": "Persönlich",
+    "signedInAs": "Angemeldet als",
+    "collapse": "Seitenleiste einklappen",
+    "expand": "Seitenleiste ausklappen",
+    "navigation": "Navigation",
     "role_description": {
       "admin": "Voller Zugriff: Verträge erstellen, bearbeiten, genehmigen, kommentieren und löschen.",
       "editor": "Kann Verträge erstellen, bearbeiten und löschen, aber nicht genehmigen.",
       "approver": "Kann Verträge prüfen und genehmigen. Kein Bearbeitungszugriff.",
       "viewer": "Nur Lesezugriff auf alle Verträge.",
       "unknown": "Rolle nicht erkannt."
-    },
-    "analytics": "Analytics & Verlauf",
-    "phaseManagement": "Phasenmanagement",
-    "demoMode": "Demo-Modus",
-    "exitDemo": "Beenden"
+    }
   },
   "demoSamples": {
     "title": "Sample Projects",
@@ -343,7 +348,9 @@
     "resize": "Größe ändern",
     "fileTooLarge": "{{name}} ist größer als {{max}}",
     "fileBadType": "{{name}} ist kein unterstützter Dateityp",
-    "uploadFailed": "Einige Dateien wurden nicht hochgeladen: {{names}}"
+    "uploadFailed": "Einige Dateien wurden nicht hochgeladen: {{names}}",
+    "pendingApprovalFilter": "Genehmigung ausstehend",
+    "clearFilter": "Filter entfernen"
   },
   "contractTable": {
     "expiry": "Ablaufdatum",

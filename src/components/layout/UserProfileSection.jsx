@@ -12,13 +12,6 @@ const UserProfileSection = ({ user, collapsed, isMobile }) => {
 
   if (!user || isMobile || collapsed) return null;
 
-  const roleDescriptions = {
-    admin: t('sidebar.role_description.admin', 'Full access: create, edit, approve, comment and delete contracts.'),
-    editor: t('sidebar.role_description.editor', 'Can create, edit and delete contracts but not approve.'),
-    approver: t('sidebar.role_description.approver', 'Can review and approve contracts. No editing access.'),
-    viewer: t('sidebar.role_description.viewer', 'Read-only access to all contracts.'),
-  };
-
   return (
     <>
       {/* Email Card */}
@@ -80,18 +73,6 @@ const UserProfileSection = ({ user, collapsed, isMobile }) => {
         <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           <strong>{t('sidebar.role', 'Role')}:</strong>{' '}
           {t(`sidebar.role_label.${user.role}`, user.role ?? 'unknown')}
-        </div>
-        <div
-          style={{
-            fontSize: '0.8rem',
-            color: darkMode ? '#9ca3af' : '#64748b',
-            marginTop: '0.25rem',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {roleDescriptions[user.role] || t('sidebar.role_description.unknown', 'Role not recognized.')}
         </div>
       </div>
     </>

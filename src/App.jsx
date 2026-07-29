@@ -3,7 +3,7 @@ import { useUser } from './hooks/useUser';
 import Dashboard from './pages/Dashboard';
 import ContractDetail from './pages/ContractDetail';
 import Login from './pages/Login';
-import NewContract from './pages/NewContract';
+import CreateContractPage from './pages/CreateContractPage';
 import ApprovalsBoard from './pages/ApprovalsBoard';
 import ContractLifecycleManager from './pages/ContractLifecycleManager';
 import PhaseManagementPage from './pages/PhaseManagementPage';
@@ -71,7 +71,7 @@ function App() {
         {/* Routes with Sidebar */}
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/new" element={<NewContract />} />
+          <Route path="/new" element={<CreateContractPage />} />
           <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
           <Route path="/phases/:contractId" element={<PhaseManagementPage />} />
           <Route path="/phases" element={<PhaseManagementPage />} />

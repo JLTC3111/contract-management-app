@@ -1,0 +1,141 @@
+/* Flat navigation rail. No rounded corners, no floating cards, one accent. */
+
+/* Overrides the global `button { border-radius: 8px }` from index.css. */
+.rail,
+.rail * {
+  border-radius: 0;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100vh;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  border-right: 1px solid var(--card-border);
+  transition: width 0.18s ease;
+  overflow: hidden;
+}
+
+.rail__top {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.rail--collapsed .rail__top { justify-content: center; }
+
+.rail__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text);
+  cursor: pointer;
+}
+
+.rail__nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem 0;
+  overflow-y: auto;
+}
+
+.rail__item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.62rem 0.9rem;
+  background: transparent;
+  border: none;
+  /* Reserved so the active row's accent bar doesn't shift the label. */
+  border-left: 3px solid transparent;
+  color: var(--sidebar-text);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.rail--collapsed .rail__item {
+  justify-content: center;
+  gap: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.rail__label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+
+.rail__item--active {
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  border-left-color: var(--primary);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.rail__item--sub {
+  padding-left: 2.6rem;
+  font-size: 0.82rem;
+  color: var(--primary);
+}
+
+.rail__item--sub svg { width: 15px; height: 15px; }
+
+.rail__chevron { flex-shrink: 0; transition: transform 0.18s ease; }
+.rail__chevron--open { transform: rotate(180deg); }
+
+.rail__spin { animation: rail-spin 1s linear infinite; }
+
+@keyframes rail-spin {
+  to { transform: rotate(360deg); }
+}
+
+.rail__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.2rem;
+  padding: 0.75rem 0.9rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.rail__signedin {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.rail__email {
+  font-size: 0.8rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rail__role {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+@media (hover: hover) {
+  .rail__item:hover,
+  .rail__toggle:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); }
+  .rail__item--active:hover { background: color-mix(in srgb, var(--primary) 18%, transparent); }
+}

@@ -27,7 +27,14 @@ export const UserProvider = ({ children }) => {
     await fetchUser();
   };
 
-  const fetchUser = async () => {
+  /**
+   * @param {object} options
+   * @param {boolean} options.silent - refresh in the background without raising
+   *   the global loading flag. App.jsx unmounts the entire routed tree while
+   *   `loading` is true, so a noisy refresh throws away every page's local state
+   *   (open dialogs, filters, selections).
+   */
+  const fetchUser = async ({ silent = false } = {}) => {
     // If in demo mode, use mock user
     if (localStorage.getItem('isDemoMode') === 'true') {
       setUser(MOCK_USER);
@@ -35,7 +42,7 @@ export const UserProvider = ({ children }) => {
       return;
     }
 
-    setLoading(true);
+    if (!silent) setLoading(true);
     try {
       const {
         data: { session },
@@ -87,7 +94,11 @@ export const UserProvider = ({ children }) => {
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state change:', event, 'Session:', !!session);
       if (session?.user) {
-        fetchUser(); // Refresh user on auth change
+        // Always silent: Supabase fires TOKEN_REFRESHED/SIGNED_IN whenever the
+        // tab regains focus, and raising `loading` here would remount the whole
+        // app and close whatever the user had open. The initial fetchUser()
+        // below still gates the first paint.
+        fetchUser({ silent: true });
       } else {
         console.log('Session cleared, setting user to null');
         setUser(null);

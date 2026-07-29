@@ -15,12 +15,12 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "approvals": "Approvals",
-    "manual": "Manual",
-    "sendFeedback": "Send Feedback",
-    "changePassword": "Change Password",
+    "manual": "Guide",
+    "sendFeedback": "Send feedback",
+    "changePassword": "Change password",
     "profile": "Profile",
-    "signOut": "Sign Out",
-    "updateStatus": "Update Status",
+    "signOut": "Log out",
+    "updateStatus": "Status updates",
     "updatingStatus": "Updating...",
     "cronFailed": "Cron failed:",
     "statusUpdated": "Status Updated!",
@@ -35,17 +35,22 @@
       "viewer": "Viewer",
       "unknown": "Unknown"
     },
+    "analytics": "Analytics & history",
+    "phaseManagement": "Stage management",
+    "demoMode": "Demo Mode",
+    "exitDemo": "Exit",
+    "personal": "Personal",
+    "signedInAs": "Signed in as",
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar",
+    "navigation": "Navigation",
     "role_description": {
       "admin": "Full access: create, edit, approve, comment and delete contracts.",
       "editor": "Can create, edit and delete contracts but not approve.",
       "approver": "Can review and approve contracts. No editing access.",
       "viewer": "Read-only access to all contracts.",
       "unknown": "Role not recognized."
-    },
-    "analytics": "Analytics & History",
-    "phaseManagement": "Phase Management",
-    "demoMode": "Demo Mode",
-    "exitDemo": "Exit"
+    }
   },
   "demoSamples": {
     "title": "Sample Projects",
@@ -363,7 +368,9 @@
     "resize": "Resize",
     "fileTooLarge": "{{name}} is over {{max}}",
     "fileBadType": "{{name}} is not a supported file type",
-    "uploadFailed": "Some files did not upload: {{names}}"
+    "uploadFailed": "Some files did not upload: {{names}}",
+    "pendingApprovalFilter": "Pending approval",
+    "clearFilter": "Clear filter"
   },
   "clear": "Clear",
   "contractTable": {

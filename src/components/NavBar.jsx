@@ -1,10 +1,9 @@
 // src/components/Navbar.jsx
-import { useUser } from '../hooks/useUser';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { contractsApi } from '../api/contracts';
 import { useTheme } from '../hooks/useTheme';
-import { ChevronDownIcon, Folder, FolderOpen } from 'lucide-react';
+import { ChevronDownIcon, FolderOpen } from 'lucide-react';
 import SunMoonIcon from './common/SunMoonIcon';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +22,6 @@ const LANGUAGES = [
 ];
 
 const Navbar = () => {
-  const { user } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
   const { darkMode, toggleDarkMode } = useTheme();
@@ -204,7 +202,7 @@ const Navbar = () => {
             alignItems: 'center',
             marginRight: '1rem'
           }}
-        > <Folder size={isMobile ? 14 : 18} />
+        >
           {titleText}
           {titleText.length < t('navbar.title').length && (
             <span 
@@ -236,16 +234,9 @@ const Navbar = () => {
             onClick={() => window.location.href = 'https://icue.vn'}
             src="/logoIcons/logo.png"
             alt="Logo"
-            animate={{ rotate: -360 }}
-            transition={{ 
-              duration: 2.5, 
-              repeat: 1, 
-              ease: "linear" 
-            }}
             style={{
               height: 'clamp(1rem, 2.5vw, 1.5rem)', 
               width: 'auto',
-              borderRadius: '20px',
               alignItems: 'center',
               display: 'inline-block',
               objectFit: 'contain',
@@ -275,7 +266,6 @@ const Navbar = () => {
                 backgroundColor: 'rgba(0, 0, 0, 0.85)',
                 color: '#fff',
                 padding: '4px 8px',
-                borderRadius: '4px',
                 fontSize: '0.75rem',
                 pointerEvents: 'none',
                 whiteSpace: 'nowrap',
@@ -287,32 +277,29 @@ const Navbar = () => {
           )}
         </div>
       </div>
-      {/* Center: Language Switcher (always visible) */}
+      {/* Right: language switcher + theme toggle, grouped in one square box */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: isMobile ? '0.25rem' : '0.5rem',
+          marginLeft: 'auto',
+          padding: isMobile ? '0.15rem 0.25rem' : '0.25rem 0.4rem',
+          border: '1px solid var(--card-border)',
+          borderRadius: 0,
+          background: 'var(--card-bg)',
+        }}
+      >
       <div
         ref={langSwitcherRef}
         style={{
-          flex: 1,
           display: 'flex',
-          justifyContent: 'center',
           alignItems: 'center',
           position: 'relative',
           zIndex: 20,
-          width: 'clamp(140px, 2.5vw, 220px)',
-          maxWidth: '45%',
         }}
       >
-        {/* Responsive width for mobile */}
-        <style>{`
-          @media (max-width: 500px) {
-            .navbar-lang-switcher {
-              margin-right: 0.5rem;
-              width: 140px !important;
-              min-width: 0 !important;
-              max-width: 90% !important;
-            }
-          }
-        `}</style>
-        <div className="navbar-lang-switcher" style={{ position: 'relative', minWidth: 150 }}>
+        <div className="navbar-lang-switcher" style={{ position: 'relative' }}>
           <button className="btn-hover-preview"
             onClick={() => setShowDropdown((prev) => !prev)}
             aria-haspopup="listbox"
@@ -320,21 +307,18 @@ const Navbar = () => {
             title={t('navbar.languageSelector')}
             style={{
               fontSize: 'clamp(0.65rem, 1.75vw, 0.925rem)',
-              borderRadius: '6px',
-              border: '1.5px solid var(--card-border)',
-              background: 'var(--card-bg)',
+              border: 'none',
+              borderRadius: 0,
+              background: 'transparent',
               color: 'var(--text)',
-              padding: '0.3rem 0.5rem',
+              padding: isMobile ? '0.2rem 0.3rem' : '0.25rem 0.4rem',
               cursor: 'pointer',
-              minWidth: 90,
-              width: '100%',
               textAlign: 'left',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
-              boxShadow: darkMode
-                ? '0 .5px 1px rgba(255, 255, 255, 0.3)'
-                : '0 .5px 1px rgba(0, 0, 0, 0.3)',
+              gap: '0.4rem',
+              whiteSpace: 'nowrap',
+              boxShadow: 'none',
               position: 'relative',
               zIndex: 21,
             }}
@@ -359,11 +343,10 @@ const Navbar = () => {
                 style={{
                   position: 'absolute',
                   top: '110%',
-                  left: 0,
-                  width: '100%',
+                  right: 0,
+                  minWidth: 'max(100%, 160px)',
                   background: 'var(--card-bg)',
                   border: '1.5px solid var(--card-border)',
-                  borderRadius: '6px',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.10)',
                   zIndex: 22,
                   margin: 0,
@@ -427,40 +410,38 @@ const Navbar = () => {
           )}
         </div>
       </div>
-  <div
-  ref={themeToggleRef}
-  style={{
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    justifyItems: 'center',
-    marginLeft: 'auto',
-    padding: isMobile ? '0.25rem' : '0.5rem',
-  }}
->
-  <button
-    type="button"
-    onClick={toggleDarkMode}
-    aria-label={t('navbar.themeToggle')}
-    title={t('navbar.themeToggle')}
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'transparent',
-      border: 'none',
-      padding: isMobile ? '4px' : '6px',
-      borderRadius: '50%',
-      color: 'var(--text)',
-      cursor: 'pointer',
-      lineHeight: 0,
-      outline: 'none',
-      marginRight: isMobile ? '0' : 'auto',
-    }}
-  >
-    <SunMoonIcon dark={darkMode} size={isMobile ? 18 : 22} />
-  </button>
-</div>
+        <span
+          ref={themeToggleRef}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            borderLeft: '1px solid var(--card-border)',
+            paddingLeft: isMobile ? '0.25rem' : '0.4rem',
+          }}
+        >
+          <button
+            type="button"
+            onClick={toggleDarkMode}
+            aria-label={t('navbar.themeToggle')}
+            title={t('navbar.themeToggle')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'transparent',
+              border: 'none',
+              borderRadius: 0,
+              padding: isMobile ? '4px' : '6px',
+              color: 'var(--text)',
+              cursor: 'pointer',
+              lineHeight: 0,
+              outline: 'none',
+            }}
+          >
+            <SunMoonIcon dark={darkMode} size={isMobile ? 18 : 22} />
+          </button>
+        </span>
+      </div>
 
     </nav>
   );

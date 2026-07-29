@@ -1,28 +1,18 @@
-/* Dashboard ("Ledger") — themed entirely off the app's existing CSS variables. */
-
-/* index.css sets a global `button { border-radius: 8px }` and inputs inherit
-   their own rounding. The dashboard is flat, so square everything inside it -
-   the drawer and modals are children of .ledger, so they are covered too. */
+/* src/components/dashboard/dashboard.css */
 .ledger,
 .ledger *,
 .ledger *::before,
 .ledger *::after {
   border-radius: 0;
 }
-
 .ledger {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  /* No horizontal padding: .content-area already pads by 1rem, and matching the
-     navbar's inset is what keeps the two aligned. */
   padding: 0 0 1.5rem;
   width: 100%;
   color: var(--text);
 }
-
-/* ---------- header ---------- */
-
 .ledger-header {
   display: flex;
   align-items: center;
@@ -31,7 +21,6 @@
   padding-bottom: 0.9rem;
   border-bottom: 1px solid var(--card-border);
 }
-
 .ledger-header__search {
   display: flex;
   align-items: center;
@@ -43,7 +32,6 @@
   border: 1px solid var(--input-border);
   color: var(--text-secondary);
 }
-
 .ledger-header__search input,
 .ledger-filters__search input {
   flex: 1;
@@ -54,9 +42,9 @@
   color: var(--text);
   font-size: 0.86rem;
 }
-
-.ledger-header__bell { position: relative; }
-
+.ledger-header__bell {
+  position: relative;
+}
 .ledger-iconbtn {
   position: relative;
   display: flex;
@@ -68,7 +56,6 @@
   color: var(--text);
   cursor: pointer;
 }
-
 .ledger-iconbtn__dot {
   position: absolute;
   top: 4px;
@@ -77,7 +64,6 @@
   height: 7px;
   background: var(--danger);
 }
-
 .ledger-notifications {
   position: absolute;
   top: calc(100% + 6px);
@@ -91,7 +77,6 @@
   border: 1px solid var(--card-border);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
 }
-
 .ledger-notifications__title {
   padding: 0.35rem 0.5rem;
   font-size: 0.72rem;
@@ -100,7 +85,6 @@
   letter-spacing: 0.05em;
   color: var(--text-secondary);
 }
-
 .ledger-notifications__item {
   display: flex;
   justify-content: space-between;
@@ -113,24 +97,25 @@
   text-align: left;
   cursor: pointer;
 }
-
-.ledger-notifications__item:hover { background: var(--hover-bg); }
-
+.ledger-notifications__item:hover {
+  background: var(--hover-bg);
+}
 .ledger-notifications__meta,
 .ledger-notifications__empty {
   color: var(--text-secondary);
   font-size: 0.78rem;
 }
-
-.ledger-notifications__empty { padding: 0.5rem; }
-
-/* Approvals + New contract group hard right, together. */
-.ledger-header .ledger-btn--toggle { margin-left: auto; }
-
-/* ---------- create page ---------- */
-
-.ledger-page__title { margin: 0; font-size: 1.15rem; font-weight: 700; }
-
+.ledger-notifications__empty {
+  padding: 0.5rem;
+}
+.ledger-header .ledger-btn--primary {
+  margin-left: auto;
+}
+.ledger-page__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
 .ledger-page__form {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -140,7 +125,6 @@
   background: var(--card-bg);
   border: 1px solid var(--card-border);
 }
-
 .ledger-page__actions {
   grid-column: 1 / -1;
   display: flex;
@@ -149,9 +133,6 @@
   padding-top: 0.4rem;
   border-top: 1px solid var(--card-border);
 }
-
-/* ---------- buttons ---------- */
-
 .ledger-btn {
   display: inline-flex;
   align-items: center;
@@ -164,23 +145,23 @@
   font-weight: 500;
   cursor: pointer;
 }
-
-.ledger-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
+.ledger-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .ledger-btn--primary {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
 }
-
-.ledger-btn--ghost { background: transparent; }
-
+.ledger-btn--ghost {
+  background: transparent;
+}
 .ledger-btn--toggle-on {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
 }
-
 .ledger-btn__badge {
   min-width: 1.15rem;
   padding: 0 0.3rem;
@@ -189,17 +170,14 @@
   font-weight: 700;
   text-align: center;
 }
-
-.ledger-btn--toggle-on .ledger-btn__badge { background: rgba(255, 255, 255, 0.28); }
-
-/* ---------- stat strip ---------- */
-
+.ledger-btn--toggle-on .ledger-btn__badge {
+  background: rgba(255, 255, 255, 0.28);
+}
 .ledger-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.75rem;
 }
-
 .ledger-stats__cell {
   display: flex;
   flex-direction: column;
@@ -208,29 +186,23 @@
   background: var(--card-bg);
   border: 1px solid var(--card-border);
 }
-
 .ledger-stats__label {
   font-size: 0.74rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-secondary);
 }
-
 .ledger-stats__value {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.1;
 }
-
-/* ---------- filter row ---------- */
-
 .ledger-filters {
   display: flex;
   align-items: center;
   gap: 0.6rem;
   flex-wrap: wrap;
 }
-
 .ledger-filters__search {
   display: flex;
   align-items: center;
@@ -242,9 +214,10 @@
   border: 1px solid var(--input-border);
   color: var(--text-secondary);
 }
-
-.ledger-filters__chips { display: flex; gap: 0.3rem; }
-
+.ledger-filters__chips {
+  display: flex;
+  gap: 0.3rem;
+}
 .ledger-chip {
   padding: 0.36rem 0.7rem;
   border: 1px solid var(--card-border);
@@ -253,15 +226,11 @@
   font-size: 0.8rem;
   cursor: pointer;
 }
-
-.ledger-chip--dismiss { display: inline-flex; align-items: center; gap: 0.3rem; }
-
 .ledger-chip--active {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
 }
-
 .ledger-filters__stage,
 .ledger-field select,
 .ledger-field input {
@@ -271,14 +240,12 @@
   color: var(--text);
   font-size: 0.83rem;
 }
-
 .ledger-viewtoggle {
   display: flex;
   margin-left: auto;
   border: 1px solid var(--card-border);
   overflow: hidden;
 }
-
 .ledger-viewtoggle__btn {
   display: inline-flex;
   align-items: center;
@@ -290,11 +257,10 @@
   font-size: 0.8rem;
   cursor: pointer;
 }
-
-.ledger-viewtoggle__btn--active { background: var(--primary); color: #fff; }
-
-/* ---------- bulk bar ---------- */
-
+.ledger-viewtoggle__btn--active {
+  background: var(--primary);
+  color: #fff;
+}
 .ledger-bulkbar {
   display: flex;
   align-items: center;
@@ -303,11 +269,10 @@
   background: var(--hover-bg);
   border: 1px solid var(--card-border);
 }
-
-.ledger-bulkbar__count { font-size: 0.85rem; font-weight: 600; }
-
-/* ---------- tags ---------- */
-
+.ledger-bulkbar__count {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
 .ledger-tag {
   display: inline-block;
   padding: 0.16rem 0.5rem;
@@ -315,34 +280,26 @@
   font-weight: 600;
   white-space: nowrap;
 }
-
 .ledger-tag--stage {
   color: var(--tag-color);
   background: color-mix(in srgb, var(--tag-color) 16%, transparent);
   border: 1px solid color-mix(in srgb, var(--tag-color) 40%, transparent);
 }
-
-/* Contract types read in the accent: red text, red border, no fill. */
 .ledger-tag--category {
   color: var(--primary);
   border: 1px solid var(--primary);
   background: transparent;
 }
-
-/* ---------- table ---------- */
-
 .ledger-table-wrap {
   overflow-x: auto;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
 }
-
 .ledger-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.85rem;
 }
-
 .ledger-table th {
   padding: 0.6rem 0.75rem;
   text-align: center;
@@ -354,25 +311,31 @@
   border-bottom: 1px solid var(--card-border);
   white-space: nowrap;
 }
-
 .ledger-table td {
   padding: 0.6rem 0.75rem;
   border-bottom: 1px solid var(--card-border);
   vertical-align: middle;
 }
-
-.ledger-table tbody tr { cursor: pointer; }
-.ledger-table tbody tr:hover { background: var(--hover-bg); }
-.ledger-table__row--selected { background: var(--hover-bg); }
-.ledger-table__check { width: 1px; }
-.ledger-table__num { text-align: right; white-space: nowrap; }
-
-/* ---------- responsive table ----------
-   Columns drop out right-to-left by priority; each dropped field reappears as a
-   chip under the name, so nothing is lost - only relocated. */
-
-.ledger-table__name { display: block; font-weight: 600; }
-
+.ledger-table tbody tr {
+  cursor: pointer;
+}
+.ledger-table tbody tr:hover {
+  background: var(--hover-bg);
+}
+.ledger-table__row--selected {
+  background: var(--hover-bg);
+}
+.ledger-table__check {
+  width: 1px;
+}
+.ledger-table__num {
+  text-align: right;
+  white-space: nowrap;
+}
+.ledger-table__name {
+  display: block;
+  font-weight: 600;
+}
 .ledger-table__meta {
   display: none;
   flex-wrap: wrap;
@@ -382,12 +345,14 @@
   font-size: 0.74rem;
   color: var(--text-secondary);
 }
-
-.ledger-table__meta > span { display: none; }
-.ledger-table__sub { display: block; font-size: 0.76rem; color: var(--text-secondary); }
-
-/* ---------- kanban ---------- */
-
+.ledger-table__meta > span {
+  display: none;
+}
+.ledger-table__sub {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
 .ledger-kanban {
   display: grid;
   grid-auto-flow: column;
@@ -396,7 +361,6 @@
   overflow-x: auto;
   padding-bottom: 0.5rem;
 }
-
 .ledger-kanban__col {
   display: flex;
   flex-direction: column;
@@ -406,7 +370,6 @@
   background: var(--hover-bg);
   border: 1px solid var(--card-border);
 }
-
 .ledger-kanban__head {
   display: flex;
   align-items: center;
@@ -415,9 +378,10 @@
   padding-bottom: 0.45rem;
   border-bottom: 2px solid var(--tag-color);
 }
-
-.ledger-kanban__title { font-size: 0.78rem; font-weight: 700; }
-
+.ledger-kanban__title {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
 .ledger-kanban__count {
   padding: 0 0.4rem;
   background: color-mix(in srgb, var(--tag-color) 20%, transparent);
@@ -425,9 +389,11 @@
   font-size: 0.72rem;
   font-weight: 700;
 }
-
-.ledger-kanban__cards { display: flex; flex-direction: column; gap: 0.45rem; }
-
+.ledger-kanban__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
 .ledger-card {
   display: flex;
   flex-direction: column;
@@ -437,11 +403,17 @@
   border: 1px solid var(--card-border);
   cursor: pointer;
 }
-
-.ledger-card:hover { border-color: var(--primary); }
-.ledger-card__name { font-size: 0.82rem; font-weight: 600; }
-.ledger-card__sub { font-size: 0.74rem; color: var(--text-secondary); }
-
+.ledger-card:hover {
+  border-color: var(--primary);
+}
+.ledger-card__name {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.ledger-card__sub {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
 .ledger-card__foot {
   display: flex;
   align-items: center;
@@ -449,18 +421,16 @@
   gap: 0.4rem;
   margin-top: 0.2rem;
 }
-
-.ledger-card__expiry { font-size: 0.72rem; color: var(--text-secondary); }
-
-/* ---------- drawer + modal ---------- */
-
+.ledger-card__expiry {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
 .ledger-scrim {
   position: fixed;
   inset: 0;
   z-index: 60;
   background: rgba(0, 0, 0, 0.4);
 }
-
 .ledger-drawer {
   position: fixed;
   top: 0;
@@ -476,7 +446,6 @@
   background: var(--card-bg);
   border-left: 1px solid var(--card-border);
 }
-
 .ledger-drawer__head {
   position: relative;
   display: flex;
@@ -485,7 +454,6 @@
   gap: 0.35rem;
   padding-right: 2rem;
 }
-
 .ledger-drawer__close {
   position: absolute;
   top: 0;
@@ -496,16 +464,12 @@
   color: var(--text);
   cursor: pointer;
 }
-
-/* ---------- tabs ---------- */
-
 .ledger-tabs {
   display: flex;
   gap: 0.25rem;
   margin-top: 0.4rem;
   border-bottom: 1px solid var(--card-border);
 }
-
 .ledger-tabs__tab {
   padding: 0.5rem 0.8rem;
   background: transparent;
@@ -517,21 +481,16 @@
   font-weight: 600;
   cursor: pointer;
 }
-
 .ledger-tabs__tab--active {
   color: var(--text);
   border-bottom-color: var(--primary);
 }
-
-/* ---------- documents + comments ---------- */
-
 .ledger-docs {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--card-border);
   overflow: hidden;
 }
-
 .ledger-docs__row {
   display: flex;
   align-items: center;
@@ -545,13 +504,29 @@
   text-align: left;
   cursor: pointer;
 }
-
-.ledger-docs__row:last-child { border-bottom: none; }
-.ledger-docs__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ledger-docs__size { color: var(--text-secondary); font-size: 0.76rem; white-space: nowrap; }
-
-.ledger-comments { display: flex; flex-direction: column; gap: 0.55rem; margin: 0; padding: 0; list-style: none; }
-
+.ledger-docs__row:last-child {
+  border-bottom: none;
+}
+.ledger-docs__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ledger-docs__size {
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  white-space: nowrap;
+}
+.ledger-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 .ledger-comments__item {
   display: flex;
   flex-direction: column;
@@ -559,10 +534,14 @@
   padding: 0.55rem 0.65rem;
   background: var(--hover-bg);
 }
-
-.ledger-comments__author { font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); }
-.ledger-comments__body { font-size: 0.85rem; }
-
+.ledger-comments__author {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.ledger-comments__body {
+  font-size: 0.85rem;
+}
 .ledger-textarea {
   width: 100%;
   padding: 0.55rem 0.65rem;
@@ -573,15 +552,15 @@
   font-size: 0.85rem;
   resize: vertical;
 }
-
-.ledger-btn--block { justify-content: center; width: 100%; }
-
+.ledger-btn--block {
+  justify-content: center;
+  width: 100%;
+}
 .ledger-btn--danger {
   background: transparent;
   border-color: var(--danger);
   color: var(--danger);
 }
-
 .ledger-drawer__eyebrow {
   font-size: 0.72rem;
   font-weight: 700;
@@ -589,9 +568,11 @@
   letter-spacing: 0.06em;
   color: var(--text-secondary);
 }
-
-.ledger-drawer__title { margin: 0; font-size: 1.15rem; font-weight: 700; }
-
+.ledger-drawer__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
 .ledger-drawer__facts {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -600,18 +581,22 @@
   padding: 0.8rem;
   background: var(--hover-bg);
 }
-
 .ledger-drawer__facts dt {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-secondary);
 }
-
-.ledger-drawer__facts dd { margin: 0.15rem 0 0; font-size: 0.88rem; font-weight: 600; }
-
-.ledger-drawer__actions { display: flex; gap: 0.5rem; margin-top: 0.3rem; }
-
+.ledger-drawer__facts dd {
+  margin: 0.15rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.ledger-drawer__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
 .ledger-drawer__section {
   margin: 0.9rem 0 0;
   font-size: 0.72rem;
@@ -620,17 +605,20 @@
   letter-spacing: 0.06em;
   color: var(--text-secondary);
 }
-
 .ledger-drawer__empty,
 .ledger-empty {
   color: var(--text-secondary);
   font-size: 0.85rem;
 }
-
-.ledger-empty { padding: 1.5rem; text-align: center; }
-
-.ledger-timeline { margin: 0; padding: 0; list-style: none; }
-
+.ledger-empty {
+  padding: 1.5rem;
+  text-align: center;
+}
+.ledger-timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 .ledger-timeline__item {
   display: flex;
   align-items: center;
@@ -639,17 +627,19 @@
   border-bottom: 1px solid var(--card-border);
   font-size: 0.82rem;
 }
-
 .ledger-timeline__dot {
   width: 8px;
   height: 8px;
   background: var(--tag-color);
   flex-shrink: 0;
 }
-
-.ledger-timeline__name { flex: 1; }
-.ledger-timeline__date { color: var(--text-secondary); font-size: 0.76rem; }
-
+.ledger-timeline__name {
+  flex: 1;
+}
+.ledger-timeline__date {
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+}
 .ledger-modal {
   position: fixed;
   top: 50%;
@@ -667,19 +657,27 @@
   border: 1px solid var(--card-border);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
 }
-
-.ledger-modal__title { grid-column: 1 / -1; margin: 0; font-size: 1.05rem; font-weight: 700; }
-
-.ledger-field { display: flex; flex-direction: column; gap: 0.28rem; min-width: 0; }
-.ledger-field--wide { grid-column: 1 / -1; }
-
+.ledger-modal__title {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.ledger-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  min-width: 0;
+}
+.ledger-field--wide {
+  grid-column: 1 / -1;
+}
 .ledger-field span {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-secondary);
 }
-
 .ledger-modal__actions {
   grid-column: 1 / -1;
   display: flex;
@@ -687,13 +685,12 @@
   gap: 0.5rem;
   margin-top: 0.3rem;
 }
-
-/* ---------- date picker ----------
-   Replaces <input type="date">, whose popup is browser chrome and can't be
-   themed. Everything below is driven by the app's own light/dark variables. */
-
-.ledger-datepicker { position: relative; display: flex; flex-direction: column; gap: 0.4rem; }
-
+.ledger-datepicker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
 .ledger-datepicker__trigger {
   display: flex;
   align-items: center;
@@ -708,9 +705,9 @@
   text-align: left;
   cursor: pointer;
 }
-
-.ledger-datepicker__trigger--empty { color: var(--text-secondary); }
-
+.ledger-datepicker__trigger--empty {
+  color: var(--text-secondary);
+}
 .ledger-cal {
   display: flex;
   flex-direction: column;
@@ -720,16 +717,15 @@
   border: 1px solid var(--card-border);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
-
-body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
-
+body.dark .ledger-cal {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
 .ledger-cal__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.4rem;
 }
-
 .ledger-cal__month {
   flex: 1;
   text-align: center;
@@ -737,7 +733,6 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   font-weight: 700;
   text-transform: capitalize;
 }
-
 .ledger-cal__nav {
   display: flex;
   padding: 0.25rem;
@@ -746,9 +741,11 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   color: var(--text);
   cursor: pointer;
 }
-
-.ledger-cal__grid { width: 100%; border-collapse: collapse; table-layout: fixed; }
-
+.ledger-cal__grid {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
 .ledger-cal__grid th {
   padding: 0.25rem 0;
   font-size: 0.66rem;
@@ -758,9 +755,10 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   color: var(--text-secondary);
   text-align: center;
 }
-
-.ledger-cal__grid td { padding: 1px; text-align: center; }
-
+.ledger-cal__grid td {
+  padding: 1px;
+  text-align: center;
+}
 .ledger-cal__day {
   width: 100%;
   aspect-ratio: 1;
@@ -773,16 +771,16 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   font-size: 0.78rem;
   cursor: pointer;
 }
-
-.ledger-cal__day--today { border-color: var(--primary); font-weight: 700; }
-
+.ledger-cal__day--today {
+  border-color: var(--primary);
+  font-weight: 700;
+}
 .ledger-cal__day--selected {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
   font-weight: 700;
 }
-
 .ledger-cal__foot {
   display: flex;
   justify-content: space-between;
@@ -790,7 +788,6 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   padding-top: 0.15rem;
   border-top: 1px solid var(--card-border);
 }
-
 .ledger-cal__action {
   padding: 0.28rem 0.5rem;
   background: transparent;
@@ -801,11 +798,9 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   font-weight: 600;
   cursor: pointer;
 }
-
-/* ---------- edit modal: floats above the drawer, drag + resize ---------- */
-
-.ledger-scrim--over-drawer { z-index: 70; }
-
+.ledger-scrim--over-drawer {
+  z-index: 70;
+}
 .ledger-modal--floating {
   position: fixed;
   z-index: 71;
@@ -820,7 +815,6 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   overflow: hidden;
   padding: 0;
 }
-
 .ledger-modal__bar {
   display: flex;
   align-items: center;
@@ -832,10 +826,14 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   user-select: none;
   touch-action: none;
 }
-
-.ledger-modal__bar:active { cursor: grabbing; }
-.ledger-modal__bar .ledger-modal__title { flex: 1; margin: 0; color: var(--text); }
-
+.ledger-modal__bar:active {
+  cursor: grabbing;
+}
+.ledger-modal__bar .ledger-modal__title {
+  flex: 1;
+  margin: 0;
+  color: var(--text);
+}
 .ledger-modal__close {
   display: flex;
   padding: 0.2rem;
@@ -844,7 +842,6 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   color: var(--text);
   cursor: pointer;
 }
-
 .ledger-modal__body {
   flex: 1;
   display: grid;
@@ -853,13 +850,11 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   padding: 0.9rem;
   overflow-y: auto;
 }
-
 .ledger-modal--floating .ledger-modal__actions {
   margin: 0;
   padding: 0.65rem 0.9rem;
   border-top: 1px solid var(--card-border);
 }
-
 .ledger-modal__resize {
   position: absolute;
   right: 0;
@@ -869,16 +864,33 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   cursor: nwse-resize;
   touch-action: none;
   background:
-    linear-gradient(135deg, transparent 50%, var(--card-border) 50%, var(--card-border) 62%,
-      transparent 62%, transparent 74%, var(--card-border) 74%, var(--card-border) 86%, transparent 86%);
+    linear-gradient(
+      135deg,
+      transparent 50%,
+      var(--card-border) 50%,
+      var(--card-border) 62%,
+      transparent 62%,
+      transparent 74%,
+      var(--card-border) 74%,
+      var(--card-border) 86%,
+      transparent 86%);
 }
-
-/* ---------- attachments ---------- */
-
-.ledger-attach { display: flex; flex-direction: column; gap: 0.4rem; }
-.ledger-attach__input { display: none; }
-.ledger-attach__list { display: flex; flex-direction: column; gap: 0.25rem; margin: 0; padding: 0; list-style: none; }
-
+.ledger-attach {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.ledger-attach__input {
+  display: none;
+}
+.ledger-attach__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 .ledger-attach__item {
   display: flex;
   align-items: center;
@@ -887,10 +899,18 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   background: var(--hover-bg);
   font-size: 0.78rem;
 }
-
-.ledger-attach__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ledger-attach__size { color: var(--text-secondary); font-size: 0.72rem; white-space: nowrap; }
-
+.ledger-attach__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ledger-attach__size {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
 .ledger-attach__remove {
   display: flex;
   padding: 0.15rem;
@@ -899,27 +919,27 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   color: var(--text-secondary);
   cursor: pointer;
 }
-
-.ledger-attach__error { margin: 0; color: var(--danger); font-size: 0.74rem; }
-
-/* calendar icon sits at the far right of the trigger */
-.ledger-datepicker__trigger > span { flex: 1; min-width: 0; }
-.ledger-datepicker__icon { flex-shrink: 0; color: var(--text-secondary); }
-
-/* ---------- hover ----------
-   One tint token, flipped per theme: a dark wash over light surfaces, a light
-   wash over dark ones. Hover is suppressed on touch/coarse pointers. */
-
+.ledger-attach__error {
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.74rem;
+}
+.ledger-datepicker__trigger > span {
+  flex: 1;
+  min-width: 0;
+}
+.ledger-datepicker__icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
 .ledger {
   --ledger-hover: rgba(15, 23, 42, 0.06);
   --ledger-hover-strong: rgba(15, 23, 42, 0.12);
 }
-
 body.dark .ledger {
   --ledger-hover: rgba(255, 255, 255, 0.08);
   --ledger-hover-strong: rgba(255, 255, 255, 0.16);
 }
-
 @media (hover: hover) {
   .ledger-btn:hover:not(:disabled),
   .ledger-chip:hover,
@@ -936,9 +956,9 @@ body.dark .ledger {
   .ledger-cal__day:hover:not(.ledger-cal__day--selected) {
     background: var(--ledger-hover);
   }
-
-  .ledger-datepicker__trigger:hover { border-color: var(--primary); }
-
+  .ledger-datepicker__trigger:hover {
+    border-color: var(--primary);
+  }
   .ledger-chip--active:hover,
   .ledger-viewtoggle__btn--active:hover,
   .ledger-btn--primary:hover:not(:disabled),
@@ -946,27 +966,28 @@ body.dark .ledger {
     background: var(--primary);
     filter: brightness(1.12);
   }
-
   .ledger-btn--danger:hover:not(:disabled) {
     background: var(--danger);
     color: #fff;
   }
-
   .ledger-stats__cell:hover,
   .ledger-card:hover {
     background: var(--ledger-hover);
     border-color: var(--primary);
   }
-
-  .ledger-table tbody tr:hover { background: var(--ledger-hover); }
-  .ledger-table__row--selected:hover { background: var(--ledger-hover-strong); }
-
+  .ledger-table tbody tr:hover {
+    background: var(--ledger-hover);
+  }
+  .ledger-table__row--selected:hover {
+    background: var(--ledger-hover-strong);
+  }
   .ledger-header__search:hover,
   .ledger-filters__search:hover,
   .ledger-filters__stage:hover,
-  .ledger-textarea:hover { border-color: var(--primary); }
+  .ledger-textarea:hover {
+    border-color: var(--primary);
+  }
 }
-
 .ledger-btn,
 .ledger-chip,
 .ledger-iconbtn,
@@ -985,75 +1006,143 @@ body.dark .ledger {
 .ledger-cal__day,
 .ledger-cal__nav,
 .ledger-cal__action {
-  transition: background 0.15s ease, border-color 0.15s ease, filter 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    filter 0.15s ease;
 }
-
-.ledger-table__row--selected { background: var(--ledger-hover); }
-
-/* ---------- responsive ----------
-   The mobile sidebar is a fixed bottom bar, so the dashboard also needs to keep
-   its last row clear of it. */
-
+.ledger-table__row--selected {
+  background: var(--ledger-hover);
+}
 @media (max-width: 1100px) {
-  .ledger-stats { grid-template-columns: repeat(2, 1fr); }
-
-  .ledger-table .col-owner { display: none; }
-  .ledger-table__meta { display: flex; }
-  .ledger-table__meta .meta-owner { display: inline; }
+  .ledger-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ledger-table .col-owner {
+    display: none;
+  }
+  .ledger-table__meta {
+    display: flex;
+  }
+  .ledger-table__meta .meta-owner {
+    display: inline;
+  }
 }
-
 @media (max-width: 900px) {
-  .ledger-header { gap: 0.5rem; }
-  .ledger-header__search { order: 3; flex-basis: 100%; max-width: none; }
-  .ledger-filters { gap: 0.5rem; }
-  .ledger-filters__search { flex-basis: 100%; max-width: none; }
-  .ledger-viewtoggle { margin-left: 0; }
-  .ledger-drawer { width: 100vw; }
-  .ledger-drawer__facts { grid-template-columns: 1fr; }
-
-  .ledger-table .col-category { display: none; }
-  .ledger-table__meta .meta-category { display: inline; }
+  .ledger-header {
+    gap: 0.5rem;
+  }
+  .ledger-header__search {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
+  .ledger-filters {
+    gap: 0.5rem;
+  }
+  .ledger-filters__search {
+    flex-basis: 100%;
+    max-width: none;
+  }
+  .ledger-viewtoggle {
+    margin-left: 0;
+  }
+  .ledger-drawer {
+    width: 100vw;
+  }
+  .ledger-drawer__facts {
+    grid-template-columns: 1fr;
+  }
+  .ledger-table .col-category {
+    display: none;
+  }
+  .ledger-table__meta .meta-category {
+    display: inline;
+  }
 }
-
 @media (max-width: 700px) {
-  .ledger { padding-bottom: 4.5rem; }
-  .ledger-stats { grid-template-columns: 1fr; }
-  .ledger-stats__cell { flex-direction: row; align-items: baseline; justify-content: space-between; }
-  .ledger-stats__value { font-size: 1.25rem; }
-
-  /* Header actions get their own full-width row rather than overflowing. */
-  .ledger-header .ledger-btn { flex: 1 1 auto; justify-content: center; }
-  .ledger-header__bell { order: 2; }
-
-  .ledger-filters__chips { width: 100%; overflow-x: auto; }
-  .ledger-filters__stage { flex: 1 1 auto; }
-  .ledger-viewtoggle { width: 100%; }
-  .ledger-viewtoggle__btn { flex: 1; justify-content: center; }
-
-  .ledger-table { font-size: 0.8rem; }
-  .ledger-table th, .ledger-table td { padding: 0.5rem 0.55rem; }
-  .ledger-table .col-value { display: none; }
-  .ledger-table__meta .meta-value { display: inline; font-weight: 600; color: var(--text); }
-
-  .ledger-kanban { grid-auto-columns: minmax(150px, 78vw); }
-
-  /* A dragged panel would be unusable at this size: pin it to the viewport. */
+  .ledger {
+    padding-bottom: 4.5rem;
+  }
+  .ledger-stats {
+    grid-template-columns: 1fr;
+  }
+  .ledger-stats__cell {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .ledger-stats__value {
+    font-size: 1.25rem;
+  }
+  .ledger-header .ledger-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .ledger-header__bell {
+    order: 2;
+  }
+  .ledger-filters__chips {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .ledger-filters__stage {
+    flex: 1 1 auto;
+  }
+  .ledger-viewtoggle {
+    width: 100%;
+  }
+  .ledger-viewtoggle__btn {
+    flex: 1;
+    justify-content: center;
+  }
+  .ledger-table {
+    font-size: 0.8rem;
+  }
+  .ledger-table th,
+  .ledger-table td {
+    padding: 0.5rem 0.55rem;
+  }
+  .ledger-table .col-value {
+    display: none;
+  }
+  .ledger-table__meta .meta-value {
+    display: inline;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .ledger-kanban {
+    grid-auto-columns: minmax(150px, 78vw);
+  }
   .ledger-modal--floating {
     left: 0 !important;
     top: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
   }
-  .ledger-modal__resize { display: none; }
-  .ledger-modal__bar { cursor: default; }
+  .ledger-modal__resize {
+    display: none;
+  }
+  .ledger-modal__bar {
+    cursor: default;
+  }
 }
-
 @media (max-width: 560px) {
-  .ledger-modal, .ledger-modal__body, .ledger-page__form { grid-template-columns: 1fr; }
-  .ledger-notifications { min-width: min(280px, 88vw); }
-
-  /* Down to Name + Stage; expiry joins the meta line. */
-  .ledger-table .col-expires { display: none; }
-  .ledger-table__meta .meta-expires { display: inline; }
-  .ledger-table th { text-align: left; }
+  .ledger-modal,
+  .ledger-modal__body,
+  .ledger-page__form {
+    grid-template-columns: 1fr;
+  }
+  .ledger-notifications {
+    min-width: min(280px, 88vw);
+  }
+  .ledger-table .col-expires {
+    display: none;
+  }
+  .ledger-table__meta .meta-expires {
+    display: inline;
+  }
+  .ledger-table th {
+    text-align: left;
+  }
 }

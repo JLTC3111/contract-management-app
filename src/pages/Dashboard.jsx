@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { approvalsApi, contractsApi } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
 import { normalizeContractStatus } from '../utils/formatters';
@@ -21,34 +22,62 @@ import BulkBar from '../components/dashboard/BulkBar';
 import ContractsTable from '../components/dashboard/ContractsTable';
 import KanbanBoard from '../components/dashboard/KanbanBoard';
 import DetailDrawer from '../components/dashboard/DetailDrawer';
-import CreateContractModal from '../components/dashboard/CreateContractModal';
 import EditContractModal from '../components/dashboard/EditContractModal';
 import '../components/dashboard/dashboard.css';
 
+/** Filters survive reloads and navigation, not just tab switches. */
+const FILTERS_KEY = 'ledger.filters';
+
+const loadFilters = () => {
+  try {
+    return JSON.parse(localStorage.getItem(FILTERS_KEY)) || {};
+  } catch {
+    return {};
+  }
+};
+
 const Dashboard = () => {
   const { t } = useTranslation();
-  const { user } = useUser();
+  const { user } = useUser() ?? {};
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const [contracts, setContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
 
+  const saved = useMemo(loadFilters, []);
+
   // Header
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(saved.query ?? '');
   const [bellOpen, setBellOpen] = useState(false);
-  const [approvalsActive, setApprovalsActive] = useState(false);
+  const [approvalsActive, setApprovalsActive] = useState(saved.approvalsActive ?? false);
 
   // Filter row
-  const [fileQuery, setFileQuery] = useState('');
-  const [category, setCategory] = useState('All');
-  const [stageFilter, setStageFilter] = useState('all');
-  const [view, setView] = useState('table');
+  const [fileQuery, setFileQuery] = useState(saved.fileQuery ?? '');
+  const [category, setCategory] = useState(saved.category ?? 'All');
+  const [stageFilter, setStageFilter] = useState(saved.stageFilter ?? 'all');
+  const [view, setView] = useState(saved.view ?? 'table');
 
   // Selection / overlays
   const [selected, setSelected] = useState(() => new Set());
   const [drawerId, setDrawerId] = useState(null);
-  const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem(FILTERS_KEY, JSON.stringify({
+      query, fileQuery, category, stageFilter, view, approvalsActive,
+    }));
+  }, [query, fileQuery, category, stageFilter, view, approvalsActive]);
+
+  // The sidebar's Approvals entry deep-links here as /?filter=approvals.
+  useEffect(() => {
+    if (searchParams.get('filter') !== 'approvals') return;
+    setApprovalsActive(true);
+    const next = new URLSearchParams(searchParams);
+    next.delete('filter');
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const load = useCallback(async () => {
     try {
@@ -137,29 +166,6 @@ const Dashboard = () => {
     }
   };
 
-  const handleCreate = async (form, attachments = []) => {
-    setBusy(true);
-    try {
-      const { stage, ...rest } = form;
-      const created = await contractsApi.create({ ...rest, ...stageUpdatePayload(stage) });
-      // Files need a contract id to live under, so they go up after the insert.
-      if (created?.id && attachments.length) {
-        const { failed } = await uploadAttachments(created.id, attachments);
-        if (failed.length) {
-          window.alert(t('dashboard.uploadFailed', 'Some files did not upload: {{names}}', {
-            names: failed.map((f) => f.name).join(', '),
-          }));
-        }
-      }
-      setCreating(false);
-      await load();
-    } catch (err) {
-      console.error('Create failed:', err);
-      window.alert(t('dashboard.createFailed', 'Could not create contract: {{msg}}', { msg: err.message }));
-    } finally {
-      setBusy(false);
-    }
-  };
 
   const handleSave = async (target, updates, attachments = []) => {
     setBusy(true);
@@ -229,7 +235,7 @@ const Dashboard = () => {
   const handleNotification = (event) => {
     setBellOpen(false);
     if (event.type === 'approvals') {
-      setApprovalsActive(true);
+      navigate('/approvals');
       return;
     }
     setDrawerId(event.contract.id);
@@ -247,8 +253,8 @@ const Dashboard = () => {
         onNotificationClick={handleNotification}
         approvalsActive={approvalsActive}
         approvalsCount={pendingApproval.length}
-        onApprovalsToggle={() => setApprovalsActive((v) => !v)}
-        onNew={() => setCreating(true)}
+        onApprovals={() => navigate('/approvals')}
+        onNew={() => navigate('/new')}
       />
 
       {loading ? (
@@ -266,14 +272,14 @@ const Dashboard = () => {
             onStageChange={setStageFilter}
             view={view}
             onViewChange={setView}
+            approvalsActive={approvalsActive}
+            onClearApprovals={() => setApprovalsActive(false)}
           />
 
           <AnimatePresence>
             {selected.size > 0 && (
               <BulkBar
                 count={selected.size}
-                busy={busy}
-                onAdvance={() => advance(contracts.filter((c) => selected.has(c.id)))}
                 onClear={() => setSelected(new Set())}
               />
             )}
@@ -314,14 +320,6 @@ const Dashboard = () => {
             busy={busy}
             onCancel={() => setEditing(null)}
             onSave={handleSave}
-          />
-        )}
-        {creating && (
-          <CreateContractModal
-            key="create"
-            busy={busy}
-            onCancel={() => setCreating(false)}
-            onCreate={handleCreate}
           />
         )}
       </AnimatePresence>

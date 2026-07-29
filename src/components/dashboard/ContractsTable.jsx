@@ -32,11 +32,11 @@ const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen }) 
               />
             </th>
             <th>{t('dashboard.col.name', 'Name')}</th>
-            <th>{t('dashboard.col.category', 'Category')}</th>
-            <th>{t('dashboard.col.stage', 'Stage')}</th>
-            <th>{t('dashboard.col.owner', 'Owner')}</th>
-            <th className="ledger-table__num">{t('dashboard.col.value', 'Value')}</th>
-            <th>{t('dashboard.col.expires', 'Expires')}</th>
+            <th className="col-category">{t('dashboard.col.category', 'Category')}</th>
+            <th className="col-stage">{t('dashboard.col.stage', 'Stage')}</th>
+            <th className="col-owner">{t('dashboard.col.owner', 'Owner')}</th>
+            <th className="col-value ledger-table__num">{t('dashboard.col.value', 'Value')}</th>
+            <th className="col-expires">{t('dashboard.col.expires', 'Expires')}</th>
           </tr>
         </thead>
         <tbody>
@@ -57,16 +57,28 @@ const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen }) 
               <td>
                 <span className="ledger-table__name">{c.title || '—'}</span>
                 <span className="ledger-table__sub">{c.client_name || '—'}</span>
+                {/* Each chip appears only at the width where its column drops out,
+                    so nothing is ever shown twice or lost. */}
+                <span className="ledger-table__meta">
+                  <span className="meta-category"><CategoryTag category={c.category} /></span>
+                  <span className="meta-owner">{c.author || '—'}</span>
+                  <span className="meta-value">
+                    {c.contract_value
+                      ? formatCompactCurrency(c.contract_value, currencyForLocale(i18n.language), i18n.language)
+                      : '—'}
+                  </span>
+                  <span className="meta-expires">{shortDate(c.expiry_date, i18n.language)}</span>
+                </span>
               </td>
-              <td><CategoryTag category={c.category} /></td>
-              <td><StageTag stage={getContractStage(c)} /></td>
-              <td>{c.author || '—'}</td>
-              <td className="ledger-table__num">
+              <td className="col-category"><CategoryTag category={c.category} /></td>
+              <td className="col-stage"><StageTag stage={getContractStage(c)} /></td>
+              <td className="col-owner">{c.author || '—'}</td>
+              <td className="col-value ledger-table__num">
                 {c.contract_value
                   ? formatCompactCurrency(c.contract_value, currencyForLocale(i18n.language), i18n.language)
                   : '—'}
               </td>
-              <td>{shortDate(c.expiry_date, i18n.language)}</td>
+              <td className="col-expires">{shortDate(c.expiry_date, i18n.language)}</td>
             </tr>
           ))}
         </tbody>

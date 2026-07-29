@@ -16,7 +16,7 @@
     "dashboard": "แดชบอร์ด",
     "approvals": "การอนุมัติ",
     "manual": "คู่มือ",
-    "sendFeedback": "ส่งข้อเสนอแนะ",
+    "sendFeedback": "ส่งความคิดเห็น",
     "changePassword": "เปลี่ยนรหัสผ่าน",
     "profile": "โปรไฟล์",
     "signOut": "ออกจากระบบ",
@@ -36,17 +36,22 @@
       "viewer": "ผู้ชม",
       "unknown": "ไม่ทราบ"
     },
+    "analytics": "การวิเคราะห์และประวัติ",
+    "phaseManagement": "จัดการขั้นตอน",
+    "demoMode": "โหมดสาธิต",
+    "exitDemo": "ออก",
+    "personal": "ส่วนตัว",
+    "signedInAs": "เข้าสู่ระบบในชื่อ",
+    "collapse": "ย่อแถบด้านข้าง",
+    "expand": "ขยายแถบด้านข้าง",
+    "navigation": "การนำทาง",
     "role_description": {
       "admin": "สิทธิ์เต็ม: สร้าง แก้ไข อนุมัติ แสดงความคิดเห็น และลบสัญญาได้ทั้งหมด",
       "editor": "สามารถสร้าง แก้ไข และลบสัญญาได้ แต่ไม่สามารถอนุมัติได้",
       "approver": "สามารถตรวจสอบและอนุมัติสัญญาได้ ไม่มีสิทธิ์แก้ไข",
       "viewer": "ดูสัญญาทั้งหมดได้เท่านั้น",
       "unknown": "ไม่รู้จักบทบาทนี้"
-    },
-    "analytics": "การวิเคราะห์และประวัติ",
-    "phaseManagement": "การจัดการขั้นตอน",
-    "demoMode": "โหมดสาธิต",
-    "exitDemo": "ออก"
+    }
   },
   "demoSamples": {
     "title": "Sample Projects",
@@ -344,7 +349,9 @@
     "resize": "ปรับขนาด",
     "fileTooLarge": "{{name}} มีขนาดเกิน {{max}}",
     "fileBadType": "{{name}} เป็นชนิดไฟล์ที่ไม่รองรับ",
-    "uploadFailed": "อัปโหลดบางไฟล์ไม่สำเร็จ: {{names}}"
+    "uploadFailed": "อัปโหลดบางไฟล์ไม่สำเร็จ: {{names}}",
+    "pendingApprovalFilter": "รออนุมัติ",
+    "clearFilter": "ล้างตัวกรอง"
   },
   "clear": "ล้าง",
   "contractTable": {

@@ -15,12 +15,12 @@
     "visitIcue": "¡Visitar iCUE!",
     "dashboard": "Panel de control",
     "approvals": "Aprobaciones",
-    "manual": "Manual",
+    "manual": "Guía",
     "sendFeedback": "Enviar comentarios",
     "changePassword": "Cambiar contraseña",
     "profile": "Perfil",
     "signOut": "Cerrar sesión",
-    "updateStatus": "Actualizar estado",
+    "updateStatus": "Actualización de estados",
     "updatingStatus": "Actualizando...",
     "cronFailed": "❌ Falló el cron:",
     "statusUpdated": "✅ ¡Estado actualizado!",
@@ -36,17 +36,22 @@
       "viewer": "Lector",
       "unknown": "Desconocido"
     },
+    "analytics": "Análisis e historial",
+    "phaseManagement": "Gestión de etapas",
+    "demoMode": "Modo demo",
+    "exitDemo": "Salir",
+    "personal": "Personal",
+    "signedInAs": "Sesión iniciada como",
+    "collapse": "Contraer barra lateral",
+    "expand": "Expandir barra lateral",
+    "navigation": "Navegación",
     "role_description": {
       "admin": "Acceso total: crear, editar, aprobar, comentar y eliminar contratos.",
       "editor": "Puede crear, editar y eliminar contratos pero no aprobar.",
       "approver": "Puede revisar y aprobar contratos. Sin acceso de edición.",
       "viewer": "Acceso de solo lectura a todos los contratos.",
       "unknown": "Rol no reconocido en este sistema."
-    },
-    "analytics": "Análisis e Historial",
-    "phaseManagement": "Gestión de Fases",
-    "demoMode": "Modo demo",
-    "exitDemo": "Salir"
+    }
   },
   "demoSamples": {
     "title": "Sample Projects",
@@ -344,7 +349,9 @@
     "resize": "Redimensionar",
     "fileTooLarge": "{{name}} supera {{max}}",
     "fileBadType": "{{name}} no es un tipo de archivo admitido",
-    "uploadFailed": "Algunos archivos no se subieron: {{names}}"
+    "uploadFailed": "Algunos archivos no se subieron: {{names}}",
+    "pendingApprovalFilter": "Pendiente de aprobación",
+    "clearFilter": "Borrar filtro"
   },
   "contractTable": {
     "expiry": "Fecha de vencimiento",

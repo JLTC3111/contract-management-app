@@ -15,12 +15,12 @@
     "visitIcue": "Visiter iCUE !",
     "dashboard": "Tableau de bord",
     "approvals": "Approbations",
-    "manual": "Manuel",
-    "sendFeedback": "Commentaires",
-    "changePassword": "Changer le passe",
+    "manual": "Guide",
+    "sendFeedback": "Envoyer un commentaire",
+    "changePassword": "Changer le mot de passe",
     "profile": "Profil",
-    "signOut": "Déconnexion",
-    "updateStatus": "Mettre statut",
+    "signOut": "Se déconnecter",
+    "updateStatus": "Mise à jour des statuts",
     "updatingStatus": "Mise à jour...",
     "cronFailed": "❌ Échec du cron:",
     "statusUpdated": "✅ Statut mis à jour!",
@@ -36,17 +36,22 @@
       "viewer": "Lecteur",
       "unknown": "Inconnu"
     },
+    "analytics": "Analyses et historique",
+    "phaseManagement": "Gestion des étapes",
+    "demoMode": "Mode démo",
+    "exitDemo": "Quitter",
+    "personal": "Personnel",
+    "signedInAs": "Connecté en tant que",
+    "collapse": "Réduire la barre latérale",
+    "expand": "Développer la barre latérale",
+    "navigation": "Navigation",
     "role_description": {
       "admin": "Accès complet : créer, modifier, approuver, commenter et supprimer des contrats.",
       "editor": "Peut créer, modifier et supprimer des contrats mais pas approuver.",
       "approver": "Peut examiner et approuver les contrats. Aucun accès à la modification.",
       "viewer": "Accès en lecture seule à tous les contrats.",
       "unknown": "Rôle non reconnu."
-    },
-    "analytics": "Analytiques & Historique",
-    "phaseManagement": "Gestion des Phases",
-    "demoMode": "Mode démo",
-    "exitDemo": "Quitter"
+    }
   },
   "demoSamples": {
     "title": "Sample Projects",
@@ -344,7 +349,9 @@
     "resize": "Redimensionner",
     "fileTooLarge": "{{name}} dépasse {{max}}",
     "fileBadType": "{{name}} n'est pas un type de fichier pris en charge",
-    "uploadFailed": "Certains fichiers n'ont pas été envoyés : {{names}}"
+    "uploadFailed": "Certains fichiers n'ont pas été envoyés : {{names}}",
+    "pendingApprovalFilter": "En attente d'approbation",
+    "clearFilter": "Effacer le filtre"
   },
   "contractTable": {
     "expiry": "Date d’expiration",

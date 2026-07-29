@@ -4,12 +4,12 @@
     "visitIcue": "访问 iCUE！",
     "dashboard": "仪表板",
     "approvals": "审批",
-    "manual": "手册",
+    "manual": "指南",
     "sendFeedback": "发送反馈",
-    "changePassword": "更改密码",
+    "changePassword": "修改密码",
     "profile": "个人资料",
     "signOut": "退出登录",
-    "updateStatus": "更新状态",
+    "updateStatus": "状态更新",
     "updatingStatus": "更新中...",
     "cronFailed": "❌ Cron失败:",
     "statusUpdated": "✅ 状态已更新!",
@@ -25,17 +25,22 @@
       "viewer": "查看者",
       "unknown": "未知"
     },
+    "analytics": "分析与历史",
+    "phaseManagement": "阶段管理",
+    "demoMode": "演示模式",
+    "exitDemo": "退出",
+    "personal": "个人",
+    "signedInAs": "登录身份",
+    "collapse": "收起侧边栏",
+    "expand": "展开侧边栏",
+    "navigation": "导航",
     "role_description": {
       "admin": "完全访问：可创建、编辑、批准、评论和删除合同。",
       "editor": "可创建、编辑和删除合同，但不能批准。",
       "approver": "可审核和批准合同。无编辑权限。",
       "viewer": "仅可查看所有合同。",
       "unknown": "角色无法识别。"
-    },
-    "analytics": "分析与历史",
-    "phaseManagement": "阶段管理",
-    "demoMode": "演示模式",
-    "exitDemo": "退出"
+    }
   },
   "demoSamples": {
     "title": "Sample Projects",
@@ -333,7 +338,9 @@
     "resize": "调整大小",
     "fileTooLarge": "{{name}} 超过 {{max}}",
     "fileBadType": "{{name}} 不是受支持的文件类型",
-    "uploadFailed": "部分文件未能上传：{{names}}"
+    "uploadFailed": "部分文件未能上传：{{names}}",
+    "pendingApprovalFilter": "待审批",
+    "clearFilter": "清除筛选"
   },
   "clear": "清除",
   "contractTable": {

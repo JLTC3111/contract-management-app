@@ -18,7 +18,7 @@ const DashboardHeader = ({
   onNotificationClick,
   approvalsActive,
   approvalsCount,
-  onApprovalsToggle,
+  onApprovals,
   onNew,
 }) => {
   const { t, i18n } = useTranslation();
@@ -103,8 +103,7 @@ const DashboardHeader = ({
       <button
         type="button"
         className={`ledger-btn ledger-btn--toggle${approvalsActive ? ' ledger-btn--toggle-on' : ''}`}
-        aria-pressed={approvalsActive}
-        onClick={onApprovalsToggle}
+        onClick={onApprovals}
       >
         <CheckCircle size={14} />
         {t('dashboard.approvalRequests', 'Approval requests')}

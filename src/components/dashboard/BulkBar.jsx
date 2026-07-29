@@ -1,12 +1,12 @@
 // src/components/dashboard/BulkBar.jsx
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { ChevronsRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 /**
  * Only rendered while rows are checkbox-selected.
  */
-const BulkBar = ({ count, onAdvance, onClear, busy }) => {
+const BulkBar = ({ count, onClear }) => {
   const { t } = useTranslation();
 
   return (
@@ -20,9 +20,6 @@ const BulkBar = ({ count, onAdvance, onClear, busy }) => {
       <span className="ledger-bulkbar__count">
         {t('dashboard.selected', '{{count}} selected', { count })}
       </span>
-      <button type="button" className="ledger-btn ledger-btn--ghost" onClick={onAdvance} disabled={busy}>
-        <ChevronsRight size={14} /> {t('dashboard.advanceStage', 'Advance stage')}
-      </button>
       <button type="button" className="ledger-btn ledger-btn--ghost" onClick={onClear}>
         <X size={14} /> {t('dashboard.clearSelection', 'Clear selection')}
       </button>
