@@ -13,7 +13,6 @@ import { useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { fromCircle } from 'flubber';
 import { __iconNode as sunNode } from 'lucide-react/dist/esm/icons/sun.js';
-import { __iconNode as moonNode } from 'lucide-react/dist/esm/icons/moon.js';
 
 // lucide `sun` = ["circle", {cx:12, cy:12, r:4}] + 8 ray paths
 const SUN_CIRCLE = sunNode.find(([tag]) => tag === 'circle')[1];
@@ -22,9 +21,17 @@ const CX = Number(SUN_CIRCLE.cx);
 const CY = Number(SUN_CIRCLE.cy);
 const SUN_R = Number(SUN_CIRCLE.r);
 
-// lucide `moon` = a single closed crescent path, whose outer arc has radius 9.
-const MOON = moonNode[0][1].d;
-const MOON_R = 9;
+// lucide `moon` is `M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z`: an outer arc of radius 9
+// starting at (12,3), with an inner radius-6 bite taken out of it. Rebuilding it
+// from those two radii lets the crescent be drawn smaller than the sun without a
+// transform - a scale transform would pivot on the morphing path's own bounding
+// box and wobble mid-animation.
+const MOON_SCALE = 0.85;
+const round = (n) => Number(n.toFixed(3));
+const MOON_OUTER = round(9 * MOON_SCALE);
+const MOON_INNER = round(6 * MOON_SCALE);
+const MOON = `M12 ${round(12 - MOON_OUTER)}a${MOON_INNER} ${MOON_INNER} 0 0 0 ${MOON_OUTER} ${MOON_OUTER} ${MOON_OUTER} ${MOON_OUTER} 0 1 1-${MOON_OUTER}-${MOON_OUTER}Z`;
+const MOON_R = MOON_OUTER;
 
 const circlePath = (r) =>
   `M${CX - r},${CY}A${r},${r},0,1,1,${CX + r},${CY}A${r},${r},0,1,1,${CX - r},${CY}Z`;

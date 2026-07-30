@@ -10,6 +10,58 @@
   border-radius: 0;
 }
 
+/* ---------- design tokens ----------
+   A Modernist layer over the app's theme variables: one accent ramp (the app's
+   red), one neutral ramp, one divider weight, one heading face. Nothing below
+   picks a colour of its own, so light/dark stays a single switch. */
+
+.ledger {
+  --font-heading: 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;
+
+  --color-bg: var(--card-bg);
+  --color-text: var(--text);
+  --color-divider: #d4d4d8;
+
+  --color-accent: #dc2626;
+  /* Three steps of the same red fill: barely there, light, and a shade darker. */
+  --color-wash-faint: #fef6f6;
+  --color-wash: #fdeded;
+  --color-wash-strong: #f6d2d2;
+  --color-accent-100: #fbeaea;
+  --color-accent-300: #e8a3a3;
+  --color-accent-500: #dc2626;
+  --color-accent-700: #8f1a1a;
+
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-200: #e7e7ea;
+  --color-neutral-300: #d4d4d8;
+  --color-neutral-500: #9c9ca5;
+  --color-neutral-700: #55555f;
+  --color-neutral-900: #1c1c22;
+}
+
+/* accent-700 flips to the light end of the ramp in dark mode: it is text on
+   accent-100, and accent-100 is a dark wash here. */
+body.dark .ledger {
+  --color-divider: #3a4356;
+
+  --color-accent: #ef4444;
+  --color-wash-faint: #2c1a1c;
+  --color-wash: #3a1f21;
+  --color-wash-strong: #57282b;
+  --color-accent-100: #3b1d20;
+  --color-accent-300: #7f2b2b;
+  --color-accent-500: #ef4444;
+  --color-accent-700: #f0a5a5;
+
+  --color-neutral-100: #232b3b;
+  --color-neutral-200: #2b3446;
+  --color-neutral-300: #3a4356;
+  --color-neutral-500: #6d7789;
+  --color-neutral-700: #c3ccda;
+  --color-neutral-900: #f4f7fb;
+}
+
 .ledger {
   display: flex;
   flex-direction: column;
@@ -245,23 +297,6 @@
 
 .ledger-filters__chips { display: flex; gap: 0.3rem; }
 
-.ledger-chip {
-  padding: 0.36rem 0.7rem;
-  border: 1px solid var(--card-border);
-  background: transparent;
-  color: var(--text);
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.ledger-chip--dismiss { display: inline-flex; align-items: center; gap: 0.3rem; }
-
-.ledger-chip--active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
-}
-
 .ledger-filters__stage,
 .ledger-field select,
 .ledger-field input {
@@ -306,28 +341,144 @@
 
 .ledger-bulkbar__count { font-size: 0.85rem; font-weight: 600; }
 
-/* ---------- tags ---------- */
+/* ---------- tags ----------
+   Three treatments, no more: an outline for anything in flight or purely
+   descriptive, a filled accent for the states that need attention, a filled
+   neutral for the settled ones. Categories never get a colour of their own -
+   NDA/MSA/Vendor are told apart by their label. */
 
-.ledger-tag {
-  display: inline-block;
-  padding: 0.16rem 0.5rem;
+.ledger .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.52rem;
+  font: inherit;
   font-size: 0.72rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  white-space: nowrap;
+  /* Transparent on the filled variants, so every tag is the same height. */
+  border: 1px solid transparent;
+}
+
+/* Every category, and the stages still in flight (Draft, In Review,
+   Negotiation): red label, red rule, nothing behind it. */
+.ledger .tag-outline {
+  background: transparent;
+  border-color: var(--color-accent-500);
+  color: var(--color-accent-500);
+}
+
+/* Awaiting Signature, Executed: a light red fill and nothing else - no rule. */
+.ledger .tag-wash {
+  background: var(--color-wash);
+  color: var(--color-text);
+}
+
+/* Expiring Soon, Expired: the same fill, one step darker. Still no rule. */
+.ledger .tag-wash-strong {
+  background: var(--color-wash-strong);
+  color: var(--color-text);
+}
+
+/* The one grey tag: "not started" has nothing to report yet. */
+.ledger .tag-quiet {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}
+
+/* Filter chips only, and the one pair of states a tag has. Unselected carries no
+   styling at all; the transparent 2px border on .tag is what keeps the chip from
+   shifting when it becomes selected. */
+.ledger .tag-plain {
+  background: transparent;
+  color: var(--color-text);
+}
+
+.ledger .tag-selected {
+  background: var(--color-accent-500);
+  border-color: #000;
+  color: #fff;
+}
+
+/* A tag rendered as a <span> is a label and never reacts. As a <button> it is a
+   filter chip, and takes a hover state (see the hover block). */
+.ledger button.tag { cursor: pointer; }
+
+/* ---------- shared primitives ----------
+   Flush rectangles on a hairline divider rule, an accent focus ring, no shadows. */
+
+.ledger .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.ledger .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ledger .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ledger .input {
+  padding: 0.42rem 0.6rem;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.83rem;
+}
+
+.ledger .input:focus,
+.ledger .btn-secondary:focus-visible,
+.ledger .btn-icon:focus-visible,
+.ledger button.tag:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.ledger .table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.ledger .table th {
+  padding: 0.6rem 0.75rem;
+  background: var(--color-bg);
+  border-bottom: 2px solid var(--color-divider);
+  color: var(--color-neutral-700);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
   white-space: nowrap;
 }
 
-.ledger-tag--stage {
-  color: var(--tag-color);
-  background: color-mix(in srgb, var(--tag-color) 16%, transparent);
-  border: 1px solid color-mix(in srgb, var(--tag-color) 40%, transparent);
+.ledger .table td {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid var(--color-neutral-300);
+  vertical-align: middle;
 }
 
-/* Contract types read in the accent: red text, red border, no fill. */
-.ledger-tag--category {
-  color: var(--primary);
-  border: 1px solid var(--primary);
-  background: transparent;
-}
+.ledger .table tbody tr:last-child td { border-bottom: none; }
 
 /* ---------- table ---------- */
 
@@ -388,69 +539,97 @@
 
 /* ---------- kanban ---------- */
 
+/* Flex, not grid: the columns share out the width instead of each taking a fixed
+   track, so an empty stage can give its space to the stages that have contracts. */
 .ledger-kanban {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(190px, 1fr);
+  display: flex;
   gap: 0.7rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
 }
 
+/* The column is one block: a pink header band flush across the top, the cards on
+   a light grey field below it. No padding on the column itself, or the band would
+   float inside its own inset. */
+/* Grows into spare width, but never squeezes under 190px - past that the board
+   scrolls sideways rather than crushing the cards. */
 .ledger-kanban__col {
+  flex: 1 1 190px;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  min-width: 0;
-  padding: 0.6rem;
-  background: var(--hover-bg);
-  border: 1px solid var(--card-border);
+  min-width: 190px;
+  background: var(--color-neutral-100);
+  border: 1.5px solid var(--color-neutral-300);
 }
+
+/* Nothing in this stage: collapse to a strip and stop growing, which is what hands
+   the slack to the columns that do have cards. Narrow enough that the label has to
+   truncate, so the header band stays the same height as every other column's. */
+.ledger-kanban__col--empty { flex: 0 1 108px; min-width: 108px; }
 
 .ledger-kanban__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.4rem;
-  padding-bottom: 0.45rem;
-  border-bottom: 2px solid var(--tag-color);
+  padding: 0.55rem 0.65rem;
+  background: var(--color-wash-faint);
+  border-bottom: 1.5px solid var(--color-neutral-300);
 }
 
-.ledger-kanban__title { font-size: 0.78rem; font-weight: 700; }
-
-.ledger-kanban__count {
-  padding: 0 0.4rem;
-  background: color-mix(in srgb, var(--tag-color) 20%, transparent);
-  color: var(--tag-color);
-  font-size: 0.72rem;
+/* One line, always: a wrapped stage name would make that column's band taller
+   than the rest of the row. */
+.ledger-kanban__title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(0.84rem, 1.15vw, 1rem);
   font-weight: 700;
 }
 
-.ledger-kanban__cards { display: flex; flex-direction: column; gap: 0.45rem; }
+/* Just a count: no fill, no accent, grey. */
+.ledger-kanban__count {
+  background: transparent;
+  color: var(--color-neutral-700);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
 
+.ledger-kanban__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.6rem;
+}
+
+/* Nothing on a card is centred or pushed right - it all stacks up on the left. */
 .ledger-card {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.25rem;
   padding: 0.55rem 0.6rem;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: var(--color-neutral-200);
+  border: 1.5px solid var(--color-neutral-300);
+  color: var(--color-neutral-900);
+  font-weight: 700;
+  text-align: left;
   cursor: pointer;
 }
 
-.ledger-card:hover { border-color: var(--primary); }
-.ledger-card__name { font-size: 0.82rem; font-weight: 600; }
-.ledger-card__sub { font-size: 0.74rem; color: var(--text-secondary); }
+.ledger-card__name { font-size: 0.82rem; }
+.ledger-card__sub { font-size: 0.74rem; }
 
 .ledger-card__foot {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
+  justify-content: flex-start;
+  gap: 0.5rem;
   margin-top: 0.2rem;
 }
 
-.ledger-card__expiry { font-size: 0.72rem; color: var(--text-secondary); }
+.ledger-card__expiry { font-size: 0.72rem; }
 
 /* ---------- drawer + modal ---------- */
 
@@ -580,14 +759,6 @@
   background: transparent;
   border-color: var(--danger);
   color: var(--danger);
-}
-
-.ledger-drawer__eyebrow {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-secondary);
 }
 
 .ledger-drawer__title { margin: 0; font-size: 1.15rem; font-weight: 700; }
@@ -900,11 +1071,222 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   cursor: pointer;
 }
 
+/* File names live inside a .ledger-field, whose <span> rule is a field label:
+   uppercasing and letter-spacing a file name makes it unreadable. */
+.ledger-field .ledger-attach__name,
+.ledger-field .ledger-attach__size {
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 0.78rem;
+}
+.ledger-field .ledger-attach__size { font-size: 0.72rem; }
+
+/* Ticked for deletion in the edit panel: still listed, clearly on its way out. */
+.ledger-attach__item--removed { opacity: 0.55; }
+.ledger-attach__item--removed .ledger-attach__name { text-decoration: line-through; }
+.ledger-attach__item--removed .ledger-attach__remove { color: var(--danger); }
+
+.ledger-attach__hint { margin: 0; color: var(--text-secondary); font-size: 0.74rem; }
 .ledger-attach__error { margin: 0; color: var(--danger); font-size: 0.74rem; }
 
 /* calendar icon sits at the far right of the trigger */
 .ledger-datepicker__trigger > span { flex: 1; min-width: 0; }
 .ledger-datepicker__icon { flex-shrink: 0; color: var(--text-secondary); }
+
+/* ---------- analytics & history ----------
+   Flush panels on a 2px divider rule, no shadows, no rounding. The only chart is
+   a pie: a single conic-gradient, so there is no SVG and no charting library in
+   the page. */
+
+.ledger-analytics { gap: 1.25rem; }
+
+.ledger-analytics__head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--color-divider);
+}
+
+.ledger-analytics__title {
+  flex: 1 1 auto;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 3.2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
+}
+
+.ledger-analytics__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Export + refresh hold the right edge; the filters stay left. */
+.ledger-analytics__toolbar-end {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+}
+
+.ledger-analytics__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+}
+
+.ledger-analytics__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 1rem 1.1rem;
+  border-left: 2px solid var(--color-divider);
+}
+
+.ledger-analytics__stat:first-child { border-left: none; }
+
+.ledger-analytics__stat-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+}
+
+.ledger-analytics__stat-value {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+/* Expiring soon is the one number the accent is spent on. */
+.ledger-analytics__stat-value--accent { color: var(--color-accent-700); }
+
+.ledger-analytics__panel {
+  padding: 1.1rem;
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+}
+
+.ledger-analytics__panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.ledger-analytics__panel-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.ledger-analytics__count {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+}
+
+/* Chart and legend travel together, centred in the panel as one group. */
+.ledger-analytics__dist {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+/* A solid pie: one conic-gradient, one slice per stage. The radius has to
+   out-specify the flat-everything rule at the top of the file. */
+.ledger .ledger-analytics__pie {
+  flex: 0 0 auto;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: conic-gradient(var(--pie-stops));
+}
+
+.ledger-analytics__legend {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Swatch, stage, percentage - all packed to the left, nothing pushed to an edge. */
+.ledger-analytics__legend-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.ledger-analytics__swatch {
+  flex: 0 0 12px;
+  width: 12px;
+  height: 12px;
+  background: var(--swatch);
+  /* The palest step of the ramp would otherwise disappear into the panel. */
+  box-shadow: inset 0 0 0 1px var(--color-divider);
+}
+
+.ledger-analytics__legend-name { min-width: 0; }
+
+.ledger-analytics__legend-pct {
+  color: var(--color-neutral-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.ledger-analytics__table-wrap { overflow-x: auto; }
+
+/* Rows open the contract, but stay visually static - the cursor is the only cue,
+   there is no hover tint here. */
+.ledger-analytics__table tbody tr { cursor: pointer; }
+
+.ledger-analytics__name { font-weight: 700; color: var(--color-text); }
+.ledger-analytics__date { color: var(--color-neutral-700); white-space: nowrap; }
+
+.ledger-analytics__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.ledger-analytics__pager-count {
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-700);
+}
+
+.ledger-analytics__empty {
+  margin: 0;
+  padding: 2.5rem 0;
+  text-align: center;
+  color: var(--color-neutral-700);
+  font-size: 0.85rem;
+}
 
 /* ---------- hover ----------
    One tint token, flipped per theme: a dark wash over light surfaces, a light
@@ -922,7 +1304,6 @@ body.dark .ledger {
 
 @media (hover: hover) {
   .ledger-btn:hover:not(:disabled),
-  .ledger-chip:hover,
   .ledger-iconbtn:hover,
   .ledger-viewtoggle__btn:hover,
   .ledger-tabs__tab:hover,
@@ -939,7 +1320,18 @@ body.dark .ledger {
 
   .ledger-datepicker__trigger:hover { border-color: var(--primary); }
 
-  .ledger-chip--active:hover,
+  .ledger .btn-icon:hover { background: var(--color-accent-100); }
+
+  /* Only the chips react, and only as buttons: an unselected chip takes the
+     system tint, a selected one just brightens so it stays unmistakably on. */
+  .ledger button.tag-plain:hover { background: var(--ledger-hover); }
+  .ledger button.tag-selected:hover { filter: brightness(1.1); }
+
+  .ledger .btn-secondary:hover:not(:disabled) {
+    background: var(--color-accent-100);
+    border-color: var(--color-accent);
+  }
+
   .ledger-viewtoggle__btn--active:hover,
   .ledger-btn--primary:hover:not(:disabled),
   .ledger-btn--toggle-on:hover:not(:disabled) {
@@ -952,11 +1344,13 @@ body.dark .ledger {
     color: #fff;
   }
 
-  .ledger-stats__cell:hover,
-  .ledger-card:hover {
+  .ledger-stats__cell:hover {
     background: var(--ledger-hover);
     border-color: var(--primary);
   }
+
+  /* The card keeps its grey field on hover - only the rule moves to the accent. */
+  .ledger-card:hover { border-color: var(--color-accent-500); }
 
   .ledger-table tbody tr:hover { background: var(--ledger-hover); }
   .ledger-table__row--selected:hover { background: var(--ledger-hover-strong); }
@@ -968,7 +1362,9 @@ body.dark .ledger {
 }
 
 .ledger-btn,
-.ledger-chip,
+.ledger .tag,
+.ledger .btn-secondary,
+.ledger .btn-icon,
 .ledger-iconbtn,
 .ledger-viewtoggle__btn,
 .ledger-tabs__tab,
@@ -997,9 +1393,20 @@ body.dark .ledger {
 @media (max-width: 1100px) {
   .ledger-stats { grid-template-columns: repeat(2, 1fr); }
 
+  /* The strip stays one bordered block: outer rule intact, internal rules move. */
+  .ledger-analytics__stats { grid-template-columns: repeat(2, 1fr); }
+  .ledger-analytics__stat:nth-child(odd) { border-left: none; }
+  .ledger-analytics__stat:nth-child(n + 3) { border-top: 2px solid var(--color-divider); }
+
+  /* Same idea as the dashboard table: columns drop out right-to-left by priority
+     and reappear as chips under the contract name, so nothing is lost. */
+  .ledger-analytics__table .col-updated { display: none; }
+  .ledger-analytics__table .ledger-table__meta { display: flex; }
+  .ledger-analytics__table .ledger-table__meta .meta-updated { display: inline; }
+
   .ledger-table .col-owner { display: none; }
-  .ledger-table__meta { display: flex; }
-  .ledger-table__meta .meta-owner { display: inline; }
+  .ledger-table .ledger-table__meta { display: flex; }
+  .ledger-table .ledger-table__meta .meta-owner { display: inline; }
 }
 
 @media (max-width: 900px) {
@@ -1012,7 +1419,10 @@ body.dark .ledger {
   .ledger-drawer__facts { grid-template-columns: 1fr; }
 
   .ledger-table .col-category { display: none; }
-  .ledger-table__meta .meta-category { display: inline; }
+  .ledger-table .ledger-table__meta .meta-category { display: inline; }
+
+  .ledger-analytics__table .col-expiry { display: none; }
+  .ledger-analytics__table .ledger-table__meta .meta-expiry { display: inline; }
 }
 
 @media (max-width: 700px) {
@@ -1033,9 +1443,25 @@ body.dark .ledger {
   .ledger-table { font-size: 0.8rem; }
   .ledger-table th, .ledger-table td { padding: 0.5rem 0.55rem; }
   .ledger-table .col-value { display: none; }
-  .ledger-table__meta .meta-value { display: inline; font-weight: 600; color: var(--text); }
+  .ledger-table .ledger-table__meta .meta-value { display: inline; font-weight: 600; color: var(--text); }
 
-  .ledger-kanban { grid-auto-columns: minmax(150px, 78vw); }
+  /* One column at a time on a phone: fill the screen and scroll sideways, but an
+     empty stage still collapses out of the way. */
+  .ledger-kanban__col { flex: 1 0 76vw; }
+  .ledger-kanban__col--empty { flex: 0 0 108px; }
+
+  .ledger-analytics__stats { grid-template-columns: 1fr; }
+  .ledger-analytics__stat {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    border-left: none;
+    border-top: none;
+  }
+  .ledger-analytics__stat + .ledger-analytics__stat { border-top: 2px solid var(--color-divider); }
+  .ledger-analytics__stat-value { font-size: 26px; }
+  .ledger-analytics__toolbar-end { margin-left: 0; }
+  .ledger .ledger-analytics__pie { width: 160px; height: 160px; }
 
   /* A dragged panel would be unusable at this size: pin it to the viewport. */
   .ledger-modal--floating {
@@ -1054,6 +1480,10 @@ body.dark .ledger {
 
   /* Down to Name + Stage; expiry joins the meta line. */
   .ledger-table .col-expires { display: none; }
-  .ledger-table__meta .meta-expires { display: inline; }
+  .ledger-table .ledger-table__meta .meta-expires { display: inline; }
   .ledger-table th { text-align: left; }
+
+  /* Down to Contract + Status. */
+  .ledger-analytics__table .col-category { display: none; }
+  .ledger-analytics__table .ledger-table__meta .meta-category { display: inline; }
 }

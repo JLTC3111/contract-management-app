@@ -113,7 +113,10 @@
     "dark": "ダークモード",
     "create": "作成",
     "close": "閉じる",
-    "saving": "保存中..."
+    "saving": "保存中...",
+    "refresh": "更新",
+    "previous": "前へ",
+    "next": "次へ"
   },
   "login": {
     "title": "契約管理システム",
@@ -178,7 +181,8 @@
     "back": "戻る",
     "done": "完了",
     "permissions": "権限",
-    "actions": "アクション"
+    "actions": "アクション",
+    "unknown": "不明"
   },
   "manual": {
     "loading": "マニュアルを読み込み中...",
@@ -597,7 +601,11 @@
     "rejected": "拒否済み",
     "draft": "下書き",
     "clickToViewTimeline": "クリックしてタイムラインを表示",
-    "clickToViewDetails": "クリックして契約詳細を表示"
+    "clickToViewDetails": "クリックして契約詳細を表示",
+    "updated": "更新日",
+    "of": "/",
+    "period": "期間",
+    "stageDistribution": "ステージ分布"
   },
   "phaseManagement": {
     "addTask": "タスクを追加",
@@ -678,7 +686,13 @@
     "completeWarning": "すべてのタスクが完了としてマークされ、次の段階が有効になります。",
     "confirmReopen": "この段階を再開しますか？",
     "reopenWarning": "これにより、段階がアクティブステータスに戻ります。",
-    "viewDetails": "詳細と書類を表示"
+    "viewDetails": "詳細と書類を表示",
+    "state": {
+      "completed": "完了",
+      "inProgress": "進行中",
+      "notStarted": "未着手"
+    },
+    "contractNotFound": "その契約は見つかりませんでした。"
   },
   "lifecycle": {
     "selectContract": "契約を選択",

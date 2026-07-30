@@ -102,7 +102,10 @@
     "dark": "深色模式",
     "create": "创建",
     "close": "关闭",
-    "saving": "保存中..."
+    "saving": "保存中...",
+    "refresh": "刷新",
+    "previous": "上一页",
+    "next": "下一页"
   },
   "login": {
     "title": "合同管理器",
@@ -167,7 +170,8 @@
     "back": "返回",
     "done": "完成",
     "permissions": "权限",
-    "actions": "操作"
+    "actions": "操作",
+    "unknown": "未知"
   },
   "manual": {
     "loading": "正在加载手册...",
@@ -585,7 +589,11 @@
     "rejected": "已拒绝",
     "draft": "草稿",
     "clickToViewTimeline": "点击查看时间线",
-    "clickToViewDetails": "点击查看合同详情"
+    "clickToViewDetails": "点击查看合同详情",
+    "updated": "更新时间",
+    "of": "/",
+    "period": "时间段",
+    "stageDistribution": "阶段分布"
   },
   "phaseManagement": {
     "addTask": "添加任务",
@@ -665,7 +673,13 @@
     "completeWarning": "所有任务将被标记为完成，并且将激活下一阶段。",
     "confirmReopen": "重新打开此阶段？",
     "reopenWarning": "这会将阶段设置回活动状态。",
-    "viewDetails": "查看详情和文档"
+    "viewDetails": "查看详情和文档",
+    "state": {
+      "completed": "已完成",
+      "inProgress": "进行中",
+      "notStarted": "未开始"
+    },
+    "contractNotFound": "找不到该合同。"
   },
   "lifecycle": {
     "selectContract": "选择合同",

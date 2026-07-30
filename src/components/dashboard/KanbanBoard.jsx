@@ -1,7 +1,7 @@
 // src/components/dashboard/KanbanBoard.jsx
 import { formatMonthYear } from '../../utils/formatters';
 import { useTranslation } from 'react-i18next';
-import { STAGES, getContractStage, getStageColor, getStageLabel } from '../../utils/stages';
+import { STAGES, getContractStage, getStageLabel } from '../../utils/stages';
 import { CategoryTag } from './StageTag';
 
 const shortDate = (value, locale) => (value ? formatMonthYear(value, locale) : '—');
@@ -19,9 +19,17 @@ const KanbanBoard = ({ contracts, onOpen }) => {
   return (
     <div className="ledger-kanban">
       {byStage.map((column) => (
-        <section key={column.value} className="ledger-kanban__col">
-          <header className="ledger-kanban__head" style={{ '--tag-color': getStageColor(column.value) }}>
-            <span className="ledger-kanban__title">{getStageLabel(t, column.value)}</span>
+        // An empty stage keeps its header but stops competing for width.
+        <section
+          key={column.value}
+          className={`ledger-kanban__col${column.items.length === 0 ? ' ledger-kanban__col--empty' : ''}`}
+        >
+          <header className="ledger-kanban__head">
+            {/* The title truncates in a collapsed column, so keep the full name
+                reachable. */}
+            <span className="ledger-kanban__title" title={getStageLabel(t, column.value)}>
+              {getStageLabel(t, column.value)}
+            </span>
             <span className="ledger-kanban__count">{column.items.length}</span>
           </header>
           <div className="ledger-kanban__cards">

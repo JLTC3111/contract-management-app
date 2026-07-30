@@ -2,13 +2,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { approvalsApi, contractsApi } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
 import { normalizeContractStatus } from '../utils/formatters';
 import { partialSearchMatch } from '../utils/searchUtils';
 import { isContractExpiringSoon } from '../utils/contractMetrics';
-import { uploadAttachments } from '../utils/uploads';
+import { deleteAttachments, uploadAttachments } from '../utils/uploads';
 import {
   APPROVAL_STAGES,
   getContractStage,
@@ -39,7 +39,6 @@ const loadFilters = () => {
 const Dashboard = () => {
   const { t } = useTranslation();
   const { user } = useUser() ?? {};
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const [contracts, setContracts] = useState([]);
@@ -51,7 +50,6 @@ const Dashboard = () => {
   // Header
   const [query, setQuery] = useState(saved.query ?? '');
   const [bellOpen, setBellOpen] = useState(false);
-  const [approvalsActive, setApprovalsActive] = useState(saved.approvalsActive ?? false);
 
   // Filter row
   const [fileQuery, setFileQuery] = useState(saved.fileQuery ?? '');
@@ -66,18 +64,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     localStorage.setItem(FILTERS_KEY, JSON.stringify({
-      query, fileQuery, category, stageFilter, view, approvalsActive,
+      query, fileQuery, category, stageFilter, view,
     }));
-  }, [query, fileQuery, category, stageFilter, view, approvalsActive]);
-
-  // The sidebar's Approvals entry deep-links here as /?filter=approvals.
-  useEffect(() => {
-    if (searchParams.get('filter') !== 'approvals') return;
-    setApprovalsActive(true);
-    const next = new URLSearchParams(searchParams);
-    next.delete('filter');
-    setSearchParams(next, { replace: true });
-  }, [searchParams, setSearchParams]);
+  }, [query, fileQuery, category, stageFilter, view]);
 
   const load = useCallback(async () => {
     try {
@@ -124,9 +113,8 @@ const Dashboard = () => {
     if (fileQuery && !partialSearchMatch(c.title, fileQuery)) return false;
     if (category !== 'All' && c.category !== category) return false;
     if (stageFilter !== 'all' && getContractStage(c) !== stageFilter) return false;
-    if (approvalsActive && !APPROVAL_STAGES.includes(getContractStage(c))) return false;
     return true;
-  }), [contracts, query, fileQuery, category, stageFilter, approvalsActive]);
+  }), [contracts, query, fileQuery, category, stageFilter]);
 
   const drawerContract = useMemo(
     () => contracts.find((c) => c.id === drawerId) || null,
@@ -167,11 +155,19 @@ const Dashboard = () => {
   };
 
 
-  const handleSave = async (target, updates, attachments = []) => {
+  const handleSave = async (target, updates, attachments = [], removedFiles = []) => {
     setBusy(true);
     try {
       const { stage, ...rest } = updates;
       await contractsApi.update(target.id, { ...rest, ...stageUpdatePayload(stage) });
+      if (removedFiles.length) {
+        const { failed } = await deleteAttachments(target.id, removedFiles);
+        if (failed.length) {
+          window.alert(t('dashboard.deleteFileFailed', 'Some files could not be deleted: {{names}}', {
+            names: failed.map((f) => f.name).join(', '),
+          }));
+        }
+      }
       if (attachments.length) {
         const { failed } = await uploadAttachments(target.id, attachments);
         if (failed.length) {
@@ -214,17 +210,41 @@ const Dashboard = () => {
     }
   };
 
-  /** Files an approval request and moves the contract Draft -> In Review. */
+  /**
+   * Files an approval request. A Draft also moves to In Review; a contract that
+   * is already further along keeps its stage, since asking for sign-off should
+   * never walk a contract backwards.
+   *
+   * Filing is the end of the interaction whatever stage the contract was in, so a
+   * successful send closes the overlays - the edit panel first, then the drawer -
+   * rather than only doing so for the Draft -> In Review case.
+   */
   const handleSendForApproval = async (target) => {
     try {
+      // The board would otherwise show one card per click.
+      const pending = await approvalsApi.getPending().catch(() => []);
+      if (pending.some((r) => String(r.contract_id) === String(target.id))) {
+        window.alert(t(
+          'dashboard.approvalAlreadyPending',
+          'This contract already has an approval request awaiting review.'
+        ));
+        return;
+      }
+
       await approvalsApi.create({
         contract_id: target.id,
         requester_id: user?.id,
         requester_email: user?.email,
-        message: '',
+        message: t('dashboard.approvalRequestMessage', 'Approval requested for "{{name}}".', {
+          name: target.title || '',
+        }),
         status: 'pending',
       });
-      await contractsApi.update(target.id, stageUpdatePayload('in_review'));
+      if (getContractStage(target) === 'draft') {
+        await contractsApi.update(target.id, stageUpdatePayload('in_review'));
+      }
+      setEditing(null);
+      setDrawerId(null);
       await load();
     } catch (err) {
       console.error('Send for approval failed:', err);
@@ -251,7 +271,6 @@ const Dashboard = () => {
         bellOpen={bellOpen}
         onBellToggle={setBellOpen}
         onNotificationClick={handleNotification}
-        approvalsActive={approvalsActive}
         approvalsCount={pendingApproval.length}
         onApprovals={() => navigate('/approvals')}
         onNew={() => navigate('/new')}
@@ -272,8 +291,6 @@ const Dashboard = () => {
             onStageChange={setStageFilter}
             view={view}
             onViewChange={setView}
-            approvalsActive={approvalsActive}
-            onClearApprovals={() => setApprovalsActive(false)}
           />
 
           <AnimatePresence>

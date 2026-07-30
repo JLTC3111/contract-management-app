@@ -6,7 +6,13 @@ import { ChevronsRight, FileText, Pencil, Trash2, X } from 'lucide-react';
 import { commentsApi, phasesApi, storageApi } from '../../api/contracts';
 import { useUser } from '../../hooks/useUser';
 import { currencyForLocale, formatCurrency, formatDate, formatFileSize } from '../../utils/formatters';
-import { getContractStage, getNextStage, getStageColor, getStageLabel } from '../../utils/stages';
+import {
+  APPROVAL_REQUESTABLE_STAGES,
+  getContractStage,
+  getNextStage,
+  getStageColor,
+  getStageLabel,
+} from '../../utils/stages';
 import { getCategoryLabel } from '../../utils/constants';
 import { StageTag } from './StageTag';
 
@@ -39,7 +45,7 @@ const DetailDrawer = ({
 
   const stage = getContractStage(contract);
   const next = getNextStage(stage);
-  const canSendForApproval = stage === 'draft';
+  const canSendForApproval = APPROVAL_REQUESTABLE_STAGES.includes(stage);
 
   useEffect(() => {
     let active = true;
@@ -145,7 +151,8 @@ const DetailDrawer = ({
         transition={{ type: 'spring', stiffness: 320, damping: 34 }}
       >
         <header className="ledger-drawer__head">
-          <span className="ledger-drawer__eyebrow">
+          {/* Same passive outline tag the table and kanban use. */}
+          <span className="tag tag-outline">
             {contract.category
               ? getCategoryLabel(t, contract.category)
               : t('dashboard.uncategorized', 'Uncategorized')}
@@ -274,7 +281,7 @@ const DetailDrawer = ({
               disabled={!canSendForApproval || sending || busy}
               title={canSendForApproval
                 ? undefined
-                : t('dashboard.onlyDraft', 'Only draft contracts can be sent for approval.')}
+                : t('dashboard.approvalNotAllowed', 'Executed and expired contracts cannot be sent for approval.')}
             >
               {t('dashboard.sendForApproval', 'Send for approval')}
             </button>

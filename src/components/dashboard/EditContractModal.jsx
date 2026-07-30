@@ -2,7 +2,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { GripHorizontal, X } from 'lucide-react';
+import { GripHorizontal, RotateCcw, Trash2, X } from 'lucide-react';
+import { storageApi } from '../../api/contracts';
+import { formatFileSize } from '../../utils/formatters';
 import { ADVANCEABLE_STAGES, getContractStage, getStageLabel } from '../../utils/stages';
 import { CONTRACT_CATEGORIES, getCategoryLabel } from '../../utils/constants';
 import DatePicker from './DatePicker';
@@ -46,6 +48,28 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
     expiry_date: contract.expiry_date ? String(contract.expiry_date).slice(0, 10) : '',
   });
   const [attachments, setAttachments] = useState([]);
+  // Already-uploaded files, and the ones ticked for deletion. Deletions are
+  // staged like every other edit here: nothing leaves storage until Save.
+  const [uploaded, setUploaded] = useState([]);
+  const [loadingFiles, setLoadingFiles] = useState(true);
+  const [removed, setRemoved] = useState(() => new Set());
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const files = await storageApi.listFiles(`uploads/${contract.id}`).catch(() => []);
+      if (!active) return;
+      setUploaded((files || []).filter((f) => f.metadata?.mimetype && f.name !== '.keep'));
+      setLoadingFiles(false);
+    })();
+    return () => { active = false; };
+  }, [contract.id]);
+
+  const toggleRemoved = (name) => setRemoved((prev) => {
+    const next = new Set(prev);
+    if (next.has(name)) next.delete(name); else next.add(name);
+    return next;
+  });
 
   // This modal owns Escape while it is open, so the drawer beneath keeps its own.
   useEffect(() => {
@@ -118,7 +142,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
       title: form.title.trim(),
       contract_value: form.contract_value === '' ? null : Number(form.contract_value),
       expiry_date: form.expiry_date || null,
-    }, attachments);
+    }, attachments, [...removed]);
   };
 
   // A legacy free-text category must stay selectable.
@@ -218,6 +242,47 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
 
           <div className="ledger-field ledger-field--wide">
             <span>{t('dashboard.documents', 'Documents')}</span>
+
+            {loadingFiles ? (
+              <p className="ledger-attach__hint">{t('dashboard.loadingFiles', 'Loading files...')}</p>
+            ) : uploaded.length === 0 ? (
+              <p className="ledger-attach__hint">{t('dashboard.noDocuments', 'No documents yet.')}</p>
+            ) : (
+              <>
+                <ul className="ledger-attach__list">
+                  {uploaded.map((file) => {
+                    const marked = removed.has(file.name);
+                    return (
+                      <li
+                        key={file.name}
+                        className={`ledger-attach__item${marked ? ' ledger-attach__item--removed' : ''}`}
+                      >
+                        <span className="ledger-attach__name">{file.name}</span>
+                        <span className="ledger-attach__size">
+                          {formatFileSize(file.metadata?.size ?? 0)}
+                        </span>
+                        <button
+                          type="button"
+                          className="ledger-attach__remove"
+                          onClick={() => toggleRemoved(file.name)}
+                          aria-label={marked
+                            ? t('dashboard.keepFile', 'Keep {{name}}', { name: file.name })
+                            : t('dashboard.deleteFile', 'Delete {{name}}', { name: file.name })}
+                        >
+                          {marked ? <RotateCcw size={13} /> : <Trash2 size={13} />}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+                {removed.size > 0 && (
+                  <p className="ledger-attach__hint">
+                    {t('dashboard.deleteOnSave', 'Marked files are deleted when you save.')}
+                  </p>
+                )}
+              </>
+            )}
+
             <AttachmentPicker files={attachments} onChange={setAttachments} />
           </div>
         </div>

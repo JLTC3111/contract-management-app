@@ -113,7 +113,10 @@
     "dark": "โหมดมืด",
     "create": "สร้าง",
     "close": "ปิด",
-    "saving": "กำลังบันทึก..."
+    "saving": "กำลังบันทึก...",
+    "refresh": "รีเฟรช",
+    "previous": "ก่อนหน้า",
+    "next": "ถัดไป"
   },
   "login": {
     "title": "ผู้จัดการสัญญา",
@@ -178,7 +181,8 @@
     "back": "กลับ",
     "done": "เสร็จสิ้น",
     "permissions": "สิทธิ์",
-    "actions": "การดำเนินการ"
+    "actions": "การดำเนินการ",
+    "unknown": "ไม่ทราบ"
   },
   "manual": {
     "loading": "กำลังโหลดคู่มือ...",
@@ -587,7 +591,11 @@
     "rejected": "ปฏิเสธแล้ว",
     "draft": "ร่าง",
     "clickToViewTimeline": "คลิกเพื่อดูไทม์ไลน์",
-    "clickToViewDetails": "คลิกเพื่อดูรายละเอียดสัญญา"
+    "clickToViewDetails": "คลิกเพื่อดูรายละเอียดสัญญา",
+    "updated": "อัปเดต",
+    "of": "จาก",
+    "period": "ช่วงเวลา",
+    "stageDistribution": "การกระจายตามขั้นตอน"
   },
   "phaseManagement": {
     "addTask": "เพิ่มงาน",
@@ -667,7 +675,13 @@
     "completeWarning": "งานทั้งหมดจะถูกทำเครื่องหมายว่าเสร็จสมบูรณ์ และขั้นตอนถัดไปจะถูกเปิดใช้งาน",
     "confirmReopen": "เปิดขั้นตอนนี้อีกครั้ง?",
     "reopenWarning": "การดำเนินการนี้จะตั้งค่าขั้นตอนกลับไปเป็นสถานะที่ใช้งานอยู่",
-    "viewDetails": "ดูรายละเอียดและเอกสาร"
+    "viewDetails": "ดูรายละเอียดและเอกสาร",
+    "state": {
+      "completed": "เสร็จสิ้น",
+      "inProgress": "กำลังดำเนินการ",
+      "notStarted": "ยังไม่เริ่ม"
+    },
+    "contractNotFound": "ไม่พบสัญญานี้"
   },
   "lifecycle": {
     "selectContract": "เลือกสัญญา",

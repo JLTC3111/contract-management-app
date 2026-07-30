@@ -27,6 +27,13 @@ export const ADVANCEABLE_STAGES = ['draft', 'in_review', 'negotiation', 'awaitin
 /** What the "Approval requests" toggle narrows the list down to. */
 export const APPROVAL_STAGES = ['in_review', 'negotiation', 'awaiting_signature'];
 
+/**
+ * Stages an approval request can still be filed from. Everything up to (but not
+ * including) Executed: a contract can need sign-off at any point on the way, and
+ * gating on Draft alone left every contract past its first move unsendable.
+ */
+export const APPROVAL_REQUESTABLE_STAGES = ['draft', 'in_review', 'negotiation', 'awaiting_signature'];
+
 const STAGE_BY_VALUE = Object.fromEntries(STAGES.map((s) => [s.value, s]));
 
 /**
@@ -54,6 +61,20 @@ export const getStageLabel = (t, value) => {
 };
 
 export const getStageColor = (value) => STAGE_BY_VALUE[value]?.color ?? '#6b7280';
+
+/**
+ * Which tag treatment a stage gets. All red, no stage-specific colour: the ones
+ * still in flight are outlined, the two settled ones sit on a light fill, and the
+ * two that need attention sit on a darker one.
+ */
+const STAGE_TAG_CLASS = {
+  expiring_soon: 'tag-wash-strong',
+  expired: 'tag-wash-strong',
+  awaiting_signature: 'tag-wash',
+  executed: 'tag-wash',
+};
+
+export const stageTagClass = (stage) => STAGE_TAG_CLASS[stage] || 'tag-outline';
 
 export const statusToStage = (status) => STATUS_TO_STAGE[status] || 'draft';
 

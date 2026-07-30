@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { getI18nOrFallback } from '../utils/formatters';
 import { supabase } from '../utils/supaBaseClient';
-import PhaseTimeline from './PhaseTimeline';
 import toast from 'react-hot-toast';
 import {
   DEFAULT_PHASES,
 } from './phase-management/constants';
 import PhaseProgressOverview from './phase-management/PhaseProgressOverview';
+import PhaseLifecycle from './phase-management/PhaseLifecycle';
 import PhaseCard from './phase-management/PhaseCard';
 import PhaseConfirmModal from './phase-management/PhaseConfirmModal';
+import './phase-management/phases.css';
 
-const PhaseManagement = ({ contractId, contract, onUpdate }) => {
+const PhaseManagement = ({ contractId, onUpdate }) => {
   const { t } = useTranslation();
   const [phases, setPhases] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -288,79 +287,49 @@ const PhaseManagement = ({ contractId, contract, onUpdate }) => {
     ? Math.round(phases.reduce((acc, p) => acc + p.progress, 0) / phases.length)
     : 0;
 
-  const activePhase = phases.find((p) => p.status === 'active');
-  const firstPending = phases.find((p) => p.status === 'pending');
-  const currentPhaseNumber = activePhase?.phase_number
-    || firstPending?.phase_number
-    || (phases[0]?.phase_number ?? 1);
-
   if (loading) {
-    return (
-      <div style={{ padding: '4rem', textAlign: 'center' }}>
-        <RefreshCw size={40} style={{ color: 'var(--text)', animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: 'var(--text)', marginTop: '1rem' }}>{t('phaseManagement.loading', 'Loading phases...')}</p>
-        <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
+    return <p className="phase-empty">{t('phaseManagement.loading', 'Loading phases...')}</p>;
   }
 
   return (
-    <div ref={containerRef} style={{ padding: 'clamp(1rem, 4vw, 2rem)', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <div>
-          <h1 style={{ color: 'var(--text)', margin: 0, fontSize: 'clamp(1.25rem, 4vw, 1.75rem)' }}>
-            {t('phaseManagement.title', 'Contract Phase Management')}
-          </h1>
-          {contract?.title && (
-            <p style={{ color: 'var(--text)', opacity: 0.7, margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>
-              {getI18nOrFallback(t, contract, 'title_i18n', 'title')}
-            </p>
-          )}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-          {saving && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text)', opacity: 0.7 }}>
-              <RefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} />
-              <span style={{ fontSize: '0.85rem' }}>{t('common.saving', 'Saving...')}</span>
-            </div>
-          )}
-        </div>
-      </div>
-
+    <div ref={containerRef} className="phase-body">
       <PhaseProgressOverview
         progressRef={progressRef}
-        phases={phases}
-        currentPhaseNumber={currentPhaseNumber}
         overallProgress={overallProgress}
-        onPhaseClick={(phase) => togglePhaseExpand(phase.id)}
       />
 
-      <div style={{ marginBottom: '2rem' }}>
-        <PhaseTimeline
-          phases={phases}
-          currentPhaseNumber={currentPhaseNumber}
-          onPhaseClick={(phase) => togglePhaseExpand(phase.id)}
-        />
-      </div>
+      <section className="phase-panel">
+        <div className="phase-panel__head">
+          <h2 className="phase-panel__title">
+            {t('phaseTimeline.title', 'Contract lifecycle timeline')}
+          </h2>
+          {saving && (
+            <span className="phase-panel__sub">{t('common.saving', 'Saving...')}</span>
+          )}
+        </div>
+        <PhaseLifecycle phases={phases} />
+      </section>
 
-      {phases.map((phase, index) => (
-        <PhaseCard
-          key={phase.id}
-          phase={phase}
-          index={index}
-          phaseRef={(el) => { phaseRefs.current[index] = el; }}
-          isExpanded={expandedPhases.has(phase.id)}
-          onToggleExpand={togglePhaseExpand}
-          onToggleTask={toggleTaskCompletion}
-          onDeleteTask={deleteTask}
-          onAddTask={addTask}
-          newTaskInput={newTaskInputs[phase.id]}
-          onNewTaskInputChange={(phaseId, value) => setNewTaskInputs((prev) => ({ ...prev, [phaseId]: value }))}
-          onStartPhase={startPhase}
-          onCompletePhase={(phaseId) => setShowConfirmModal({ type: 'complete', phaseId })}
-          onReopenPhase={(phaseId) => setShowConfirmModal({ type: 'reopen', phaseId })}
-        />
-      ))}
+      <div className="phase-list">
+        {phases.map((phase, index) => (
+          <PhaseCard
+            key={phase.id}
+            phase={phase}
+            index={index}
+            phaseRef={(el) => { phaseRefs.current[index] = el; }}
+            isExpanded={expandedPhases.has(phase.id)}
+            onToggleExpand={togglePhaseExpand}
+            onToggleTask={toggleTaskCompletion}
+            onDeleteTask={deleteTask}
+            onAddTask={addTask}
+            newTaskInput={newTaskInputs[phase.id]}
+            onNewTaskInputChange={(phaseId, value) => setNewTaskInputs((prev) => ({ ...prev, [phaseId]: value }))}
+            onStartPhase={startPhase}
+            onCompletePhase={(phaseId) => setShowConfirmModal({ type: 'complete', phaseId })}
+            onReopenPhase={(phaseId) => setShowConfirmModal({ type: 'reopen', phaseId })}
+          />
+        ))}
+      </div>
 
       <PhaseConfirmModal
         modal={showConfirmModal}

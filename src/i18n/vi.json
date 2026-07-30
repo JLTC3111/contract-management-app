@@ -114,7 +114,10 @@
     "dark": "Chế độ tối",
     "create": "Tạo",
     "close": "Đóng",
-    "saving": "Đang lưu..."
+    "saving": "Đang lưu...",
+    "refresh": "Làm mới",
+    "previous": "Trước",
+    "next": "Sau"
   },
   "login": {
     "title": "Quản Lý Hợp Đồng",
@@ -179,7 +182,8 @@
     "back": "Quay lại",
     "done": "Xong",
     "permissions": "Quyền hạn",
-    "actions": "Hành động"
+    "actions": "Hành động",
+    "unknown": "Không rõ"
   },
   "manual": {
     "loading": "Đang tải hướng dẫn...",
@@ -597,7 +601,11 @@
     "rejected": "Đã từ chối",
     "draft": "Bản nháp",
     "clickToViewTimeline": "Nhấp để xem tiến trình",
-    "clickToViewDetails": "Nhấp để xem chi tiết hợp đồng"
+    "clickToViewDetails": "Nhấp để xem chi tiết hợp đồng",
+    "updated": "Cập nhật",
+    "of": "trên",
+    "period": "Khoảng thời gian",
+    "stageDistribution": "Phân bố giai đoạn"
   },
   "phaseManagement": {
     "addTask": "Thêm Nhiệm Vụ",
@@ -677,7 +685,13 @@
     "completeWarning": "Tất cả các nhiệm vụ sẽ được đánh dấu là hoàn thành và giai đoạn tiếp theo sẽ được kích hoạt.",
     "confirmReopen": "Mở lại giai đoạn này?",
     "reopenWarning": "Điều này sẽ đặt giai đoạn trở lại trạng thái đang hoạt động.",
-    "viewDetails": "Xem chi tiết & tài liệu"
+    "viewDetails": "Xem chi tiết & tài liệu",
+    "state": {
+      "completed": "Hoàn thành",
+      "inProgress": "Đang thực hiện",
+      "notStarted": "Chưa bắt đầu"
+    },
+    "contractNotFound": "Không tìm thấy hợp đồng này."
   },
   "lifecycle": {
     "contractLifecycleManagement": "Quản lý Chu kỳ Sống Hợp đồng",

@@ -16,7 +16,6 @@ const DashboardHeader = ({
   bellOpen,
   onBellToggle,
   onNotificationClick,
-  approvalsActive,
   approvalsCount,
   onApprovals,
   onNew,
@@ -100,11 +99,8 @@ const DashboardHeader = ({
         )}
       </div>
 
-      <button
-        type="button"
-        className={`ledger-btn ledger-btn--toggle${approvalsActive ? ' ledger-btn--toggle-on' : ''}`}
-        onClick={onApprovals}
-      >
+      {/* Opens the approvals board - it never reads as "on", so no toggle state. */}
+      <button type="button" className="ledger-btn ledger-btn--toggle" onClick={onApprovals}>
         <CheckCircle size={14} />
         {t('dashboard.approvalRequests', 'Approval requests')}
         <span className="ledger-btn__badge">{approvalsCount}</span>

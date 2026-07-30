@@ -133,6 +133,43 @@ export const TASK_TRANSLATION_MAP = {
 
 export const getTaskTranslationKey = (taskText) => TASK_TRANSLATION_MAP[taskText] || null;
 
+/**
+ * One phase, normalised to the three states the stepper and the tags draw:
+ * done, active (started but unfinished), todo. Progress is trusted alongside the
+ * status column, so a phase left at 100% still reads as done.
+ */
+export const phaseState = (phase) => {
+  if (!phase) return 'todo';
+  if (phase.status === 'completed' || phase.progress >= 100) return 'done';
+  if (phase.status === 'active' || (phase.progress ?? 0) > 0) return 'active';
+  return 'todo';
+};
+
+/** The same three states for a whole contract, derived from its phases. */
+export const contractPhaseState = (phases = []) => {
+  if (phases.length === 0) return 'todo';
+  const states = phases.map(phaseState);
+  if (states.every((s) => s === 'done')) return 'done';
+  return states.some((s) => s !== 'todo') ? 'active' : 'todo';
+};
+
+const STATE_LABELS = {
+  done: ['phaseManagement.state.completed', 'Completed'],
+  active: ['phaseManagement.state.inProgress', 'In progress'],
+  todo: ['phaseManagement.state.notStarted', 'Not started'],
+};
+
+export const stateLabel = (t, state) => {
+  const [key, fallback] = STATE_LABELS[state] || STATE_LABELS.todo;
+  return t(key, fallback);
+};
+
+/** Settled reads as a filled wash, in flight as an outline, untouched as grey. */
+export const stateTagClass = (state) => {
+  if (state === 'done') return 'tag-wash';
+  return state === 'active' ? 'tag-outline' : 'tag-quiet';
+};
+
 export const buttonStyle = (color = 'var(--primary)', disabled = false) => ({
   padding: '0.5rem 1rem',
   borderRadius: '6px',

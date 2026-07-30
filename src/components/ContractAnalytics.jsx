@@ -1,222 +1,143 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+// src/components/ContractAnalytics.jsx
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell, AreaChart, Area
-} from 'recharts';
-import { 
-  Clock, 
-  CheckCircle, AlertTriangle, Calendar,
-  Filter, Download, Eye, ChevronLeft, ChevronRight, RefreshCw
-} from 'lucide-react';
+import { Download, RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '../hooks/useTheme';
-import { getI18nOrFallback, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
-import { DEFAULT_DASHBOARD_METRIC_FILTER } from '../utils/contractMetrics';
+import { getI18nOrFallback } from '../utils/formatters';
+import { STAGES, getContractStage, getStageLabel } from '../utils/stages';
+import { getCategoryShortLabel } from '../utils/constants';
+import { StageTag } from './dashboard/StageTag';
+import './dashboard/dashboard.css';
 
-const COLORS = ['#10b981', '#f59e0b', '#ef4444', '#6b7280', '#8b5cf6', '#06b6d4'];
-const STATUS_COLORS = {
-  approved: '#10b981',
-  pending: '#f59e0b',
-  in_progress: '#3b82f6',
-  rejected: '#ef4444',
-  draft: '#6b7280',
-  expiring: '#f97316',
-  expired: '#dc2626'
+const PERIOD_DAYS = {
+  '1month': 30,
+  '3months': 90,
+  '6months': 180,
+  '1year': 365,
+  all: Infinity,
 };
 
+const PAGE_SIZE = 10;
+
+/**
+ * The pie's shades, in order: one step per stage, walked from the accent into the
+ * neutrals and back to the palest accent.
+ */
+const PIE_RAMP = [
+  'var(--color-accent-700)',
+  'var(--color-accent-500)',
+  'var(--color-accent-300)',
+  'var(--color-neutral-700)',
+  'var(--color-neutral-500)',
+  'var(--color-neutral-300)',
+  'var(--color-accent-100)',
+];
+
+const shortDate = (value) => (value ? new Date(value).toLocaleDateString() : '—');
+
+/**
+ * Analytics & history. Everything here is derived from the stage model, and the
+ * one chart is drawn in CSS - see .ledger-analytics__pie.
+ */
 const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   const { t } = useTranslation();
-  const { darkMode } = useTheme();
   const navigate = useNavigate();
-  const [selectedPeriod, setSelectedPeriod] = useState('6months');
-  const [selectedStatus, setSelectedStatus] = useState(DEFAULT_DASHBOARD_METRIC_FILTER);
-  const [showDetailedView, setShowDetailedView] = useState(false);
-  const [tablePage, setTablePage] = useState(0);
-  const [sortField, setSortField] = useState('updated_at');
-  const [sortDir, setSortDir] = useState('desc');
-  const [containerWidth, setContainerWidth] = useState(1400);
-  const [isResizing, setIsResizing] = useState(false);
-  const itemsPerPage = 10;
+  const [period, setPeriod] = useState('6months');
+  const [stageFilter, setStageFilter] = useState('all');
+  const [page, setPage] = useState(0);
 
-  // Refs for GSAP animations and resizing
-  const containerRef = useRef(null);
-  const metricsRef = useRef([]);
-  const chartsRef = useRef([]);
-  const resizeHandleRef = useRef(null);
-  const resizeCenterXRef = useRef(0);
+  const filtered = useMemo(() => {
+    if (!Array.isArray(contracts)) return [];
+    const days = PERIOD_DAYS[period];
+    const cutoff = days === Infinity
+      ? null
+      : new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
-  // Handle resize functionality
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (!isResizing) return;
+    return contracts.filter((c) => {
+      if (!c) return false;
+      if (cutoff && (!c.updated_at || new Date(c.updated_at) < cutoff)) return false;
+      if (stageFilter !== 'all' && getContractStage(c) !== stageFilter) return false;
+      return true;
+    });
+  }, [contracts, period, stageFilter]);
 
-      // Calculate width relative to the container's center (stable even with sidebar layouts)
-      const centerX = resizeCenterXRef.current;
-      if (!centerX) return;
-
-      const distanceFromCenter = Math.abs(e.clientX - centerX);
-      const newWidth = Math.max(800, Math.min(2400, distanceFromCenter * 2));
-      setContainerWidth(newWidth);
+  const stats = useMemo(() => {
+    const byStage = (stage) => filtered.filter((c) => getContractStage(c) === stage).length;
+    return {
+      total: filtered.length,
+      inReview: byStage('in_review'),
+      executed: byStage('executed'),
+      expiring: byStage('expiring_soon'),
     };
+  }, [filtered]);
 
-    const handleMouseUp = () => {
-      setIsResizing(false);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    };
+  /** One slice per stage that actually has contracts, in lifecycle order. */
+  const distribution = useMemo(() => {
+    if (filtered.length === 0) return [];
+    return STAGES
+      .map((stage, i) => ({
+        value: stage.value,
+        label: getStageLabel(t, stage.value),
+        color: PIE_RAMP[i % PIE_RAMP.length],
+        count: filtered.filter((c) => getContractStage(c) === stage.value).length,
+      }))
+      .filter((slice) => slice.count > 0)
+      .map((slice) => ({ ...slice, share: (slice.count / filtered.length) * 100 }));
+  }, [filtered, t]);
 
-    if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      document.body.style.cursor = 'ew-resize';
-      document.body.style.userSelect = 'none';
-    }
+  /** `a 0deg 40deg, b 40deg 130deg, ...` - the arcs, in one custom property. */
+  const pieStops = useMemo(() => {
+    let at = 0;
+    return distribution
+      .map((slice, i) => {
+        const from = at;
+        // The last slice closes on 360deg exactly, whatever the rounding did.
+        at = i === distribution.length - 1 ? 360 : from + (slice.share / 100) * 360;
+        return `${slice.color} ${from}deg ${at}deg`;
+      })
+      .join(', ');
+  }, [distribution]);
 
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isResizing, containerWidth]);
+  const rows = useMemo(
+    () => [...filtered].sort((a, b) => {
+      const at = a.updated_at ? new Date(a.updated_at).getTime() : 0;
+      const bt = b.updated_at ? new Date(b.updated_at).getTime() : 0;
+      return bt - at;
+    }),
+    [filtered]
+  );
 
-  const handleResizeStart = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const paged = rows.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE);
 
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    resizeCenterXRef.current = rect.left + rect.width / 2;
-
-    setIsResizing(true);
+  const onFilterChange = (setter) => (e) => {
+    setter(e.target.value);
+    setPage(0);
   };
 
-  // Filter contracts based on period and status
-  const filteredContracts = useMemo(() => {
-    if (!Array.isArray(contracts)) return [];
-    
-    const now = new Date();
-    const periods = {
-      '1month': 30,
-      '3months': 90,
-      '6months': 180,
-      '1year': 365,
-      'all': Infinity
-    };
-    
-    const daysBack = periods[selectedPeriod];
-    const cutoffDate = new Date(now.getTime() - (daysBack * 24 * 60 * 60 * 1000));
-    
-    return contracts.filter(contract => {
-      if (!contract || !contract.updated_at) return false;
-      const dateValid = new Date(contract.updated_at) >= cutoffDate;
-      const statusValid = selectedStatus === 'all'
-        || normalizeContractStatus(contract.status) === selectedStatus;
-      return dateValid && statusValid;
-    });
-  }, [contracts, selectedPeriod, selectedStatus]);
-
-  // Sorted contracts for table
-  const sortedContracts = useMemo(() => {
-    return [...filteredContracts].sort((a, b) => {
-      let aVal = a[sortField];
-      let bVal = b[sortField];
-      
-      if (sortField === 'updated_at' || sortField === 'expiry_date') {
-        aVal = aVal ? new Date(aVal).getTime() : 0;
-        bVal = bVal ? new Date(bVal).getTime() : 0;
-      }
-      
-      if (sortDir === 'asc') return aVal > bVal ? 1 : -1;
-      return aVal < bVal ? 1 : -1;
-    });
-  }, [filteredContracts, sortField, sortDir]);
-
-  // Paginated contracts
-  const paginatedContracts = useMemo(() => {
-    const start = tablePage * itemsPerPage;
-    return sortedContracts.slice(start, start + itemsPerPage);
-  }, [sortedContracts, tablePage]);
-
-  const totalPages = Math.ceil(sortedContracts.length / itemsPerPage);
-
-  // Status Distribution Data
-  const statusData = useMemo(() => {
-    if (filteredContracts.length === 0) return [];
-
-    const statusCounts = filteredContracts.reduce((acc, contract) => {
-      if (contract?.status) {
-        acc[contract.status] = (acc[contract.status] || 0) + 1;
-      }
-      return acc;
-    }, {});
-
-    return Object.entries(statusCounts).map(([status, count]) => ({
-      name: t(`contractTable.status.${status}`, status.charAt(0).toUpperCase() + status.slice(1)),
-      value: count,
-      status,
-      percentage: ((count / filteredContracts.length) * 100).toFixed(1)
-    }));
-  }, [filteredContracts, t]);
-
-  // Monthly Trend Data
-  const monthlyTrends = useMemo(() => {
-    if (filteredContracts.length === 0) return [];
-
-    const monthlyData = {};
-    
-    filteredContracts.forEach(contract => {
-      if (!contract?.updated_at) return;
-      
-      const month = new Date(contract.updated_at).toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short' 
-      });
-      
-      if (!monthlyData[month]) {
-        monthlyData[month] = { month, total: 0, approved: 0, rejected: 0, pending: 0, draft: 0, expired: 0, expiring: 0 };
-      }
-      
-      monthlyData[month].total++;
-      if (contract.status) monthlyData[month][contract.status]++;
-    });
-
-    return Object.values(monthlyData).sort((a, b) => new Date(a.month) - new Date(b.month));
-  }, [filteredContracts]);
-
-  // Key Metrics
-  const keyMetrics = useMemo(() => {
-    const total = filteredContracts.length;
-    const approved = filteredContracts.filter(c => c?.status === 'approved').length;
-    const rejected = filteredContracts.filter(c => c?.status === 'rejected').length;
-    const pending = filteredContracts.filter(c => c?.status === 'pending').length;
-    const expiring = filteredContracts.filter(c => c?.status === 'expiring').length;
-    
-    return {
-      total,
-      approved,
-      rejected,
-      pending,
-      expiring,
-      approvalRate: total > 0 ? ((approved / total) * 100).toFixed(1) : 0,
-      rejectionRate: total > 0 ? ((rejected / total) * 100).toFixed(1) : 0
-    };
-  }, [filteredContracts]);
-
-  // Export to CSV
-  const handleExportCSV = () => {
-    const headers = ['Title', 'Status', 'Version', 'Author', 'Updated', 'Expiry'];
-    const rows = filteredContracts.map(c => [
+  const exportCsv = () => {
+    const headers = [
+      t('analytics.contract', 'Contract'),
+      t('dashboard.col.category', 'Category'),
+      t('dashboard.col.stage', 'Stage'),
+      t('dashboard.col.owner', 'Owner'),
+      t('analytics.updated', 'Updated'),
+      t('analytics.expiry', 'Expiry'),
+    ];
+    const body = rows.map((c) => [
       c.title || '',
-      c.status || '',
-      c.version || '',
+      c.category || '',
+      getStageLabel(t, getContractStage(c)),
       c.author || '',
-      c.updated_at ? new Date(c.updated_at).toLocaleDateString() : '',
-      c.expiry_date ? new Date(c.expiry_date).toLocaleDateString() : ''
+      shortDate(c.updated_at),
+      shortDate(c.expiry_date),
     ]);
-    
-    const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
+    const csv = [headers, ...body]
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
     const a = document.createElement('a');
     a.href = url;
     a.download = `contracts-analytics-${new Date().toISOString().split('T')[0]}.csv`;
@@ -224,358 +145,214 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
     URL.revokeObjectURL(url);
   };
 
-  // Handle sort
-  const handleSort = (field) => {
-    if (sortField === field) {
-      setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortDir('desc');
-    }
-  };
-
-  const cardStyle = {
-    background: 'var(--card-bg)',
-    border: '1px solid var(--card-border)',
-    borderRadius: '12px',
-    padding: '1.5rem',
-    marginBottom: '1rem',
-    boxShadow: darkMode ? '0 4px 6px rgba(255, 255, 255, 0.05)' : '0 4px 6px rgba(0, 0, 0, 0.08)'
-  };
-
-  const MetricCard = React.forwardRef(({ title, value, icon: Icon, color = '#3b82f6', onClick }, ref) => (
-    <div 
-      ref={ref}
-      onClick={onClick}
-      style={{
-        ...cardStyle,
-        background: `linear-gradient(135deg, ${color}15, var(--card-bg))`,
-        borderLeft: `4px solid ${color}`,
-        cursor: onClick ? 'pointer' : 'default',
-        transition: 'transform 0.2s, box-shadow 0.2s'
-      }}
-      onMouseEnter={e => { if (onClick) { e.currentTarget.style.transform = 'translateY(-2px)'; }}}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h3 style={{ margin: 0, color: 'var(--text)', fontSize: '0.9rem', opacity: 0.8 }}>{title}</h3>
-          <p style={{ margin: '0.5rem 0 0 0', fontSize: '2rem', fontWeight: 'bold', color }}>{value}</p>
-        </div>
-        <Icon size={32} style={{ color, opacity: 0.7 }} />
-      </div>
-    </div>
-  ));
-
-  // Loading state
   if (loading) {
-    return (
-      <div style={{ padding: '4rem', textAlign: 'center' }}>
-        <RefreshCw size={48} style={{ color: 'var(--primary)', animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: 'var(--text)', marginTop: '1rem' }}>{t('common.loading', 'Loading...')}</p>
-        <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
+    return <p className="ledger-analytics__empty">{t('common.loading', 'Loading...')}</p>;
   }
 
-  // No data state
-  if (!Array.isArray(contracts) || contracts.length === 0) {
-    return (
-      <div style={{ padding: '4rem', textAlign: 'center' }}>
-        <Calendar size={64} style={{ color: 'var(--text)', opacity: 0.3, marginBottom: '1rem' }} />
-        <h2 style={{ color: 'var(--text)' }}>{t('analytics.title', 'Contract Analytics')}</h2>
-        <p style={{ color: 'var(--text)', opacity: 0.7 }}>{t('analytics.noContractsAvailable', 'No contracts available for analysis')}</p>
-      </div>
-    );
-  }
+  const cells = [
+    { key: 'total', label: t('analytics.totalContracts', 'Total contracts'), value: stats.total },
+    { key: 'in_review', label: getStageLabel(t, 'in_review'), value: stats.inReview },
+    { key: 'executed', label: getStageLabel(t, 'executed'), value: stats.executed },
+    {
+      key: 'expiring',
+      label: t('analytics.expiringSoon', 'Expiring soon'),
+      value: stats.expiring,
+      accent: true,
+    },
+  ];
 
   return (
-    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>
-      <div ref={containerRef} style={{ padding: '2rem', maxWidth: `${containerWidth}px`, width: '100%', position: 'relative', transition: isResizing ? 'none' : 'max-width 0.3s ease' }}>
-      {/* Header with controls */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <h1 style={{ color: 'var(--text)', margin: 0, fontSize: 'clamp(1.25rem, 4vw, 1.75rem)' }}>
-          {t('analytics.contractAnalyticsHistory', 'Contract Analytics & History')}
-        </h1>
-        
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-          {/* Period filter */}
-          <select 
-            value={selectedPeriod}
-            onChange={(e) => { setSelectedPeriod(e.target.value); setTablePage(0); }}
-            style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: 'var(--card-bg)', color: 'var(--text)', fontSize: '0.9rem' }}
-          >
-            <option value="1month">{t('analytics.lastMonth', 'Last Month')}</option>
-            <option value="3months">{t('analytics.last3Months', 'Last 3 Months')}</option>
-            <option value="6months">{t('analytics.last6Months', 'Last 6 Months')}</option>
-            <option value="1year">{t('analytics.lastYear', 'Last Year')}</option>
-            <option value="all">{t('analytics.allTime', 'All Time')}</option>
-          </select>
-          
-          {/* Status filter */}
-          <select 
-            value={selectedStatus}
-            onChange={(e) => { setSelectedStatus(e.target.value); setTablePage(0); }}
-            style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: 'var(--card-bg)', color: 'var(--text)', fontSize: '0.9rem' }}
-          >
-            <option value="all">{t('analytics.allStatuses', 'All Statuses')}</option>
-            <option value="in_progress">{t('contractTable.status.in_progress', 'In Progress')}</option>
-            <option value="approved">{t('contractTable.status.approved', 'Approved')}</option>
-            <option value="pending">{t('contractTable.status.pending', 'Pending')}</option>
-            <option value="rejected">{t('contractTable.status.rejected', 'Rejected')}</option>
-            <option value="draft">{t('contractTable.status.draft', 'Draft')}</option>
-            <option value="expiring">{t('contractTable.status.expiring', 'Expiring')}</option>
-            <option value="expired">{t('contractTable.status.expired', 'Expired')}</option>
-          </select>
+    <>
+      <div className="ledger-analytics__toolbar">
+        <select
+          className="input"
+          value={period}
+          onChange={onFilterChange(setPeriod)}
+          aria-label={t('analytics.period', 'Period')}
+        >
+          <option value="1month">{t('analytics.lastMonth', 'Last Month')}</option>
+          <option value="3months">{t('analytics.last3Months', 'Last 3 Months')}</option>
+          <option value="6months">{t('analytics.last6Months', 'Last 6 Months')}</option>
+          <option value="1year">{t('analytics.lastYear', 'Last Year')}</option>
+          <option value="all">{t('analytics.allTime', 'All Time')}</option>
+        </select>
 
-          {/* View toggle */}
-          <button
-            onClick={() => setShowDetailedView(!showDetailedView)}
-            style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: showDetailedView ? 'var(--primary)' : 'var(--card-bg)', color: showDetailedView ? '#fff' : 'var(--text)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}
-          >
-            <Eye size={16} />
-            {showDetailedView ? t('analytics.simpleView', 'Simple') : t('analytics.detailedView', 'Detailed')}
-          </button>
-          
-          {/* Export button */}
-          <button
-            onClick={handleExportCSV}
-            style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: '#10b981', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}
-          >
-            <Download size={16} />
-            {t('analytics.exportCSV', 'Export CSV')}
-          </button>
+        <select
+          className="input"
+          value={stageFilter}
+          onChange={onFilterChange(setStageFilter)}
+          aria-label={t('dashboard.stage', 'Stage')}
+        >
+          <option value="all">{t('dashboard.allStages', 'All stages')}</option>
+          {STAGES.map((s) => (
+            <option key={s.value} value={s.value}>{getStageLabel(t, s.value)}</option>
+          ))}
+        </select>
 
-          {/* Refresh button */}
+        <div className="ledger-analytics__toolbar-end">
+          <button type="button" className="btn-secondary" onClick={exportCsv}>
+            <Download size={15} aria-hidden="true" />
+            {t('analytics.exportCSV', 'Export to CSV')}
+          </button>
           {onRefresh && (
-            <button onClick={onRefresh} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: 'var(--card-bg)', color: 'var(--text)', cursor: 'pointer' }}>
-              <RefreshCw size={18} />
+            <button
+              type="button"
+              className="btn-icon"
+              onClick={onRefresh}
+              aria-label={t('buttons.refresh', 'Refresh')}
+              title={t('buttons.refresh', 'Refresh')}
+            >
+              <RefreshCw size={17} />
             </button>
           )}
         </div>
       </div>
 
-      {/* Key Metrics Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-        <MetricCard ref={el => metricsRef.current[0] = el} title={t('analytics.totalContracts', 'Total Contracts')} value={keyMetrics.total} icon={Calendar} color="#3b82f6" />
-        <MetricCard ref={el => metricsRef.current[1] = el} title={t('analytics.approvalRate', 'Approval Rate')} value={`${keyMetrics.approvalRate}%`} icon={CheckCircle} color="#10b981" onClick={() => setSelectedStatus('approved')} />
-        <MetricCard ref={el => metricsRef.current[2] = el} title={t('analytics.pendingReview', 'Pending Review')} value={keyMetrics.pending} icon={Clock} color="#f59e0b" onClick={() => setSelectedStatus('pending')} />
-        <MetricCard ref={el => metricsRef.current[3] = el} title={t('analytics.expiringSoon', 'Expiring Soon')} value={keyMetrics.expiring} icon={AlertTriangle} color="#ef4444" onClick={() => setSelectedStatus('expiring')} />
+      <div className="ledger-analytics__stats">
+        {cells.map((cell) => (
+          <div key={cell.key} className="ledger-analytics__stat">
+            <span className="ledger-analytics__stat-label">{cell.label}</span>
+            <span
+              className={`ledger-analytics__stat-value${
+                cell.accent ? ' ledger-analytics__stat-value--accent' : ''
+              }`}
+            >
+              {cell.value}
+            </span>
+          </div>
+        ))}
       </div>
 
-      {/* Charts Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: showDetailedView ? 'repeat(auto-fit, minmax(400px, 1fr))' : '1fr', gap: '2rem', marginBottom: '2rem' }}>
-        {/* Status Distribution Pie */}
-        <div ref={el => chartsRef.current[0] = el} style={cardStyle}>
-          <h3 style={{ color: 'var(--text)', marginBottom: '1rem' }}>{t('analytics.statusDistribution', 'Status Distribution')}</h3>
-          {statusData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={statusData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percentage }) => `${name}: ${percentage}%`}
-                  outerRadius={100}
-                  dataKey="value"
-                  onClick={(data) => setSelectedStatus(data.status)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {statusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={STATUS_COLORS[entry.status] || COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value, name) => [value, name]} />
-              </PieChart>
-            </ResponsiveContainer>
-          ) : (
-            <p style={{ color: 'var(--text)', opacity: 0.6, textAlign: 'center', padding: '4rem 0' }}>{t('analytics.noData', 'No data available')}</p>
-          )}
+      <section className="ledger-analytics__panel">
+        <div className="ledger-analytics__panel-head">
+          <h2 className="ledger-analytics__panel-title">
+            {t('analytics.stageDistribution', 'Stage distribution')}
+          </h2>
         </div>
 
-        {/* Monthly Trends Area Chart */}
-        {showDetailedView && (
-          <div ref={el => chartsRef.current[1] = el} style={cardStyle}>
-            <h3 style={{ color: 'var(--text)', marginBottom: '1rem' }}>{t('analytics.monthlyTrends', 'Monthly Trends')}</h3>
-            {monthlyTrends.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={monthlyTrends}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#374151' : '#e5e7eb'} />
-                  <XAxis dataKey="month" stroke="var(--text)" fontSize={12} />
-                  <YAxis stroke="var(--text)" fontSize={12} />
-                  <Tooltip contentStyle={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '8px' }} />
-                  <Legend />
-                  <Area type="monotone" dataKey="approved" stackId="1" stroke="#10b981" fill="#10b981" name={t('contractTable.status.approved', 'Approved')} />
-                  <Area type="monotone" dataKey="pending" stackId="1" stroke="#f59e0b" fill="#f59e0b" name={t('contractTable.status.pending', 'Pending')} />
-                  <Area type="monotone" dataKey="rejected" stackId="1" stroke="#ef4444" fill="#ef4444" name={t('contractTable.status.rejected', 'Rejected')} />
-                </AreaChart>
-              </ResponsiveContainer>
-            ) : (
-              <p style={{ color: 'var(--text)', opacity: 0.6, textAlign: 'center', padding: '4rem 0' }}>{t('analytics.noData', 'No data available')}</p>
-            )}
+        {distribution.length === 0 ? (
+          <p className="ledger-analytics__empty">{t('analytics.noData', 'No data available')}</p>
+        ) : (
+          <div className="ledger-analytics__dist">
+            <div
+              className="ledger-analytics__pie"
+              style={{ '--pie-stops': pieStops }}
+              role="img"
+              aria-label={distribution
+                .map((s) => `${s.label}: ${s.share.toFixed(1)}%`)
+                .join(', ')}
+            />
+            <ul className="ledger-analytics__legend">
+              {distribution.map((slice) => (
+                <li key={slice.value} className="ledger-analytics__legend-item">
+                  <span
+                    className="ledger-analytics__swatch"
+                    style={{ '--swatch': slice.color }}
+                    aria-hidden="true"
+                  />
+                  <span className="ledger-analytics__legend-name">{slice.label}</span>
+                  <span className="ledger-analytics__legend-pct">{slice.share.toFixed(1)}%</span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
-      </div>
+      </section>
 
-      {/* Bar Chart (Detailed View) */}
-      {showDetailedView && monthlyTrends.length > 0 && (
-        <div ref={el => chartsRef.current[2] = el} style={cardStyle}>
-          <h3 style={{ color: 'var(--text)', marginBottom: '1rem' }}>{t('analytics.statusTimeline', 'Contract Status Timeline')}</h3>
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={monthlyTrends}>
-              <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#374151' : '#e5e7eb'} />
-              <XAxis dataKey="month" stroke="var(--text)" fontSize={12} />
-              <YAxis stroke="var(--text)" fontSize={12} />
-              <Tooltip contentStyle={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '8px' }} />
-              <Legend />
-              <Bar dataKey="approved" fill="#10b981" name={t('contractTable.status.approved', 'Approved')} />
-              <Bar dataKey="pending" fill="#f59e0b" name={t('contractTable.status.pending', 'Pending')} />
-              <Bar dataKey="rejected" fill="#ef4444" name={t('contractTable.status.rejected', 'Rejected')} />
-              <Bar dataKey="draft" fill="#6b7280" name={t('contractTable.status.draft', 'Draft')} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      )}
-
-      {/* Contract History Table with pagination & sorting */}
-      <div ref={el => chartsRef.current[3] = el} style={cardStyle}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <h3 style={{ color: 'var(--text)', margin: 0 }}>{t('analytics.recentHistory', 'Contract History')}</h3>
-          <span style={{ color: 'var(--text)', opacity: 0.7, fontSize: '0.9rem' }}>
-            {t('analytics.showing', 'Showing')} {paginatedContracts.length} {t('analytics.of', 'of')} {sortedContracts.length}
+      <section className="ledger-analytics__panel">
+        <div className="ledger-analytics__panel-head">
+          <h2 className="ledger-analytics__panel-title">
+            {t('analytics.recentHistory', 'Recent history')}
+          </h2>
+          <span className="ledger-analytics__count">
+            {t('analytics.showing', 'Showing')} {paged.length} {t('analytics.of', 'of')} {rows.length}
           </span>
         </div>
-        
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
-            <thead>
-              <tr style={{ borderBottom: '2px solid var(--card-border)' }}>
-                {[
-                  { key: 'title', label: t('analytics.contract', 'Contract') },
-                  { key: 'status', label: t('analytics.status', 'Status') },
-                  { key: 'updated_at', label: t('analytics.updated', 'Updated') },
-                  { key: 'expiry_date', label: t('analytics.expiry', 'Expiry') }
-                ].map(col => (
-                  <th 
-                    key={col.key}
-                    onClick={() => handleSort(col.key)}
-                    style={{ padding: '1rem', textAlign: 'left', color: 'var(--text)', cursor: 'pointer', userSelect: 'none' }}
-                  >
-                    {col.label} {sortField === col.key && (sortDir === 'asc' ? '↑' : '↓')}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedContracts.map((contract) => (
-                <tr 
-                  key={contract.id} 
-                  style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s', cursor: 'pointer' }} 
-                  onMouseEnter={e => e.currentTarget.style.background = 'var(--hover-bg)'} 
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                  onClick={() => navigate(`/contracts/${contract.id}`)}
-                  title={t('analytics.clickToViewDetails', 'Click to view contract details')}
-                >
-                  <td style={{ padding: '1rem', color: 'var(--text)' }}>{getI18nOrFallback(t, contract, 'title_i18n', 'title')}</td>
-                  <td style={{ padding: '1rem' }}>
-                    {(() => {
-                      const normalizedStatus = normalizeContractStatus(contract.status) || 'draft';
-                      const color = STATUS_COLORS[normalizedStatus] || '#6b7280';
-                      return (
-                        <span style={{ padding: '0.25rem 0.75rem', borderRadius: '12px', fontSize: '0.85rem', backgroundColor: `${color}20`, color }}>
-                          {t(`contractTable.status.${normalizedStatus}`, humanizeContractStatus(normalizedStatus) || String(contract.status || ''))}
-                        </span>
-                      );
-                    })()}
-                  </td>
-                  <td style={{ padding: '1rem', color: 'var(--text)' }}>{contract.updated_at ? new Date(contract.updated_at).toLocaleDateString() : '-'}</td>
-                  <td style={{ padding: '1rem', color: 'var(--text)' }}>{contract.expiry_date ? new Date(contract.expiry_date).toLocaleDateString() : '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
-            <button onClick={() => setTablePage(p => Math.max(0, p - 1))} disabled={tablePage === 0} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: 'var(--card-bg)', color: 'var(--text)', cursor: tablePage === 0 ? 'not-allowed' : 'pointer', opacity: tablePage === 0 ? 0.5 : 1 }}>
-              <ChevronLeft size={18} />
-            </button>
-            <span style={{ color: 'var(--text)', fontSize: '0.9rem' }}>{tablePage + 1} / {totalPages}</span>
-            <button onClick={() => setTablePage(p => Math.min(totalPages - 1, p + 1))} disabled={tablePage >= totalPages - 1} style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--card-border)', background: 'var(--card-bg)', color: 'var(--text)', cursor: tablePage >= totalPages - 1 ? 'not-allowed' : 'pointer', opacity: tablePage >= totalPages - 1 ? 0.5 : 1 }}>
-              <ChevronRight size={18} />
-            </button>
-          </div>
+        {rows.length === 0 ? (
+          <p className="ledger-analytics__empty">{t('analytics.noData', 'No data available')}</p>
+        ) : (
+          <>
+            <div className="ledger-analytics__table-wrap">
+              <table className="table ledger-analytics__table">
+                <thead>
+                  <tr>
+                    <th>{t('analytics.contract', 'Contract')}</th>
+                    <th className="col-category">{t('dashboard.col.category', 'Category')}</th>
+                    <th>{t('analytics.status', 'Status')}</th>
+                    <th className="col-updated">{t('analytics.updated', 'Updated')}</th>
+                    <th className="col-expiry">{t('analytics.expiry', 'Expiry')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paged.map((c) => (
+                    <tr
+                      key={c.id}
+                      onClick={() => navigate(`/contracts/${c.id}`)}
+                      title={t('analytics.clickToViewDetails', 'Click to view contract details')}
+                    >
+                      <td>
+                        <span className="ledger-analytics__name">
+                          {getI18nOrFallback(t, c, 'title_i18n', 'title') || '—'}
+                        </span>
+                        {/* Each chip shows only at the width where its column drops
+                            out, so nothing is ever duplicated or lost. */}
+                        <span className="ledger-table__meta">
+                          <span className="meta-category">
+                            {c.category
+                              ? <span className="tag tag-outline">{getCategoryShortLabel(t, c.category)}</span>
+                              : '—'}
+                          </span>
+                          {/* Two dates in one line, so each keeps its label. */}
+                          <span className="meta-updated">
+                            {t('analytics.updated', 'Updated')}: {shortDate(c.updated_at)}
+                          </span>
+                          <span className="meta-expiry">
+                            {t('analytics.expiry', 'Expiry')}: {shortDate(c.expiry_date)}
+                          </span>
+                        </span>
+                      </td>
+                      <td className="col-category">
+                        {c.category
+                          ? <span className="tag tag-outline">{getCategoryShortLabel(t, c.category)}</span>
+                          : '—'}
+                      </td>
+                      <td><StageTag stage={getContractStage(c)} /></td>
+                      <td className="col-updated ledger-analytics__date">{shortDate(c.updated_at)}</td>
+                      <td className="col-expiry ledger-analytics__date">{shortDate(c.expiry_date)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {pageCount > 1 && (
+              <div className="ledger-analytics__pager">
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => setPage(currentPage - 1)}
+                  disabled={currentPage === 0}
+                >
+                  {t('buttons.previous', 'Previous')}
+                </button>
+                <span className="ledger-analytics__pager-count">
+                  {currentPage + 1} / {pageCount}
+                </span>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => setPage(currentPage + 1)}
+                  disabled={currentPage >= pageCount - 1}
+                >
+                  {t('buttons.next', 'Next')}
+                </button>
+              </div>
+            )}
+          </>
         )}
-      </div>
-      
-      {/* Resize handles */}
-      <div
-        ref={resizeHandleRef}
-        onMouseDown={handleResizeStart}
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          bottom: 0,
-          width: '12px',
-          cursor: 'ew-resize',
-          background: isResizing ? 'var(--primary)' : 'transparent',
-          transition: 'background 0.2s',
-          zIndex: 10,
-          opacity: 0.25,
-          userSelect: 'none'
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-        onMouseLeave={(e) => !isResizing && (e.currentTarget.style.opacity = '0.3')}
-      >
-        <div style={{
-          position: 'absolute',
-          right: '2px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: '4px',
-          height: '40px',
-          background: 'var(--primary)',
-          borderRadius: '2px',
-          opacity: 0.6
-        }} />
-      </div>
-      
-      <div
-        onMouseDown={handleResizeStart}
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: '12px',
-          cursor: 'ew-resize',
-          background: isResizing ? 'var(--primary)' : 'transparent',
-          transition: 'background 0.2s',
-          zIndex: 10,
-          opacity: 0.25,
-          userSelect: 'none'
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-        onMouseLeave={(e) => !isResizing && (e.currentTarget.style.opacity = '0.3')}
-      >
-        <div style={{
-          position: 'absolute',
-          left: '2px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: '4px',
-          height: '40px',
-          background: 'var(--primary)',
-          borderRadius: '2px',
-          opacity: 0.6
-        }} />
-      </div>
-    </div>
-    </div>
+      </section>
+    </>
   );
 };
 

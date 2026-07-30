@@ -112,7 +112,10 @@
     "dark": "Dunkler Modus",
     "create": "Erstellen",
     "close": "Schließen",
-    "saving": "Wird gespeichert..."
+    "saving": "Wird gespeichert...",
+    "refresh": "Aktualisieren",
+    "previous": "Zurück",
+    "next": "Weiter"
   },
   "login": {
     "title": "Vertragsmanager",
@@ -255,7 +258,8 @@
     "back": "Zurück",
     "done": "Fertig",
     "permissions": "Berechtigungen",
-    "actions": "Aktionen"
+    "actions": "Aktionen",
+    "unknown": "Unbekannt"
   },
   "noPendingRequests": "Keine ausstehenden Anfragen",
   "approvalRequests": {
@@ -592,7 +596,11 @@
     "rejected": "Abgelehnt",
     "draft": "Entwurf",
     "clickToViewTimeline": "Klicken Sie, um die Zeitleiste anzuzeigen",
-    "clickToViewDetails": "Klicken, um Vertragsdetails anzuzeigen"
+    "clickToViewDetails": "Klicken, um Vertragsdetails anzuzeigen",
+    "updated": "Aktualisiert",
+    "of": "von",
+    "period": "Zeitraum",
+    "stageDistribution": "Phasenverteilung"
   },
   "phaseManagement": {
     "addTask": "Aufgabe hinzufügen",
@@ -673,7 +681,13 @@
     "completeWarning": "Alle Aufgaben werden als abgeschlossen markiert und die nächste Phase wird aktiviert.",
     "confirmReopen": "Diese Phase erneut öffnen?",
     "reopenWarning": "Dies setzt die Phase auf den Status 'Aktiv' zurück.",
-    "viewDetails": "Details & Dokumente anzeigen"
+    "viewDetails": "Details & Dokumente anzeigen",
+    "state": {
+      "completed": "Abgeschlossen",
+      "inProgress": "In Bearbeitung",
+      "notStarted": "Nicht begonnen"
+    },
+    "contractNotFound": "Dieser Vertrag konnte nicht gefunden werden."
   },
   "lifecycle": {
     "selectContract": "Vertrag auswählen",

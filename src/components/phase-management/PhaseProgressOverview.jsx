@@ -1,58 +1,36 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '../../hooks/useTheme';
-import PhaseTimeline from '../PhaseTimeline';
 
-const PhaseProgressOverview = ({
-  progressRef,
-  phases,
-  currentPhaseNumber,
-  overallProgress,
-  onPhaseClick,
-}) => {
+/**
+ * Overall progress: the average across every phase, as one big accent number and
+ * one flush bar.
+ */
+const PhaseProgressOverview = ({ progressRef, overallProgress = 0 }) => {
   const { t } = useTranslation();
-  const { darkMode } = useTheme();
-
-  const cardStyle = {
-    background: 'var(--card-bg)',
-    border: '1px solid var(--card-border)',
-    borderRadius: '12px',
-    marginBottom: '1rem',
-    boxShadow: darkMode ? '0 2px 8px rgba(255,255,255,0.05)' : '0 2px 8px rgba(0,0,0,0.08)',
-    overflow: 'hidden',
-  };
 
   return (
-    <div ref={progressRef} style={{ ...cardStyle, padding: '1.5rem', marginBottom: '2rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', gap: '1rem', flexWrap: 'wrap' }}>
+    <section ref={progressRef} className="phase-panel">
+      <div className="phase-panel__head">
         <div>
-          <h3 style={{ color: 'var(--text)', margin: 0 }}>{t('phaseManagement.overallProgress', 'Overall Progress')}</h3>
-          <p style={{ color: 'var(--text)', opacity: 0.65, margin: 0, fontSize: '0.9rem' }}>
+          <h2 className="phase-panel__title">
+            {t('phaseManagement.overallProgress', 'Overall progress')}
+          </h2>
+          <p className="phase-panel__sub">
             {t('phaseManagement.trackProjectPhases', 'Track project phases and deliverables')}
           </p>
         </div>
-        <span style={{ color: overallProgress === 100 ? '#10b981' : 'var(--text)', fontWeight: 'bold', fontSize: '1.25rem' }}>
-          {overallProgress}%
-        </span>
+        <span className="phase-panel__pct">{overallProgress}%</span>
       </div>
 
-      <div style={{ background: darkMode ? '#374151' : '#e5e7eb', borderRadius: '8px', height: '12px', overflow: 'hidden', marginBottom: '1.5rem' }}>
-        <div style={{
-          background: overallProgress === 100 ? '#10b981' : 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
-          height: '100%',
-          width: `${overallProgress}%`,
-          transition: 'width 0.5s ease',
-          borderRadius: '8px',
-        }} />
+      <div
+        className="phase-bar"
+        role="progressbar"
+        aria-valuenow={overallProgress}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div className="phase-bar__fill" style={{ width: `${overallProgress}%` }} />
       </div>
-
-      <PhaseTimeline
-        phases={phases}
-        currentPhaseNumber={currentPhaseNumber}
-        compact
-        onPhaseClick={onPhaseClick}
-      />
-    </div>
+    </section>
   );
 };
 

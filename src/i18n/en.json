@@ -114,7 +114,10 @@
     "googleDocs": "Google Docs",
     "create": "Create",
     "close": "Close",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "refresh": "Refresh",
+    "previous": "Previous",
+    "next": "Next"
   },
   "login": {
     "title": "Contract Manager",
@@ -275,7 +278,8 @@
     "profile": "Profile",
     "logout": "Logout",
     "language": "Language",
-    "theme": "Theme"
+    "theme": "Theme",
+    "unknown": "Unknown"
   },
   "noPendingRequests": "No Pending Requests",
   "approvalRequests": {
@@ -706,7 +710,11 @@
     "rejected": "Rejected",
     "draft": "Draft",
     "clickToViewTimeline": "Click to view timeline",
-    "clickToViewDetails": "Click to view contract details"
+    "clickToViewDetails": "Click to view contract details",
+    "updated": "Updated",
+    "of": "of",
+    "period": "Period",
+    "stageDistribution": "Stage distribution"
   },
   "phaseManagement": {
     "addTask": "Add Task",
@@ -794,7 +802,13 @@
     "noOpenPhases": "No open phases for this contract.",
     "noOpenTasks": "No open tasks in this phase.",
     "noContractsAvailable": "No contracts available",
-    "createContractFirst": "Create a contract on the dashboard to manage phases."
+    "createContractFirst": "Create a contract on the dashboard to manage phases.",
+    "state": {
+      "completed": "Completed",
+      "inProgress": "In progress",
+      "notStarted": "Not started"
+    },
+    "contractNotFound": "That contract could not be found."
   },
   "lifecycle": {
     "contractLifecycleManagement": "Contract Lifecycle Management",

@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar.jsx
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   BarChart3,
@@ -38,8 +38,18 @@ const Sidebar = () => {
     () => typeof window !== 'undefined' && window.innerWidth < MOBILE_BREAKPOINT
   );
 
+  const wasMobile = useRef(isMobile);
+
   useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    const onResize = () => {
+      const nowMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      // Coming back up to a desktop width, expand again. The mobile bar stores
+      // collapsed=true for its own layout, which would otherwise leave the rail
+      // collapsed the moment it takes over.
+      if (wasMobile.current && !nowMobile) localStorage.setItem('collapsed', 'false');
+      wasMobile.current = nowMobile;
+      setIsMobile(nowMobile);
+    };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
@@ -136,8 +146,8 @@ const SidebarRail = () => {
       key: 'approvals',
       icon: Check,
       label: t('sidebar.approvals', 'Approvals'),
-      // Filters the dashboard rather than opening the separate board.
-      onClick: () => navigate('/?filter=approvals'),
+      active: location.pathname.startsWith('/approvals'),
+      onClick: () => navigate('/approvals'),
     },
     {
       key: 'phases',

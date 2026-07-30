@@ -3,6 +3,7 @@ import { useUser } from '../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { approvalsApi, contractsApi } from '../api/contracts';
+import { getContractStage, getNextStage, getStageLabel, stageUpdatePayload } from '../utils/stages';
 import { Check, X, Clock, FileText, User, ArrowLeft, Edit, Save, X as CancelIcon, ThumbsUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -129,11 +130,19 @@ const Approvals = () => {
       // Get the contract ID from the request
       const request = approvalRequests.find(r => r.id === requestId);
       if (request) {
-        // Update contract status using API
+        // Approving moves the contract on to the next stage; rejecting only
+        // stamps the status and leaves the stage where it is.
         try {
-          await contractsApi.update(request.contract_id, { 
-            status: action === 'approve' ? 'approved' : 'rejected'
-          });
+          let updates = { status: 'rejected' };
+          if (action === 'approve') {
+            const current = getContractStage(request.contracts);
+            // Sign-off on a Draft or In Review contract lands it in Negotiation.
+            const next = ['draft', 'in_review'].includes(current)
+              ? 'negotiation'
+              : getNextStage(current) ?? current;
+            updates = stageUpdatePayload(next);
+          }
+          await contractsApi.update(request.contract_id, updates);
           toast.success(t('contract_approval_action_completed_successfully'));
         } catch (contractError) {
           console.error('Error updating contract status:', contractError);
@@ -235,7 +244,6 @@ const Approvals = () => {
             style={{
               background: 'var(--card-bg)',
               border: '1px solid var(--card-border)',
-              borderRadius: '6px',
               padding: 'clamp(0.3rem, 2vw, 0.5rem)',
               cursor: 'pointer',
               display: 'flex',
@@ -267,7 +275,6 @@ const Approvals = () => {
           <h3
             style={{
               border: '1px solid var(--card-border)',
-              borderRadius: '12px',
               padding: 'clamp(0.3rem, 2vw, 0.5rem)',
               margin: 0,
               color: 'var(--text)',
@@ -307,7 +314,6 @@ const Approvals = () => {
           color: 'var(--text-secondary)',
           background: 'var(--card-bg)',
           border: '1px solid var(--card-border)',
-          borderRadius: '8px'
         }}>
           <Clock size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
           <h3 style={{ margin: '0 0 0.5rem 0' }}>{t('noPendingRequests')}</h3>
@@ -324,7 +330,6 @@ const Approvals = () => {
               style={{
                 background: 'var(--card-bg)',
                 border: '1px solid var(--card-border)',
-                borderRadius: '8px',
                 padding: 'clamp(1rem, 4vw, 1.5rem)',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
               }}
@@ -341,7 +346,6 @@ const Approvals = () => {
                   background: '#f59e0b',
                   color: 'white',
                   padding: '0.25rem 0.75rem',
-                  borderRadius: '12px',
                   fontSize: '0.75rem',
                   fontWeight: '500'
                 }}>
@@ -357,7 +361,6 @@ const Approvals = () => {
                 <div style={{
                   background: 'var(--hover-bg)',
                   padding: 'clamp(0.5rem, 2vw, 1rem)',
-                  borderRadius: '6px',
                   border: '1px solid var(--card-border)',
                   color: 'var(--text)'
                 }}>
@@ -369,7 +372,6 @@ const Approvals = () => {
               <div style={{ 
                 background: 'var(--hover-bg)', 
                 padding: 'clamp(0.5rem, 2vw, 1rem)', 
-                borderRadius: '6px',
                 marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
                 border: '1px solid var(--card-border)'
               }}>
@@ -377,7 +379,9 @@ const Approvals = () => {
                   <strong>{t('contractDetails')}:</strong>
                 </p>
                 <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  • {t('status_label')}: {request.contracts?.status || 'Unknown'}
+                  • {t('status_label')}: {request.contracts
+                    ? getStageLabel(t, getContractStage(request.contracts))
+                    : t('common.unknown', 'Unknown')}
                 </p>
                 <p style={{ margin: '0.25rem 0 0 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
                   • {t('updated')}: {new Date(request.contracts?.updated_at).toLocaleDateString()}
@@ -391,7 +395,6 @@ const Approvals = () => {
               <div style={{ 
                 background: 'var(--card-bg)', 
                 padding: 'clamp(0.5rem, 2vw, 1rem)', 
-                borderRadius: '6px',
                 marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
                 border: '1px solid var(--card-border)'
               }}>
@@ -417,7 +420,6 @@ const Approvals = () => {
                               color: 'white',
                               border: 'none',
                               padding: '0.25rem 0.5rem',
-                              borderRadius: '4px',
                               cursor: saving ? 'not-allowed' : 'pointer',
                               display: 'flex',
                               alignItems: 'center',
@@ -437,7 +439,6 @@ const Approvals = () => {
                               color: 'white',
                               border: 'none',
                               padding: '0.25rem 0.5rem',
-                              borderRadius: '4px',
                               cursor: saving ? 'not-allowed' : 'pointer',
                               display: 'flex',
                               alignItems: 'center',
@@ -458,7 +459,6 @@ const Approvals = () => {
                             color: 'white',
                             border: 'none',
                             padding: '0.25rem 0.5rem',
-                            borderRadius: '4px',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
@@ -480,7 +480,6 @@ const Approvals = () => {
                     style={{
                       background: 'var(--hover-bg)',
                       padding: 'clamp(0.5rem, 2vw, 1rem)',
-                      borderRadius: '6px',
                       border: '1px solid var(--card-border)',
                     }}
                   >
@@ -493,7 +492,6 @@ const Approvals = () => {
                         minHeight: '100px',
                         padding: '0.5rem',
                         border: '1px solid var(--card-border)',
-                        borderRadius: '4px',
                         background: 'var(--card-bg)',
                         color: 'var(--text)',
                         fontSize: '0.875rem',
@@ -529,7 +527,6 @@ const Approvals = () => {
                     color: 'white',
                     border: 'none',
                     padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
-                    borderRadius: '6px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -553,7 +550,6 @@ const Approvals = () => {
                     color: 'white',
                     border: 'none',
                     padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
-                    borderRadius: '6px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',

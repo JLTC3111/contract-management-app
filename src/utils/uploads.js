@@ -55,3 +55,25 @@ export const uploadAttachments = async (contractId, files) => {
 
   return { uploaded, failed };
 };
+
+/**
+ * Removes files from a contract's folder, best effort, mirroring
+ * uploadAttachments. Names come from the storage listing, so they are already
+ * the sanitized keys.
+ * @returns {Promise<{deleted: string[], failed: {name: string, message: string}[]}>}
+ */
+export const deleteAttachments = async (contractId, names) => {
+  const deleted = [];
+  const failed = [];
+
+  for (const name of names || []) {
+    try {
+      await storageApi.delete(`uploads/${contractId}/${name}`);
+      deleted.push(name);
+    } catch (err) {
+      failed.push({ name, message: err?.message || 'delete failed' });
+    }
+  }
+
+  return { deleted, failed };
+};

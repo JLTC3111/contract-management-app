@@ -1,6 +1,6 @@
 // src/components/dashboard/FilterRow.jsx
 import { useTranslation } from 'react-i18next';
-import { Search, LayoutGrid, Rows3, X } from 'lucide-react';
+import { Search, LayoutGrid, Rows3 } from 'lucide-react';
 import { STAGES, getStageLabel } from '../../utils/stages';
 import { CONTRACT_CATEGORIES, getCategoryLabel, getCategoryShortLabel } from '../../utils/constants';
 
@@ -16,8 +16,6 @@ const FilterRow = ({
   onStageChange,
   view,
   onViewChange,
-  approvalsActive,
-  onClearApprovals,
 }) => {
   const { t } = useTranslation();
 
@@ -34,12 +32,14 @@ const FilterRow = ({
         />
       </div>
 
+      {/* Category is the one place a tag is a control: unstyled when off, filled
+          red when it is the active filter. */}
       <div className="ledger-filters__chips" role="group" aria-label={t('dashboard.category', 'Category')}>
         {CONTRACT_CATEGORIES.map((c) => (
           <button
             key={c}
             type="button"
-            className={`ledger-chip${category === c ? ' ledger-chip--active' : ''}`}
+            className={`tag ${category === c ? 'tag-selected' : 'tag-plain'}`}
             aria-pressed={category === c}
             onClick={() => onCategoryChange(c)}
             title={c === 'All' ? undefined : getCategoryLabel(t, c)}
@@ -60,19 +60,6 @@ const FilterRow = ({
           <option key={s.value} value={s.value}>{getStageLabel(t, s.value)}</option>
         ))}
       </select>
-
-      {/* The sidebar's Approvals entry sets this filter; this is how it comes off. */}
-      {approvalsActive && (
-        <button
-          type="button"
-          className="ledger-chip ledger-chip--active ledger-chip--dismiss"
-          onClick={onClearApprovals}
-          title={t('dashboard.clearFilter', 'Clear filter')}
-        >
-          {t('dashboard.pendingApprovalFilter', 'Pending approval')}
-          <X size={12} />
-        </button>
-      )}
 
       <div className="ledger-viewtoggle" role="group" aria-label={t('dashboard.view', 'View')}>
         <button

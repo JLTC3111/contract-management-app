@@ -1,0 +1,481 @@
+/* Phase management — flush panels, one accent, no shadows.
+   Everything here reads its colours from the tokens dashboard.css defines on
+   `.ledger`, so the page root must carry that class. */
+
+/* ---------- header ---------- */
+
+.phase-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--color-divider);
+}
+
+.phase-head__title {
+  flex: 1 1 auto;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 3.2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
+}
+
+.phase-contract__name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1rem, 2.4vw, 1.25rem);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.phase-contract__row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.55rem;
+}
+
+/* The picker holds the right edge; the tag and the button stay left. */
+.phase-contract__picker { margin-left: auto; max-width: min(320px, 100%); }
+
+/* The panels and the phase list stack with one gap between them. */
+.phase-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ---------- horizontal stepper ---------- */
+
+.phase-stepper {
+  display: flex;
+  margin: 0;
+  padding: 0.35rem 0 0;
+  list-style: none;
+}
+
+.phase-stepper__step {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+/* Spans from the previous square's centre to this one's, behind both. */
+.phase-stepper__line {
+  position: absolute;
+  top: 12px;
+  right: 50%;
+  left: -50%;
+  height: 2px;
+  background: var(--color-divider);
+}
+
+.phase-stepper__line--done { background: var(--color-accent-500); }
+
+.phase-stepper__square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--color-neutral-200);
+  border: 1.5px solid var(--color-neutral-300);
+  color: #fff;
+}
+
+.phase-stepper__square--done {
+  background: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+}
+
+.phase-stepper__square--active {
+  background: transparent;
+  border-color: var(--color-accent-500);
+}
+
+.phase-stepper__num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-neutral-700);
+}
+
+.phase-stepper__step--active .phase-stepper__num { color: var(--color-accent-500); }
+
+/* ---------- panels ---------- */
+
+.phase-panel {
+  padding: 1.1rem;
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+}
+
+.phase-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.phase-panel__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.phase-panel__sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-neutral-700);
+}
+
+.phase-panel__pct {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-accent-500);
+}
+
+/* ---------- progress bar ---------- */
+
+/* display:block so the bar works as a <span> inside the phase row's button too. */
+.phase-bar {
+  display: block;
+  overflow: hidden;
+  height: 10px;
+  margin-top: 1rem;
+  background: var(--color-neutral-200);
+}
+
+.phase-bar__fill {
+  display: block;
+  height: 100%;
+  background: var(--color-accent-500);
+  transition: width 0.3s ease;
+}
+
+/* Inline bars sit inside a row of text, so they are capped - a rule running the
+   whole panel width would read as a divider rather than a measure. */
+.phase-bar--slim {
+  height: 6px;
+  margin-top: 0.5rem;
+  max-width: 340px;
+}
+
+/* ---------- vertical lifecycle timeline ---------- */
+
+.phase-lifecycle { margin-top: 1rem; }
+
+.phase-lifecycle__row { display: flex; gap: 0.8rem; }
+
+.phase-lifecycle__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 18px;
+}
+
+.phase-lifecycle__node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  background: var(--color-neutral-200);
+  border: 1.5px solid var(--color-neutral-300);
+  color: #fff;
+}
+
+.phase-lifecycle__node--done {
+  background: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+}
+
+.phase-lifecycle__node--active {
+  background: transparent;
+  border-color: var(--color-accent-500);
+}
+
+/* Stretches over the body's bottom padding to reach the next node. */
+.phase-lifecycle__line {
+  flex: 1;
+  width: 2px;
+  background: var(--color-divider);
+}
+
+.phase-lifecycle__line--done { background: var(--color-accent-500); }
+
+.phase-lifecycle__body {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 1.1rem;
+}
+
+.phase-lifecycle__row:last-child .phase-lifecycle__body { padding-bottom: 0; }
+.phase-lifecycle__row:last-child .phase-lifecycle__line { display: none; }
+
+.phase-lifecycle__line-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.phase-lifecycle__name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.phase-lifecycle__caption {
+  margin: 0.35rem 0 0;
+  font-size: 0.76rem;
+  color: var(--color-neutral-700);
+}
+
+/* ---------- flat phase list ---------- */
+
+.phase-list {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+}
+
+.phase-item + .phase-item { border-top: 1px solid var(--color-neutral-300); }
+
+.phase-item__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.phase-item__num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 26px;
+  height: 26px;
+  background: var(--color-neutral-200);
+  border: 1.5px solid var(--color-neutral-300);
+  color: var(--color-neutral-900);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.phase-item__num--done {
+  background: var(--color-accent-500);
+  border-color: var(--color-accent-500);
+  color: #fff;
+}
+
+.phase-item__num--active {
+  background: transparent;
+  border-color: var(--color-accent-500);
+  color: var(--color-accent-500);
+}
+
+.phase-item__body { flex: 1; min-width: 0; }
+
+.phase-item__name {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.phase-item__desc {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--color-neutral-700);
+}
+
+.phase-item__end {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+  padding-top: 0.15rem;
+}
+
+.phase-item__pct {
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent-500);
+}
+
+.phase-item__chev { display: flex; color: var(--color-neutral-700); }
+
+/* ---------- expanded phase body ---------- */
+
+.phase-item__panel {
+  padding: 0 1rem 1rem;
+  border-top: 1px solid var(--color-neutral-300);
+}
+
+.phase-item__meta {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin: 0.85rem 0 0;
+  font-size: 0.78rem;
+  color: var(--color-neutral-700);
+}
+
+.phase-item__meta > span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+.phase-item__section {
+  margin: 1rem 0 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+}
+
+.phase-tasks {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-neutral-300);
+}
+
+.phase-task {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.84rem;
+}
+
+.phase-task + .phase-task { border-top: 1px solid var(--color-neutral-300); }
+.phase-task--done { background: var(--color-wash-faint); }
+.phase-task--done .phase-task__text { text-decoration: line-through; opacity: 0.7; }
+
+.phase-task__text { flex: 1; min-width: 0; }
+
+.phase-task__sub {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  color: var(--color-neutral-700);
+}
+
+.phase-task__sub > span { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+.phase-task__del {
+  display: flex;
+  padding: 0.15rem;
+  background: transparent;
+  border: none;
+  color: var(--color-accent-500);
+  cursor: pointer;
+}
+
+.phase-item__add {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.phase-item__add .input { flex: 1; min-width: 0; }
+
+.phase-item__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--color-neutral-300);
+}
+
+/* ---------- confirm modal ---------- */
+
+.phase-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.phase-modal__box {
+  width: 100%;
+  max-width: 400px;
+  padding: 1.25rem;
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+}
+
+.phase-modal__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.phase-modal__body {
+  margin: 0.5rem 0 1.1rem;
+  font-size: 0.85rem;
+  color: var(--color-neutral-700);
+}
+
+.phase-modal__actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
+
+/* ---------- states ---------- */
+
+.phase-empty {
+  margin: 0;
+  padding: 2.5rem 0;
+  text-align: center;
+  color: var(--color-neutral-700);
+  font-size: 0.9rem;
+}
+
+@media (hover: hover) {
+  .phase-item__row:hover { background: var(--color-wash-faint); }
+  .phase-task__del:hover { background: var(--ledger-hover); }
+}
+
+@media (max-width: 700px) {
+  .phase-contract__picker { margin-left: 0; max-width: 100%; }
+  .phase-panel__pct { font-size: 26px; }
+  .phase-stepper__square { width: 22px; height: 22px; }
+  .phase-stepper__line { top: 10px; }
+  .phase-item__desc { display: none; }
+}

@@ -113,7 +113,10 @@
     "dark": "Mode sombre",
     "create": "Créer",
     "close": "Fermer",
-    "saving": "Enregistrement..."
+    "saving": "Enregistrement...",
+    "refresh": "Actualiser",
+    "previous": "Précédent",
+    "next": "Suivant"
   },
   "login": {
     "title": "Gestionnaire de Contrats",
@@ -178,7 +181,8 @@
     "back": "Retour",
     "done": "Terminé",
     "permissions": "Permissions",
-    "actions": "Actions"
+    "actions": "Actions",
+    "unknown": "Inconnu"
   },
   "manual": {
     "loading": "Chargement du manuel...",
@@ -596,7 +600,11 @@
     "rejected": "Rejeté",
     "draft": "Brouillon",
     "clickToViewTimeline": "Cliquez pour voir la chronologie",
-    "clickToViewDetails": "Cliquer pour voir les détails du contrat"
+    "clickToViewDetails": "Cliquer pour voir les détails du contrat",
+    "updated": "Mis à jour",
+    "of": "sur",
+    "period": "Période",
+    "stageDistribution": "Répartition par étape"
   },
   "phaseManagement": {
     "addTask": "Ajouter une tâche",
@@ -675,7 +683,13 @@
     "completeWarning": "Toutes les tâches seront marquées comme terminées et la phase suivante sera activée.",
     "confirmReopen": "Rouvrir cette phase?",
     "reopenWarning": "Cela remettra la phase au statut actif.",
-    "viewDetails": "Voir les détails et documents"
+    "viewDetails": "Voir les détails et documents",
+    "state": {
+      "completed": "Terminé",
+      "inProgress": "En cours",
+      "notStarted": "Non commencé"
+    },
+    "contractNotFound": "Ce contrat n'a pas pu être trouvé."
   },
   "lifecycle": {
     "selectContract": "Sélectionner le Contrat",
