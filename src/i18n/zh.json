@@ -57,7 +57,13 @@
       "sample_contract_5": "暖通维护合同",
       "sample_contract_5_description": "办公楼的年度暖通（HVAC）维护合同。",
       "sample_contract_6": "营销活动合同",
-      "sample_contract_6_description": "包含社交媒体、PPC和内容营销的第一季度营销活动。"
+      "sample_contract_6_description": "包含社交媒体、PPC和内容营销的第一季度营销活动。",
+      "sample_contract_7": "供应商合作协议",
+      "sample_contract_7_description": "已完成的供应商合作协议，各阶段均已签署确认。",
+      "sample_contract_8": "基础设施升级项目",
+      "sample_contract_8_description": "正在进行的基础设施升级，生命周期各阶段处于活动状态。",
+      "sample_contract_9": "设备租赁合同",
+      "sample_contract_9_description": "在审核过程中被拒绝的设备租赁合同。"
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
@@ -118,7 +124,17 @@
     "or": "或",
     "error": "登录失败。请检查您的凭据。",
     "loading": "加载中...",
-    "languageSelector": "选择语言"
+    "languageSelector": "选择语言",
+    "kicker": "合同管理平台",
+    "headline": "所有合同，集于一处。",
+    "lede": "在同一套系统中起草、审批、签署并归档全公司的合同。",
+    "emailPlaceholder": "you@company.cn",
+    "passwordPlaceholder": "请输入密码",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账号？请联系管理员。",
+    "photoPlaceholder": "封面图片 — 灰度",
+    "enterEmailFirst": "请先输入您的邮箱地址。",
+    "resetSent": "重置链接已发送，请查收邮件。"
   },
   "headers": {
     "userManual": "用户手册",
@@ -751,5 +767,37 @@
     "NDA": "NDA",
     "MSA": "MSA",
     "Vendor": "供应商"
-  }
+  },
+  "passwordModal": {
+    "currentPassword": "当前密码",
+    "newPassword": "新密码",
+    "confirmPassword": "确认新密码",
+    "allFieldsRequired": "所有字段均为必填项。",
+    "passwordsNotMatch": "两次输入的新密码不一致。",
+    "passwordTooShort": "密码至少需要 6 个字符。",
+    "incorrectCurrentPassword": "当前密码不正确。",
+    "updateFailed": "密码更新失败。",
+    "updateSuccess": "密码更新成功！",
+    "unexpectedError": "发生意外错误。"
+  },
+  "authErrors": {
+    "invalidCredentials": "邮箱或密码不正确。",
+    "emailNotConfirmed": "该邮箱地址尚未验证。",
+    "userNotFound": "未找到使用该邮箱的账号。",
+    "userBanned": "该账号已被停用。",
+    "emailInvalid": "邮箱地址无效。",
+    "emailNotAuthorized": "该邮箱地址无权登录。",
+    "validationFailed": "请检查您输入的信息。",
+    "weakPassword": "密码强度不足。请使用更长、更难猜的密码。",
+    "samePassword": "新密码必须与当前密码不同。",
+    "tooManyRequests": "尝试次数过多。请稍后再试。",
+    "tooManyEmails": "发送邮件次数过多。请稍后再试。",
+    "sessionExpired": "登录已过期，请重新登录。",
+    "signupDisabled": "目前已停止新用户注册。",
+    "providerDisabled": "该登录方式目前已停用。",
+    "captchaFailed": "安全验证失败，请重试。",
+    "requestTimeout": "请求超时，请重试。",
+    "unexpectedFailure": "发生错误，请重试。"
+  },
+  "approval_board_placeholder": "请输入您的审批回复内容..."
 }

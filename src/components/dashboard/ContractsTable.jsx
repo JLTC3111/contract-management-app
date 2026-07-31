@@ -1,6 +1,11 @@
 // src/components/dashboard/ContractsTable.jsx
 import { useTranslation } from 'react-i18next';
-import { currencyForLocale, formatCompactCurrency, formatMonthYear } from '../../utils/formatters';
+import {
+  currencyForLocale,
+  formatCompactCurrency,
+  formatMonthYear,
+  getI18nOrFallback,
+} from '../../utils/formatters';
 import { getContractStage } from '../../utils/stages';
 import { StageTag, CategoryTag } from './StageTag';
 
@@ -51,11 +56,17 @@ const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen }) 
                   type="checkbox"
                   checked={selected.has(c.id)}
                   onChange={() => onToggle(c.id)}
-                  aria-label={t('dashboard.selectRow', 'Select {{name}}', { name: c.title })}
+                  aria-label={t('dashboard.selectRow', 'Select {{name}}', {
+                    name: getI18nOrFallback(t, c, 'title_i18n', 'title'),
+                  })}
                 />
               </td>
               <td>
-                <span className="ledger-table__name">{c.title || '—'}</span>
+                {/* Demo/seeded rows carry a title_i18n key; real ones only have
+                    the stored title, which is what the fallback returns. */}
+                <span className="ledger-table__name">
+                  {getI18nOrFallback(t, c, 'title_i18n', 'title') || '—'}
+                </span>
                 <span className="ledger-table__sub">{c.client_name || '—'}</span>
                 {/* Each chip appears only at the width where its column drops out,
                     so nothing is ever shown twice or lost. */}

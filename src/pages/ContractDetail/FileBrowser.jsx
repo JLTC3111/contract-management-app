@@ -14,7 +14,6 @@ const FileBrowser = ({
   onPreview,
   selectedFiles,
   highlightedFiles = [],
-  fileItemRefs,
   onFileSelect,
   darkMode,
   t
@@ -245,7 +244,7 @@ const FileBrowser = ({
       )}
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {visibleFiles.map((file, idx) => {
+        {visibleFiles.map((file) => {
           const isFolderItem = isFolder(file);
           const fileName = file.name;
           const originalFileName = getOriginalFileName(fileName);
@@ -271,7 +270,6 @@ const FileBrowser = ({
             return (
               <li
                 key={fileName}
-                ref={el => { if (fileItemRefs?.current) fileItemRefs.current[idx] = el; }}
                 style={{
                   marginLeft: '2rem',
                   display: 'flex',
@@ -308,7 +306,6 @@ const FileBrowser = ({
 
           return (
             <li
-              ref={el => { if (fileItemRefs?.current) fileItemRefs.current[idx] = el; }}
               key={fileName}
               style={{
                 marginLeft: '2rem',

@@ -141,8 +141,9 @@ export const getTaskTranslationKey = (taskText) => TASK_TRANSLATION_MAP[taskText
 export const phaseState = (phase) => {
   if (!phase) return 'todo';
   if (phase.status === 'completed' || phase.progress >= 100) return 'done';
-  if (phase.status === 'active' || (phase.progress ?? 0) > 0) return 'active';
-  return 'todo';
+  // 'in_progress' is what the seeded demo rows use for 'active'.
+  if (phase.status === 'active' || phase.status === 'in_progress') return 'active';
+  return (phase.progress ?? 0) > 0 ? 'active' : 'todo';
 };
 
 /** The same three states for a whole contract, derived from its phases. */

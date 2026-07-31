@@ -220,7 +220,9 @@ const demoPhasesApi = {
       ...phase,
       id: generateDemoId('phase'),
       contract_id: contractId,
-      phase_number: index + 1,
+      // Backfilling phases 3 and 5 must keep their numbers, so only fall back to
+      // the position when the caller did not say which phase this is.
+      phase_number: phase.phase_number ?? index + 1,
       created_at: new Date().toISOString(),
     }));
     phases.push(...newPhases);

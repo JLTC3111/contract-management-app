@@ -5,12 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "predev": "node scripts/loginphotos-manifest.js",
+    "prebuild": "node scripts/loginphotos-manifest.js",
     "build": "vite build",
+    "loginphotos": "node scripts/loginphotos-manifest.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "admin:reset-password": "node admin-password-reset.js"
   },
   "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
     "@heroicons/react": "^2.2.0",
     "@react-three/drei": "^10.5.1",
     "@react-three/fiber": "^9.2.0",

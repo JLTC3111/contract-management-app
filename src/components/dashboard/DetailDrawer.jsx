@@ -5,7 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { ChevronsRight, FileText, Pencil, Trash2, X } from 'lucide-react';
 import { commentsApi, phasesApi, storageApi } from '../../api/contracts';
 import { useUser } from '../../hooks/useUser';
-import { currencyForLocale, formatCurrency, formatDate, formatFileSize } from '../../utils/formatters';
+import {
+  currencyForLocale,
+  formatCurrency,
+  formatDate,
+  formatFileSize,
+  getI18nOrFallback,
+} from '../../utils/formatters';
 import {
   APPROVAL_REQUESTABLE_STAGES,
   getContractStage,
@@ -45,6 +51,7 @@ const DetailDrawer = ({
 
   const stage = getContractStage(contract);
   const next = getNextStage(stage);
+  const title = getI18nOrFallback(t, contract, 'title_i18n', 'title');
   const canSendForApproval = APPROVAL_REQUESTABLE_STAGES.includes(stage);
 
   useEffect(() => {
@@ -144,7 +151,7 @@ const DetailDrawer = ({
       <motion.aside
         className="ledger-drawer"
         role="dialog"
-        aria-label={contract.title || t('dashboard.contract', 'Contract')}
+        aria-label={title || t('dashboard.contract', 'Contract')}
         initial={{ x: '100%' }}
         animate={{ x: 0 }}
         exit={{ x: '100%' }}
@@ -165,7 +172,7 @@ const DetailDrawer = ({
           >
             <X size={18} />
           </button>
-          <h2 className="ledger-drawer__title">{contract.title || '—'}</h2>
+          <h2 className="ledger-drawer__title">{title || '—'}</h2>
           <StageTag stage={stage} />
         </header>
 

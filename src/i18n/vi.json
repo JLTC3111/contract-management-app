@@ -69,7 +69,13 @@
       "sample_contract_5": "Hợp đồng Bảo trì HVAC",
       "sample_contract_5_description": "Hợp đồng bảo trì HVAC hàng năm cho tòa nhà văn phòng.",
       "sample_contract_6": "Hợp đồng Chiến dịch Marketing",
-      "sample_contract_6_description": "Chiến dịch marketing quý 1 bao gồm mạng xã hội, PPC và nội dung marketing."
+      "sample_contract_6_description": "Chiến dịch marketing quý 1 bao gồm mạng xã hội, PPC và nội dung marketing.",
+      "sample_contract_7": "Hợp đồng Hợp tác Nhà cung cấp",
+      "sample_contract_7_description": "Hợp đồng hợp tác với nhà cung cấp đã hoàn tất và ký duyệt toàn bộ các giai đoạn.",
+      "sample_contract_8": "Dự án Nâng cấp Hạ tầng",
+      "sample_contract_8_description": "Nâng cấp hạ tầng đang triển khai với các giai đoạn đang hoạt động.",
+      "sample_contract_9": "Hợp đồng Thuê Thiết bị",
+      "sample_contract_9_description": "Hợp đồng thuê thiết bị đã bị từ chối trong quá trình xét duyệt."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
@@ -130,7 +136,17 @@
     "or": "hoặc",
     "error": "Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.",
     "loading": "Đang tải...",
-    "languageSelector": "Chọn ngôn ngữ"
+    "languageSelector": "Chọn ngôn ngữ",
+    "kicker": "Nền tảng hợp đồng",
+    "headline": "Mọi hợp đồng, một nơi duy nhất.",
+    "lede": "Soạn thảo, phê duyệt, ký kết và lưu trữ hợp đồng của cả công ty trong một hệ thống duy nhất.",
+    "emailPlaceholder": "ten@congty.vn",
+    "passwordPlaceholder": "Nhập mật khẩu",
+    "forgotPassword": "Quên mật khẩu?",
+    "noAccount": "Chưa có tài khoản? Liên hệ quản trị viên.",
+    "photoPlaceholder": "Ảnh bìa — grayscale",
+    "enterEmailFirst": "Vui lòng nhập địa chỉ email trước.",
+    "resetSent": "Vui lòng kiểm tra email để đặt lại mật khẩu."
   },
   "headers": {
     "userManual": "Hướng dẫn sử dụng",
@@ -759,5 +775,37 @@
     "NDA": "HĐ Cung Cấp Dịch Vụ",
     "MSA": "HĐ Tư Vấn",
     "Vendor": "Nhà cung cấp"
-  }
+  },
+  "passwordModal": {
+    "currentPassword": "Mật khẩu hiện tại",
+    "newPassword": "Mật khẩu mới",
+    "confirmPassword": "Xác nhận mật khẩu mới",
+    "allFieldsRequired": "Vui lòng điền đầy đủ các trường.",
+    "passwordsNotMatch": "Mật khẩu mới không khớp.",
+    "passwordTooShort": "Mật khẩu phải có ít nhất 6 ký tự.",
+    "incorrectCurrentPassword": "Mật khẩu hiện tại không đúng.",
+    "updateFailed": "Không thể cập nhật mật khẩu.",
+    "updateSuccess": "Đã cập nhật mật khẩu thành công!",
+    "unexpectedError": "Đã xảy ra lỗi không mong muốn."
+  },
+  "authErrors": {
+    "invalidCredentials": "Email hoặc mật khẩu không đúng.",
+    "emailNotConfirmed": "Địa chỉ email này chưa được xác nhận.",
+    "userNotFound": "Không tìm thấy tài khoản cho email này.",
+    "userBanned": "Tài khoản này đã bị tạm khóa.",
+    "emailInvalid": "Địa chỉ email không hợp lệ.",
+    "emailNotAuthorized": "Địa chỉ email này không được phép đăng nhập.",
+    "validationFailed": "Vui lòng kiểm tra lại thông tin đã nhập.",
+    "weakPassword": "Mật khẩu quá yếu. Hãy chọn mật khẩu dài và khó đoán hơn.",
+    "samePassword": "Mật khẩu mới phải khác mật khẩu hiện tại.",
+    "tooManyRequests": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
+    "tooManyEmails": "Đã gửi quá nhiều email. Vui lòng đợi một lát rồi thử lại.",
+    "sessionExpired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+    "signupDisabled": "Hiện không cho phép đăng ký mới.",
+    "providerDisabled": "Phương thức đăng nhập này hiện bị tắt.",
+    "captchaFailed": "Kiểm tra bảo mật thất bại. Vui lòng thử lại.",
+    "requestTimeout": "Yêu cầu đã hết thời gian chờ. Vui lòng thử lại.",
+    "unexpectedFailure": "Đã xảy ra lỗi. Vui lòng thử lại."
+  },
+  "approval_board_placeholder": "Nhập nội dung phản hồi phê duyệt của bạn..."
 }

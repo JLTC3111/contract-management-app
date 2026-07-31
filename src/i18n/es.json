@@ -68,7 +68,13 @@
       "sample_contract_5": "Contrato de Mantenimiento HVAC",
       "sample_contract_5_description": "Contrato anual de mantenimiento HVAC para el edificio de oficinas.",
       "sample_contract_6": "Acuerdo de Campaña de Marketing",
-      "sample_contract_6_description": "Campaña de marketing del Q1 que incluye redes sociales, PPC y marketing de contenidos."
+      "sample_contract_6_description": "Campaña de marketing del Q1 que incluye redes sociales, PPC y marketing de contenidos.",
+      "sample_contract_7": "Acuerdo de Colaboración con Proveedor",
+      "sample_contract_7_description": "Acuerdo de colaboración con proveedor completado, con todas las fases aprobadas.",
+      "sample_contract_8": "Proyecto de Mejora de Infraestructura",
+      "sample_contract_8_description": "Mejora de infraestructura en curso, con fases del ciclo de vida activas.",
+      "sample_contract_9": "Contrato de Alquiler de Equipos",
+      "sample_contract_9_description": "Contrato de alquiler de equipos rechazado durante la revisión."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
@@ -129,7 +135,17 @@
     "or": "o",
     "error": "Error de inicio de sesión. Por favor, verifique sus credenciales.",
     "loading": "Cargando...",
-    "languageSelector": "Seleccionar idioma"
+    "languageSelector": "Seleccionar idioma",
+    "kicker": "Plataforma de contratos",
+    "headline": "Todos los contratos en un solo lugar.",
+    "lede": "Redacta, aprueba, firma y archiva los contratos de toda la empresa en un único sistema.",
+    "emailPlaceholder": "tu@empresa.es",
+    "passwordPlaceholder": "Introduce tu contraseña",
+    "forgotPassword": "¿Has olvidado la contraseña?",
+    "noAccount": "¿Aún no tienes cuenta? Ponte en contacto con tu administrador.",
+    "photoPlaceholder": "Imagen de portada — escala de grises",
+    "enterEmailFirst": "Introduce primero tu dirección de correo.",
+    "resetSent": "Revisa tu bandeja de entrada para el enlace de restablecimiento."
   },
   "headers": {
     "userManual": "Manual de usuario",
@@ -809,5 +825,37 @@
     "NDA": "NDA",
     "MSA": "MSA",
     "Vendor": "Proveedor"
-  }
+  },
+  "passwordModal": {
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "allFieldsRequired": "Todos los campos son obligatorios.",
+    "passwordsNotMatch": "Las nuevas contraseñas no coinciden.",
+    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres.",
+    "incorrectCurrentPassword": "La contraseña actual es incorrecta.",
+    "updateFailed": "No se ha podido actualizar la contraseña.",
+    "updateSuccess": "¡Contraseña actualizada correctamente!",
+    "unexpectedError": "Se ha producido un error inesperado."
+  },
+  "authErrors": {
+    "invalidCredentials": "El correo o la contraseña no son correctos.",
+    "emailNotConfirmed": "Esta dirección de correo aún no se ha confirmado.",
+    "userNotFound": "No se ha encontrado ninguna cuenta con ese correo.",
+    "userBanned": "Esta cuenta ha sido suspendida.",
+    "emailInvalid": "Esa dirección de correo no es válida.",
+    "emailNotAuthorized": "Esa dirección de correo no está autorizada a iniciar sesión.",
+    "validationFailed": "Revisa los datos introducidos.",
+    "weakPassword": "Esa contraseña es demasiado débil. Elige una más larga y menos obvia.",
+    "samePassword": "La nueva contraseña debe ser distinta de la actual.",
+    "tooManyRequests": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
+    "tooManyEmails": "Se han enviado demasiados correos. Espera un momento.",
+    "sessionExpired": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+    "signupDisabled": "Los nuevos registros están desactivados.",
+    "providerDisabled": "Ese método de inicio de sesión está desactivado.",
+    "captchaFailed": "La comprobación de seguridad ha fallado. Inténtalo de nuevo.",
+    "requestTimeout": "La solicitud ha agotado el tiempo de espera. Inténtalo de nuevo.",
+    "unexpectedFailure": "Se ha producido un error. Inténtalo de nuevo."
+  },
+  "approval_board_placeholder": "Escribe tu mensaje de respuesta de aprobación..."
 }

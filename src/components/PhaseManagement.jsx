@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { supabase } from '../utils/supaBaseClient';
+import { phasesApi } from '../api/contracts';
 import toast from 'react-hot-toast';
 import {
   DEFAULT_PHASES,
@@ -32,13 +32,10 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
     try {
       setLoading(true);
 
-      const { data: existingPhases, error } = await supabase
-        .from('contract_phases')
-        .select('*')
-        .eq('contract_id', contractId)
-        .order('phase_number');
-
-      if (error) throw error;
+      // Everything here goes through phasesApi rather than supabase directly:
+      // demo mode keeps its phases in localStorage, and a raw query would look
+      // for 'demo-contract-7' in Postgres and throw.
+      const existingPhases = await phasesApi.getByContractId(contractId);
 
       if (existingPhases?.length > 0) {
         if (existingPhases.length < 6) {
@@ -74,19 +71,16 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
               };
             });
 
-            const { data: insertedPhases, error: insertError } = await supabase
-              .from('contract_phases')
-              .insert(missingPhases)
-              .select();
-
-            if (insertError) {
-              console.error('Error adding missing phases:', insertError);
-            } else {
-              const allPhases = [...existingPhases, ...insertedPhases].sort((a, b) => a.phase_number - b.phase_number);
+            try {
+              const insertedPhases = await phasesApi.initialize(contractId, missingPhases);
+              const allPhases = [...existingPhases, ...insertedPhases]
+                .sort((a, b) => a.phase_number - b.phase_number);
               setPhases(allPhases);
               const activePhase = allPhases.find((p) => p.status === 'active');
               if (activePhase) setExpandedPhases(new Set([activePhase.id]));
               return;
+            } catch (insertError) {
+              console.error('Error adding missing phases:', insertError);
             }
           }
         }
@@ -128,12 +122,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
         progress: 0,
       }));
 
-      const { data, error } = await supabase
-        .from('contract_phases')
-        .insert(defaultPhases)
-        .select();
-
-      if (error) throw error;
+      const data = await phasesApi.initialize(contractId, defaultPhases);
 
       setPhases(data);
       if (data?.[0]) setExpandedPhases(new Set([data[0].id]));
@@ -148,12 +137,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
     try {
       setSaving(true);
 
-      const { error } = await supabase
-        .from('contract_phases')
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq('id', phaseId);
-
-      if (error) throw error;
+      await phasesApi.update(phaseId, updates);
 
       setPhases((prev) => prev.map((phase) => (
         phase.id === phaseId ? { ...phase, ...updates } : phase
@@ -173,7 +157,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
     const phase = phases.find((p) => p.id === phaseId);
     if (!phase) return;
 
-    const updatedTasks = phase.tasks.map((task) => (
+    const updatedTasks = (phase.tasks ?? []).map((task) => (
       task.id === taskId
         ? { ...task, completed: !task.completed, completed_at: !task.completed ? new Date().toISOString() : null }
         : task
@@ -217,7 +201,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
       created_at: new Date().toISOString(),
     };
 
-    const updatedTasks = [...phase.tasks, newTask];
+    const updatedTasks = [...(phase.tasks ?? []), newTask];
     const progress = Math.round((updatedTasks.filter((task) => task.completed).length / updatedTasks.length) * 100);
 
     await updatePhase(phaseId, { tasks: updatedTasks, progress }, false);
@@ -229,7 +213,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
     const phase = phases.find((p) => p.id === phaseId);
     if (!phase) return;
 
-    const updatedTasks = phase.tasks.filter((task) => task.id !== taskId);
+    const updatedTasks = (phase.tasks ?? []).filter((task) => task.id !== taskId);
     if (updatedTasks.length === 0) {
       toast.error(t('phaseManagement.errors.atLeastOneTask', 'Phase must have at least one task'));
       return;
@@ -248,7 +232,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
     const phase = phases.find((p) => p.id === phaseId);
     if (!phase) return;
 
-    const updatedTasks = phase.tasks.map((task) => ({
+    const updatedTasks = (phase.tasks ?? []).map((task) => ({
       ...task,
       completed: true,
       completed_at: new Date().toISOString(),
@@ -284,7 +268,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
   };
 
   const overallProgress = phases.length > 0
-    ? Math.round(phases.reduce((acc, p) => acc + p.progress, 0) / phases.length)
+    ? Math.round(phases.reduce((acc, p) => acc + (p.progress ?? 0), 0) / phases.length)
     : 0;
 
   if (loading) {

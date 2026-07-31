@@ -75,9 +75,6 @@ const ContractDetailPage = () => {
   const [previewType, setPreviewType] = useState(null);
 
   // Animation refs
-  const headerRef = useRef(null);
-  const infoRefs = useRef([]);
-  const fileItemRefs = useRef([]);
 
   // Computed values
   const canEdit = user && ['admin', 'editor'].includes(user.role);
@@ -789,7 +786,6 @@ const ContractDetailPage = () => {
         newFolderName={newFolderName}
         folderInputRef={folderInputRef}
         darkMode={darkMode}
-        headerRef={headerRef}
         actionLoading={actionLoading}
         onBack={() => navigate(-1)}
         onManagePhases={() => navigate(`/phases/${contractId}`)}
@@ -829,8 +825,6 @@ const ContractDetailPage = () => {
           updated={updated}
           editMode={editMode}
           user={user}
-          headerRef={headerRef}
-          infoRefs={infoRefs}
           onFieldChange={handleChange}
           darkMode={darkMode}
           t={t}
@@ -895,7 +889,6 @@ const ContractDetailPage = () => {
               contract={contract}
               selectedFiles={selectedFiles}
               highlightedFiles={highlightedFiles}
-              fileItemRefs={fileItemRefs}
               darkMode={darkMode}
               onPathChange={setCurrentPath}
               onFileSelect={(filePath, isSelected) => {

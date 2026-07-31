@@ -68,7 +68,13 @@
       "sample_contract_5": "Contrat de maintenance CVC",
       "sample_contract_5_description": "Contrat annuel de maintenance CVC pour le bâtiment de bureaux.",
       "sample_contract_6": "Contrat de campagne marketing",
-      "sample_contract_6_description": "Campagne marketing T1 incluant réseaux sociaux, PPC et marketing de contenu."
+      "sample_contract_6_description": "Campagne marketing T1 incluant réseaux sociaux, PPC et marketing de contenu.",
+      "sample_contract_7": "Accord de partenariat fournisseur",
+      "sample_contract_7_description": "Accord de partenariat fournisseur finalisé, toutes les phases validées.",
+      "sample_contract_8": "Projet de modernisation de l’infrastructure",
+      "sample_contract_8_description": "Modernisation de l’infrastructure en cours, phases du cycle de vie actives.",
+      "sample_contract_9": "Contrat de location de matériel",
+      "sample_contract_9_description": "Contrat de location de matériel rejeté lors de la revue."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
@@ -129,7 +135,17 @@
     "or": "ou",
     "error": "Échec de la connexion. Veuillez vérifier vos identifiants.",
     "loading": "Chargement...",
-    "languageSelector": "Sélectionner la langue"
+    "languageSelector": "Sélectionner la langue",
+    "kicker": "Plateforme contractuelle",
+    "headline": "Tous vos contrats au même endroit.",
+    "lede": "Rédigez, validez, signez et archivez les contrats de toute l’entreprise dans un seul système.",
+    "emailPlaceholder": "vous@entreprise.fr",
+    "passwordPlaceholder": "Saisissez votre mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Pas encore de compte ? Contactez votre administrateur.",
+    "photoPlaceholder": "Image de couverture — niveaux de gris",
+    "enterEmailFirst": "Saisissez d’abord votre adresse e-mail.",
+    "resetSent": "Consultez votre boîte de réception pour le lien de réinitialisation."
   },
   "headers": {
     "userManual": "Manuel d'utilisateur",
@@ -757,5 +773,37 @@
     "NDA": "NDA",
     "MSA": "MSA",
     "Vendor": "Fournisseur"
-  }
+  },
+  "passwordModal": {
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe",
+    "allFieldsRequired": "Tous les champs sont obligatoires.",
+    "passwordsNotMatch": "Les nouveaux mots de passe ne correspondent pas.",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 6 caractères.",
+    "incorrectCurrentPassword": "Le mot de passe actuel est incorrect.",
+    "updateFailed": "Échec de la mise à jour du mot de passe.",
+    "updateSuccess": "Mot de passe mis à jour avec succès !",
+    "unexpectedError": "Une erreur inattendue s'est produite."
+  },
+  "authErrors": {
+    "invalidCredentials": "Adresse e-mail ou mot de passe incorrect.",
+    "emailNotConfirmed": "Cette adresse e-mail n’a pas encore été confirmée.",
+    "userNotFound": "Aucun compte ne correspond à cette adresse e-mail.",
+    "userBanned": "Ce compte a été suspendu.",
+    "emailInvalid": "Cette adresse e-mail n’est pas valide.",
+    "emailNotAuthorized": "Cette adresse e-mail n’est pas autorisée à se connecter.",
+    "validationFailed": "Veuillez vérifier les informations saisies.",
+    "weakPassword": "Ce mot de passe est trop faible. Choisissez-en un plus long et moins évident.",
+    "samePassword": "Le nouveau mot de passe doit être différent de l’actuel.",
+    "tooManyRequests": "Trop de tentatives. Veuillez patienter un instant.",
+    "tooManyEmails": "Trop d’e-mails envoyés. Veuillez patienter un instant.",
+    "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+    "signupDisabled": "Les nouvelles inscriptions sont désactivées.",
+    "providerDisabled": "Cette méthode de connexion est désactivée.",
+    "captchaFailed": "La vérification de sécurité a échoué. Veuillez réessayer.",
+    "requestTimeout": "La requête a expiré. Veuillez réessayer.",
+    "unexpectedFailure": "Une erreur s’est produite. Veuillez réessayer."
+  },
+  "approval_board_placeholder": "Saisissez votre message de réponse d’approbation..."
 }

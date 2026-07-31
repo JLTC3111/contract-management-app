@@ -27,7 +27,9 @@ const PhaseCard = ({
   const { t } = useTranslation();
   const state = phaseState(phase);
   const progress = phase.progress ?? 0;
-  const done = phase.tasks.filter((task) => task.completed).length;
+  // Seeded demo phases predate the task model and carry no `tasks` at all.
+  const tasks = phase.tasks ?? [];
+  const done = tasks.filter((task) => task.completed).length;
 
   const taskText = (task) => {
     if (task.textKey) return t(task.textKey, task.text);
@@ -96,11 +98,11 @@ const PhaseCard = ({
           )}
 
           <h3 className="phase-item__section">
-            {t('phaseManagement.tasksDeliverables', 'Tasks & deliverables')} ({done}/{phase.tasks.length})
+            {t('phaseManagement.tasksDeliverables', 'Tasks & deliverables')} ({done}/{tasks.length})
           </h3>
 
           <ul className="phase-tasks">
-            {phase.tasks.map((task) => (
+            {tasks.map((task) => (
               <li key={task.id} className={`phase-task${task.completed ? ' phase-task--done' : ''}`}>
                 <input
                   type="checkbox"

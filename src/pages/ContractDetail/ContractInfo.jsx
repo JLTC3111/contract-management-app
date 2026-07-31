@@ -67,7 +67,6 @@ const ContractInfo = ({
   updated,
   editMode,
   onFieldChange,
-  infoRefs,
   darkMode
 }) => {
   const { t, i18n } = useTranslation();
@@ -108,12 +107,6 @@ const ContractInfo = ({
     boxShadow: darkMode
       ? '0 2px 8px rgba(255,255,255,0.05)'
       : '0 2px 8px rgba(0,0,0,0.08)'
-  };
-
-  const setInfoRef = (el, index) => {
-    if (el && infoRefs?.current) {
-      infoRefs.current[index] = el;
-    }
   };
 
   const statusOptions = CONTRACT_STATUSES.map(({ value, labelKey }) => ({
@@ -157,7 +150,6 @@ const ContractInfo = ({
       >
         {/* Status */}
         <div
-          ref={(el) => setInfoRef(el, 0)}
           className={cn('relative overflow-hidden')}
           style={cardStyle}
         >
@@ -185,7 +177,7 @@ const ContractInfo = ({
         </div>
 
         {/* Version */}
-        <div ref={(el) => setInfoRef(el, 1)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.version', 'Version')}</label>
           {editMode ? (
             <input
@@ -200,7 +192,7 @@ const ContractInfo = ({
         </div>
 
         {/* Author */}
-        <div ref={(el) => setInfoRef(el, 2)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.author', 'Author')}</label>
           {editMode ? (
             <input
@@ -215,7 +207,7 @@ const ContractInfo = ({
         </div>
 
         {/* Category */}
-        <div ref={(el) => setInfoRef(el, 3)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.category', 'Category')}</label>
           {editMode ? (
             <input
@@ -231,7 +223,7 @@ const ContractInfo = ({
         </div>
 
         {/* Client */}
-        <div ref={(el) => setInfoRef(el, 4)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.client', 'Client')}</label>
           {editMode ? (
             <input
@@ -246,7 +238,7 @@ const ContractInfo = ({
         </div>
 
         {/* Client Email */}
-        <div ref={(el) => setInfoRef(el, 5)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.clientEmail', 'Client Email')}</label>
           {editMode ? (
             <input
@@ -261,7 +253,7 @@ const ContractInfo = ({
         </div>
 
         {/* Contract Value */}
-        <div ref={(el) => setInfoRef(el, 6)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.contractValue', 'Contract Value')}</label>
           {editMode ? (
             <input
@@ -290,7 +282,7 @@ const ContractInfo = ({
         </div>
 
         {/* Expiry Date */}
-        <div ref={(el) => setInfoRef(el, 7)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.expiry', 'Expiry Date')}</label>
           {editMode ? (
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -337,7 +329,7 @@ const ContractInfo = ({
         </div>
 
         {/* Created */}
-        <div ref={(el) => setInfoRef(el, 8)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.created', 'Created')}</label>
           <span style={valueStyle}>
             {createdAt ? formatDateTime(createdAt, i18n.language) : '-'}
@@ -345,7 +337,7 @@ const ContractInfo = ({
         </div>
 
         {/* Last Updated */}
-        <div ref={(el) => setInfoRef(el, 9)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.updated', 'Last Updated')}</label>
           <span style={valueStyle}>
             {updatedAt ? formatDateTime(updatedAt, i18n.language) : '-'}
@@ -353,7 +345,7 @@ const ContractInfo = ({
         </div>
 
         {/* Primary document */}
-        <div ref={(el) => setInfoRef(el, 10)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.primaryDocument', 'Primary Document')}</label>
           <span style={{ ...valueStyle, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
             {primaryFileName ? (
@@ -377,7 +369,7 @@ const ContractInfo = ({
         }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
       >
-        <div ref={(el) => setInfoRef(el, 11)} style={cardStyle}>
+        <div style={cardStyle}>
           <label style={labelStyle}>{t('contractTable.description', 'Description')}</label>
           {editMode ? (
             <textarea

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../utils/supaBaseClient';
 import { approvalsApi, contractsApi } from '../api/contracts';
 import { getContractStage, getNextStage, getStageLabel, stageUpdatePayload } from '../utils/stages';
+import { getI18nOrFallback } from '../utils/formatters';
 import { Check, X, Clock, FileText, User, ArrowLeft, Edit, Save, X as CancelIcon, ThumbsUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -51,11 +52,6 @@ const Approvals = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [editingRequestId, editedMessage, saving]);
 
-  const headerRef = useRef(null);
-  const cardRefs = useRef([]);
-  const buttonRefs = useRef([]);
-  const editRefs = useRef([]);
-  const textareaRef = useRef(null);
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -106,7 +102,9 @@ const Approvals = () => {
         const contract = relevantContracts?.find(c => c.id === request.contract_id);
         return {
           ...request,
-          contracts: contract || { id: request.contract_id, title: 'Unknown Contract', status: 'Unknown', updated_at: null }
+          // No title on the placeholder: an English literal here would win over
+          // the translated t('unknown_contract') the header falls back to.
+          contracts: contract || { id: request.contract_id, title: null, status: null, updated_at: null }
         };
       });
 
@@ -229,7 +227,6 @@ const Approvals = () => {
     <div style={{ padding: '2rem' }}>
       <div style={{ marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>
         <div
-          ref={headerRef}
           style={{
             display: 'flex',
             minWidth: 'clamp(250px, 82.5vw, 800px)',
@@ -283,7 +280,8 @@ const Approvals = () => {
               boxShadow: darkMode ? '0 2px 8px rgba(255, 255, 255, 0.2)' : '0 2px 8px rgba(0,0,0,0.2)',
             }}
           >
-            {approvalRequests.length > 0 ? approvalRequests[0]?.contracts?.title || t('unknown_contract') : t('unknown_contract')}
+            {getI18nOrFallback(t, approvalRequests[0]?.contracts, 'title_i18n', 'title')
+              || t('unknown_contract')}
           </h3>
         </div>
   
@@ -323,10 +321,9 @@ const Approvals = () => {
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {approvalRequests.map((request, idx) => (
+          {approvalRequests.map((request) => (
             <div
               key={request.id}
-              ref={el => cardRefs.current[idx] = el}
               style={{
                 background: 'var(--card-bg)',
                 border: '1px solid var(--card-border)',
@@ -364,7 +361,9 @@ const Approvals = () => {
                   border: '1px solid var(--card-border)',
                   color: 'var(--text)'
                 }}>
-                  {request.message}
+                  {/* Seeded demo requests carry a message_i18n key; requests filed
+                      in the app only have the message text that was stored. */}
+                  {getI18nOrFallback(t, request, 'message_i18n', 'message')}
                 </div>
               </div>
 
@@ -476,7 +475,6 @@ const Approvals = () => {
                 
                 {editingRequestId === request.id ? (
                   <div
-                    ref={el => editRefs.current[idx] = el}
                     style={{
                       background: 'var(--hover-bg)',
                       padding: 'clamp(0.5rem, 2vw, 1rem)',
@@ -484,7 +482,6 @@ const Approvals = () => {
                     }}
                   >
                     <textarea
-                      ref={textareaRef}
                       value={editedMessage}
                       onChange={(e) => setEditedMessage(e.target.value)}
                       style={{
@@ -519,7 +516,6 @@ const Approvals = () => {
                 opacity: user?.role === 'editor' ? 0.6 : 1
               }}>
                 <button
-                  ref={el => buttonRefs.current[idx * 2] = el}
                   onClick={() => handleApprovalAction(request.id, 'approve')}
                   className="btn-hover-effect"
                   style={{
@@ -542,7 +538,6 @@ const Approvals = () => {
                   {t('approval_board_approve')}
                 </button>
                 <button
-                  ref={el => buttonRefs.current[idx * 2 + 1] = el}
                   onClick={() => handleApprovalAction(request.id, 'reject')}
                   className="btn-hover-effect"
                   style={{

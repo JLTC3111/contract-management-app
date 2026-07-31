@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowLeft, Trash, Download, FolderPlus, Trash2, X, Check, GitBranch } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { getI18nOrFallback } from '../../utils/formatters';
 import { TextEffect } from '../../../components/motion-primitives/text-effect';
 import { TextShimmer } from '../../../components/motion-primitives/text-shimmer';
 
@@ -17,7 +18,6 @@ const ContractHeader = ({
   onManagePhases,
   onFieldChange,
   actionLoading,
-  headerRef,
   darkMode,
   // File actions
   selectedFiles = [],
@@ -31,10 +31,13 @@ const ContractHeader = ({
   onCreateFolder
 }) => {
   const { t } = useTranslation();
-  const title = contract?.title || t('contractTable.untitledContract', 'Untitled Contract');
+  // Seeded/demo contracts carry a title_i18n key; real ones fall back to the
+  // stored title. Read-only display, so this never feeds the edit field.
+  const title = getI18nOrFallback(t, contract, 'title_i18n', 'title')
+    || t('contractTable.untitledContract', 'Untitled Contract');
 
   return (
-    <div ref={headerRef} style={{ marginBottom: '2rem' }}>
+    <div style={{ marginBottom: '2rem' }}>
       {/* Back Button */}
       <button
         onClick={onBack}

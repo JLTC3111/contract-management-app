@@ -68,7 +68,13 @@
       "sample_contract_5": "HVAC保守契約",
       "sample_contract_5_description": "オフィスビルの年間HVAC保守契約。",
       "sample_contract_6": "マーケティングキャンペーン契約",
-      "sample_contract_6_description": "ソーシャルメディア、PPC、コンテンツマーケティングを含むQ1キャンペーン。"
+      "sample_contract_6_description": "ソーシャルメディア、PPC、コンテンツマーケティングを含むQ1キャンペーン。",
+      "sample_contract_7": "ベンダー提携契約",
+      "sample_contract_7_description": "全フェーズの承認が完了したベンダー提携契約。",
+      "sample_contract_8": "インフラ更新プロジェクト",
+      "sample_contract_8_description": "進行中のインフラ更新。ライフサイクルの各フェーズが稼働中。",
+      "sample_contract_9": "機器レンタル契約",
+      "sample_contract_9_description": "審査の過程で却下された機器レンタル契約。"
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
@@ -129,7 +135,17 @@
     "or": "または",
     "error": "ログインに失敗しました。認証情報を確認してください。",
     "loading": "読み込み中...",
-    "languageSelector": "言語を選択"
+    "languageSelector": "言語を選択",
+    "kicker": "契約管理プラットフォーム",
+    "headline": "すべての契約をひとつの場所に。",
+    "lede": "契約の作成・承認・締結・保管を、全社でひとつのシステムに。",
+    "emailPlaceholder": "you@company.jp",
+    "passwordPlaceholder": "パスワードを入力",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "noAccount": "アカウントがない場合は管理者にご連絡ください。",
+    "photoPlaceholder": "カバー画像 — グレースケール",
+    "enterEmailFirst": "先にメールアドレスを入力してください。",
+    "resetSent": "再設定用のリンクをメールで送信しました。"
   },
   "headers": {
     "userManual": "ユーザーマニュアル",
@@ -759,5 +775,37 @@
     "NDA": "NDA",
     "MSA": "MSA",
     "Vendor": "ベンダー"
-  }
+  },
+  "passwordModal": {
+    "currentPassword": "現在のパスワード",
+    "newPassword": "新しいパスワード",
+    "confirmPassword": "新しいパスワード（確認）",
+    "allFieldsRequired": "すべての項目を入力してください。",
+    "passwordsNotMatch": "新しいパスワードが一致しません。",
+    "passwordTooShort": "パスワードは6文字以上で入力してください。",
+    "incorrectCurrentPassword": "現在のパスワードが正しくありません。",
+    "updateFailed": "パスワードを更新できませんでした。",
+    "updateSuccess": "パスワードを更新しました。",
+    "unexpectedError": "予期しないエラーが発生しました。"
+  },
+  "authErrors": {
+    "invalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
+    "emailNotConfirmed": "このメールアドレスはまだ確認されていません。",
+    "userNotFound": "そのメールアドレスのアカウントは見つかりません。",
+    "userBanned": "このアカウントは停止されています。",
+    "emailInvalid": "メールアドレスの形式が正しくありません。",
+    "emailNotAuthorized": "このメールアドレスではログインできません。",
+    "validationFailed": "入力内容をご確認ください。",
+    "weakPassword": "パスワードが弱すぎます。もっと長く推測されにくいものをご使用ください。",
+    "samePassword": "新しいパスワードは現在のものと異なる必要があります。",
+    "tooManyRequests": "試行回数が多すぎます。しばらくしてから再度お試しください。",
+    "tooManyEmails": "メールの送信が多すぎます。しばらくしてから再度お試しください。",
+    "sessionExpired": "セッションの有効期限が切れました。再度ログインしてください。",
+    "signupDisabled": "現在、新規登録は受け付けていません。",
+    "providerDisabled": "このログイン方法は現在無効です。",
+    "captchaFailed": "セキュリティチェックに失敗しました。再度お試しください。",
+    "requestTimeout": "リクエストがタイムアウトしました。再度お試しください。",
+    "unexpectedFailure": "エラーが発生しました。再度お試しください。"
+  },
+  "approval_board_placeholder": "承認の返信メッセージを入力してください..."
 }

@@ -1,0 +1,36 @@
+{
+  "shared": [
+    "/loginphotos/loginphoto_kr.jpg"
+  ],
+  "all": [
+    "/loginphotos/loginphoto_de.jpg",
+    "/loginphotos/loginphoto_en.jpg",
+    "/loginphotos/loginphoto_es.jpg",
+    "/loginphotos/loginphoto_fr.jpg",
+    "/loginphotos/loginphoto_jp.jpg",
+    "/loginphotos/loginphoto_kr.jpg",
+    "/loginphotos/loginphoto_th.jpg",
+    "/loginphotos/loginphoto_vi.jpg"
+  ],
+  "en": [
+    "/loginphotos/loginphoto_en.jpg"
+  ],
+  "de": [
+    "/loginphotos/loginphoto_de.jpg"
+  ],
+  "fr": [
+    "/loginphotos/loginphoto_fr.jpg"
+  ],
+  "es": [
+    "/loginphotos/loginphoto_es.jpg"
+  ],
+  "ja": [
+    "/loginphotos/loginphoto_jp.jpg"
+  ],
+  "th": [
+    "/loginphotos/loginphoto_th.jpg"
+  ],
+  "vi": [
+    "/loginphotos/loginphoto_vi.jpg"
+  ]
+}

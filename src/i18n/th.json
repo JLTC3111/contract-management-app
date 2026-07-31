@@ -68,7 +68,13 @@
       "sample_contract_5": "สัญญาบำรุงรักษาระบบปรับอากาศ (HVAC)",
       "sample_contract_5_description": "สัญญาบำรุงรักษา HVAC ประจำปีสำหรับอาคารสำนักงาน",
       "sample_contract_6": "สัญญาแคมเปญการตลาด",
-      "sample_contract_6_description": "แคมเปญการตลาดไตรมาส 1 รวมโซเชียลมีเดีย PPC และการตลาดเนื้อหา"
+      "sample_contract_6_description": "แคมเปญการตลาดไตรมาส 1 รวมโซเชียลมีเดีย PPC และการตลาดเนื้อหา",
+      "sample_contract_7": "ข้อตกลงความร่วมมือกับผู้จัดจำหน่าย",
+      "sample_contract_7_description": "ข้อตกลงความร่วมมือกับผู้จัดจำหน่ายที่เสร็จสมบูรณ์ อนุมัติครบทุกขั้นตอน",
+      "sample_contract_8": "โครงการยกระดับโครงสร้างพื้นฐาน",
+      "sample_contract_8_description": "การยกระดับโครงสร้างพื้นฐานที่กำลังดำเนินการ โดยมีขั้นตอนที่ยังทำงานอยู่",
+      "sample_contract_9": "สัญญาเช่าอุปกรณ์",
+      "sample_contract_9_description": "สัญญาเช่าอุปกรณ์ที่ถูกปฏิเสธระหว่างการตรวจสอบ"
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
@@ -129,7 +135,17 @@
     "or": "หรือ",
     "error": "การเข้าสู่ระบบล้มเหลว กรุณาตรวจสอบข้อมูลประจำตัวของคุณ",
     "loading": "กำลังโหลด...",
-    "languageSelector": "เลือกภาษา"
+    "languageSelector": "เลือกภาษา",
+    "kicker": "แพลตฟอร์มสัญญา",
+    "headline": "ทุกสัญญา ในที่เดียว",
+    "lede": "ร่าง อนุมัติ ลงนาม และจัดเก็บสัญญาทั้งองค์กรในระบบเดียว",
+    "emailPlaceholder": "you@company.co.th",
+    "passwordPlaceholder": "กรอกรหัสผ่าน",
+    "forgotPassword": "ลืมรหัสผ่าน?",
+    "noAccount": "ยังไม่มีบัญชี? ติดต่อผู้ดูแลระบบ",
+    "photoPlaceholder": "ภาพปก — ขาวดำ",
+    "enterEmailFirst": "กรุณากรอกอีเมลของคุณก่อน",
+    "resetSent": "โปรดตรวจสอบอีเมลเพื่อดูลิงก์ตั้งรหัสใหม่"
   },
   "headers": {
     "userManual": "คู่มือผู้ใช้",
@@ -749,5 +765,37 @@
     "NDA": "NDA",
     "MSA": "MSA",
     "Vendor": "ผู้ขาย"
-  }
+  },
+  "passwordModal": {
+    "currentPassword": "รหัสผ่านปัจจุบัน",
+    "newPassword": "รหัสผ่านใหม่",
+    "confirmPassword": "ยืนยันรหัสผ่านใหม่",
+    "allFieldsRequired": "กรุณากรอกข้อมูลให้ครบทุกช่อง",
+    "passwordsNotMatch": "รหัสผ่านใหม่ไม่ตรงกัน",
+    "passwordTooShort": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+    "incorrectCurrentPassword": "รหัสผ่านปัจจุบันไม่ถูกต้อง",
+    "updateFailed": "ไม่สามารถอัปเดตรหัสผ่านได้",
+    "updateSuccess": "อัปเดตรหัสผ่านเรียบร้อยแล้ว!",
+    "unexpectedError": "เกิดข้อผิดพลาดที่ไม่คาดคิด"
+  },
+  "authErrors": {
+    "invalidCredentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "emailNotConfirmed": "อีเมลนี้ยังไม่ได้รับการยืนยัน",
+    "userNotFound": "ไม่พบบัญชีสำหรับอีเมลนี้",
+    "userBanned": "บัญชีนี้ถูกระงับการใช้งาน",
+    "emailInvalid": "รูปแบบอีเมลไม่ถูกต้อง",
+    "emailNotAuthorized": "อีเมลนี้ไม่มีสิทธิ์เข้าสู่ระบบ",
+    "validationFailed": "กรุณาตรวจสอบข้อมูลที่กรอก",
+    "weakPassword": "รหัสผ่านคาดเดาง่ายเกินไป กรุณาใช้รหัสที่ยาวและคาดเดายากขึ้น",
+    "samePassword": "รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านเดิม",
+    "tooManyRequests": "พยายามหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่",
+    "tooManyEmails": "ส่งอีเมลมากเกินไป กรุณารอสักครู่",
+    "sessionExpired": "เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง",
+    "signupDisabled": "ขณะนี้ปิดการสมัครใหม่",
+    "providerDisabled": "วิธีเข้าสู่ระบบนี้ถูกปิดอยู่",
+    "captchaFailed": "การตรวจสอบความปลอดภัยล้มเหลว กรุณาลองใหม่",
+    "requestTimeout": "คำขอหมดเวลา กรุณาลองใหม่",
+    "unexpectedFailure": "เกิดข้อผิดพลาด กรุณาลองใหม่"
+  },
+  "approval_board_placeholder": "กรอกข้อความตอบกลับการอนุมัติของคุณ..."
 }

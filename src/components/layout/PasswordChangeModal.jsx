@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { supabase } from '../../utils/supaBaseClient';
 import { useTranslation } from 'react-i18next';
+import { authErrorMessage } from '../../utils/authErrors';
 
 /**
  * Password Change Modal Component
@@ -76,7 +77,11 @@ const PasswordChangeModal = ({
       });
 
       if (signInError) {
-        setError(t('passwordModal.incorrectCurrentPassword', 'Current password is incorrect.'));
+        // A failed re-auth here means one thing, so keep the specific wording;
+        // anything else the server objects to goes through the shared mapper.
+        setError(signInError.code === 'invalid_credentials'
+          ? t('passwordModal.incorrectCurrentPassword', 'Current password is incorrect.')
+          : authErrorMessage(t, signInError));
         setLoading(false);
         return;
       }
@@ -87,7 +92,9 @@ const PasswordChangeModal = ({
       });
 
       if (updateError) {
-        setError(updateError.message || t('passwordModal.updateFailed', 'Failed to update password.'));
+        // Translated by error code (weak_password, same_password, ...), falling
+        // back to the server's own wording only for codes we have not mapped.
+        setError(authErrorMessage(t, updateError, 'passwordModal.updateFailed'));
       } else {
         setSuccess(t('passwordModal.updateSuccess', 'Password updated successfully!'));
         setTimeout(() => onClose(), 1500);

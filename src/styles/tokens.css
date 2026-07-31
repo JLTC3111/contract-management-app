@@ -1,0 +1,60 @@
+/* Design tokens — the Modernist layer over the app's theme variables.
+   One accent ramp (the app's red), one neutral ramp, one divider weight, one
+   heading face. Nothing that consumes these picks a colour of its own, so
+   light/dark stays a single switch.
+
+   Scoped to the roots that opt in: `.ledger` (dashboard, analytics, phases) and
+   `.auth` (login). Add a root here rather than redefining the ramp elsewhere. */
+
+.ledger,
+.auth {
+  --font-heading: 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;
+  /* Archivo ships with the app (@fontsource-variable/archivo, imported by the
+     page that uses it). The variable face covers 100-900, so weight 800 is real
+     rather than synthesised. */
+  --font-display: 'Archivo Variable', Archivo, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --color-bg: var(--card-bg);
+  --color-text: var(--text);
+  --color-divider: #d4d4d8;
+
+  --color-accent: #dc2626;
+  /* Three steps of the same red fill: barely there, light, and a shade darker. */
+  --color-wash-faint: #fef6f6;
+  --color-wash: #fdeded;
+  --color-wash-strong: #f6d2d2;
+  --color-accent-100: #fbeaea;
+  --color-accent-300: #e8a3a3;
+  --color-accent-500: #dc2626;
+  --color-accent-700: #8f1a1a;
+
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-200: #e7e7ea;
+  --color-neutral-300: #d4d4d8;
+  --color-neutral-500: #9c9ca5;
+  --color-neutral-700: #55555f;
+  --color-neutral-900: #1c1c22;
+}
+
+/* accent-700 flips to the light end of the ramp in dark mode: it is text on
+   accent-100, and accent-100 is a dark wash here. */
+body.dark .ledger,
+body.dark .auth {
+  --color-divider: #3a4356;
+
+  --color-accent: #ef4444;
+  --color-wash-faint: #2c1a1c;
+  --color-wash: #3a1f21;
+  --color-wash-strong: #57282b;
+  --color-accent-100: #3b1d20;
+  --color-accent-300: #7f2b2b;
+  --color-accent-500: #ef4444;
+  --color-accent-700: #f0a5a5;
+
+  --color-neutral-100: #232b3b;
+  --color-neutral-200: #2b3446;
+  --color-neutral-300: #3a4356;
+  --color-neutral-500: #6d7789;
+  --color-neutral-700: #c3ccda;
+  --color-neutral-900: #f4f7fb;
+}

@@ -1,0 +1,441 @@
+@import '../styles/tokens.css';
+
+/* Login — Modernist.
+   A full-width nav over a two-column split, ruled apart by the system's 2px
+   lines. Nothing floats, nothing is centred, there is no card. */
+
+.auth,
+.auth *,
+.auth *::before,
+.auth *::after {
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.auth {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  /* Every line on this page starts at the same left edge. None of the eight
+     languages is right-to-left, so this is safe to state outright. */
+  text-align: left;
+}
+
+/* Ink ground and paper type, not the app's slate dark surface: this is the one
+   full-bleed page in the product, and the design asks for the harder contrast.
+   The neutrals warm up to match, so the greys do not read blue against the ink. */
+body.dark .auth {
+  --color-bg: #12120f;
+  --color-text: #f7f5f0;
+  --color-divider: #34332e;
+  --color-neutral-100: #1b1a17;
+  --color-neutral-200: #23221e;
+  --color-neutral-300: #34332e;
+  --color-neutral-500: #6f6d64;
+  --color-neutral-700: #a9a69c;
+  --color-neutral-900: #f7f5f0;
+}
+
+/* ---------- nav ---------- */
+
+.auth-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  border-bottom: 2px solid var(--color-divider);
+}
+
+.auth-nav__brand {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.auth-nav__end {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ---------- split ---------- */
+
+.auth-split {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  flex: 1;
+  min-height: 0;
+}
+
+/* The form comes first in the DOM so the stacked layout leads with it, but on a
+   wide screen the hero takes the left seven parts - hence the explicit columns. */
+.auth-hero {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(1.5rem, 3.5vw, 2.75rem);
+}
+
+/* The seam. A single 2px rule, no gap, no shadow. */
+.auth-form-col {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-left: 2px solid var(--color-divider);
+}
+
+/* ---------- hero ---------- */
+
+.auth-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-accent-500);
+}
+
+/* Lightened so it stays readable on the ink ground. The ramp inverts under dark
+   mode, so the light step is accent-700 - accent-300 is the dark end there. */
+body.dark .auth-kicker { color: var(--color-accent-700); }
+
+.auth-headline {
+  margin: 0.9rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4vw, 3.1rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  color: var(--color-text);
+}
+
+.auth-lede {
+  max-width: 46ch;
+  margin: 1rem 0 0;
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  line-height: 1.55;
+  color: var(--color-neutral-700);
+}
+
+/* ---------- photo ---------- */
+
+.auth-photo {
+  position: relative;
+  flex: 1;
+  min-height: 220px;
+  margin-top: 1.6rem;
+  overflow: hidden;
+  border: 2px solid var(--color-divider);
+  background: var(--color-neutral-100);
+}
+
+.auth-photo__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.auth-photo__img--on { opacity: 1; }
+
+/* Drawn only while the folder is empty - the same hatch as the wireframe. */
+.auth-photo__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--color-neutral-500);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 10px,
+    var(--color-neutral-200) 10px 12px
+  );
+}
+
+/* ---------- form column ---------- */
+
+.auth-form__title {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.auth-rule {
+  height: 0;
+  margin: 0 0 1.4rem;
+  border: 0;
+  border-top: 2px solid var(--color-divider);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.field > span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-neutral-700);
+}
+
+.auth .input {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.auth .input::placeholder { color: var(--color-neutral-500); }
+
+.auth .input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -1px;
+}
+
+/* Room for the eye toggle sitting inside the field. */
+.field--password { position: relative; }
+.field--password .input { padding-right: 2.75rem; }
+
+.auth-eye {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  display: flex;
+  padding: 0.35rem;
+  background: transparent;
+  border: none;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+}
+
+.auth-forgot {
+  align-self: flex-start;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-accent-500);
+  font: inherit;
+  font-size: 0.83rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* ---------- buttons ---------- */
+
+/* Label flush left, arrow pushed right, spanning the column. */
+.auth-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--color-accent-500);
+  border: 1px solid var(--color-accent-500);
+  color: #fff;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.auth-demo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ---------- divider + small print ---------- */
+
+/* Label flush left with the rule running out to the right - nothing on this page
+   is centred. */
+.auth-or {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-neutral-700);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.auth-or::after {
+  content: '';
+  flex: 1;
+  height: 0;
+  border-top: 1px solid var(--color-divider);
+}
+
+.auth-fineprint {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  color: var(--color-neutral-700);
+}
+
+.auth-error {
+  padding: 0.65rem 0.8rem;
+  background: var(--color-wash);
+  border-left: 3px solid var(--color-accent-500);
+  color: var(--color-text);
+  font-size: 0.85rem;
+}
+
+.auth-notice {
+  padding: 0.65rem 0.8rem;
+  background: var(--color-neutral-100);
+  border-left: 3px solid var(--color-neutral-500);
+  color: var(--color-text);
+  font-size: 0.85rem;
+}
+
+/* ---------- language select ---------- */
+
+.auth-lang {
+  position: relative;
+  display: flex;
+}
+
+.auth-lang__btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.6rem;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.auth-lang__flag { width: 1.15em; height: 1.15em; object-fit: contain; }
+.auth-lang__label { white-space: nowrap; }
+
+.auth-lang__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 50;
+  min-width: 170px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+}
+
+.auth-lang__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.83rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.auth-lang__item--on { font-weight: 700; background: var(--color-wash-faint); }
+
+.auth-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .auth-submit:hover:not(:disabled) { filter: brightness(1.08); }
+  .auth-demo:hover,
+  .auth-lang__btn:hover,
+  .auth-toggle:hover { background: var(--color-wash-faint); }
+  .auth-lang__item:hover { background: var(--color-wash-faint); }
+  .auth-eye:hover { color: var(--color-accent-500); }
+}
+
+/* ---------- stacked ----------
+   Form first, photo second: the seam turns from vertical to horizontal. */
+
+@media (max-width: 900px) {
+  .auth-split { grid-template-columns: 1fr; }
+
+  /* Back to DOM order - form, then photo - and the seam turns horizontal. */
+  .auth-form-col {
+    grid-column: 1;
+    grid-row: 1;
+    border-left: none;
+  }
+
+  .auth-hero {
+    grid-column: 1;
+    grid-row: 2;
+    border-top: 2px solid var(--color-divider);
+  }
+
+  .auth-photo { min-height: 200px; }
+}

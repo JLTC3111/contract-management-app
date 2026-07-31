@@ -67,7 +67,13 @@
       "sample_contract_5": "Wartungsvertrag für HLK-Anlagen",
       "sample_contract_5_description": "Jährlicher Wartungsvertrag für HLK-Anlagen des Bürogebäudes.",
       "sample_contract_6": "Vertrag zur Marketingkampagne",
-      "sample_contract_6_description": "Marketingkampagne für Q1, einschließlich Social Media, PPC und Content-Marketing."
+      "sample_contract_6_description": "Marketingkampagne für Q1, einschließlich Social Media, PPC und Content-Marketing.",
+      "sample_contract_7": "Partnerschaftsvertrag mit Lieferanten",
+      "sample_contract_7_description": "Abgeschlossener Lieferantenvertrag, alle Phasen freigegeben.",
+      "sample_contract_8": "Projekt zur Infrastrukturmodernisierung",
+      "sample_contract_8_description": "Laufende Infrastrukturmodernisierung mit aktiven Projektphasen.",
+      "sample_contract_9": "Mietvertrag für Ausrüstung",
+      "sample_contract_9_description": "Mietvertrag für Ausrüstung, der bei der Prüfung abgelehnt wurde."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
@@ -128,7 +134,17 @@
     "or": "oder",
     "error": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.",
     "loading": "Lädt...",
-    "languageSelector": "Sprache auswählen"
+    "languageSelector": "Sprache auswählen",
+    "kicker": "Vertragsplattform",
+    "headline": "Alle Verträge an einem Ort.",
+    "lede": "Verträge des gesamten Unternehmens in einem System erstellen, freigeben, unterzeichnen und archivieren.",
+    "emailPlaceholder": "sie@firma.de",
+    "passwordPlaceholder": "Passwort eingeben",
+    "forgotPassword": "Passwort vergessen?",
+    "noAccount": "Noch kein Konto? Wenden Sie sich an Ihre Administration.",
+    "photoPlaceholder": "Titelbild — Graustufen",
+    "enterEmailFirst": "Geben Sie zuerst Ihre E-Mail-Adresse ein.",
+    "resetSent": "Prüfen Sie Ihren Posteingang auf den Link zum Zurücksetzen."
   },
   "headers": {
     "userManual": "Benutzerhandbuch",
@@ -755,5 +771,37 @@
     "NDA": "NDA",
     "MSA": "MSA",
     "Vendor": "Lieferant"
-  }
+  },
+  "passwordModal": {
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "confirmPassword": "Neues Passwort bestätigen",
+    "allFieldsRequired": "Alle Felder sind erforderlich.",
+    "passwordsNotMatch": "Die neuen Passwörter stimmen nicht überein.",
+    "passwordTooShort": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    "incorrectCurrentPassword": "Das aktuelle Passwort ist falsch.",
+    "updateFailed": "Passwort konnte nicht aktualisiert werden.",
+    "updateSuccess": "Passwort erfolgreich aktualisiert!",
+    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten."
+  },
+  "authErrors": {
+    "invalidCredentials": "E-Mail-Adresse oder Passwort ist falsch.",
+    "emailNotConfirmed": "Diese E-Mail-Adresse wurde noch nicht bestätigt.",
+    "userNotFound": "Zu dieser E-Mail-Adresse wurde kein Konto gefunden.",
+    "userBanned": "Dieses Konto wurde gesperrt.",
+    "emailInvalid": "Diese E-Mail-Adresse ist ungültig.",
+    "emailNotAuthorized": "Diese E-Mail-Adresse ist nicht zur Anmeldung berechtigt.",
+    "validationFailed": "Bitte prüfen Sie Ihre Eingaben.",
+    "weakPassword": "Dieses Passwort ist zu schwach. Wählen Sie ein längeres, weniger naheliegendes.",
+    "samePassword": "Das neue Passwort muss sich vom aktuellen unterscheiden.",
+    "tooManyRequests": "Zu viele Versuche. Bitte warten Sie einen Moment.",
+    "tooManyEmails": "Zu viele E-Mails gesendet. Bitte warten Sie einen Moment.",
+    "sessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+    "signupDisabled": "Neuanmeldungen sind derzeit deaktiviert.",
+    "providerDisabled": "Diese Anmeldemethode ist derzeit deaktiviert.",
+    "captchaFailed": "Die Sicherheitsprüfung ist fehlgeschlagen. Bitte erneut versuchen.",
+    "requestTimeout": "Zeitüberschreitung der Anfrage. Bitte erneut versuchen.",
+    "unexpectedFailure": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
+  },
+  "approval_board_placeholder": "Geben Sie Ihre Antwort zur Freigabe ein..."
 }

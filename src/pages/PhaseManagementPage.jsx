@@ -6,8 +6,7 @@ import toast from 'react-hot-toast';
 import { getI18nOrFallback, normalizeContractStatus } from '../utils/formatters';
 import { DEFAULT_DASHBOARD_METRIC_FILTER } from '../utils/contractMetrics';
 import { useUser } from '../hooks/useUser';
-import { contractsApi } from '../api/contracts';
-import { supabase } from '../utils/supaBaseClient';
+import { contractsApi, phasesApi } from '../api/contracts';
 import PhaseManagement from '../components/PhaseManagement';
 import PhaseStepper from '../components/phase-management/PhaseStepper';
 import {
@@ -72,14 +71,10 @@ const PhaseManagementPage = () => {
       const data = await contractsApi.getById(contractId);
       setContract(data);
 
-      const { data: phaseData, error: phaseError } = await supabase
-        .from('contract_phases')
-        .select('*')
-        .eq('contract_id', contractId)
-        .order('phase_number');
-
-      if (phaseError) throw phaseError;
-      setPhasesForHeader(phaseData || []);
+      // Through phasesApi, not supabase directly: demo mode keeps its phases in
+      // localStorage, and a raw query here would go looking for 'demo-contract-7'
+      // in Postgres and throw.
+      setPhasesForHeader(await phasesApi.getByContractId(contractId));
     } catch (error) {
       console.error('Error fetching contract:', error);
       toast.error(t('lifecycle.failedToLoadContractDetails'));
@@ -110,7 +105,7 @@ const PhaseManagementPage = () => {
 
   if (loading || (!contractId && allContracts.length > 0)) {
     return (
-      <div className="ledger">
+      <div className="ledger phase-page">
         {header}
         <p className="phase-empty">{t('phaseManagement.loading', 'Loading phases...')}</p>
       </div>
@@ -119,7 +114,7 @@ const PhaseManagementPage = () => {
 
   if (!contract) {
     return (
-      <div className="ledger">
+      <div className="ledger phase-page">
         {header}
         <p className="phase-empty">
           {contractId
@@ -140,7 +135,7 @@ const PhaseManagementPage = () => {
   const state = contractPhaseState(phasesForHeader);
 
   return (
-    <div className="ledger">
+    <div className="ledger phase-page">
       {header}
 
       <div className="phase-contract">

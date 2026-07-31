@@ -67,7 +67,13 @@
       "sample_contract_5": "HVAC Maintenance Contract",
       "sample_contract_5_description": "Annual HVAC maintenance agreement for office building.",
       "sample_contract_6": "Marketing Campaign Agreement",
-      "sample_contract_6_description": "Q1 marketing campaign including social media, PPC, and content marketing."
+      "sample_contract_6_description": "Q1 marketing campaign including social media, PPC, and content marketing.",
+      "sample_contract_7": "Vendor Partnership Agreement",
+      "sample_contract_7_description": "Completed vendor partnership agreement with all phases signed off.",
+      "sample_contract_8": "Infrastructure Upgrade Project",
+      "sample_contract_8_description": "Ongoing infrastructure upgrade with active lifecycle phases.",
+      "sample_contract_9": "Equipment Rental Contract",
+      "sample_contract_9_description": "Equipment rental agreement that was rejected during review."
     },
     "loadSample": "Load Sample",
     "clearSamples": "Clear Demo Samples",
@@ -130,7 +136,17 @@
     "or": "or",
     "error": "Login failed. Please check your credentials.",
     "loading": "Loading...",
-    "languageSelector": "Select Language"
+    "languageSelector": "Select Language",
+    "kicker": "Contract platform",
+    "headline": "Every contract, in one place.",
+    "lede": "Draft, approve, sign and archive the whole company’s contracts in a single system.",
+    "emailPlaceholder": "you@company.com",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot your password?",
+    "noAccount": "No account yet? Contact your administrator.",
+    "photoPlaceholder": "Cover image — grayscale",
+    "enterEmailFirst": "Enter your email address first.",
+    "resetSent": "Check your inbox for a reset link."
   },
   "headers": {
     "userManual": "User Manual",
@@ -875,5 +891,36 @@
     "NDA": "NDA",
     "MSA": "MSA",
     "Vendor": "Vendor"
+  },
+  "passwordModal": {
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "allFieldsRequired": "All fields are required.",
+    "passwordsNotMatch": "New passwords do not match.",
+    "passwordTooShort": "Password must be at least 6 characters.",
+    "incorrectCurrentPassword": "Current password is incorrect.",
+    "updateFailed": "Failed to update password.",
+    "updateSuccess": "Password updated successfully!",
+    "unexpectedError": "An unexpected error occurred."
+  },
+  "authErrors": {
+    "invalidCredentials": "Incorrect email or password.",
+    "emailNotConfirmed": "This email address has not been confirmed yet.",
+    "userNotFound": "No account was found for that email address.",
+    "userBanned": "This account has been suspended.",
+    "emailInvalid": "That email address is not valid.",
+    "emailNotAuthorized": "That email address is not authorised to sign in.",
+    "validationFailed": "Please check the details you entered.",
+    "weakPassword": "That password is too weak. Choose a longer, less obvious one.",
+    "samePassword": "The new password must be different from the current one.",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again.",
+    "tooManyEmails": "Too many emails sent. Please wait a moment and try again.",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "signupDisabled": "New sign-ups are currently disabled.",
+    "providerDisabled": "That sign-in method is currently disabled.",
+    "captchaFailed": "The security check failed. Please try again.",
+    "requestTimeout": "The request timed out. Please try again.",
+    "unexpectedFailure": "Something went wrong. Please try again."
   }
 }

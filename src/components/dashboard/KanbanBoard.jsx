@@ -1,5 +1,5 @@
 // src/components/dashboard/KanbanBoard.jsx
-import { formatMonthYear } from '../../utils/formatters';
+import { formatMonthYear, getI18nOrFallback } from '../../utils/formatters';
 import { useTranslation } from 'react-i18next';
 import { STAGES, getContractStage, getStageLabel } from '../../utils/stages';
 import { CategoryTag } from './StageTag';
@@ -47,7 +47,9 @@ const KanbanBoard = ({ contracts, onOpen }) => {
                   }
                 }}
               >
-                <span className="ledger-card__name">{c.title || '—'}</span>
+                <span className="ledger-card__name">
+                  {getI18nOrFallback(t, c, 'title_i18n', 'title') || '—'}
+                </span>
                 <span className="ledger-card__sub">{c.client_name || '—'}</span>
                 <div className="ledger-card__foot">
                   <CategoryTag category={c.category} />

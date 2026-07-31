@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { approvalsApi, contractsApi } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
-import { normalizeContractStatus } from '../utils/formatters';
+import { getI18nOrFallback, normalizeContractStatus } from '../utils/formatters';
 import { partialSearchMatch } from '../utils/searchUtils';
 import { isContractExpiringSoon } from '../utils/contractMetrics';
 import { deleteAttachments, uploadAttachments } from '../utils/uploads';
@@ -105,16 +105,28 @@ const Dashboard = () => {
     pending: pendingApproval.length,
   }), [contracts, expiring, pendingApproval]);
 
+  /** What the row actually shows: the translated title where one exists. */
+  const titleOf = useCallback(
+    (c) => getI18nOrFallback(t, c, 'title_i18n', 'title'),
+    [t]
+  );
+
   const visible = useMemo(() => contracts.filter((c) => {
-    if (query && !partialSearchMatch(c.title, query) && !partialSearchMatch(c.client_name, query)) {
+    // Match what is on screen as well as what is stored - a seeded contract reads
+    // as its translated title, so searching for that has to find it.
+    const matchesTitle = (needle) => (
+      partialSearchMatch(titleOf(c), needle) || partialSearchMatch(c.title, needle)
+    );
+
+    if (query && !matchesTitle(query) && !partialSearchMatch(c.client_name, query)) {
       return false;
     }
     // The filter-row search matches on name only, per spec.
-    if (fileQuery && !partialSearchMatch(c.title, fileQuery)) return false;
+    if (fileQuery && !matchesTitle(fileQuery)) return false;
     if (category !== 'All' && c.category !== category) return false;
     if (stageFilter !== 'all' && getContractStage(c) !== stageFilter) return false;
     return true;
-  }), [contracts, query, fileQuery, category, stageFilter]);
+  }), [contracts, query, fileQuery, category, stageFilter, titleOf]);
 
   const drawerContract = useMemo(
     () => contracts.find((c) => c.id === drawerId) || null,
@@ -188,7 +200,9 @@ const Dashboard = () => {
 
   const handleDelete = async (target) => {
     const confirmed = window.confirm(
-      t('dashboard.confirmDelete', 'Delete "{{name}}"? This cannot be undone.', { name: target.title })
+      t('dashboard.confirmDelete', 'Delete "{{name}}"? This cannot be undone.', {
+        name: titleOf(target),
+      })
     );
     if (!confirmed) return;
 
@@ -236,7 +250,7 @@ const Dashboard = () => {
         requester_id: user?.id,
         requester_email: user?.email,
         message: t('dashboard.approvalRequestMessage', 'Approval requested for "{{name}}".', {
-          name: target.title || '',
+          name: titleOf(target) || '',
         }),
         status: 'pending',
       });
