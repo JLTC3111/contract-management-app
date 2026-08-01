@@ -1,571 +1,369 @@
-import { useState, useEffect } from 'react';
-import { useUser } from '../hooks/useUser';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../utils/supaBaseClient';
-import { approvalsApi, contractsApi } from '../api/contracts';
-import { getContractStage, getNextStage, getStageLabel, stageUpdatePayload } from '../utils/stages';
-import { getI18nOrFallback } from '../utils/formatters';
-import { Check, X, Clock, FileText, User, ArrowLeft, Edit, Save, X as CancelIcon, ThumbsUp } from 'lucide-react';
+// src/pages/ApprovalsBoard.jsx
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { useTheme } from '../hooks/useTheme';
+import { ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
-import React, { useRef } from 'react';
+import { useUser } from '../hooks/useUser';
+import { approvalsApi, contractsApi } from '../api/contracts';
+import { getContractStage, getNextStage, stageUpdatePayload } from '../utils/stages';
+import { formatDate, getI18nOrFallback } from '../utils/formatters';
+import { StageTag } from '../components/dashboard/StageTag';
+import '../components/dashboard/dashboard.css';
 
-// Helper to check demo mode
-const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
+const CAN_VIEW = ['admin', 'approver', 'editor'];
+/** Editors see the queue but cannot act on it, so their controls are locked. */
+const CAN_ACT = ['admin', 'approver'];
 
-const Approvals = () => {
-  const { user } = useUser();
-  const navigate = useNavigate();
-  const [approvalRequests, setApprovalRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { t, i18n } = useTranslation();
+/**
+ * Approval request page: one request read top to bottom in a single measured
+ * column. `/approvals/:id` shows that request; `/approvals` shows the pending
+ * queue in the same layout.
+ *
+ * `.ledger` is what carries the design tokens, so it has to stay on the root.
+ */
+const ApprovalsBoard = () => {
   const { id } = useParams();
-  const [request, setRequest] = useState(null);
-  const { darkMode } = useTheme();
-  
-  // Edit state
-  const [editingRequestId, setEditingRequestId] = useState(null);
-  const [editedMessage, setEditedMessage] = useState('');
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const { user } = useUser();
+
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  /** Decisions made in this session. The request stays on screen with its
+      confirmation banner instead of vanishing out of the pending queue. */
+  const [decisions, setDecisions] = useState({});
+
+  // Response editing
+  const [editingId, setEditingId] = useState(null);
+  const [draft, setDraft] = useState('');
   const [saving, setSaving] = useState(false);
 
-  const lastDefaultApprovalResponseTextRef = useRef(t('defaultApprovalResponseText'));
+  const canView = !!user && CAN_VIEW.includes(user.role);
+  const canAct = !!user && CAN_ACT.includes(user.role);
 
-  // Handle keyboard shortcuts for save and cancel buttons
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        if (editingRequestId && editedMessage.trim() && !saving) {
-          handleSaveMessage(editingRequestId);
-        }
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        if (editingRequestId && !saving) {
-          handleCancelEdit();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [editingRequestId, editedMessage, saving]);
-
-
-  useEffect(() => {
-    const fetchRequest = async () => {
-      try {
-        // Use API which handles demo mode
-        const data = await approvalsApi.getById(id);
-        if (data) {
-          // Also fetch contract details
-          const contract = await contractsApi.getById(data.contract_id);
-          setRequest({ ...data, contracts: contract });
-        }
-      } catch (error) {
-        console.error('Error fetching approval request:', error);
-      }
-    };
-  
-    if (id) {
-      fetchRequest();
-    }
-  }, [id]);
-
-  // Fetch all pending approval requests
-  const fetchApprovalRequests = async () => {
-    if (!user || (user.role !== 'admin' && user.role !== 'approver' && user.role !== 'editor')) {
-      return;
-    }
-
+  const load = useCallback(async () => {
+    if (!canView) return;
     setLoading(true);
     try {
-      // Use API which handles demo mode
-      const pendingApprovals = await approvalsApi.getPending();
-
-      if (!pendingApprovals || pendingApprovals.length === 0) {
-        setApprovalRequests([]);
-        setLoading(false);
+      if (id) {
+        const request = await approvalsApi.getById(id);
+        if (!request) {
+          setRequests([]);
+          return;
+        }
+        const contract = await contractsApi.getById(request.contract_id);
+        setRequests([{ ...request, contracts: contract || null }]);
         return;
       }
 
-      // Get contract IDs from approval requests
-      const contractIds = pendingApprovals.map(req => req.contract_id);
+      const pending = await approvalsApi.getPending();
+      if (!pending?.length) {
+        setRequests([]);
+        return;
+      }
 
-      // Fetch contract details using API
       const contracts = await contractsApi.getAll();
-      const relevantContracts = contracts.filter(c => contractIds.includes(c.id));
-
-      // Combine the data
-      const requestsWithContracts = pendingApprovals.map(request => {
-        const contract = relevantContracts?.find(c => c.id === request.contract_id);
-        return {
-          ...request,
-          // No title on the placeholder: an English literal here would win over
-          // the translated t('unknown_contract') the header falls back to.
-          contracts: contract || { id: request.contract_id, title: null, status: null, updated_at: null }
-        };
-      });
-
-      setApprovalRequests(requestsWithContracts);
+      setRequests(pending.map((request) => ({
+        ...request,
+        // No title on the placeholder: an English literal here would win over
+        // the translated t('unknown_contract') the heading falls back to.
+        contracts: contracts?.find((c) => c.id === request.contract_id)
+          || { id: request.contract_id, title: null, status: null, updated_at: null },
+      })));
     } catch (err) {
       console.error('Error fetching approval requests:', err);
-      toast.error('Failed to load approval requests');
+      toast.error(t('errors.approvalActionFailed', 'Approval action failed.'));
+      setRequests([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [canView, id, t]);
 
-  // Handle approval/rejection
-  const handleApprovalAction = async (requestId, action) => {
+  useEffect(() => { load(); }, [load]);
+
+  /** What the request reads as now - a decision made here outranks the fetched
+      status, which is still 'pending' in the row we already have. */
+  const statusOf = useCallback(
+    (request) => decisions[request.id] || request.status || 'pending',
+    [decisions]
+  );
+
+  const titleOf = useCallback(
+    (request) => getI18nOrFallback(t, request.contracts, 'title_i18n', 'title')
+      || t('unknown_contract'),
+    [t]
+  );
+
+  /** The header tag speaks for the request when there is exactly one on screen;
+      a queue is pending by definition, since that is all getPending returns. */
+  const headerStatus = requests.length === 1 ? statusOf(requests[0]) : 'pending';
+
+  const statusLabel = useMemo(() => ({
+    pending: t('pending'),
+    approved: t('status.approved', 'Approved'),
+    rejected: t('approvals.rejected', 'Rejected'),
+  }), [t]);
+
+  const handleDecision = async (request, action) => {
+    const approved = action === 'approve';
     try {
-      // Update the approval request status using API
-      await approvalsApi.update(requestId, { 
-        status: action === 'approve' ? 'approved' : 'rejected'
-      });
+      await approvalsApi.update(request.id, { status: approved ? 'approved' : 'rejected' });
 
-      // Get the contract ID from the request
-      const request = approvalRequests.find(r => r.id === requestId);
-      if (request) {
-        // Approving moves the contract on to the next stage; rejecting only
-        // stamps the status and leaves the stage where it is.
-        try {
-          let updates = { status: 'rejected' };
-          if (action === 'approve') {
-            const current = getContractStage(request.contracts);
-            // Sign-off on a Draft or In Review contract lands it in Negotiation.
-            const next = ['draft', 'in_review'].includes(current)
-              ? 'negotiation'
-              : getNextStage(current) ?? current;
-            updates = stageUpdatePayload(next);
-          }
-          await contractsApi.update(request.contract_id, updates);
-          toast.success(t('contract_approval_action_completed_successfully'));
-        } catch (contractError) {
-          console.error('Error updating contract status:', contractError);
-          toast.error(t('approval_action_completed_but_failed_to_update_contract_status'));
+      // Approving moves the contract on to the next stage; rejecting only
+      // stamps the status and leaves the stage where it is.
+      try {
+        let updates = { status: 'rejected' };
+        if (approved) {
+          const current = getContractStage(request.contracts);
+          // Sign-off on a Draft or In Review contract lands it in Negotiation.
+          const next = ['draft', 'in_review'].includes(current)
+            ? 'negotiation'
+            : getNextStage(current) ?? current;
+          updates = stageUpdatePayload(next);
         }
+        await contractsApi.update(request.contract_id, updates);
+        toast.success(t('contract_approval_action_completed_successfully'));
+      } catch (contractError) {
+        console.error('Error updating contract status:', contractError);
+        toast.error(t('approval_action_completed_but_failed_to_update_contract_status'));
       }
 
-      // Refresh the list
-      fetchApprovalRequests();
+      setDecisions((prev) => ({ ...prev, [request.id]: approved ? 'approved' : 'rejected' }));
     } catch (err) {
       console.error('Error handling approval action:', err);
       toast.error(t('failed_to_process_approval_action'));
     }
   };
 
-  // Handle edit message
-  const handleEditMessage = (requestId, currentResponse) => {
-    setEditingRequestId(requestId);
-    setEditedMessage(currentResponse || t('defaultApprovalResponseText'));
+  const startEdit = (request) => {
+    setEditingId(request.id);
+    setDraft(request.approval_response || t('defaultApprovalResponseText'));
   };
 
-  // Handle save edited message
-  const handleSaveMessage = async (requestId) => {
-    if (!editedMessage.trim()) {
-      toast.error(t('response_message_cannot_be_empty'));
+  const cancelEdit = useCallback(() => {
+    setEditingId(null);
+    setDraft('');
+  }, []);
+
+  const saveEdit = useCallback(async (requestId, text) => {
+    const message = text.trim();
+    if (!message) {
+      toast.error(t('response_message_cannot_be_empty', 'Response message cannot be empty'));
       return;
     }
 
     setSaving(true);
     try {
-      // Use API which handles demo mode
-      await approvalsApi.update(requestId, { 
-        approval_response: editedMessage.trim()
-      });
-
+      await approvalsApi.update(requestId, { approval_response: message });
+      // Keep the saved text on screen rather than refetching: a decided request
+      // is no longer pending and a refetch would drop it from the queue.
+      setRequests((prev) => prev.map((r) => (
+        r.id === requestId ? { ...r, approval_response: message } : r
+      )));
       toast.success(t('approval_response_updated_successfully'));
-      setEditingRequestId(null);
-      setEditedMessage('');
-      
-      // Refresh the list to show updated response
-      fetchApprovalRequests();
+      setEditingId(null);
+      setDraft('');
     } catch (err) {
       console.error('Error saving approval response:', err);
       toast.error(t('failed_to_save_approval_response'));
     } finally {
       setSaving(false);
     }
-  };
+  }, [t]);
 
-  // Handle cancel edit
-  const handleCancelEdit = () => {
-    setEditingRequestId(null);
-    setEditedMessage('');
-  };
-
+  // Cmd/Ctrl+Enter commits the response, Escape abandons it.
   useEffect(() => {
-    fetchApprovalRequests();
-  }, [user]);
+    if (editingId === null) return undefined;
+    const onKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        if (!saving) saveEdit(editingId, draft);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        if (!saving) cancelEdit();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [editingId, draft, saving, saveEdit, cancelEdit]);
 
+  // The stored response wins; only the untouched default follows the language.
   useEffect(() => {
-    // If editing and the message matches the previous default, update to new translation
-    if (
-      editingRequestId !== null &&
-      editedMessage === lastDefaultApprovalResponseTextRef.current
-    ) {
-      setEditedMessage(t('defaultApprovalResponseText'));
-    }
-    // Always update the ref to the latest translation
-    lastDefaultApprovalResponseTextRef.current = t('defaultApprovalResponseText');
+    if (editingId === null) return;
+    const request = requests.find((r) => r.id === editingId);
+    if (request && !request.approval_response) setDraft(t('defaultApprovalResponseText'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language, editingRequestId]);
+  }, [i18n.language]);
 
-  // Don't show for non-admin/approver users
-  if (!user || (user.role !== 'admin' && user.role !== 'approver' && user.role !== 'editor')) {
+  if (!canView) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <h2>{t('access_denied')}</h2>
-        <p>{t('no_permission_to_view_approval_requests')}</p>
+      <div className="ledger ledger-approvals">
+        <header className="ledger-approvals__head">
+          <button
+            type="button"
+            className="btn-icon"
+            onClick={() => navigate(-1)}
+            aria-label={t('buttons.back', 'Back')}
+            title={t('buttons.back', 'Back')}
+          >
+            <ArrowLeft size={19} />
+          </button>
+          <h1 className="ledger-approvals__title">{t('access_denied')}</h1>
+        </header>
+        <p className="ledger-state">{t('no_permission_to_view_approval_requests')}</p>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <div style={{ marginBottom: 'clamp(1rem, 4vw, 2rem)' }}>
-        <div
-          style={{
-            display: 'flex',
-            minWidth: 'clamp(250px, 82.5vw, 800px)',
-            alignItems: 'center',
-            gap: 'clamp(0.5rem, 2vw, 1rem)',
-            marginBottom: '0.5rem',
-            flexWrap: 'wrap',
-          }}
+    <div className="ledger ledger-approvals">
+      <header className="ledger-approvals__head">
+        <button
+          type="button"
+          className="btn-icon"
+          onClick={() => navigate(-1)}
+          aria-label={t('buttons.back', 'Back')}
+          title={t('buttons.back', 'Back')}
         >
-          <button
-            onClick={() => navigate('/')}
-            style={{
-              background: 'var(--card-bg)',
-              border: '1px solid var(--card-border)',
-              padding: 'clamp(0.3rem, 2vw, 0.5rem)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--text)',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--hover-bg)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--card-bg)';
-            }}
-          >
-            <ArrowLeft size={20} />
-          </button>
-  
-          <h1
-            style={{
-              color: 'var(--text)',
-              margin: 0,
-              fontSize: 'clamp(0.8rem, 2vw, 1.25rem)',
-            }}
-          >
-            📋 {t('approval_board_approvalRequests.title')}
-          </h1>
-  
-          <h3
-            style={{
-              border: '1px solid var(--card-border)',
-              padding: 'clamp(0.3rem, 2vw, 0.5rem)',
-              margin: 0,
-              color: 'var(--text)',
-              fontSize: '1.2rem',
-              fontWeight: 500,
-              boxShadow: darkMode ? '0 2px 8px rgba(255, 255, 255, 0.2)' : '0 2px 8px rgba(0,0,0,0.2)',
-            }}
-          >
-            {getI18nOrFallback(t, approvalRequests[0]?.contracts, 'title_i18n', 'title')
-              || t('unknown_contract')}
-          </h3>
-        </div>
-  
-        {/*<p style={{ color: 'var(--text-secondary)', margin: 0 }}>
-          {t('approval_board_approvalRequests.subtitle')}
-        </p>*/}
-      </div>
-   
+          <ArrowLeft size={19} />
+        </button>
+        <h1 className="ledger-approvals__title">
+          {requests.length > 1
+            ? t('approvals.pageTitlePlural', 'Approval requests')
+            : t('approvals.pageTitle', 'Approval request')}
+        </h1>
+        {!loading && requests.length > 0 && (
+          <span className={`tag ${headerStatus === 'pending' ? 'tag-accent' : 'tag-quiet'}`}>
+            {statusLabel[headerStatus] || statusLabel.pending}
+          </span>
+        )}
+      </header>
 
       {loading ? (
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          padding: '3rem',
-          color: 'var(--text-secondary)'
-        }}>
-          <Clock size={24} style={{ marginRight: '0.5rem' }} />
-          {t('loading_approval_requests')}
-        </div>
-      ) : approvalRequests.length === 0 ? (
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column',
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          padding: '3rem',
-          color: 'var(--text-secondary)',
-          background: 'var(--card-bg)',
-          border: '1px solid var(--card-border)',
-        }}>
-          <Clock size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
-          <h3 style={{ margin: '0 0 0.5rem 0' }}>{t('noPendingRequests')}</h3>
-          <p style={{ margin: 0, textAlign: 'center' }}>
-            {t('currentlyNoApprovalRequestsWaitingForYourReview')}
-          </p>
-        </div>
+        <p className="ledger-state">{t('loading_approval_requests')}</p>
+      ) : requests.length === 0 ? (
+        <p className="ledger-state">
+          {t('currentlyNoApprovalRequestsWaitingForYourReview')}
+        </p>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {approvalRequests.map((request) => (
-            <div
-              key={request.id}
-              style={{
-                background: 'var(--card-bg)',
-                border: '1px solid var(--card-border)',
-                padding: 'clamp(1rem, 4vw, 1.5rem)',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-              }}
-            >
-              {/* Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+        <div className="ledger-approvals__body">
+          {requests.map((request) => {
+            const decision = decisions[request.id];
+            const editing = editingId === request.id;
+            const lockedClass = canAct ? '' : ' ledger-approvals__locked';
+
+            return (
+              <article className="ledger-approvals__request" key={request.id}>
                 <div>
-                  
-                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                    {t('requestedBy')} {request.requester_email}
+                  <p className="ledger-approvals__requester">
+                    {t('requestedBy')}{' '}
+                    {request.requester_email || request.requested_by_name || '—'}
                   </p>
+                  <h2 className="ledger-approvals__contract">{titleOf(request)}</h2>
                 </div>
-                <span style={{
-                  background: '#f59e0b',
-                  color: 'white',
-                  padding: '0.25rem 0.75rem',
-                  fontSize: '0.75rem',
-                  fontWeight: '500'
-                }}>
-                  {t('pending')}
-                </span>
-              </div>
 
-              {/* Request Details */}
-              <div style={{ marginBottom: 'clamp(1rem, 4vw, 1.5rem)' }}>
-                <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text)', fontSize: 'clamp(0.95rem, 2vw, 1rem)' }}>
-                  <strong>{t('requestMessage')}:</strong>
-                </p>
-                <div style={{
-                  background: 'var(--hover-bg)',
-                  padding: 'clamp(0.5rem, 2vw, 1rem)',
-                  border: '1px solid var(--card-border)',
-                  color: 'var(--text)'
-                }}>
-                  {/* Seeded demo requests carry a message_i18n key; requests filed
-                      in the app only have the message text that was stored. */}
-                  {getI18nOrFallback(t, request, 'message_i18n', 'message')}
-                </div>
-              </div>
-
-              {/* Contract Info */}
-              <div style={{ 
-                background: 'var(--hover-bg)', 
-                padding: 'clamp(0.5rem, 2vw, 1rem)', 
-                marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
-                border: '1px solid var(--card-border)'
-              }}>
-                <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  <strong>{t('contractDetails')}:</strong>
-                </p>
-                <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  • {t('status_label')}: {request.contracts
-                    ? getStageLabel(t, getContractStage(request.contracts))
-                    : t('common.unknown', 'Unknown')}
-                </p>
-                <p style={{ margin: '0.25rem 0 0 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  • {t('updated')}: {new Date(request.contracts?.updated_at).toLocaleDateString()}
-                </p>
-                <p style={{ margin: '0.25rem 0 0 0', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  • {t('requestDate')}: {new Date(request.created_at).toLocaleDateString()}
-                </p>
-              </div>
-
-              {/* Default Response */}
-              <div style={{ 
-                background: 'var(--card-bg)', 
-                padding: 'clamp(0.5rem, 2vw, 1rem)', 
-                marginBottom: 'clamp(1rem, 4vw, 1.5rem)',
-                border: '1px solid var(--card-border)'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-                    <strong>{t('defaultApprovalResponse')}:</strong>
-                  </p>
-                  {(user?.role === 'admin' || user?.role === 'approver' || user?.role === 'editor') && (
-                    <div style={{ 
-                      display: 'flex', 
-                      gap: '0.5rem',
-                      filter: user?.role === 'editor' ? 'blur(4px)' : 'none',
-                      pointerEvents: user?.role === 'editor' ? 'none' : 'auto',
-                      opacity: user?.role === 'editor' ? 0.6 : 1
-                    }}>
-                      {editingRequestId === request.id ? (
-                        <>
-                          <button className="btn-hover-effect"
-                            onClick={() => handleSaveMessage(request.id)}
-                            disabled={saving}
-                            style={{
-                              background: '#10b981',
-                              color: 'white',
-                              border: 'none',
-                              padding: '0.25rem 0.5rem',
-                              cursor: saving ? 'not-allowed' : 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '0.25rem',
-                              fontSize: '0.75rem',
-                              opacity: saving ? 0.6 : 1,
-                            }}
-                          >
-                            <Save size={12} />
-                            {saving ? t('approval_board_saving') : t('approval_board_save')}
-                          </button>
-                          <button className="btn-hover-effect"
-                            onClick={handleCancelEdit}
-                            disabled={saving}
-                            style={{
-                              background: '#6b7280',
-                              color: 'white',
-                              border: 'none',
-                              padding: '0.25rem 0.5rem',
-                              cursor: saving ? 'not-allowed' : 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '0.25rem',
-                              fontSize: '0.75rem',
-                              opacity: saving ? 0.6 : 1,
-                            }}
-                          >
-                            <CancelIcon size={12} />
-                            {t('approval_board_cancel')}
-                          </button>
-                        </>
-                      ) : (
-                        <button className="btn-hover-effect"
-                          onClick={() => handleEditMessage(request.id, request.approval_response)}
-                          style={{
-                            background: '#3b82f6',
-                            color: 'white',
-                            border: 'none',
-                            padding: '0.25rem 0.5rem',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.25rem',
-                            fontSize: '0.75rem',
-                          }}
-                        >
-                          <Edit size={12} />
-                          {t('approval_board_edit')}
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-                
-                {editingRequestId === request.id ? (
-                  <div
-                    style={{
-                      background: 'var(--hover-bg)',
-                      padding: 'clamp(0.5rem, 2vw, 1rem)',
-                      border: '1px solid var(--card-border)',
-                    }}
-                  >
-                    <textarea
-                      value={editedMessage}
-                      onChange={(e) => setEditedMessage(e.target.value)}
-                      style={{
-                        width: '100%',
-                        minHeight: '100px',
-                        padding: '0.5rem',
-                        border: '1px solid var(--card-border)',
-                        background: 'var(--card-bg)',
-                        color: 'var(--text)',
-                        fontSize: '0.875rem',
-                        fontFamily: 'inherit',
-                        resize: 'vertical',
-                        outline: 'none',
-                      }}
-                      placeholder={t('approval_board_placeholder')}
-                    />
+                <section className="ledger-panel">
+                  <div className="ledger-panel__head">
+                    <span className="ledger-panel__label">{t('requestMessage')}</span>
                   </div>
-                ) : (
-                  <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem', fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    "{request.approval_response || t('defaultApprovalResponseText')}" <ThumbsUp size={16} />
-                  </p>
-                )}
-              </div>
+                  <div className="ledger-panel__body">
+                    {/* Seeded demo requests carry a message_i18n key; requests filed
+                        in the app only have the message text that was stored. */}
+                    <p className="ledger-approvals__message">
+                      {getI18nOrFallback(t, request, 'message_i18n', 'message') || '—'}
+                    </p>
+                  </div>
+                </section>
 
-              {/* Action Buttons */}
-              <div style={{ 
-                display: 'flex', 
-                gap: '0.75rem', 
-                justifyContent: 'space-between',
-                filter: user?.role === 'editor' ? 'blur(4px)' : 'none',
-                pointerEvents: user?.role === 'editor' ? 'none' : 'auto',
-                opacity: user?.role === 'editor' ? 0.6 : 1
-              }}>
-                <button
-                  onClick={() => handleApprovalAction(request.id, 'approve')}
-                  className="btn-hover-effect"
-                  style={{
-                    background: '#10b981',
-                    color: 'white',
-                    border: 'none',
-                    padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                    fontWeight: '500',
-                    transition: 'background 0.2s',
-                  }}
-                  onMouseEnter={(e) => e.target.style.background = '#059669'}
-                  onMouseLeave={(e) => e.target.style.background = '#10b981'}
-                >
-                  <Check size={16} />
-                  {t('approval_board_approve')}
-                </button>
-                <button
-                  onClick={() => handleApprovalAction(request.id, 'reject')}
-                  className="btn-hover-effect"
-                  style={{
-                    background: '#ef4444',
-                    color: 'white',
-                    border: 'none',
-                    padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                    fontWeight: '500',
-                    transition: 'background 0.2s',
-                  }}
-                  onMouseEnter={(e) => e.target.style.background = '#dc2626'}
-                  onMouseLeave={(e) => e.target.style.background = '#ef4444'}
-                >
-                  <X size={16} />
-                  {t('approval_board_reject')}
-                </button>
-              </div>
-            </div>
-          ))}
+                <section className="ledger-panel">
+                  <div className="ledger-panel__head">
+                    <span className="ledger-panel__label">{t('contractDetails')}</span>
+                  </div>
+                  <div className="ledger-panel__body">
+                    <dl className="ledger-approvals__facts">
+                      <div className="ledger-approvals__fact">
+                        <dt>{t('status_label')}</dt>
+                        <dd><StageTag stage={getContractStage(request.contracts)} /></dd>
+                      </div>
+                      <div className="ledger-approvals__fact">
+                        <dt>{t('table.lastUpdated', 'Last Updated')}</dt>
+                        <dd>{formatDate(request.contracts?.updated_at, {}, i18n.language)}</dd>
+                      </div>
+                      <div className="ledger-approvals__fact">
+                        <dt>{t('approvals.requestedOn', 'Requested on')}</dt>
+                        <dd>{formatDate(request.created_at, {}, i18n.language)}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                </section>
+
+                <section className="ledger-panel">
+                  <div className="ledger-panel__head">
+                    <span className="ledger-panel__label">
+                      {t('defaultApprovalResponse')}
+                    </span>
+                    <button
+                      type="button"
+                      className={`ledger-panel__action${lockedClass}`}
+                      onClick={() => (editing ? saveEdit(request.id, draft) : startEdit(request))}
+                      disabled={saving}
+                    >
+                      {editing
+                        ? (saving ? t('approval_board_saving') : t('approvals.done', 'Done'))
+                        : t('approval_board_edit')}
+                    </button>
+                  </div>
+                  <div className="ledger-panel__body">
+                    {editing ? (
+                      <textarea
+                        className="ledger-approvals__textarea"
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        placeholder={t('approval_board_placeholder')}
+                        aria-label={t('defaultApprovalResponse')}
+                        autoFocus
+                      />
+                    ) : (
+                      <p className="ledger-approvals__response">
+                        “{request.approval_response || t('defaultApprovalResponseText')}”
+                      </p>
+                    )}
+                  </div>
+                </section>
+
+                {decision ? (
+                  <p className="ledger-approvals__decision" role="status">
+                    {decision === 'approved'
+                      ? t('approvals.approvedConfirmation', 'You approved this request.')
+                      : t('approvals.rejectedConfirmation', 'You rejected this request.')}
+                  </p>
+                ) : (
+                  <div className={`ledger-approvals__actions${lockedClass}`}>
+                    <button
+                      type="button"
+                      className="btn-accent"
+                      onClick={() => handleDecision(request, 'approve')}
+                    >
+                      {t('approval_board_approve')}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={() => handleDecision(request, 'reject')}
+                    >
+                      {t('approval_board_reject')}
+                    </button>
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
       )}
     </div>
   );
 };
 
-export default Approvals; 
+export default ApprovalsBoard;

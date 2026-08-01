@@ -33,6 +33,7 @@ const DetailDrawer = ({
   onEdit,
   onDelete,
   onSendForApproval,
+  onOpenRecord,
   busy,
   // True while the edit modal is stacked on top: Escape and backdrop clicks
   // belong to that layer, so the drawer must ignore them.
@@ -175,6 +176,16 @@ const DetailDrawer = ({
           <h2 className="ledger-drawer__title">{title || '—'}</h2>
           <StageTag stage={stage} />
         </header>
+
+        {/* The drawer is a summary; everything it leaves out is one click away. */}
+        <button
+          type="button"
+          className="ledger-drawer__record"
+          onClick={() => onOpenRecord(contract)}
+        >
+          <span>{t('record.openFull', 'Open full record view')}</span>
+          <span aria-hidden="true">→</span>
+        </button>
 
         <div className="ledger-drawer__actions">
           <button
@@ -327,6 +338,14 @@ const DetailDrawer = ({
             </button>
           </>
         )}
+
+        <button
+          type="button"
+          className="ledger-btn ledger-btn--ghost ledger-btn--block"
+          onClick={() => onOpenRecord(contract)}
+        >
+          {t('record.viewFull', 'View full details')} →
+        </button>
       </motion.aside>
     </>
   );

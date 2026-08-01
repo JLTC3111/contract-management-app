@@ -42,7 +42,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0.4rem 0;
+  padding: 1.1rem 0 0.4rem;
   overflow-y: auto;
 }
 
@@ -82,13 +82,19 @@
   font-weight: 700;
 }
 
+/* Nested rows are subordinate, not urgent: normal weight in the body colour.
+   The accent stays reserved for the active row. */
 .rail__item--sub {
   padding-left: 2.6rem;
   font-size: 0.82rem;
-  color: var(--primary);
+  font-weight: 500;
+  color: var(--sidebar-text);
 }
 
 .rail__item--sub svg { width: 15px; height: 15px; }
+
+/* "Full record" with nothing read yet: visible, but nothing to open. */
+.rail__item:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .rail__chevron { flex-shrink: 0; transition: transform 0.18s ease; }
 .rail__chevron--open { transform: rotate(180deg); }
@@ -135,7 +141,7 @@
 }
 
 @media (hover: hover) {
-  .rail__item:hover,
+  .rail__item:hover:not(:disabled),
   .rail__toggle:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); }
   .rail__item--active:hover { background: color-mix(in srgb, var(--primary) 18%, transparent); }
 }

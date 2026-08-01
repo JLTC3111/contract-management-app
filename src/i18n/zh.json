@@ -799,5 +799,30 @@
     "requestTimeout": "请求超时，请重试。",
     "unexpectedFailure": "发生错误，请重试。"
   },
-  "approval_board_placeholder": "请输入您的审批回复内容..."
+  "approval_board_placeholder": "请输入您的审批回复内容...",
+  "approvals": {
+    "pageTitle": "审批请求",
+    "pageTitlePlural": "审批请求",
+    "requestedOn": "请求日期",
+    "rejected": "已拒绝",
+    "done": "完成",
+    "approvedConfirmation": "您已批准此请求。",
+    "rejectedConfirmation": "您已拒绝此请求。"
+  },
+  "record": {
+    "sidebar": "完整档案",
+    "sidebarHint": "请先从仪表板打开一份合同。",
+    "open": "完整档案",
+    "openFull": "打开完整档案视图",
+    "viewFull": "查看完整详情",
+    "description": "描述",
+    "noDescription": "暂无描述。",
+    "contractValue": "合同金额",
+    "created": "创建时间",
+    "approvalDraftOnly": "只有草稿合同才能提交审批。",
+    "newFolderPrompt": "文件夹名称",
+    "folderNameInvalid": "文件夹名称必须包含字母或数字。",
+    "folderCreated": "已创建文件夹\"{{name}}\"。",
+    "folderFailed": "无法创建文件夹：{{msg}}"
+  }
 }

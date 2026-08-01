@@ -807,5 +807,30 @@
     "requestTimeout": "Yêu cầu đã hết thời gian chờ. Vui lòng thử lại.",
     "unexpectedFailure": "Đã xảy ra lỗi. Vui lòng thử lại."
   },
-  "approval_board_placeholder": "Nhập nội dung phản hồi phê duyệt của bạn..."
+  "approval_board_placeholder": "Nhập nội dung phản hồi phê duyệt của bạn...",
+  "approvals": {
+    "pageTitle": "Yêu cầu phê duyệt",
+    "pageTitlePlural": "Các yêu cầu phê duyệt",
+    "requestedOn": "Ngày yêu cầu",
+    "rejected": "Đã từ chối",
+    "done": "Xong",
+    "approvedConfirmation": "Bạn đã phê duyệt yêu cầu này.",
+    "rejectedConfirmation": "Bạn đã từ chối yêu cầu này."
+  },
+  "record": {
+    "sidebar": "Hồ sơ đầy đủ",
+    "sidebarHint": "Hãy mở một hợp đồng từ bảng điều khiển trước.",
+    "open": "Hồ sơ đầy đủ",
+    "openFull": "Mở hồ sơ đầy đủ",
+    "viewFull": "Xem chi tiết đầy đủ",
+    "description": "Mô tả",
+    "noDescription": "Chưa có mô tả.",
+    "contractValue": "Giá trị hợp đồng",
+    "created": "Ngày tạo",
+    "approvalDraftOnly": "Chỉ hợp đồng nháp mới có thể gửi phê duyệt.",
+    "newFolderPrompt": "Tên thư mục",
+    "folderNameInvalid": "Tên thư mục phải chứa chữ cái hoặc số.",
+    "folderCreated": "Đã tạo thư mục \"{{name}}\".",
+    "folderFailed": "Không thể tạo thư mục: {{msg}}"
+  }
 }

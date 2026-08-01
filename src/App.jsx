@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useUser } from './hooks/useUser';
 import Dashboard from './pages/Dashboard';
-import ContractDetail from './pages/ContractDetail';
+import ContractRecord from './pages/ContractRecord';
 import Login from './pages/Login';
 import CreateContractPage from './pages/CreateContractPage';
 import ApprovalsBoard from './pages/ApprovalsBoard';
@@ -72,7 +72,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/new" element={<CreateContractPage />} />
-          <Route path="/contracts/:contractId" element={<ContractDetail user={user} />} />
+          <Route path="/contracts/:contractId" element={<ContractRecord />} />
           <Route path="/phases/:contractId" element={<PhaseManagementPage />} />
           <Route path="/phases" element={<PhaseManagementPage />} />
           <Route path="/lifecycle/:contractId" element={<ContractLifecycleManager />} />

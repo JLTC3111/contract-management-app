@@ -15,7 +15,7 @@ const shortDate = (value, locale) => (value ? formatMonthYear(value, locale) : '
  * Row click opens the drawer; the checkbox cell stops propagation so selecting
  * never opens anything.
  */
-const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen }) => {
+const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen, onOpenRecord }) => {
   const { t, i18n } = useTranslation();
   const allSelected = contracts.length > 0 && contracts.every((c) => selected.has(c.id));
 
@@ -36,12 +36,13 @@ const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen }) 
                 aria-label={t('dashboard.selectAll', 'Select all')}
               />
             </th>
-            <th>{t('dashboard.col.name', 'Name')}</th>
+            <th className="col-name">{t('dashboard.col.name', 'Name')}</th>
             <th className="col-category">{t('dashboard.col.category', 'Category')}</th>
             <th className="col-stage">{t('dashboard.col.stage', 'Stage')}</th>
             <th className="col-owner">{t('dashboard.col.owner', 'Owner')}</th>
             <th className="col-value ledger-table__num">{t('dashboard.col.value', 'Value')}</th>
             <th className="col-expires">{t('dashboard.col.expires', 'Expires')}</th>
+            <th className="col-record"><span className="sr-only">{t('record.open', 'Full record')}</span></th>
           </tr>
         </thead>
         <tbody>
@@ -61,7 +62,7 @@ const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen }) 
                   })}
                 />
               </td>
-              <td>
+              <td className="col-name">
                 {/* Demo/seeded rows carry a title_i18n key; real ones only have
                     the stored title, which is what the fallback returns. */}
                 <span className="ledger-table__name">
@@ -90,6 +91,17 @@ const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen }) 
                   : '—'}
               </td>
               <td className="col-expires">{shortDate(c.expiry_date, i18n.language)}</td>
+              {/* Opens the record instead of the drawer, so the row click must
+                  not also fire. */}
+              <td className="col-record">
+                <button
+                  type="button"
+                  className="ledger-table__record"
+                  onClick={(e) => { e.stopPropagation(); onOpenRecord(c); }}
+                >
+                  {t('record.open', 'Full record')} →
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

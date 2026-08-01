@@ -857,5 +857,30 @@
     "requestTimeout": "La solicitud ha agotado el tiempo de espera. Inténtalo de nuevo.",
     "unexpectedFailure": "Se ha producido un error. Inténtalo de nuevo."
   },
-  "approval_board_placeholder": "Escribe tu mensaje de respuesta de aprobación..."
+  "approval_board_placeholder": "Escribe tu mensaje de respuesta de aprobación...",
+  "approvals": {
+    "pageTitle": "Solicitud de aprobación",
+    "pageTitlePlural": "Solicitudes de aprobación",
+    "requestedOn": "Solicitado el",
+    "rejected": "Rechazada",
+    "done": "Listo",
+    "approvedConfirmation": "Has aprobado esta solicitud.",
+    "rejectedConfirmation": "Has rechazado esta solicitud."
+  },
+  "record": {
+    "sidebar": "Registro completo",
+    "sidebarHint": "Abra primero un contrato desde el panel.",
+    "open": "Registro completo",
+    "openFull": "Abrir vista de registro completo",
+    "viewFull": "Ver todos los detalles",
+    "description": "Descripción",
+    "noDescription": "No se ha proporcionado descripción.",
+    "contractValue": "Valor del contrato",
+    "created": "Creado",
+    "approvalDraftOnly": "Solo los borradores pueden enviarse para aprobación.",
+    "newFolderPrompt": "Nombre de la carpeta",
+    "folderNameInvalid": "El nombre de la carpeta debe contener letras o números.",
+    "folderCreated": "Carpeta \"{{name}}\" creada.",
+    "folderFailed": "No se pudo crear la carpeta: {{msg}}"
+  }
 }

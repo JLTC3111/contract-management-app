@@ -797,5 +797,30 @@
     "requestTimeout": "คำขอหมดเวลา กรุณาลองใหม่",
     "unexpectedFailure": "เกิดข้อผิดพลาด กรุณาลองใหม่"
   },
-  "approval_board_placeholder": "กรอกข้อความตอบกลับการอนุมัติของคุณ..."
+  "approval_board_placeholder": "กรอกข้อความตอบกลับการอนุมัติของคุณ...",
+  "approvals": {
+    "pageTitle": "คำขออนุมัติ",
+    "pageTitlePlural": "คำขออนุมัติ",
+    "requestedOn": "ขอเมื่อ",
+    "rejected": "ปฏิเสธแล้ว",
+    "done": "เสร็จสิ้น",
+    "approvedConfirmation": "คุณได้อนุมัติคำขอนี้แล้ว",
+    "rejectedConfirmation": "คุณได้ปฏิเสธคำขอนี้แล้ว"
+  },
+  "record": {
+    "sidebar": "ระเบียนฉบับเต็ม",
+    "sidebarHint": "กรุณาเปิดสัญญาจากแดชบอร์ดก่อน",
+    "open": "ระเบียนฉบับเต็ม",
+    "openFull": "เปิดมุมมองระเบียนฉบับเต็ม",
+    "viewFull": "ดูรายละเอียดทั้งหมด",
+    "description": "คำอธิบาย",
+    "noDescription": "ไม่มีคำอธิบาย",
+    "contractValue": "มูลค่าสัญญา",
+    "created": "สร้างเมื่อ",
+    "approvalDraftOnly": "ส่งขออนุมัติได้เฉพาะสัญญาฉบับร่างเท่านั้น",
+    "newFolderPrompt": "ชื่อโฟลเดอร์",
+    "folderNameInvalid": "ชื่อโฟลเดอร์ต้องมีตัวอักษรหรือตัวเลข",
+    "folderCreated": "สร้างโฟลเดอร์ \"{{name}}\" แล้ว",
+    "folderFailed": "ไม่สามารถสร้างโฟลเดอร์ได้: {{msg}}"
+  }
 }

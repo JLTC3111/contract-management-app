@@ -805,5 +805,30 @@
     "requestTimeout": "La requête a expiré. Veuillez réessayer.",
     "unexpectedFailure": "Une erreur s’est produite. Veuillez réessayer."
   },
-  "approval_board_placeholder": "Saisissez votre message de réponse d’approbation..."
+  "approval_board_placeholder": "Saisissez votre message de réponse d’approbation...",
+  "approvals": {
+    "pageTitle": "Demande d'approbation",
+    "pageTitlePlural": "Demandes d'approbation",
+    "requestedOn": "Demandé le",
+    "rejected": "Rejetée",
+    "done": "Terminé",
+    "approvedConfirmation": "Vous avez approuvé cette demande.",
+    "rejectedConfirmation": "Vous avez rejeté cette demande."
+  },
+  "record": {
+    "sidebar": "Dossier complet",
+    "sidebarHint": "Ouvrez d’abord un contrat depuis le tableau de bord.",
+    "open": "Dossier complet",
+    "openFull": "Ouvrir le dossier complet",
+    "viewFull": "Voir tous les détails",
+    "description": "Description",
+    "noDescription": "Aucune description fournie.",
+    "contractValue": "Valeur du contrat",
+    "created": "Créé le",
+    "approvalDraftOnly": "Seuls les brouillons peuvent être envoyés pour approbation.",
+    "newFolderPrompt": "Nom du dossier",
+    "folderNameInvalid": "Le nom du dossier doit contenir des lettres ou des chiffres.",
+    "folderCreated": "Dossier « {{name}} » créé.",
+    "folderFailed": "Impossible de créer le dossier : {{msg}}"
+  }
 }

@@ -6,6 +6,7 @@ import {
   LogOutIcon,
   Check,
   ChevronsLeft,
+  FileText,
   UserLock,
   BookOpen,
   Settings,
@@ -24,6 +25,7 @@ import { SidebarButton, SubMenu } from './SidebarNav';
 import PasswordChangeModal from './PasswordChangeModal';
 import RssPulse from './RssPulse';
 import UserProfileSection from './UserProfileSection';
+import { LAST_RECORD_KEY } from '../../pages/ContractRecord';
 
 import '../Table.css';
 
@@ -376,6 +378,20 @@ const SidebarMobile = () => {
               collapsed={collapsed}
               currentPath={location.pathname}
               onClick={() => navigate('/')}
+            />
+
+            {/* Full record - reopens the last contract read there. */}
+            <SidebarButton
+              icon={<FileText size={20} />}
+              label={t('record.sidebar', 'Full record')}
+              path="/contracts"
+              collapsed={collapsed}
+              currentPath={location.pathname}
+              onClick={() => {
+                const id = localStorage.getItem(LAST_RECORD_KEY);
+                if (id) navigate(`/contracts/${id}`);
+                else toast(t('record.sidebarHint', 'Open a contract from the dashboard first.'));
+              }}
             />
 
             {/* Approvals */}

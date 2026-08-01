@@ -803,5 +803,30 @@
     "requestTimeout": "Zeitüberschreitung der Anfrage. Bitte erneut versuchen.",
     "unexpectedFailure": "Etwas ist schiefgelaufen. Bitte erneut versuchen."
   },
-  "approval_board_placeholder": "Geben Sie Ihre Antwort zur Freigabe ein..."
+  "approval_board_placeholder": "Geben Sie Ihre Antwort zur Freigabe ein...",
+  "approvals": {
+    "pageTitle": "Genehmigungsanfrage",
+    "pageTitlePlural": "Genehmigungsanfragen",
+    "requestedOn": "Angefragt am",
+    "rejected": "Abgelehnt",
+    "done": "Fertig",
+    "approvedConfirmation": "Sie haben diese Anfrage genehmigt.",
+    "rejectedConfirmation": "Sie haben diese Anfrage abgelehnt."
+  },
+  "record": {
+    "sidebar": "Vollständiger Datensatz",
+    "sidebarHint": "Öffnen Sie zuerst einen Vertrag im Dashboard.",
+    "open": "Vollständiger Datensatz",
+    "openFull": "Vollständige Ansicht öffnen",
+    "viewFull": "Alle Details anzeigen",
+    "description": "Beschreibung",
+    "noDescription": "Keine Beschreibung vorhanden.",
+    "contractValue": "Vertragswert",
+    "created": "Erstellt",
+    "approvalDraftOnly": "Nur Entwürfe können zur Genehmigung eingereicht werden.",
+    "newFolderPrompt": "Ordnername",
+    "folderNameInvalid": "Der Ordnername muss Buchstaben oder Zahlen enthalten.",
+    "folderCreated": "Ordner \"{{name}}\" erstellt.",
+    "folderFailed": "Ordner konnte nicht erstellt werden: {{msg}}"
+  }
 }

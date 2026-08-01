@@ -266,6 +266,13 @@ const Dashboard = () => {
     }
   };
 
+  /** Leaves the dashboard for the full record. The drawer closes on the way out
+      so returning with Back doesn't land on a stale overlay. */
+  const openRecord = useCallback((target) => {
+    setDrawerId(null);
+    navigate(`/contracts/${target.id}`);
+  }, [navigate]);
+
   const handleNotification = (event) => {
     setBellOpen(false);
     if (event.type === 'approvals') {
@@ -323,6 +330,7 @@ const Dashboard = () => {
               onToggle={toggleRow}
               onToggleAll={toggleAll}
               onOpen={(c) => setDrawerId(c.id)}
+              onOpenRecord={openRecord}
             />
           ) : (
             <KanbanBoard contracts={visible} onOpen={(c) => setDrawerId(c.id)} />
@@ -341,6 +349,7 @@ const Dashboard = () => {
             onEdit={(c) => setEditing(c)}
             onDelete={handleDelete}
             onSendForApproval={handleSendForApproval}
+            onOpenRecord={openRecord}
             suppressDismiss={Boolean(editing)}
           />
         )}

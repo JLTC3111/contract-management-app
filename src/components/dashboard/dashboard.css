@@ -205,10 +205,12 @@
 .ledger-stats__cell {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.3rem;
   padding: 0.85rem 1rem;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
+  text-align: left;
 }
 
 .ledger-stats__label {
@@ -222,6 +224,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.1;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---------- filter row ---------- */
@@ -330,6 +333,13 @@
 .ledger .tag-wash-strong {
   background: var(--color-wash-strong);
   color: var(--color-text);
+}
+
+/* Solid accent. Reserved for the one state a page is waiting on - the pending
+   approval request - so it reads as "your move" rather than as a category. */
+.ledger .tag-accent {
+  background: var(--color-accent-500);
+  color: #fff;
 }
 
 /* The one grey tag: "not started" has nothing to report yet. */
@@ -446,7 +456,7 @@
 
 .ledger-table th {
   padding: 0.6rem 0.75rem;
-  text-align: center;
+  text-align: left;
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -466,7 +476,11 @@
 .ledger-table tbody tr:hover { background: var(--hover-bg); }
 .ledger-table__row--selected { background: var(--hover-bg); }
 .ledger-table__check { width: 1px; }
-.ledger-table__num { text-align: right; white-space: nowrap; }
+/* Everything reads down the same left edge - labels, dates and money alike.
+   Tabular figures keep the digits in column without needing right alignment. */
+.ledger-table__num { text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ledger-table th,
+.ledger-table td { text-align: left; }
 
 /* ---------- responsive table ----------
    Columns drop out right-to-left by priority; each dropped field reappears as a
@@ -1094,10 +1108,12 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
 .ledger-analytics__stat {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
   min-width: 0;
   padding: 1rem 1.1rem;
   border-left: 2px solid var(--color-divider);
+  text-align: left;
 }
 
 .ledger-analytics__stat:first-child { border-left: none; }
@@ -1115,6 +1131,7 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
   color: var(--color-text);
 }
 
@@ -1209,6 +1226,10 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
 
 .ledger-analytics__table-wrap { overflow-x: auto; }
 
+/* Same rule as the dashboard table: one left edge for every column. */
+.ledger-analytics__table th,
+.ledger-analytics__table td { text-align: left; }
+
 /* Rows open the contract, but stay visually static - the cursor is the only cue,
    there is no hover tint here. */
 .ledger-analytics__table tbody tr { cursor: pointer; }
@@ -1236,6 +1257,459 @@ body.dark .ledger-cal { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
   text-align: center;
   color: var(--color-neutral-700);
   font-size: 0.85rem;
+}
+
+/* ---------- approvals ----------
+   One request, read top to bottom in a single measured column: who asked, what
+   for, the contract's facts, the reply that goes back. Panels are flush 2px
+   rectangles with a label bar; the accent is spent on the status tag, the
+   Approve button and the confirmation - nothing else. */
+
+.ledger-approvals { gap: 1.25rem; }
+
+.ledger-approvals__head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--color-divider);
+}
+
+.ledger-approvals__title {
+  flex: 1 1 auto;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 3.2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
+}
+
+/* The one measured column. Left-aligned, never centred. */
+.ledger-approvals__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.ledger-approvals__request {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ledger-approvals__requester {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+  overflow-wrap: anywhere;
+}
+
+.ledger-approvals__contract {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.ledger-panel {
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+}
+
+/* Label bar: the panel's name, its one optional control, and the rule that
+   separates it from the body. */
+.ledger-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.35rem;
+  padding: 0.45rem 1rem;
+  border-bottom: 2px solid var(--color-divider);
+}
+
+.ledger-panel__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+}
+
+.ledger-panel__action {
+  padding: 0.2rem 0.55rem;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ledger-panel__action:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ledger-panel__body { padding: 1rem; }
+
+.ledger-approvals__message {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+
+/* Status / Last updated / Requested on, one column each. */
+.ledger-approvals__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.ledger-approvals__fact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.ledger-approvals__fact dt {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+}
+
+.ledger-approvals__fact dd {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.ledger-approvals__response {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--color-neutral-700);
+}
+
+.ledger-approvals__textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 0.55rem 0.65rem;
+  background: var(--input-bg);
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+.ledger-approvals__textarea:focus,
+.ledger-panel__action:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.ledger-approvals__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* The one filled button a page gets. Everything beside it is .btn-secondary -
+   never a second colour, the accent alone says which way is forward. */
+.ledger .btn-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.3rem;
+  background: var(--color-accent-500);
+  border: 1px solid var(--color-accent-500);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ledger .btn-accent:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ledger .btn-accent:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Replaces both buttons once the call has been made. */
+.ledger-approvals__decision {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: var(--color-accent-100);
+  border: 2px solid var(--color-accent-300);
+  color: var(--color-accent-700);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* Editors can see the queue but not act on it. */
+.ledger-approvals__locked {
+  filter: blur(4px);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.ledger-state {
+  margin: 0;
+  padding: 2.5rem 0;
+  color: var(--color-neutral-700);
+  font-size: 0.9rem;
+}
+
+/* ---------- full record ----------
+   Everything the drawer summarises, at full width and in one column: the facts
+   grid, the description, the documents, the stage history, the comments. Same
+   panel idiom as the approvals page, one measure wider. */
+
+.ledger-record { gap: 1.25rem; }
+
+.ledger-record__head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.9rem;
+  border-bottom: 2px solid var(--color-divider);
+}
+
+/* The contract's name doubles as the page's brand in the header rule. */
+.ledger-record__brand {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ledger-record__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.ledger-record__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+}
+
+.ledger-record__title {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.ledger-record__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Nine pairs, three to a row, read left to right then down. */
+.ledger-record__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem 1rem;
+  margin: 0;
+}
+
+.ledger-record__fact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.ledger-record__fact dt {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-700);
+}
+
+.ledger-record__fact dd {
+  margin: 0;
+  max-width: 100%;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.ledger-record__text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-neutral-700);
+  white-space: pre-wrap;
+}
+
+/* Documents and activity are both plain rows on a hairline rule - no boxes
+   inside a box, the panel border is the only frame. */
+.ledger-record__row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.6rem 0;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--color-neutral-300);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.ledger-record__row:first-child { border-top: none; }
+button.ledger-record__row { cursor: pointer; }
+
+.ledger-record__row-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+
+.ledger-record__row-meta {
+  flex-shrink: 0;
+  color: var(--color-neutral-700);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ledger-record__comment {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--color-neutral-300);
+}
+
+.ledger-record__comment:first-child { border-top: none; }
+
+.ledger-record__comment-author {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-neutral-700);
+}
+
+.ledger-record__comment-body { font-size: 0.88rem; line-height: 1.5; }
+
+.ledger-record__empty {
+  margin: 0;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: var(--color-neutral-700);
+}
+
+.ledger-record__compose {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.ledger-record__compose textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 0.55rem 0.65rem;
+  background: var(--input-bg);
+  border: 1px solid var(--color-divider);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.88rem;
+  resize: vertical;
+}
+
+.ledger-record__compose textarea:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* ---------- record entry points ----------
+   Three doors into the same page: a per-row link in the table, and the bar and
+   footer button in the drawer. */
+
+/* The header cell is empty on screen; the column still needs a name read out. */
+.ledger .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.ledger-table .col-record { width: 1px; white-space: nowrap; }
+
+.ledger-table__record {
+  padding: 0.15rem 0;
+  background: transparent;
+  border: none;
+  color: var(--color-accent-500);
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ledger-drawer__record {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  background: var(--color-accent-100);
+  border: 1px solid var(--color-accent-300);
+  color: var(--color-accent-700);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
 }
 
 /* ---------- hover ----------
@@ -1309,6 +1783,18 @@ body.dark .ledger {
   .ledger-filters__search:hover,
   .ledger-filters__stage:hover,
   .ledger-textarea:hover { border-color: var(--primary); }
+
+  .ledger-panel__action:hover:not(:disabled) {
+    background: var(--color-accent-100);
+    border-color: var(--color-accent);
+  }
+  .ledger .btn-accent:hover:not(:disabled) { filter: brightness(1.1); }
+  .ledger-approvals__textarea:hover,
+  .ledger-record__compose textarea:hover { border-color: var(--color-accent); }
+
+  .ledger-table__record:hover { text-decoration: underline; }
+  .ledger-drawer__record:hover { background: var(--color-wash-strong); }
+  button.ledger-record__row:hover { color: var(--color-accent-500); }
 }
 
 .ledger-btn,
@@ -1330,7 +1816,10 @@ body.dark .ledger {
 .ledger-datepicker__trigger,
 .ledger-cal__day,
 .ledger-cal__nav,
-.ledger-cal__action {
+.ledger-cal__action,
+.ledger-panel__action,
+.ledger .btn-accent,
+.ledger-approvals__textarea {
   transition: background 0.15s ease, border-color 0.15s ease, filter 0.15s ease;
 }
 
@@ -1373,6 +1862,9 @@ body.dark .ledger {
 
   .ledger-analytics__table .col-expiry { display: none; }
   .ledger-analytics__table .ledger-table__meta .meta-expiry { display: inline; }
+
+  /* Nine facts go three -> two to a row before stacking outright at 560px. */
+  .ledger-record__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 700px) {
@@ -1394,6 +1886,10 @@ body.dark .ledger {
   .ledger-table th, .ledger-table td { padding: 0.5rem 0.55rem; }
   .ledger-table .col-value { display: none; }
   .ledger-table .ledger-table__meta .meta-value { display: inline; font-weight: 600; color: var(--text); }
+
+  /* Too narrow for a second target per row; the drawer still links to the
+     record from its top bar and its footer. */
+  .ledger-table .col-record { display: none; }
 
   /* One column at a time on a phone: fill the screen and scroll sideways, but an
      empty stage still collapses out of the way. */
@@ -1426,12 +1922,20 @@ body.dark .ledger {
 
 @media (max-width: 560px) {
   .ledger-modal, .ledger-modal__body, .ledger-page__form { grid-template-columns: 1fr; }
+
+  /* Three facts side by side stop fitting; they stack in the same order. */
+  .ledger-approvals__facts { grid-template-columns: 1fr; gap: 0.85rem; }
+  .ledger-approvals__contract { font-size: 22px; }
+  .ledger-approvals__actions > * { flex: 1 1 auto; justify-content: center; }
+
+  .ledger-record__facts { grid-template-columns: 1fr; }
+  .ledger-record__title { font-size: 22px; }
+  .ledger-record__actions > * { flex: 1 1 auto; justify-content: center; }
   .ledger-notifications { min-width: min(280px, 88vw); }
 
   /* Down to Name + Stage; expiry joins the meta line. */
   .ledger-table .col-expires { display: none; }
   .ledger-table .ledger-table__meta .meta-expires { display: inline; }
-  .ledger-table th { text-align: left; }
 
   /* Down to Contract + Status. */
   .ledger-analytics__table .col-category { display: none; }

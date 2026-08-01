@@ -807,5 +807,30 @@
     "requestTimeout": "リクエストがタイムアウトしました。再度お試しください。",
     "unexpectedFailure": "エラーが発生しました。再度お試しください。"
   },
-  "approval_board_placeholder": "承認の返信メッセージを入力してください..."
+  "approval_board_placeholder": "承認の返信メッセージを入力してください...",
+  "approvals": {
+    "pageTitle": "承認リクエスト",
+    "pageTitlePlural": "承認リクエスト",
+    "requestedOn": "申請日",
+    "rejected": "却下済み",
+    "done": "完了",
+    "approvedConfirmation": "このリクエストを承認しました。",
+    "rejectedConfirmation": "このリクエストを却下しました。"
+  },
+  "record": {
+    "sidebar": "詳細レコード",
+    "sidebarHint": "先にダッシュボードから契約を開いてください。",
+    "open": "詳細レコード",
+    "openFull": "詳細レコードを開く",
+    "viewFull": "詳細を表示",
+    "description": "説明",
+    "noDescription": "説明はありません。",
+    "contractValue": "契約金額",
+    "created": "作成日",
+    "approvalDraftOnly": "下書きの契約のみ承認申請できます。",
+    "newFolderPrompt": "フォルダ名",
+    "folderNameInvalid": "フォルダ名には英数字を含めてください。",
+    "folderCreated": "フォルダ「{{name}}」を作成しました。",
+    "folderFailed": "フォルダを作成できませんでした: {{msg}}"
+  }
 }

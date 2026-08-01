@@ -16,22 +16,18 @@
     <title>Contract Manager</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/logoIcons/tableOfContent.svg">
+    <link rel="icon" type="image/png" href="/logoIcons/favicon.png">
 
-    <!-- App Styles -->
-    <link rel="stylesheet" href="/app.css?v=2" />
-    <link rel="stylesheet" href="/index.css?v=2" />
-
-    <!-- Flags & Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script type="module" crossorigin src="/assets/index-BlkxLr7W.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-C7XMDlza.css">
+    <!-- No stylesheet links: src/index.css and src/App.css are imported by
+         src/App.jsx and bundled by Vite. Icons come from lucide-react and flags
+         from public/flags/, so there is nothing to fetch off a CDN either. -->
+    <script type="module" crossorigin src="/assets/index-Df_G4IF-.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-02i6MNux.css">
   </head>
   <body>
     <div id="root"></div>
 
-    <!-- JS Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <!-- jszip is a dependency and is imported where it is used, so it ships in the
+         bundle - pulling it off a CDN here loaded it a second time, for nothing. -->
   </body>
 </html>

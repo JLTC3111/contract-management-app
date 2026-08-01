@@ -922,5 +922,30 @@
     "captchaFailed": "The security check failed. Please try again.",
     "requestTimeout": "The request timed out. Please try again.",
     "unexpectedFailure": "Something went wrong. Please try again."
+  },
+  "approvals": {
+    "pageTitle": "Approval request",
+    "pageTitlePlural": "Approval requests",
+    "requestedOn": "Requested on",
+    "rejected": "Rejected",
+    "done": "Done",
+    "approvedConfirmation": "You approved this request.",
+    "rejectedConfirmation": "You rejected this request."
+  },
+  "record": {
+    "sidebar": "Full record",
+    "sidebarHint": "Open a contract from the dashboard first.",
+    "open": "Full record",
+    "openFull": "Open full record view",
+    "viewFull": "View full details",
+    "description": "Description",
+    "noDescription": "No description provided.",
+    "contractValue": "Contract value",
+    "created": "Created",
+    "approvalDraftOnly": "Only draft contracts can be sent for approval.",
+    "newFolderPrompt": "Folder name",
+    "folderNameInvalid": "Folder name must contain letters or numbers.",
+    "folderCreated": "Folder \"{{name}}\" created.",
+    "folderFailed": "Could not create folder: {{msg}}"
   }
 }

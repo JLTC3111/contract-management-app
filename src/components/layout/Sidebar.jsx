@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar.jsx
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   BarChart3,
@@ -8,6 +8,7 @@ import {
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
+  FileText,
   Home,
   LayoutDashboard,
   Lightbulb,
@@ -22,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import PasswordChangeModal from './PasswordChangeModal';
 import SidebarMobile from './SidebarMobile';
+import { LAST_RECORD_KEY } from '../../pages/ContractRecord';
 import './sidebar.css';
 
 const EXPANDED = 240;
@@ -128,6 +130,16 @@ const SidebarRail = () => {
     }
   };
 
+  /**
+   * The record page needs a contract to show, so this row reopens the last one
+   * read. Keyed on the path so visiting a record immediately re-points it.
+   */
+  const lastRecordId = useMemo(
+    () => localStorage.getItem(LAST_RECORD_KEY),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [location.pathname]
+  );
+
   const items = [
     {
       key: 'home',
@@ -141,6 +153,17 @@ const SidebarRail = () => {
       label: t('sidebar.dashboard', 'Dashboard'),
       active: location.pathname === '/',
       onClick: () => navigate('/'),
+    },
+    {
+      key: 'record',
+      icon: FileText,
+      label: t('record.sidebar', 'Full record'),
+      active: location.pathname.startsWith('/contracts/'),
+      disabled: !lastRecordId,
+      hint: lastRecordId
+        ? undefined
+        : t('record.sidebarHint', 'Open a contract from the dashboard first.'),
+      onClick: () => navigate(`/contracts/${lastRecordId}`),
     },
     {
       key: 'approvals',
@@ -206,7 +229,8 @@ const SidebarRail = () => {
           item.active ? 'rail__item--active' : '',
         ].filter(Boolean).join(' ')}
         onClick={item.onClick}
-        title={collapsed ? item.label : undefined}
+        disabled={item.disabled}
+        title={item.hint || (collapsed ? item.label : undefined)}
         aria-current={item.active ? 'page' : undefined}
       >
         <Icon size={18} aria-hidden="true" />
