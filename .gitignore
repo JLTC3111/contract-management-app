@@ -4,3 +4,8 @@
 # Admin logs (contains sensitive information)
 logs/
 *.log
+
+# Secrets. .env.example is the committed template.
+.env
+.env.*
+!.env.example
