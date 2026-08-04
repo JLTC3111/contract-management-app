@@ -168,7 +168,7 @@ const DashboardHeader = ({
             title={t('navbar.languageSelector', 'Select language')}
           >
             <img className="ledger-header__flag" src={currentLang.flag} alt="" />
-            <span>{currentLang.label}</span>
+            <span className="ledger-header__lang-label">{currentLang.label}</span>
             <ChevronDown size={13} aria-hidden="true" />
           </button>
 
@@ -209,12 +209,14 @@ const DashboardHeader = ({
         {/* Opens the approvals board - it never reads as "on", so no toggle state. */}
         <button type="button" className="ledger-btn ledger-btn--toggle" onClick={onApprovals}>
           <CheckCircle size={14} />
-          {t('dashboard.approvalRequests', 'Approval requests')}
+          <span className="ledger-btn__label">
+            {t('dashboard.approvalRequests', 'Approval requests')}
+          </span>
           <span className="ledger-btn__badge">{approvalsCount}</span>
         </button>
 
         <button type="button" className="ledger-btn ledger-btn--primary" onClick={onNew}>
-          <Plus size={14} /> {t('dashboard.newContract', 'New contract')}
+          <Plus size={14} /> <span className="ledger-btn__label">{t('dashboard.newContract', 'New contract')}</span> 
         </button>
       </div>
     </header>

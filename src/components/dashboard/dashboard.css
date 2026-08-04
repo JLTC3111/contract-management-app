@@ -63,6 +63,7 @@
   line-height: 1.1;
   color: var(--color-text);
   white-space: nowrap;
+  text-align: left;
 }
 
 .ledger-header__kicker {
@@ -71,6 +72,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-neutral-700);
+  text-align: left;
 }
 
 .ledger-header__controls {
@@ -300,6 +302,11 @@
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: white;
+}
+
+.ledger-btn__label { 
+  white-space: nowrap;
+  font-size: clamp(0.65rem, 1.15vw, 0.85rem);
 }
 
 /* ---------- create page ---------- */
@@ -2006,6 +2013,12 @@ body.dark .ledger {
 /* ---------- responsive ----------
    The mobile sidebar is a fixed bottom bar, so the dashboard also needs to keep
    its last row clear of it. */
+
+@media (min-width: 900px) and (max-width: 1425px) {
+  .ledger-btn__label { display: none; }
+  .ledger-header__lang-label { display: none; }
+  .ledger-header__kicker { display: none; }
+}
 
 @media (max-width: 1100px) {
   .ledger-stats { grid-template-columns: repeat(2, 1fr); }
