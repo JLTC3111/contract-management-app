@@ -23,61 +23,111 @@
   color: var(--text);
 }
 
-/* ---------- header ---------- */
+/* ---------- header ----------
+   One full-width bar, flush to the content edges: a brand cell and a controls
+   cell split by a 2px rule, the whole bar closed off by a 2px bottom rule.
+   Every control in the controls cell is exactly 38px tall so the row reads as
+   one band. */
 
 .ledger-header {
   display: flex;
+  align-items: stretch;
+  background: var(--color-bg);
+  border-bottom: 2px solid var(--color-divider);
+}
+
+.ledger-header__brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  flex: none;
+  min-width: 260px;
+  padding: 12px 24px;
+  border-right: 2px solid var(--color-divider);
+}
+
+.ledger-header__brand-row {
+  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  padding-bottom: 0.9rem;
-  border-bottom: 1px solid var(--card-border);
+  gap: 10px;
+}
+
+.ledger-header__mark { flex: none; color: var(--color-accent); }
+
+.ledger-header__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.ledger-header__kicker {
+  padding-left: 28px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-neutral-700);
+}
+
+.ledger-header__controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+  padding: 12px 24px;
 }
 
 .ledger-header__search {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  flex: 1 1 220px;
-  max-width: 380px;
-  padding: 0.42rem 0.65rem;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  color: var(--text-secondary);
-}
-
-.ledger-header__search input,
-.ledger-filters__search input {
   flex: 1;
-  min-width: 0;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: var(--text);
-  font-size: 0.86rem;
+  max-width: 420px;
 }
 
-.ledger-header__bell { position: relative; }
+.ledger-header__search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--color-neutral-700);
+  pointer-events: none;
+}
+
+.ledger-header__search .input {
+  width: 100%;
+  height: 38px;
+  padding-left: 32px;
+}
+
+.ledger-header__spacer { flex: 1; }
+
+.ledger-header__bell { position: relative; flex: none; }
 
 .ledger-iconbtn {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.4rem;
+  width: 38px;
+  height: 38px;
   background: transparent;
-  border: none;
-  color: var(--text);
+  border: 2px solid var(--color-divider);
+  color: var(--color-text);
   cursor: pointer;
 }
 
 .ledger-iconbtn__dot {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 7px;
-  height: 7px;
-  background: var(--danger);
+  top: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
 }
 
 .ledger-notifications {
@@ -87,11 +137,11 @@
   z-index: 40;
   display: flex;
   flex-direction: column;
-  min-width: 260px;
+  width: 320px;
   padding: 0.4rem;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+  box-shadow: var(--shadow-md);
 }
 
 .ledger-notifications__title {
@@ -126,8 +176,61 @@
 
 .ledger-notifications__empty { padding: 0.5rem; }
 
-/* Approvals + New contract group hard right, together. */
-.ledger-header .ledger-btn--toggle { margin-left: auto; }
+/* One box, two halves on an internal 2px rule - never two separate buttons. */
+.ledger-header__langtheme {
+  display: flex;
+  align-items: stretch;
+  flex: none;
+  height: 38px;
+  border: 2px solid var(--color-divider);
+}
+
+.ledger-header__lang {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 0 12px;
+  background: transparent;
+  border: none;
+  border-right: 2px solid var(--color-divider);
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ledger-header__theme {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+/* Approvals + New contract share the header's 38px / 2px-border rhythm without
+   touching the shared .ledger-btn primitive used across modals and forms. */
+.ledger-header .ledger-btn {
+  height: 38px;
+  padding: 0 14px;
+  border-width: 2px;
+}
+
+.ledger-header .ledger-btn--toggle {
+  background: transparent;
+  border-color: var(--color-divider);
+  color: var(--color-text);
+}
+
+.ledger-header .ledger-btn--primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
 
 /* ---------- create page ---------- */
 
@@ -1729,6 +1832,8 @@ body.dark .ledger {
 @media (hover: hover) {
   .ledger-btn:hover:not(:disabled),
   .ledger-iconbtn:hover,
+  .ledger-header__lang:hover,
+  .ledger-header__theme:hover,
   .ledger-viewtoggle__btn:hover,
   .ledger-tabs__tab:hover,
   .ledger-drawer__close:hover,
@@ -1779,7 +1884,7 @@ body.dark .ledger {
   .ledger-table tbody tr:hover { background: var(--ledger-hover); }
   .ledger-table__row--selected:hover { background: var(--ledger-hover-strong); }
 
-  .ledger-header__search:hover,
+  .ledger-header__search .input:hover,
   .ledger-filters__search:hover,
   .ledger-filters__stage:hover,
   .ledger-textarea:hover { border-color: var(--primary); }
@@ -1808,7 +1913,9 @@ body.dark .ledger {
 .ledger-stats__cell,
 .ledger-card,
 .ledger-table tbody tr,
-.ledger-header__search,
+.ledger-header__search .input,
+.ledger-header__lang,
+.ledger-header__theme,
 .ledger-filters__search,
 .ledger-filters__stage,
 .ledger-textarea,
@@ -1849,8 +1956,15 @@ body.dark .ledger {
 }
 
 @media (max-width: 900px) {
-  .ledger-header { gap: 0.5rem; }
+  .ledger-header { flex-wrap: wrap; }
+  .ledger-header__brand {
+    flex: 1 1 100%;
+    border-right: none;
+    border-bottom: 2px solid var(--color-divider);
+  }
+  .ledger-header__controls { flex-wrap: wrap; gap: 0.5rem; }
   .ledger-header__search { order: 3; flex-basis: 100%; max-width: none; }
+  .ledger-header__spacer { display: none; }
   .ledger-filters { gap: 0.5rem; }
   .ledger-filters__search { flex-basis: 100%; max-width: none; }
   .ledger-viewtoggle { margin-left: 0; }
@@ -1931,7 +2045,7 @@ body.dark .ledger {
   .ledger-record__facts { grid-template-columns: 1fr; }
   .ledger-record__title { font-size: 22px; }
   .ledger-record__actions > * { flex: 1 1 auto; justify-content: center; }
-  .ledger-notifications { min-width: min(280px, 88vw); }
+  .ledger-notifications { width: min(320px, 88vw); }
 
   /* Down to Name + Stage; expiry joins the meta line. */
   .ledger-table .col-expires { display: none; }

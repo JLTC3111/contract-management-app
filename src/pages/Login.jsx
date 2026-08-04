@@ -2,10 +2,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, ChevronDown, Eye, EyeOff, MoonStar, Play, Sun } from 'lucide-react';
+import { ArrowRight, ChevronDown, Eye, EyeOff, Mail, MoonStar, Sun } from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
-import { useUser } from '../hooks/useUser';
 import { useLoginPhotos } from '../hooks/useLoginPhotos';
 import { authErrorMessage } from '../utils/authErrors';
 // The display face for the headline and the wordmark. Self-hosted, so no CDN.
@@ -27,7 +26,6 @@ const Login = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { darkMode, toggleDarkMode } = useTheme();
-  const { enableDemoMode } = useUser();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -102,9 +100,9 @@ const Login = () => {
     }
   }, [email, t]);
 
+  // Demo mode is locked - this now routes to a request instead of an instant login.
   const handleDemo = () => {
-    enableDemoMode();
-    navigate('/');
+    window.open('mailto:support@icue.vn?subject=Demo Access Request', '_blank');
   };
 
   return (
@@ -221,8 +219,8 @@ const Login = () => {
             <div className="auth-or">{t('login.or', 'or')}</div>
 
             <button type="button" className="auth-demo" onClick={handleDemo}>
-              <span>{t('login.tryDemo', 'Dùng thử chế độ demo')}</span>
-              <Play size={15} aria-hidden="true" />
+              <span>{t('login.tryDemo', 'Request Demo Access')}</span>
+              <Mail size={15} aria-hidden="true" />
             </button>
 
             <p className="auth-fineprint">

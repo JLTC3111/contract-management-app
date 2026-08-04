@@ -34,6 +34,8 @@
   --color-neutral-500: #9c9ca5;
   --color-neutral-700: #55555f;
   --color-neutral-900: #1c1c22;
+
+  --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.16);
 }
 
 /* accent-700 flips to the light end of the ramp in dark mode: it is text on
@@ -57,4 +59,6 @@ body.dark .auth {
   --color-neutral-500: #6d7789;
   --color-neutral-700: #c3ccda;
   --color-neutral-900: #f4f7fb;
+
+  --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.5);
 }
