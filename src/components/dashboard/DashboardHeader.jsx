@@ -81,7 +81,7 @@ const DashboardHeader = ({
     <header className="ledger-header">
       <div className="ledger-header__brand">
         <div className="ledger-header__brand-row">
-          <AsteriskMark />
+          <img src="/logoIcons/logo.png" alt="" style={{ width: 18, height: 18 }} />
           <span className="ledger-header__title">{t('navbar.title', 'Quản Lý Hợp Đồng')}</span>
         </div>
          <span className="ledger-header__kicker">
