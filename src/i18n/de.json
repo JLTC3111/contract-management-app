@@ -567,6 +567,7 @@
   "comment_deleted": "Kommentar gelöscht!",
   "failed_to_delete_comment": "Kommentar konnte nicht gelöscht werden.",
   "navbar": {
+    "kicker": "Institut für Wirtschaft und Stadtplanung",
     "title": "Vertragsmanager",
     "visitIcue": "iCUE besuchen!",
     "searchPlaceholder": "Dateien oder Ordner suchen...",

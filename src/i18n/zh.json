@@ -560,6 +560,7 @@
   "comment_deleted": "评论已删除！",
   "failed_to_delete_comment": "删除评论失败。",
   "navbar": {
+    "kicker": "经济与城市规划研究所",
     "title": "合同管理器",
     "visitIcue": "访问 iCUE！",
     "searchPlaceholder": "搜索文件或文件夹...",

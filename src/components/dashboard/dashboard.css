@@ -66,8 +66,7 @@
 }
 
 .ledger-header__kicker {
-  padding-left: 28px;
-  font-size: 11px;
+  font-size: clamp(0.5rem, 1.15vw, 0.55rem); 
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -83,31 +82,49 @@
   padding: 12px 24px;
 }
 
+/* Grow is off on purpose. The spacer next to it is the only thing that should
+   take up slack, so the basis below *is* the field's width whenever the row
+   fits. `max-width` alone cannot do that: it caps growing, not shrinking, so
+   once the controls need more room than the bar has, the field is squeezed
+   past it and the number stops meaning anything. min-width is the floor for
+   that case - past it the buttons give instead. */
 .ledger-header__search {
   position: relative;
   display: flex;
   align-items: center;
-  flex: 1;
-  max-width: 420px;
+  flex: 0 1 220px;
+  min-width: 100px;
+  max-width: 220px;
+  padding: 0;
 }
 
 .ledger-header__search-icon {
   position: absolute;
-  left: 10px;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--color-neutral-700);
   pointer-events: none;
+  z-index: 1;
 }
 
-.ledger-header__search .input {
+/* `.ledger .input` further down sets the `padding` shorthand at the same
+   specificity, so it would reset padding-left and drop the text back under the
+   magnifier. The extra `.ledger` here is what keeps the indent. */
+.ledger .ledger-header__search .input {
   width: 100%;
   height: 38px;
-  padding-left: 32px;
+  padding: 0 12px 0 38px;
 }
 
 .ledger-header__spacer { flex: 1; }
 
 .ledger-header__bell { position: relative; flex: none; }
 
+/* index.css pulls in Tailwind's preflight (border-box) but then re-pads every
+   button with `0.6em 1.2em`. On a fixed 38px square that padding eats the whole
+   content box and the icon collapses to nothing, so the padding is zeroed here
+   explicitly - same for every fixed-size control in this bar. */
 .ledger-iconbtn {
   position: relative;
   display: flex;
@@ -115,6 +132,7 @@
   justify-content: center;
   width: 38px;
   height: 38px;
+  padding: 0;
   background: transparent;
   border: 2px solid var(--color-divider);
   color: var(--color-text);
@@ -176,8 +194,10 @@
 
 .ledger-notifications__empty { padding: 0.5rem; }
 
-/* One box, two halves on an internal 2px rule - never two separate buttons. */
+/* One box, two halves on an internal 2px rule - never two separate buttons.
+   Relative so the language menu can hang off it. */
 .ledger-header__langtheme {
+  position: relative;
   display: flex;
   align-items: stretch;
   flex: none;
@@ -205,11 +225,61 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: none;
   width: 38px;
+  padding: 0;
   background: transparent;
   border: none;
   color: var(--color-text);
   cursor: pointer;
+}
+
+/* Icons are flex items in fixed-width cells; without this they are the first
+   thing the layout shrinks. */
+.ledger-header svg { flex: none; }
+
+/* Same panel treatment as the notification dropdown: 2px rule, no radius. */
+.ledger-header__langmenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: -2px;
+  z-index: 40;
+  min-width: 180px;
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--color-bg);
+  border: 2px solid var(--color-divider);
+  box-shadow: var(--shadow-md);
+}
+
+.ledger-header__langitem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ledger-header__langitem--on {
+  font-weight: 700;
+  background: var(--color-wash-faint);
+}
+
+.ledger-header__flag {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 
 /* Approvals + New contract share the header's 38px / 2px-border rhythm without
@@ -229,7 +299,7 @@
 .ledger-header .ledger-btn--primary {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: var(--color-bg);
+  color: white;
 }
 
 /* ---------- create page ---------- */
@@ -265,7 +335,7 @@
   border: 1px solid var(--card-border);
   background: var(--card-bg);
   color: var(--text);
-  font-size: 0.83rem;
+  font-size: clamp(0.65rem, 1.15vw, 0.85rem);
   font-weight: 500;
   cursor: pointer;
 }
@@ -1834,6 +1904,7 @@ body.dark .ledger {
   .ledger-iconbtn:hover,
   .ledger-header__lang:hover,
   .ledger-header__theme:hover,
+  .ledger-header__langitem:hover,
   .ledger-viewtoggle__btn:hover,
   .ledger-tabs__tab:hover,
   .ledger-drawer__close:hover,

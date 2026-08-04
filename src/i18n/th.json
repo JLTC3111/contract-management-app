@@ -563,6 +563,7 @@
   "comment_deleted": "ลบความคิดเห็นแล้ว!",
   "failed_to_delete_comment": "ไม่สามารถลบความคิดเห็นได้",
   "navbar": {
+    "kicker": "สถาบันเศรษฐศาสตร์และการวางผังเมือง",
     "title": "จัดการสัญญา",
     "visitIcue": "เยี่ยมชม iCUE!",
     "searchPlaceholder": "ค้นหาไฟล์หรือโฟลเดอร์...",

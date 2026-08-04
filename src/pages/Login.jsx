@@ -7,20 +7,10 @@ import { supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
 import { useLoginPhotos } from '../hooks/useLoginPhotos';
 import { authErrorMessage } from '../utils/authErrors';
+import { LANGUAGES, languageFor } from '../i18n/languages';
 // The display face for the headline and the wordmark. Self-hosted, so no CDN.
 import '@fontsource-variable/archivo';
 import './login.css';
-
-const LANGUAGES = [
-  { code: 'en', label: 'English', flag: '/flags/gb.svg' },
-  { code: 'de', label: 'Deutsch', flag: '/flags/de.svg' },
-  { code: 'fr', label: 'Français', flag: '/flags/fr.svg' },
-  { code: 'es', label: 'Español', flag: '/flags/es.svg' },
-  { code: 'ja', label: '日本語', flag: '/flags/jp.svg' },
-  { code: 'th', label: 'ไทย', flag: '/flags/th.svg' },
-  { code: 'zh', label: '中文', flag: '/flags/cn.svg' },
-  { code: 'vi', label: 'Tiếng Việt', flag: '/flags/vn.svg' },
-];
 
 const Login = () => {
   const { t, i18n } = useTranslation();
@@ -39,7 +29,7 @@ const Login = () => {
   const emailRef = useRef(null);
 
   const { photos, index, mounted } = useLoginPhotos(i18n.language);
-  const current = LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0];
+  const current = languageFor(i18n.language);
 
   // Close the language menu on an outside click or Escape.
   useEffect(() => {

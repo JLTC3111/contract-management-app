@@ -630,6 +630,7 @@
     "close": "Close"
   },
   "navbar": {
+    "kicker": "Institute of Economics & Urban Planning",
     "title": "Contract Manager",
     "visitIcue": "Visit iCUE!",
     "searchPlaceholder": "Search files or folders...",

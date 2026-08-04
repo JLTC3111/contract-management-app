@@ -571,6 +571,7 @@
   "comment_deleted": "Commentaire supprimé !",
   "failed_to_delete_comment": "Échec de la suppression du commentaire.",
   "navbar": {
+    "kicker": "Institut d'Économie et d'Aménagement Urbain",
     "title": "Gestionnaire de Contrats",
     "visitIcue": "Visiter iCUE !",
     "searchPlaceholder": "Rechercher des fichiers ou dossiers...",

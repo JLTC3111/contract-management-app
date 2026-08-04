@@ -572,6 +572,7 @@
   "comment_deleted": "¡Comentario eliminado!",
   "failed_to_delete_comment": "No se pudo eliminar el comentario.",
   "navbar": {
+    "kicker": "Instituto de Economía y Planificación Urbana",
     "title": "Gestor de Contratos",
     "visitIcue": "¡Visitar iCUE!",
     "searchPlaceholder": "Buscar archivos o carpetas...",

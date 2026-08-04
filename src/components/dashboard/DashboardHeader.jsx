@@ -1,10 +1,13 @@
 // src/components/dashboard/DashboardHeader.jsx
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Bell, CheckCircle, Globe, Plus, Search, Sun } from 'lucide-react';
+import { Bell, CheckCircle, ChevronDown, Plus, Search } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
+import SunMoonIcon from '../common/SunMoonIcon';
 import { formatDate } from '../../utils/formatters';
+import { LANGUAGES, languageFor } from '../../i18n/languages';
+import './dashboard.css';
 
 // 8-spoke asterisk mark - the app's mark appears once, here, on the dashboard.
 const AsteriskMark = () => (
@@ -43,10 +46,12 @@ const DashboardHeader = ({
   onNew,
 }) => {
   const { t, i18n } = useTranslation();
-  const { toggleDarkMode } = useTheme();
+  const { darkMode, toggleDarkMode } = useTheme();
   const bellRef = useRef(null);
+  const langRef = useRef(null);
+  const [langOpen, setLangOpen] = useState(false);
   const unread = expiring.length > 0 || pendingCount > 0;
-  const isVietnamese = i18n.language === 'vi';
+  const currentLang = languageFor(i18n.language);
 
   useEffect(() => {
     if (!bellOpen) return undefined;
@@ -57,6 +62,21 @@ const DashboardHeader = ({
     return () => document.removeEventListener('mousedown', onDown);
   }, [bellOpen, onBellToggle]);
 
+  // Same dismiss behaviour as the login page's picker: outside click or Escape.
+  useEffect(() => {
+    if (!langOpen) return undefined;
+    const onDown = (e) => {
+      if (langRef.current && !langRef.current.contains(e.target)) setLangOpen(false);
+    };
+    const onKey = (e) => e.key === 'Escape' && setLangOpen(false);
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [langOpen]);
+
   return (
     <header className="ledger-header">
       <div className="ledger-header__brand">
@@ -64,7 +84,9 @@ const DashboardHeader = ({
           <AsteriskMark />
           <span className="ledger-header__title">{t('navbar.title', 'Quản Lý Hợp Đồng')}</span>
         </div>
-        <span className="ledger-header__kicker">CONTRACT LEDGER</span>
+         <span className="ledger-header__kicker">
+          {t('navbar.kicker', 'CONTRACT LEDGER')}
+        </span>
       </div>
 
       <div className="ledger-header__controls">
@@ -135,17 +157,44 @@ const DashboardHeader = ({
           )}
         </div>
 
-        <div className="ledger-header__langtheme">
+        <div className="ledger-header__langtheme" ref={langRef}>
           <button
             type="button"
             className="ledger-header__lang"
-            onClick={() => i18n.changeLanguage(isVietnamese ? 'en' : 'vi')}
+            onClick={() => setLangOpen((v) => !v)}
+            aria-haspopup="listbox"
+            aria-expanded={langOpen}
             aria-label={t('navbar.languageSelector', 'Select language')}
             title={t('navbar.languageSelector', 'Select language')}
           >
-            <Globe size={15} aria-hidden="true" />
-            <span>{isVietnamese ? 'Tiếng Việt' : 'English'}</span>
+            <img className="ledger-header__flag" src={currentLang.flag} alt="" />
+            <span>{currentLang.label}</span>
+            <ChevronDown size={13} aria-hidden="true" />
           </button>
+
+          {langOpen && (
+            <ul className="ledger-header__langmenu" role="listbox">
+              {LANGUAGES.map((lang) => (
+                <li key={lang.code}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={i18n.language === lang.code}
+                    className={`ledger-header__langitem${
+                      i18n.language === lang.code ? ' ledger-header__langitem--on' : ''
+                    }`}
+                    onClick={() => {
+                      i18n.changeLanguage(lang.code);
+                      setLangOpen(false);
+                    }}
+                  >
+                    <img className="ledger-header__flag" src={lang.flag} alt="" />
+                    <span>{lang.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
           <button
             type="button"
             className="ledger-header__theme"
@@ -153,7 +202,7 @@ const DashboardHeader = ({
             aria-label={t('navbar.themeToggle', 'Toggle theme')}
             title={t('navbar.themeToggle', 'Toggle theme')}
           >
-            <Sun size={16} />
+            <SunMoonIcon dark={darkMode} size={16} fill="currentColor" />
           </button>
         </div>
 
