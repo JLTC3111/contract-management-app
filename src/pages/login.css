@@ -51,6 +51,11 @@ body.dark .auth {
   border-bottom: 2px solid var(--color-divider);
 }
 
+.auth-nav__logo {
+  width: 32px;
+  height: 32px;
+}
+
 .auth-nav__brand {
   flex: 1 1 auto;
   min-width: 0;

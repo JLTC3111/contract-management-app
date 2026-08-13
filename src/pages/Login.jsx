@@ -98,6 +98,7 @@ const Login = () => {
   return (
     <div className="auth">
       <nav className="auth-nav">
+        <img src="/logoIcons/logo.png" alt="Logo" className="auth-nav__logo" />
         <p className="auth-nav__brand">{t('login.title', 'Quản Lý Hợp Đồng')}</p>
 
         <div className="auth-nav__end">
