@@ -1,11 +1,34 @@
 import { useState, useEffect } from 'react';
-import { Bell, Check, X, Clock, MessageCircle } from 'lucide-react';
+import {
+  AlertTriangle,
+  Bell,
+  Check,
+  CheckCircle,
+  ClipboardList,
+  Clock,
+  Info,
+  MessageCircle,
+  OctagonAlert,
+  X,
+} from 'lucide-react';
 import { supabase } from '../utils/supaBaseClient';
 import { useUser } from '../hooks/useUser';
 import { useTheme } from '../hooks/useTheme';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+
+const NOTIFICATION_TYPE_ICONS = {
+  error: OctagonAlert,
+  warning: AlertTriangle,
+  success: CheckCircle,
+  info: Info,
+};
+
+const NotificationTypeIcon = ({ type, size = 16 }) => {
+  const Icon = NOTIFICATION_TYPE_ICONS[type];
+  return Icon ? <Icon size={size} aria-hidden="true" /> : null;
+};
 
 const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
 
@@ -551,8 +574,9 @@ const NotificationDropdown = () => {
             {/* General Notifications - Show for all users */}
             {generalNotifications.length > 0 && (
               <div style={{ padding: '1rem', borderBottom: '2px solid var(--card-border)' }}>
-                <h4 style={{ margin: '0 0 1rem 0', color: 'var(--text)', fontSize: '1rem' }}>
-                  🔔 {t('general_notifications', 'System Notifications')}
+                <h4 style={{ margin: '0 0 1rem 0', color: 'var(--text)', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Bell size={16} aria-hidden="true" />
+                  {t('general_notifications', 'System Notifications')}
                 </h4>
                 {generalNotifications.map((notification) => (
                   <div
@@ -580,10 +604,7 @@ const NotificationDropdown = () => {
                         alignItems: 'center',
                         gap: '0.5rem'
                       }}>
-                        {notification.type === 'error' && '🛑'}
-                        {notification.type === 'warning' && '⚠️'}
-                        {notification.type === 'success' && '✅'}
-                        {notification.type === 'info' && 'ℹ️'}
+                        <NotificationTypeIcon type={notification.type} />
                         {notification.title}
                       </h5>
                       <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
@@ -626,8 +647,9 @@ const NotificationDropdown = () => {
                 {/* Approval Status Notifications */}
                 {approvalStatusNotifications.length > 0 && (
                   <div style={{ padding: '1rem', borderBottom: '2px solid var(--card-border)' }}>
-                    <h4 style={{ margin: '0 0 1rem 0', color: 'var(--text)', fontSize: '1rem' }}>
-                      📋 {t('approval_status_updates', 'Approval Status Updates')}
+                    <h4 style={{ margin: '0 0 1rem 0', color: 'var(--text)', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <ClipboardList size={16} aria-hidden="true" />
+                      {t('approval_status_updates', 'Approval Status Updates')}
                     </h4>
                     {approvalStatusNotifications.map((notification) => (
                       <div

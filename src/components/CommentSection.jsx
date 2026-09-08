@@ -313,8 +313,8 @@ const CommentSection = ({ contractId }) => {
                 gap: '0.5rem'
               }}
             >
-              {submittingComment ? <LoadingSpinner size={14} /> : null}
-              {submittingComment ? t('posting') : '💬 ' + t('post_comment')}
+              {submittingComment ? <LoadingSpinner size={14} /> : <MessageCircle size={14} aria-hidden="true" />}
+              {submittingComment ? t('posting') : t('post_comment')}
             </button>
           </div>
 

@@ -948,5 +948,12 @@
     "folderNameInvalid": "Folder name must contain letters or numbers.",
     "folderCreated": "Folder \"{{name}}\" created.",
     "folderFailed": "Could not create folder: {{msg}}"
+  },
+  "errorBoundary": {
+    "kicker": "Application error",
+    "headline": "Something went wrong.",
+    "lede": "This page could not be shown. Reload to try again.",
+    "reload": "Reload",
+    "details": "Technical details"
   }
 }

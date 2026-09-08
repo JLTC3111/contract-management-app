@@ -22,10 +22,10 @@
     "signOut": "ออกจากระบบ",
     "updateStatus": "อัปเดตสถานะ",
     "updatingStatus": "กำลังอัปเดต...",
-    "cronFailed": "❌ Cron ล้มเหลว:",
-    "statusUpdated": "✅ อัปเดตสถานะแล้ว!",
+    "cronFailed": "Cron ล้มเหลว:",
+    "statusUpdated": "อัปเดตสถานะแล้ว!",
     "contractsUpdated": "สัญญาที่อัปเดตแล้ว",
-    "cronTriggerFailed": "🚨 ไม่สามารถเรียกใช้ cron job ได้ ตรวจสอบเครือข่ายหรือการตั้งค่า CORS",
+    "cronTriggerFailed": "ไม่สามารถเรียกใช้ cron job ได้ ตรวจสอบเครือข่ายหรือการตั้งค่า CORS",
     "home": "หน้าหลัก",
     "logged_in_as": "เข้าสู่ระบบในชื่อ:",
     "role": "บทบาท",
@@ -823,5 +823,12 @@
     "folderNameInvalid": "ชื่อโฟลเดอร์ต้องมีตัวอักษรหรือตัวเลข",
     "folderCreated": "สร้างโฟลเดอร์ \"{{name}}\" แล้ว",
     "folderFailed": "ไม่สามารถสร้างโฟลเดอร์ได้: {{msg}}"
+  },
+  "errorBoundary": {
+    "kicker": "ข้อผิดพลาดของแอป",
+    "headline": "เกิดข้อผิดพลาดบางอย่าง",
+    "lede": "ไม่สามารถแสดงหน้านี้ได้ โหลดใหม่เพื่อลองอีกครั้ง",
+    "reload": "โหลดใหม่",
+    "details": "รายละเอียดทางเทคนิค"
   }
 }

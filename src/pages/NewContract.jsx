@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import { useUser } from '../hooks/useUser';
+import Select from '../components/common/Select';
 
 const fieldStyle = {
   fontSize: 'clamp(0.95rem, 2vw, 1rem)',
@@ -158,19 +159,22 @@ const NewContract = () => {
               onChange={(e) => setVersion(e.target.value)}
               style={{ ...fieldStyle, minWidth: 'clamp(100px, 20vw, 160px)' }}
             />
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              style={{ ...fieldStyle, minWidth: 'clamp(100px, 20vw, 160px)' }}
-            >
-              <option value="draft">{t('contractTable.status.draft')}</option>
-              <option value="pending">{t('contractTable.status.pending')}</option>
-              <option value="in_progress">{t('contractTable.status.in_progress')}</option>
-              <option value="approved">{t('contractTable.status.approved')}</option>
-              <option value="rejected">{t('contractTable.status.rejected')}</option>
-              <option value="expiring">{t('contractTable.status.expiring')}</option>
-              <option value="expired">{t('contractTable.status.expired')}</option>
-            </select>
+            <div style={{ flex: 1, minWidth: 'clamp(100px, 20vw, 160px)' }}>
+              <Select
+                value={status}
+                onChange={setStatus}
+                ariaLabel={t('contractTable.headerStatus', 'Status')}
+                options={[
+                  { value: 'draft', label: t('contractTable.status.draft') },
+                  { value: 'pending', label: t('contractTable.status.pending') },
+                  { value: 'in_progress', label: t('contractTable.status.in_progress') },
+                  { value: 'approved', label: t('contractTable.status.approved') },
+                  { value: 'rejected', label: t('contractTable.status.rejected') },
+                  { value: 'expiring', label: t('contractTable.status.expiring') },
+                  { value: 'expired', label: t('contractTable.status.expired') },
+                ]}
+              />
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(0.5rem, 2vw, 1rem)' }}>

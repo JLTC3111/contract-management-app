@@ -22,10 +22,10 @@
     "signOut": "ログアウト",
     "updateStatus": "ステータス更新",
     "updatingStatus": "更新中...",
-    "cronFailed": "❌ Cron失敗:",
-    "statusUpdated": "✅ ステータス更新完了!",
+    "cronFailed": "Cron失敗:",
+    "statusUpdated": "ステータス更新完了!",
     "contractsUpdated": "契約更新済み",
-    "cronTriggerFailed": "🚨 Cronジョブの実行に失敗しました。ネットワークまたはCORS設定を確認してください。",
+    "cronTriggerFailed": "Cronジョブの実行に失敗しました。ネットワークまたはCORS設定を確認してください。",
     "home": "ホーム",
     "logged_in_as": "ログイン中:",
     "role": "役割",
@@ -274,7 +274,7 @@
       "manualTip": "マニュアルとフィードバックオプションを使用してエクスペリエンスを向上。"
     },
     "footer": {
-      "thanks": "契約管理をお楽しみください！📍",
+      "thanks": "契約管理をお楽しみください！",
       "contact": "ご質問やサポートが必要な場合は、dev@icue.vn"
     }
   },
@@ -833,5 +833,12 @@
     "folderNameInvalid": "フォルダ名には英数字を含めてください。",
     "folderCreated": "フォルダ「{{name}}」を作成しました。",
     "folderFailed": "フォルダを作成できませんでした: {{msg}}"
+  },
+  "errorBoundary": {
+    "kicker": "アプリケーションエラー",
+    "headline": "問題が発生しました。",
+    "lede": "このページを表示できませんでした。再読み込みしてもう一度お試しください。",
+    "reload": "再読み込み",
+    "details": "技術的な詳細"
   }
 }

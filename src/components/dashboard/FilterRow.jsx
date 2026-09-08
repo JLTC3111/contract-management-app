@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Search, LayoutGrid, Rows3 } from 'lucide-react';
 import { STAGES, getStageLabel } from '../../utils/stages';
 import { CONTRACT_CATEGORIES, getCategoryLabel, getCategoryShortLabel } from '../../utils/constants';
+import Select from '../common/Select';
 
 /**
  * File/folder name search, category chips, stage dropdown, table/kanban toggle.
@@ -49,17 +50,16 @@ const FilterRow = ({
         ))}
       </div>
 
-      <select
+      <Select
         className="ledger-filters__stage"
         value={stage}
-        onChange={(e) => onStageChange(e.target.value)}
-        aria-label={t('dashboard.stage', 'Stage')}
-      >
-        <option value="all">{t('dashboard.allStages', 'All stages')}</option>
-        {STAGES.map((s) => (
-          <option key={s.value} value={s.value}>{getStageLabel(t, s.value)}</option>
-        ))}
-      </select>
+        onChange={onStageChange}
+        ariaLabel={t('dashboard.stage', 'Stage')}
+        options={[
+          { value: 'all', label: t('dashboard.allStages', 'All stages') },
+          ...STAGES.map((s) => ({ value: s.value, label: getStageLabel(t, s.value) })),
+        ]}
+      />
 
       <div className="ledger-viewtoggle" role="group" aria-label={t('dashboard.view', 'View')}>
         <button

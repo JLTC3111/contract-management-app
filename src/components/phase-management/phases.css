@@ -40,7 +40,13 @@
 }
 
 /* The picker holds the right edge; the tag and the button stay left. */
-.phase-contract__picker { margin-left: auto; max-width: min(320px, 100%); }
+.ledger-select.phase-contract__picker {
+  margin-left: auto;
+  width: min(320px, 100%);
+  min-width: 12rem;
+  max-width: min(320px, 100%);
+  flex: 1 1 12rem;
+}
 
 /* The page had no width floor at all, so it kept compressing with whatever pane
    it sat in. 700px is where the layout switches to its compact form, so that is
@@ -480,7 +486,7 @@
 
 @media (max-width: 700px) {
   .phase-page { min-width: 0; }
-  .phase-contract__picker { margin-left: 0; max-width: 100%; }
+  .phase-contract__picker { margin-left: 0; width: 100%; max-width: 100%; }
   .phase-panel__pct { font-size: 26px; }
   .phase-stepper__square { width: 22px; height: 22px; }
   .phase-stepper__line { top: 10px; }

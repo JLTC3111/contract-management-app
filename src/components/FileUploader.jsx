@@ -176,7 +176,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
       // Validate file
       const validation = validateFile(file);
       if (!validation.valid) {
-        toast.error(`❌ ${file.name}: ${validation.error}`);
+        toast.error(`${file.name}: ${validation.error}`);
         errorCount++;
         continue;
       }
@@ -192,12 +192,12 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
         try {
           const result = await handleDemoUpload(file, filePath);
           uploads.push(result);
-          toast.success(`✅ ${file.name} ${t('uploader_uploaded')}!`);
+          toast.success(`${file.name} ${t('uploader_uploaded')}!`);
           successCount++;
           if (onUploadSuccess) onUploadSuccess();
         } catch (error) {
           console.error(`Demo upload error for ${file.name}:`, error);
-          toast.error(`❌ ${t('upload_error_for')} ${file.name}`);
+          toast.error(`${t('upload_error_for')} ${file.name}`);
           errorCount++;
         }
         continue;
@@ -212,7 +212,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
 
         if (signedUrlError) {
           console.error('Error getting signed URL:', signedUrlError);
-          toast.error(`❌ ${t('failed_to_upload')} ${file.name}`);
+          toast.error(`${t('failed_to_upload')} ${file.name}`);
           errorCount++;
           continue;
         }
@@ -259,7 +259,7 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
               category: getFileTypeCategory(file.name)
             });
         
-            toast.success(`✅ ${file.name} ${t('uploader_uploaded')}!`);
+            toast.success(`${file.name} ${t('uploader_uploaded')}!`);
             successCount++;
         
             const { error: updateError } = await supabase
@@ -269,28 +269,28 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
         
             if (updateError) {
               console.error('Error saving file path to DB:', updateError.message);
-              toast.error(`⚠️ ${t('file_uploaded_but_db_not_updated')}`);
+              toast.error(t('file_uploaded_but_db_not_updated'));
             }
         
-            // ✅ Immediately refresh the file list UI
+            // Immediately refresh the file list UI
             if (onUploadSuccess) onUploadSuccess();
         
           } else {
             console.error(`Failed to upload ${file.name}:`, xhr.responseText);
-            toast.error(`❌ ${t('failed_to_upload')} ${file.name}`);
+            toast.error(`${t('failed_to_upload')} ${file.name}`);
             errorCount++;
           }
         };
         
         xhr.onerror = () => {
-          toast.error(`❌ ${t('upload_error_for')} ${file.name}`);
+          toast.error(`${t('upload_error_for')} ${file.name}`);
           errorCount++;
         };
 
         xhr.send(file); // Send after events are wired up
       } catch (error) {
         console.error(`Error uploading ${file.name}:`, error);
-        toast.error(`❌ ${t('upload_error_for')} ${file.name}`);
+        toast.error(`${t('upload_error_for')} ${file.name}`);
         errorCount++;
       }
     }
@@ -301,9 +301,9 @@ const FileUploader = ({ onUploadComplete, onUploadSuccess, contract, currentPath
     // Summary toast
     if (successCount > 0) {
       if (errorCount > 0) {
-        toast.success(`✅ ${successCount} file(s) uploaded successfully. ${errorCount} failed.`);
+        toast.success(`${successCount} file(s) uploaded successfully. ${errorCount} failed.`);
       } else {
-        toast.success(`✅ All ${successCount} file(s) uploaded successfully!`);
+        toast.success(`All ${successCount} file(s) uploaded successfully!`);
       }
     }
 

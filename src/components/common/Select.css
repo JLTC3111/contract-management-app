@@ -1,0 +1,110 @@
+/* Themed select — same field chrome as the date picker, same panel as the
+   language menu. The list is portaled to body, so tokens come from :root. */
+
+.ledger-select,
+.ledger-select__trigger,
+.ledger-select__menu,
+.ledger-select__option {
+  box-sizing: border-box;
+}
+
+.ledger-select {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.ledger-select__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.42rem 0.6rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0;
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.83rem;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+}
+
+.ledger-select__trigger > span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ledger-select__trigger--empty { color: var(--text-secondary); }
+
+.ledger-select__trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ledger-select__icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.ledger-select__trigger[aria-expanded="true"] .ledger-select__icon {
+  transform: rotate(180deg);
+}
+
+.ledger-select__menu {
+  position: fixed;
+  z-index: 80;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 240px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+body.dark .ledger-select__menu { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
+
+.ledger-select__menu > li { margin: 0; padding: 0; }
+
+.ledger-select__option {
+  display: block;
+  width: 100%;
+  padding: 0.45rem 0.7rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.83rem;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ledger-select__option--on { font-weight: 700; }
+
+.ledger-select__option--active {
+  background: var(--hover-bg);
+}
+
+.ledger-select__trigger:focus-visible,
+.ledger-select__option:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+@media (hover: hover) {
+  .ledger-select__trigger:hover { border-color: var(--primary); }
+  .ledger-select__option:hover { background: var(--hover-bg); }
+}

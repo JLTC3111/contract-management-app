@@ -7,6 +7,7 @@ import { getI18nOrFallback } from '../utils/formatters';
 import { STAGES, getContractStage, getStageLabel } from '../utils/stages';
 import { getCategoryShortLabel } from '../utils/constants';
 import { StageTag } from './dashboard/StageTag';
+import Select from './common/Select';
 import './dashboard/dashboard.css';
 
 const PERIOD_DAYS = {
@@ -111,8 +112,8 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   const currentPage = Math.min(page, pageCount - 1);
   const paged = rows.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE);
 
-  const onFilterChange = (setter) => (e) => {
-    setter(e.target.value);
+  const onFilterChange = (setter) => (value) => {
+    setter(value);
     setPage(0);
   };
 
@@ -164,30 +165,30 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
   return (
     <>
       <div className="ledger-analytics__toolbar">
-        <select
-          className="input"
+        <Select
+          className="ledger-analytics__select"
           value={period}
           onChange={onFilterChange(setPeriod)}
-          aria-label={t('analytics.period', 'Period')}
-        >
-          <option value="1month">{t('analytics.lastMonth', 'Last Month')}</option>
-          <option value="3months">{t('analytics.last3Months', 'Last 3 Months')}</option>
-          <option value="6months">{t('analytics.last6Months', 'Last 6 Months')}</option>
-          <option value="1year">{t('analytics.lastYear', 'Last Year')}</option>
-          <option value="all">{t('analytics.allTime', 'All Time')}</option>
-        </select>
+          ariaLabel={t('analytics.period', 'Period')}
+          options={[
+            { value: '1month', label: t('analytics.lastMonth', 'Last Month') },
+            { value: '3months', label: t('analytics.last3Months', 'Last 3 Months') },
+            { value: '6months', label: t('analytics.last6Months', 'Last 6 Months') },
+            { value: '1year', label: t('analytics.lastYear', 'Last Year') },
+            { value: 'all', label: t('analytics.allTime', 'All Time') },
+          ]}
+        />
 
-        <select
-          className="input"
+        <Select
+          className="ledger-analytics__select"
           value={stageFilter}
           onChange={onFilterChange(setStageFilter)}
-          aria-label={t('dashboard.stage', 'Stage')}
-        >
-          <option value="all">{t('dashboard.allStages', 'All stages')}</option>
-          {STAGES.map((s) => (
-            <option key={s.value} value={s.value}>{getStageLabel(t, s.value)}</option>
-          ))}
-        </select>
+          ariaLabel={t('dashboard.stage', 'Stage')}
+          options={[
+            { value: 'all', label: t('dashboard.allStages', 'All stages') },
+            ...STAGES.map((s) => ({ value: s.value, label: getStageLabel(t, s.value) })),
+          ]}
+        />
 
         <div className="ledger-analytics__toolbar-end">
           <button type="button" className="btn-secondary" onClick={exportCsv}>

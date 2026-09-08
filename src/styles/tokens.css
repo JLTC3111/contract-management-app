@@ -3,11 +3,13 @@
    heading face. Nothing that consumes these picks a colour of its own, so
    light/dark stays a single switch.
 
-   Scoped to the roots that opt in: `.ledger` (dashboard, analytics, phases) and
-   `.auth` (login). Add a root here rather than redefining the ramp elsewhere. */
+   Scoped to the roots that opt in: `.ledger` (dashboard, analytics, phases),
+   `.auth` (login), and `.crash` (error boundary). Add a root here rather than
+   redefining the ramp elsewhere. */
 
 .ledger,
-.auth {
+.auth,
+.crash {
   --font-heading: 'Helvetica Neue', Helvetica, Arial, system-ui, sans-serif;
   /* Archivo ships with the app (@fontsource-variable/archivo, imported by the
      page that uses it). The variable face covers 100-900, so weight 800 is real
@@ -41,7 +43,8 @@
 /* accent-700 flips to the light end of the ramp in dark mode: it is text on
    accent-100, and accent-100 is a dark wash here. */
 body.dark .ledger,
-body.dark .auth {
+body.dark .auth,
+body.dark .crash {
   --color-divider: #3a4356;
 
   --color-accent: #ef4444;

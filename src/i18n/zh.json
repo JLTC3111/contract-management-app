@@ -11,10 +11,10 @@
     "signOut": "退出登录",
     "updateStatus": "状态更新",
     "updatingStatus": "更新中...",
-    "cronFailed": "❌ Cron失败:",
-    "statusUpdated": "✅ 状态已更新!",
+    "cronFailed": "Cron失败:",
+    "statusUpdated": "状态已更新!",
     "contractsUpdated": "合同已更新",
-    "cronTriggerFailed": "🚨 无法触发cron任务。请检查网络或CORS设置。",
+    "cronTriggerFailed": "无法触发cron任务。请检查网络或CORS设置。",
     "home": "首页",
     "logged_in_as": "登录身份:",
     "role": "角色",
@@ -263,7 +263,7 @@
       "manualTip": "使用手册和反馈选项来改善您的体验。"
     },
     "footer": {
-      "thanks": "祝您合同管理愉快！📍",
+      "thanks": "祝您合同管理愉快！",
       "contact": "如有问题或需要帮助，请联系 dev@icue.vn"
     }
   },
@@ -825,5 +825,12 @@
     "folderNameInvalid": "文件夹名称必须包含字母或数字。",
     "folderCreated": "已创建文件夹\"{{name}}\"。",
     "folderFailed": "无法创建文件夹：{{msg}}"
+  },
+  "errorBoundary": {
+    "kicker": "应用程序错误",
+    "headline": "出现问题。",
+    "lede": "无法显示此页面。请刷新后重试。",
+    "reload": "刷新",
+    "details": "技术详情"
   }
 }

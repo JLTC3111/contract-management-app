@@ -22,10 +22,10 @@
     "signOut": "Se déconnecter",
     "updateStatus": "Mise à jour des statuts",
     "updatingStatus": "Mise à jour...",
-    "cronFailed": "❌ Échec du cron:",
-    "statusUpdated": "✅ Statut mis à jour!",
+    "cronFailed": "Échec du cron:",
+    "statusUpdated": "Statut mis à jour!",
     "contractsUpdated": "contrat(s) mis à jour",
-    "cronTriggerFailed": "🚨 Échec du déclenchement du cron. Vérifiez le réseau ou les paramètres CORS.",
+    "cronTriggerFailed": "Échec du déclenchement du cron. Vérifiez le réseau ou les paramètres CORS.",
     "home": "Accueil",
     "logged_in_as": "Connecté en:",
     "role": "Rôle",
@@ -831,5 +831,12 @@
     "folderNameInvalid": "Le nom du dossier doit contenir des lettres ou des chiffres.",
     "folderCreated": "Dossier « {{name}} » créé.",
     "folderFailed": "Impossible de créer le dossier : {{msg}}"
+  },
+  "errorBoundary": {
+    "kicker": "Erreur de l’application",
+    "headline": "Une erreur s’est produite.",
+    "lede": "Cette page n’a pas pu s’afficher. Rechargez pour réessayer.",
+    "reload": "Recharger",
+    "details": "Détails techniques"
   }
 }

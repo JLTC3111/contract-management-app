@@ -9,6 +9,7 @@ import { useUser } from '../hooks/useUser';
 import { contractsApi, phasesApi } from '../api/contracts';
 import PhaseManagement from '../components/PhaseManagement';
 import PhaseStepper from '../components/phase-management/PhaseStepper';
+import Select from '../components/common/Select';
 import {
   contractPhaseState,
   stateLabel,
@@ -158,18 +159,16 @@ const PhaseManagementPage = () => {
           </button>
 
           {allContracts.length > 1 && (
-            <select
-              className="input phase-contract__picker"
-              value={contract.id}
-              onChange={(e) => navigate(`/phases/${e.target.value}`)}
-              aria-label={t('lifecycle.selectContract', 'Select contract')}
-            >
-              {allContracts.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {getI18nOrFallback(t, c, 'title_i18n', 'title') || c.title || `Contract #${c.id}`}
-                </option>
-              ))}
-            </select>
+            <Select
+              className="phase-contract__picker"
+              value={String(contract.id)}
+              onChange={(id) => navigate(`/phases/${id}`)}
+              ariaLabel={t('lifecycle.selectContract', 'Select contract')}
+              options={allContracts.map((c) => ({
+                value: String(c.id),
+                label: getI18nOrFallback(t, c, 'title_i18n', 'title') || c.title || `Contract #${c.id}`,
+              }))}
+            />
           )}
         </div>
       </div>

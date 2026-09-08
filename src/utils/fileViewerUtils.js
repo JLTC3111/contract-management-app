@@ -62,41 +62,6 @@ export const getFileTypeCategory = (filename) => {
   return 'other';
 };
 
-export const getFileIcon = (filename) => {
-  const extension = getFileExtension(filename);
-  
-  switch (extension) {
-    case 'docx':
-    case 'doc':
-      return '📄';
-    case 'xlsx':
-    case 'xls':
-      return '📊';
-    case 'pptx':
-    case 'ppt':
-      return '📈';
-    case 'pdf':
-      return '📋';
-    case 'jpg':
-    case 'jpeg':
-    case 'png':
-    case 'gif':
-    case 'bmp':
-    case 'webp':
-    case 'svg':
-      return '🖼️';
-    case 'txt':
-    case 'md':
-      return '📝';
-    case 'zip':
-    case 'rar':
-    case '7z':
-      return '📦';
-    default:
-      return '📁';
-  }
-};
-
 export const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 Bytes';
   
@@ -120,6 +85,5 @@ export const getFilePreviewProps = (file) => {
     fileType: getFileExtension(file.name),
     fileName: file.name,
     fileSize: file.size ? formatFileSize(file.size) : null,
-    fileIcon: getFileIcon(file.name)
   };
 }; 

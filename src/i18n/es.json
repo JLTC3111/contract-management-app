@@ -22,10 +22,10 @@
     "signOut": "Cerrar sesión",
     "updateStatus": "Actualización de estados",
     "updatingStatus": "Actualizando...",
-    "cronFailed": "❌ Falló el cron:",
-    "statusUpdated": "✅ ¡Estado actualizado!",
+    "cronFailed": "Falló el cron:",
+    "statusUpdated": "¡Estado actualizado!",
     "contractsUpdated": "contrato(s) actualizado(s)",
-    "cronTriggerFailed": "🚨 Error al activar el cron. Verifique la red o la configuración CORS.",
+    "cronTriggerFailed": "Error al activar el cron. Verifique la red o la configuración CORS.",
     "home": "Inicio",
     "logged_in_as": "Conectado como:",
     "role": "Rol",
@@ -883,5 +883,12 @@
     "folderNameInvalid": "El nombre de la carpeta debe contener letras o números.",
     "folderCreated": "Carpeta \"{{name}}\" creada.",
     "folderFailed": "No se pudo crear la carpeta: {{msg}}"
+  },
+  "errorBoundary": {
+    "kicker": "Error de la aplicación",
+    "headline": "Algo salió mal.",
+    "lede": "No se pudo mostrar esta página. Recargue para intentarlo de nuevo.",
+    "reload": "Recargar",
+    "details": "Detalles técnicos"
   }
 }

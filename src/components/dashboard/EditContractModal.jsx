@@ -9,6 +9,7 @@ import { ADVANCEABLE_STAGES, getContractStage, getStageLabel } from '../../utils
 import { CONTRACT_CATEGORIES, getCategoryLabel } from '../../utils/constants';
 import DatePicker from './DatePicker';
 import AttachmentPicker from './AttachmentPicker';
+import Select from '../common/Select';
 
 const CATEGORY_OPTIONS = CONTRACT_CATEGORIES.filter((c) => c !== 'All');
 
@@ -198,23 +199,25 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
             <input value={form.title} onChange={set('title')} required autoFocus />
           </label>
 
-          <label className="ledger-field">
+          <div className="ledger-field">
             <span>{t('dashboard.col.category', 'Category')}</span>
-            <select value={form.category} onChange={set('category')}>
-              {categories.map((c) => (
-                <option key={c} value={c}>{getCategoryLabel(t, c)}</option>
-              ))}
-            </select>
-          </label>
+            <Select
+              value={form.category}
+              onChange={(v) => setForm((f) => ({ ...f, category: v }))}
+              ariaLabel={t('dashboard.col.category', 'Category')}
+              options={categories.map((c) => ({ value: c, label: getCategoryLabel(t, c) }))}
+            />
+          </div>
 
-          <label className="ledger-field">
+          <div className="ledger-field">
             <span>{t('dashboard.col.stage', 'Stage')}</span>
-            <select value={form.stage} onChange={set('stage')}>
-              {stages.map((s) => (
-                <option key={s} value={s}>{getStageLabel(t, s)}</option>
-              ))}
-            </select>
-          </label>
+            <Select
+              value={form.stage}
+              onChange={(v) => setForm((f) => ({ ...f, stage: v }))}
+              ariaLabel={t('dashboard.col.stage', 'Stage')}
+              options={stages.map((s) => ({ value: s, label: getStageLabel(t, s) }))}
+            />
+          </div>
 
           <label className="ledger-field ledger-field--wide">
             <span>{t('dashboard.col.owner', 'Owner')}</span>

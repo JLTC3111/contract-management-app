@@ -13,6 +13,7 @@ import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS, getStatusColor } from '
 import { formatDate, getDaysUntilExpiry, getI18nOrFallback, getContractStatusLabel, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
 import { getSearchHighlightSegments, searchMultipleFields } from '../utils/searchUtils';
 import { StatusBadge } from './common';
+import Select from './common/Select';
 
 const ICON_COMPONENTS = {
   CheckCircle, Clock, FileText, XCircle, AlertOctagon,
@@ -71,6 +72,7 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
 
   // Close popover on outside click
   document.onclick = (e) => {
+    if (e.target.closest?.('.ledger-select__menu')) return;
     Object.keys(openFilters).forEach((key) => {
       if (openFilters[key] && popoverRefs.current[key] && !popoverRefs.current[key].contains(e.target)) {
         setOpenFilters((prev) => ({ ...prev, [key]: false }));
@@ -236,18 +238,15 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
                 <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('status', (
-                <select
-                  className="table-filter-input"
+                <Select
                   value={filters.status}
-                  onChange={e => setFilters(f => ({ ...f, status: e.target.value }))}
-                  style={{ width: 160 }}
-                  autoFocus
-                >
-                  <option value="">{t('contractTable.all')}</option>
-                  {uniqueStatuses.map(s => (
-                    <option key={s} value={s}>{getContractStatusLabel(t, s)}</option>
-                  ))}
-                </select>
+                  onChange={(v) => setFilters((f) => ({ ...f, status: v }))}
+                  ariaLabel={t('contractTable.headerStatus')}
+                  options={[
+                    { value: '', label: t('contractTable.all') },
+                    ...uniqueStatuses.map((s) => ({ value: s, label: getContractStatusLabel(t, s) })),
+                  ]}
+                />
               ))}
             </th>
             <th style={{ position: 'relative' }}>
@@ -281,16 +280,15 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
                 <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('version', (
-                <select
-                  className="table-filter-input"
+                <Select
                   value={filters.version}
-                  onChange={e => setFilters(f => ({ ...f, version: e.target.value }))}
-                  style={{ width: 160 }}
-                  autoFocus
-                >
-                  <option value="">{t('contractTable.all')}</option>
-                  {uniqueVersions.map(v => <option key={v} value={v}>{v}</option>)}
-                </select>
+                  onChange={(v) => setFilters((f) => ({ ...f, version: v }))}
+                  ariaLabel={t('contractTable.version')}
+                  options={[
+                    { value: '', label: t('contractTable.all') },
+                    ...uniqueVersions.map((v) => ({ value: v, label: v })),
+                  ]}
+                />
               ))}
             </th>
             <th style={{ position: 'relative' }}>
@@ -364,16 +362,15 @@ const ContractTable = ({ contracts, searchQuery = '', statusFilter = '' }) => {
                 <svg width="12" height="12" viewBox="0 0 24 24" style={{ verticalAlign: 'middle', color: 'var(--text)' }}><path fill="currentColor" d="M3 5h18v2H3zm3 7h12v2H6zm3 7h6v2H9z"/></svg>
               </span>
               {renderPopover('author', (
-                <select
-                  className="table-filter-input"
+                <Select
                   value={filters.author}
-                  onChange={e => setFilters(f => ({ ...f, author: e.target.value }))}
-                  style={{ width: 160 }}
-                  autoFocus
-                >
-                  <option value="">{t('contractTable.all')}</option>
-                  {uniqueAuthors.map(a => <option key={a} value={a}>{a}</option>)}
-                </select>
+                  onChange={(v) => setFilters((f) => ({ ...f, author: v }))}
+                  ariaLabel={t('contractTable.author')}
+                  options={[
+                    { value: '', label: t('contractTable.all') },
+                    ...uniqueAuthors.map((a) => ({ value: a, label: a })),
+                  ]}
+                />
               ))}
             </th>
             <th style={{ position: 'relative' }}>

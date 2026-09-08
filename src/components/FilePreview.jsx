@@ -1,10 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { getViewerComponent, getFilePreviewProps, isOfficeFile, isImageFile, isTextFile } from '../utils/fileViewerUtils';
-
-// Import all preview components
+import {
+  FileArchive,
+  FileImage,
+  FileSpreadsheet,
+  FileText,
+  FileType,
+  Folder,
+  Presentation,
+  X,
+} from 'lucide-react';
+import { getViewerComponent, getFilePreviewProps } from '../utils/fileViewerUtils';
 import ImagePreview from './ImagePreview';
 import PdfPreview from './PdfPreview';
 import OfficeViewer from './OfficeViewer';
+
+const FILE_TYPE_ICONS = {
+  doc: FileText,
+  docx: FileText,
+  xls: FileSpreadsheet,
+  xlsx: FileSpreadsheet,
+  ppt: Presentation,
+  pptx: Presentation,
+  pdf: FileText,
+  jpg: FileImage,
+  jpeg: FileImage,
+  png: FileImage,
+  gif: FileImage,
+  bmp: FileImage,
+  webp: FileImage,
+  svg: FileImage,
+  txt: FileType,
+  md: FileType,
+  zip: FileArchive,
+  rar: FileArchive,
+  '7z': FileArchive,
+};
+
+const FileTypeIcon = ({ fileType, size = 20 }) => {
+  const Icon = FILE_TYPE_ICONS[fileType] || Folder;
+  return <Icon size={size} aria-hidden="true" />;
+};
 
 const FilePreview = ({ file, onClose }) => {
   const [loading, setLoading] = useState(true);
@@ -102,7 +137,7 @@ const FilePreview = ({ file, onClose }) => {
         background: '#f8fafc'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ fontSize: '1.5rem' }}>{previewProps.fileIcon}</span>
+          <FileTypeIcon fileType={previewProps.fileType} />
           <div>
             <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#1f2937' }}>
               {previewProps.fileName}
@@ -124,14 +159,16 @@ const FilePreview = ({ file, onClose }) => {
               background: 'transparent',
               cursor: 'pointer',
               borderRadius: '4px',
-              fontSize: '1.25rem',
+              display: 'flex',
+              alignItems: 'center',
               color: '#6b7280',
               transition: 'color 0.2s'
             }}
-            onMouseOver={(e) => e.target.style.color = '#374151'}
-            onMouseOut={(e) => e.target.style.color = '#6b7280'}
+            onMouseOver={(e) => { e.currentTarget.style.color = '#374151'; }}
+            onMouseOut={(e) => { e.currentTarget.style.color = '#6b7280'; }}
+            aria-label="Close preview"
           >
-            ✕
+            <X size={20} />
           </button>
         )}
       </div>

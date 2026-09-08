@@ -13,6 +13,7 @@ import {
   Lightbulb,
   Workflow,
   BarChart3,
+  Gamepad2,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useUser } from '../../hooks/useUser';
@@ -284,8 +285,9 @@ const SidebarMobile = () => {
               gap: '0.5rem',
             }}
           >
-            <span style={{ color: '#f59e0b', fontSize: '0.8rem', fontWeight: 600 }}>
-              🎮 {t('sidebar.demoMode', 'Demo Mode')}
+            <span style={{ color: '#f59e0b', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <Gamepad2 size={14} aria-hidden="true" />
+              {t('sidebar.demoMode', 'Demo Mode')}
             </span>
             <button
               onClick={() => {

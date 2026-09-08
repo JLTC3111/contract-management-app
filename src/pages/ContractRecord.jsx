@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence } from 'framer-motion';
-import { ArrowLeft, FolderPlus, Pencil, Trash2, Workflow } from 'lucide-react';
+import { ArrowLeft, FileText, FolderPlus, Pencil, Trash2, Workflow } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
   approvalsApi,
@@ -436,7 +436,7 @@ const ContractRecord = () => {
                   className="ledger-record__row"
                   onClick={() => openDocument(doc.name)}
                 >
-                  <span aria-hidden="true">📄</span>
+                  <FileText size={16} aria-hidden="true" style={{ flexShrink: 0 }} />
                   <span className="ledger-record__row-name">{doc.name}</span>
                   <span className="ledger-record__row-meta">
                     {formatFileSize(doc.metadata?.size ?? 0)}

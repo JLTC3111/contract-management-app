@@ -21,10 +21,10 @@
     "signOut": "Abmelden",
     "updateStatus": "Statusaktualisierung",
     "updatingStatus": "Aktualisiere...",
-    "cronFailed": "❌ Cron fehlgeschlagen:",
-    "statusUpdated": "✅ Status aktualisiert!",
+    "cronFailed": "Cron fehlgeschlagen:",
+    "statusUpdated": "Status aktualisiert!",
     "contractsUpdated": "Vertrag(e) aktualisiert",
-    "cronTriggerFailed": "🚨 Cron-Job konnte nicht ausgelöst werden. Netzwerk- oder CORS-Einstellungen prüfen.",
+    "cronTriggerFailed": "Cron-Job konnte nicht ausgelöst werden. Netzwerk- oder CORS-Einstellungen prüfen.",
     "home": "Startseite",
     "logged_in_as": "Angemeldet als:",
     "role": "Rolle",
@@ -829,5 +829,12 @@
     "folderNameInvalid": "Der Ordnername muss Buchstaben oder Zahlen enthalten.",
     "folderCreated": "Ordner \"{{name}}\" erstellt.",
     "folderFailed": "Ordner konnte nicht erstellt werden: {{msg}}"
+  },
+  "errorBoundary": {
+    "kicker": "Anwendungsfehler",
+    "headline": "Etwas ist schiefgelaufen.",
+    "lede": "Diese Seite konnte nicht angezeigt werden. Laden Sie neu, um es erneut zu versuchen.",
+    "reload": "Neu laden",
+    "details": "Technische Details"
   }
 }

@@ -430,14 +430,19 @@
 
 .ledger-filters__chips { display: flex; gap: 0.3rem; }
 
-.ledger-filters__stage,
-.ledger-field select,
 .ledger-field input {
   padding: 0.42rem 0.6rem;
   border: 1px solid var(--input-border);
   background: var(--input-bg);
   color: var(--text);
   font-size: 0.83rem;
+}
+
+.ledger-select.ledger-filters__stage,
+.ledger-select.ledger-analytics__select {
+  width: auto;
+  min-width: 11rem;
+  flex: 0 0 auto;
 }
 
 .ledger-viewtoggle {
@@ -1964,7 +1969,6 @@ body.dark .ledger {
 
   .ledger-header__search .input:hover,
   .ledger-filters__search:hover,
-  .ledger-filters__stage:hover,
   .ledger-textarea:hover { border-color: var(--primary); }
 
   .ledger-panel__action:hover:not(:disabled) {
@@ -1995,7 +1999,6 @@ body.dark .ledger {
 .ledger-header__lang,
 .ledger-header__theme,
 .ledger-filters__search,
-.ledger-filters__stage,
 .ledger-textarea,
 .ledger-drawer__close,
 .ledger-datepicker__trigger,

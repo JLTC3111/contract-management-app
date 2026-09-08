@@ -22,10 +22,10 @@
     "signOut": "Đăng xuất",
     "updateStatus": "Cập nhật trạng thái",
     "updatingStatus": "Đang cập nhật...",
-    "cronFailed": "❌ Cron thất bại:",
-    "statusUpdated": "✅ Đã cập nhật trạng thái!",
+    "cronFailed": "Cron thất bại:",
+    "statusUpdated": "Đã cập nhật trạng thái!",
     "contractsUpdated": "hợp đồng đã cập nhật",
-    "cronTriggerFailed": "🚨 Không thể kích hoạt cron job. Kiểm tra mạng hoặc cài đặt CORS.",
+    "cronTriggerFailed": "Không thể kích hoạt cron job. Kiểm tra mạng hoặc cài đặt CORS.",
     "in_progress": "Đang thực hiện",
     "home": "Trang chủ",
     "logged_in_as": "Đăng nhập:",
@@ -833,5 +833,12 @@
     "folderNameInvalid": "Tên thư mục phải chứa chữ cái hoặc số.",
     "folderCreated": "Đã tạo thư mục \"{{name}}\".",
     "folderFailed": "Không thể tạo thư mục: {{msg}}"
+  },
+  "errorBoundary": {
+    "kicker": "Lỗi ứng dụng",
+    "headline": "Đã xảy ra lỗi.",
+    "lede": "Không thể hiển thị trang này. Tải lại để thử lại.",
+    "reload": "Tải lại",
+    "details": "Chi tiết kỹ thuật"
   }
 }
