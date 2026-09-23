@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../hooks/useTheme';
 import { Loader2, Upload, Check, X, UploadCloud } from 'lucide-react';
-import { isOfficeFile, isImageFile, isTextFile, getFileTypeCategory } from '../utils/fileViewerUtils';
+import { isImageFile, isTextFile, getFileTypeCategory } from '../utils/fileViewerUtils';
 
 // Helper to check demo mode
 const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';

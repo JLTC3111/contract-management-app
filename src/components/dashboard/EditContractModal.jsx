@@ -1,9 +1,10 @@
+import { useStorageFolder, isStorageFolder } from '../../hooks/useStorageFolder';
+import DocumentBreadcrumbs from './DocumentBreadcrumbs';
 // src/components/dashboard/EditContractModal.jsx
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { GripHorizontal, RotateCcw, Trash2, X } from 'lucide-react';
-import { storageApi } from '../../api/contracts';
+import { Folder, GripHorizontal, RotateCcw, Trash2, X } from 'lucide-react';
 import { formatFileSize } from '../../utils/formatters';
 import { ADVANCEABLE_STAGES, getContractStage, getStageLabel } from '../../utils/stages';
 import { CONTRACT_CATEGORIES, getCategoryLabel } from '../../utils/constants';
@@ -51,20 +52,10 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
   const [attachments, setAttachments] = useState([]);
   // Already-uploaded files, and the ones ticked for deletion. Deletions are
   // staged like every other edit here: nothing leaves storage until Save.
-  const [uploaded, setUploaded] = useState([]);
-  const [loadingFiles, setLoadingFiles] = useState(true);
+  const folder = useStorageFolder(`uploads/${contract.id}`);
+  const uploaded = folder.files;
+  const loadingFiles = folder.loading;
   const [removed, setRemoved] = useState(() => new Set());
-
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      const files = await storageApi.listFiles(`uploads/${contract.id}`).catch(() => []);
-      if (!active) return;
-      setUploaded((files || []).filter((f) => f.metadata?.mimetype && f.name !== '.keep'));
-      setLoadingFiles(false);
-    })();
-    return () => { active = false; };
-  }, [contract.id]);
 
   const toggleRemoved = (name) => setRemoved((prev) => {
     const next = new Set(prev);
@@ -143,7 +134,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
       title: form.title.trim(),
       contract_value: form.contract_value === '' ? null : Number(form.contract_value),
       expiry_date: form.expiry_date || null,
-    }, attachments, [...removed]);
+    }, attachments, [...removed], folder.path);
   };
 
   // A legacy free-text category must stay selectable.
@@ -160,7 +151,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
 
   return (
     <>
-      <motion.div
+      <Motion.div
         className="ledger-scrim ledger-scrim--over-drawer"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -168,7 +159,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
         transition={{ duration: 0.18 }}
         onClick={onCancel}
       />
-      <motion.form
+      <Motion.form
         className="ledger-modal ledger-modal--floating"
         role="dialog"
         aria-label={t('dashboard.editContract', 'Edit contract')}
@@ -246,6 +237,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
           <div className="ledger-field ledger-field--wide">
             <span>{t('dashboard.documents', 'Documents')}</span>
 
+            <DocumentBreadcrumbs folder={folder} />
             {loadingFiles ? (
               <p className="ledger-attach__hint">{t('dashboard.loadingFiles', 'Loading files...')}</p>
             ) : uploaded.length === 0 ? (
@@ -254,7 +246,15 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
               <>
                 <ul className="ledger-attach__list">
                   {uploaded.map((file) => {
-                    const marked = removed.has(file.name);
+                    const relativeName = folder.relativeName(file.name);
+                    const marked = removed.has(relativeName);
+                    if (isStorageFolder(file)) return (
+                      <li key={relativeName} className="ledger-attach__item">
+                        <button type="button" className="ledger-btn ledger-btn--ghost" onClick={() => folder.enter(file.name)}>
+                          <Folder size={14} aria-hidden="true" /> {file.name}
+                        </button>
+                      </li>
+                    );
                     return (
                       <li
                         key={file.name}
@@ -267,7 +267,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
                         <button
                           type="button"
                           className="ledger-attach__remove"
-                          onClick={() => toggleRemoved(file.name)}
+                          onClick={() => toggleRemoved(relativeName)}
                           aria-label={marked
                             ? t('dashboard.keepFile', 'Keep {{name}}', { name: file.name })
                             : t('dashboard.deleteFile', 'Delete {{name}}', { name: file.name })}
@@ -305,7 +305,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
           role="separator"
           aria-label={t('dashboard.resize', 'Resize')}
         />
-      </motion.form>
+      </Motion.form>
     </>
   );
 };

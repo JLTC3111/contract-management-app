@@ -1,5 +1,5 @@
 // src/components/layout/RssPulse.jsx
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { __iconNode as rssNode } from 'lucide-react/dist/esm/icons/rss.js';
 
 // lucide `rss` = inner arc (r9), outer arc (r16), and the dot.
@@ -34,8 +34,8 @@ const RssPulse = ({ size = 18, active = false, strokeWidth = 2 }) => {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <motion.path d={INNER} animate={inner} />
-      <motion.path d={OUTER} animate={outer} />
+      <Motion.path d={INNER} animate={inner} />
+      <Motion.path d={OUTER} animate={outer} />
       <circle cx={DOT.cx} cy={DOT.cy} r={DOT.r} fill="currentColor" stroke="none" />
     </svg>
   );

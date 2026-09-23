@@ -12,14 +12,16 @@ import ForcePasswordChange from './components/ForcePasswordChange';
 import Layout from './components/Layout';
 import './index.css';
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
+import { passwordRecovery } from './utils/supaBaseClient';
 
 function App() {
   const { t } = useTranslation();
   const [isBot, setIsBot] = useState(false);
   const [forcePasswordChange, setForcePasswordChange] = useState(false);
   const { user, loading } = useUser();
+  const recovery = useSyncExternalStore(passwordRecovery.subscribe, passwordRecovery.getSnapshot);
 
   useEffect(() => {
     if (navigator.userAgent.includes("Headless")) {
@@ -52,6 +54,7 @@ function App() {
     );
   }
 
+  if (recovery) return <Login recovery={recovery} />;
   if (loading) return <p>{t('common.loading')}</p>;
   if (!user) return <Login />;
 

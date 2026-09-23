@@ -1,28 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, Loader2 } from 'lucide-react';
-import { supabase } from '../utils/supaBaseClient';
 import { commentsApi } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-
-// Helper to check demo mode
-const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
-
-// Centralized Supabase insert helper
-const insertToSupabase = async (table, payload) => {
-  const { data, error } = await supabase.from(table).insert(payload);
-  if (error) {
-    console.error(`Supabase ${table} insert error:`, {
-      message: error.message,
-      details: error.details,
-      hint: error.hint,
-      code: error.code
-    });
-    throw error;
-  }
-  return data;
-};
 
 // Date formatting helper
 const formatDate = (dateString) => {
@@ -34,7 +15,7 @@ const formatDate = (dateString) => {
       hour: '2-digit',
       minute: '2-digit'
     });
-  } catch (error) {
+  } catch {
     return 'Invalid date';
   }
 };
@@ -78,14 +59,6 @@ const commentHeaderStyle = {
 const commentTextStyle = {
   marginTop: 8,
   whiteSpace: 'pre-wrap'
-};
-
-const deleteButtonStyle = {
-  marginLeft: 'auto',
-  marginTop: 8,
-  float: 'right',
-  background: '#ef4444',
-  color: '#fff'
 };
 
 // Component to display individual comment

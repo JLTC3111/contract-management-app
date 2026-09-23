@@ -147,6 +147,14 @@
     "enterEmailFirst": "先にメールアドレスを入力してください。",
     "resetSent": "再設定用のリンクをメールで送信しました。"
   },
+  "passwordRecovery": {
+    "title": "パスワードをリセット",
+    "description": "{{email}} の新しいパスワードを設定してください。",
+    "save": "新しいパスワードを保存",
+    "invalidLink": "このリンクは無効か、有効期限が切れています。ログイン画面に戻り、新しいリンクをリクエストしてください。",
+    "backToLogin": "ログイン画面に戻る",
+    "continue": "続ける"
+  },
   "headers": {
     "userManual": "ユーザーマニュアル",
     "changePassword": "パスワードを変更"

@@ -7,6 +7,8 @@
 import { supabase } from '../utils/supaBaseClient';
 import { partialSearchMatch } from '../utils/searchUtils';
 import { contractsSchema } from './schemaAdapter';
+import { fetchAllRows } from './pagination';
+import { getContractStage, getNextStage, stageUpdatePayload } from '../utils/stages';
 import { 
   getDemoContracts, 
   setDemoContracts, 
@@ -156,7 +158,7 @@ const demoContractsApi = {
     };
     
     contracts.forEach(contract => {
-      if (counts.hasOwnProperty(contract.status)) {
+      if (Object.prototype.hasOwnProperty.call(counts, contract.status)) {
         counts[contract.status]++;
       }
     });
@@ -210,6 +212,12 @@ const demoPhasesApi = {
       ...updates,
       updated_at: new Date().toISOString(),
     };
+    if (updates.status === 'completed') {
+      const phase = phases[index];
+      const next = phases.find((item) => item.contract_id === phase.contract_id &&
+        item.phase_number === phase.phase_number + 1 && item.status === 'pending');
+      if (next) Object.assign(next, { status: 'active', start_date: new Date().toISOString() });
+    }
     setDemoPhases(phases);
     return phases[index];
   },
@@ -283,7 +291,7 @@ const demoStorageApi = {
     console.log('[Demo Mode] Simulated file delete:', path);
   },
 
-  async getSignedUrl(path, expiresIn = 3600) {
+  async getSignedUrl(path) {
     // Return a placeholder URL for demo mode
     console.log('[Demo Mode] Simulated signed URL request:', path);
     return null;
@@ -344,56 +352,23 @@ const demoApprovalsApi = {
     return approvals[index];
   },
 
-  async approve(approvalId, response) {
+  async decide(id, decision) {
     const approvals = getDemoApprovals();
-    const index = approvals.findIndex(a => a.id === approvalId);
-    if (index === -1) {
-      throw new Error('Approval not found');
-    }
-    approvals[index] = {
-      ...approvals[index],
-      status: 'approved',
-      response,
-      responded_at: new Date().toISOString(),
-    };
-    setDemoApprovals(approvals);
-    
-    // Also update the contract status
+    const request = approvals.find((item) => String(item.id) === String(id));
+    if (!request || request.status !== 'pending') throw new Error('This request has already been decided');
+    if (!['approved', 'rejected'].includes(decision)) throw new Error('Invalid decision');
     const contracts = getDemoContracts();
-    const contractIndex = contracts.findIndex(c => c.id === approvals[index].contract_id);
-    if (contractIndex !== -1) {
-      contracts[contractIndex].status = 'approved';
-      contracts[contractIndex].updated_at = new Date().toISOString();
-      setDemoContracts(contracts);
-    }
-    
-    return approvals[index];
-  },
-
-  async reject(approvalId, response) {
-    const approvals = getDemoApprovals();
-    const index = approvals.findIndex(a => a.id === approvalId);
-    if (index === -1) {
-      throw new Error('Approval not found');
-    }
-    approvals[index] = {
-      ...approvals[index],
-      status: 'rejected',
-      response,
-      responded_at: new Date().toISOString(),
-    };
+    const contract = contracts.find((item) => item.id === request.contract_id);
+    if (!contract) throw new Error('Contract not found');
+    const stage = getContractStage(contract);
+    const next = ['draft', 'in_review'].includes(stage) ? 'negotiation' : getNextStage(stage);
+    if (!next) throw new Error('Contract cannot advance');
+    Object.assign(contract, decision === 'approved' ? stageUpdatePayload(next) : { status: 'rejected' });
+    request.status = decision;
+    request.updated_at = contract.updated_at = new Date().toISOString();
+    setDemoContracts(contracts);
     setDemoApprovals(approvals);
-    
-    // Also update the contract status
-    const contracts = getDemoContracts();
-    const contractIndex = contracts.findIndex(c => c.id === approvals[index].contract_id);
-    if (contractIndex !== -1) {
-      contracts[contractIndex].status = 'rejected';
-      contracts[contractIndex].updated_at = new Date().toISOString();
-      setDemoContracts(contracts);
-    }
-    
-    return approvals[index];
+    return request;
   }
 };
 
@@ -420,36 +395,17 @@ export const contractsApi = {
       return demoContractsApi.getAll(options);
     }
     
-    let query = supabase.from('contracts').select('*');
-    
-    // Apply filters
-    if (options.status && options.status !== 'all') {
-      query = query.eq('status', options.status);
-    }
-    
-    if (options.search) {
-      query = query.ilike('title', `%${options.search}%`);
-    }
-    
-    // Apply ordering
-    if (options.orderBy) {
-      query = query.order(options.orderBy, { ascending: options.ascending ?? false });
-    } else {
-      query = query.order('updated_at', { ascending: false });
-    }
-    
-    // Apply pagination
-    if (options.limit) {
-      query = query.limit(options.limit);
-    }
-    
-    if (options.offset) {
-      query = query.range(options.offset, options.offset + (options.limit || 10) - 1);
-    }
-    
-    const { data, error } = await query;
+    const data = await fetchAllRows((withCount) => {
+      let query = supabase.from('contracts').select('*', withCount ? { count: 'exact' } : {});
+      if (options.status && options.status !== 'all') query = query.eq('status', options.status);
+      if (options.search) query = query.ilike('title', `%${options.search}%`);
+      const orderBy = options.orderBy || 'updated_at';
+      query = query.order(orderBy, { ascending: options.ascending ?? false });
+      // A unique tie-breaker keeps page boundaries stable for equal timestamps.
+      if (orderBy !== 'id') query = query.order('id', { ascending: true });
+      return query;
+    }, options);
 
-    if (error) throw error;
     // Raw row: tells us which columns this deployment actually has.
     contractsSchema.learnFromRow(data?.[0]);
     return normalizeContractRows(data || []);
@@ -586,7 +542,7 @@ export const contractsApi = {
     };
     
     data?.forEach(contract => {
-      if (counts.hasOwnProperty(contract.status)) {
+      if (Object.prototype.hasOwnProperty.call(counts, contract.status)) {
         counts[contract.status]++;
       }
     });
@@ -889,14 +845,17 @@ export const storageApi = {
       return demoStorageApi.listFiles(folder);
     }
     
-    const { data, error } = await supabase.storage
-      .from('contracts')
-      .list(folder, {
-        sortBy: { column: 'name', order: 'asc' }
+    const files = [];
+    let offset = 0;
+    while (true) {
+      const { data, error } = await supabase.storage.from('contracts').list(folder, {
+        sortBy: { column: 'name', order: 'asc' }, limit: 100, offset,
       });
-    
-    if (error) throw error;
-    return data || [];
+      if (error) throw error;
+      if (!data?.length) return files;
+      files.push(...data);
+      offset += data.length;
+    }
   }
 };
 
@@ -982,40 +941,12 @@ export const approvalsApi = {
     return data;
   },
 
-  async approve(approvalId, response) {
-    if (isDemoMode()) {
-      return demoApprovalsApi.approve(approvalId, response);
-    }
-    const { data, error } = await supabase
-      .from('contract_approval_requests')
-      .update({
-        status: 'approved',
-        response,
-        responded_at: new Date().toISOString()
-      })
-      .eq('id', approvalId)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data;
-  },
-
-  async reject(approvalId, response) {
-    if (isDemoMode()) {
-      return demoApprovalsApi.reject(approvalId, response);
-    }
-    const { data, error } = await supabase
-      .from('contract_approval_requests')
-      .update({
-        status: 'rejected',
-        response,
-        responded_at: new Date().toISOString()
-      })
-      .eq('id', approvalId)
-      .select()
-      .single();
-    
+  async decide(id, decision) {
+    if (isDemoMode()) return demoApprovalsApi.decide(id, decision);
+    const { data, error } = await supabase.rpc('decide_contract_approval', {
+      p_request_id: id,
+      p_decision: decision,
+    }).single();
     if (error) throw error;
     return data;
   }

@@ -4,20 +4,8 @@ import { useTranslation } from 'react-i18next';
 const OfficeViewer = ({ fileUrl, fileType, fileName }) => {
   const [viewMode, setViewMode] = useState('online'); // 'online', 'google'
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const { t } = useTranslation();
 
-
-  // Office file extensions
-  const officeExtensions = {
-    docx: 'document',
-    doc: 'document',
-    xlsx: 'spreadsheet',
-    xls: 'spreadsheet',
-    pptx: 'presentation',
-    ppt: 'presentation',
-    pdf: 'pdf'
-  };
 
   // Get Microsoft Office Online Viewer URL
   const getOfficeOnlineUrl = (url) => {
@@ -48,21 +36,6 @@ const OfficeViewer = ({ fileUrl, fileType, fileName }) => {
         fontSize: '1.1rem'
       }}>
         Loading {fileType.toUpperCase()} file...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div style={{ 
-        color: 'red', 
-        padding: '1rem', 
-        textAlign: 'center',
-        background: '#fef2f2',
-        border: '1px solid #fecaca',
-        borderRadius: '8px'
-      }}>
-        {error}
       </div>
     );
   }

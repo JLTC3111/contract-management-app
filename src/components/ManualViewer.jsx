@@ -171,7 +171,7 @@ ${t('manual.error.fallback', 'You can try:')}
 
   // Custom component renderers for ReactMarkdown
   const markdownComponents = {
-    h3: ({ node, children, ...props }) => {
+    h3: ({ node: _node, children, ...props }) => {
       const childArray = React.Children.toArray(children);
       if (childArray.length === 0) return <h3 {...props}>{children}</h3>;
 
@@ -207,7 +207,7 @@ ${t('manual.error.fallback', 'You can try:')}
       }
       return <h3 {...props} style={{ textAlign: 'center' }}>{children}</h3>;
     },
-    p: ({ node, children, ...props }) => {
+    p: ({ node: _node, children, ...props }) => {
       const childArray = React.Children.toArray(children);
       const textContent = childArray
         .map(child => (typeof child === 'string' ? child : ''))

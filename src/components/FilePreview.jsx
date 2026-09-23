@@ -43,7 +43,6 @@ const FileTypeIcon = ({ fileType, size = 20 }) => {
 
 const FilePreview = ({ file, onClose }) => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (file) {
@@ -79,21 +78,6 @@ const FilePreview = ({ file, onClose }) => {
     );
   }
 
-  if (error) {
-    return (
-      <div style={{ 
-        color: 'red', 
-        padding: '1rem', 
-        textAlign: 'center',
-        background: '#fef2f2',
-        border: '1px solid #fecaca',
-        borderRadius: '8px'
-      }}>
-        {error}
-      </div>
-    );
-  }
-
   const previewProps = getFilePreviewProps(file);
   const viewerComponent = getViewerComponent(file.name);
 
@@ -105,10 +89,6 @@ const FilePreview = ({ file, onClose }) => {
       
       case 'ImagePreview':
         return <ImagePreview fileUrl={previewProps.fileUrl} />;
-      
-      case 'OfficeViewer':
-      case 'DocxPreview': // Fallback to OfficeViewer for DOCX files
-      case 'PptxPreview': // Fallback to OfficeViewer for PPTX files
       
       default:
         return (

@@ -100,7 +100,7 @@ const PhaseTimeline = ({
     }
   };
 
-  const getConnectorColor = (fromStatus, toStatus) => {
+  const getConnectorColor = (fromStatus) => {
     if (fromStatus === 'completed') {
       return darkMode ? 'bg-green-600' : 'bg-green-500';
     }

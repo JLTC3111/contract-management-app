@@ -148,6 +148,14 @@
     "enterEmailFirst": "Enter your email address first.",
     "resetSent": "Check your inbox for a reset link."
   },
+  "passwordRecovery": {
+    "title": "Reset password",
+    "description": "Choose a new password for {{email}}.",
+    "save": "Save new password",
+    "invalidLink": "This reset link is invalid or has expired. Return to login and request a new link.",
+    "backToLogin": "Back to login",
+    "continue": "Continue"
+  },
   "headers": {
     "userManual": "User Manual",
     "changePassword": "Change Password"

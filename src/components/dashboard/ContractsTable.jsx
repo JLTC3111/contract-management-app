@@ -1,7 +1,7 @@
 // src/components/dashboard/ContractsTable.jsx
 import { useTranslation } from 'react-i18next';
 import {
-  currencyForLocale,
+  CONTRACT_CURRENCY,
   formatCompactCurrency,
   formatMonthYear,
   getI18nOrFallback,
@@ -76,7 +76,7 @@ const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen, on
                   <span className="meta-owner">{c.author || '—'}</span>
                   <span className="meta-value">
                     {c.contract_value
-                      ? formatCompactCurrency(c.contract_value, currencyForLocale(i18n.language), i18n.language)
+                      ? formatCompactCurrency(c.contract_value, CONTRACT_CURRENCY, i18n.language)
                       : '—'}
                   </span>
                   <span className="meta-expires">{shortDate(c.expiry_date, i18n.language)}</span>
@@ -87,7 +87,7 @@ const ContractsTable = ({ contracts, selected, onToggle, onToggleAll, onOpen, on
               <td className="col-owner">{c.author || '—'}</td>
               <td className="col-value ledger-table__num">
                 {c.contract_value
-                  ? formatCompactCurrency(c.contract_value, currencyForLocale(i18n.language), i18n.language)
+                  ? formatCompactCurrency(c.contract_value, CONTRACT_CURRENCY, i18n.language)
                   : '—'}
               </td>
               <td className="col-expires">{shortDate(c.expiry_date, i18n.language)}</td>

@@ -1,6 +1,6 @@
 // src/components/dashboard/StatStrip.jsx
 import { useTranslation } from 'react-i18next';
-import { currencyForLocale, formatCompactCurrency } from '../../utils/formatters';
+import { CONTRACT_CURRENCY, formatCompactCurrency } from '../../utils/formatters';
 
 /**
  * Four equal cells, plain numbers, no charts.
@@ -13,7 +13,7 @@ const StatStrip = ({ totals }) => {
     {
       key: 'value',
       label: t('dashboard.stats.activeValue', 'Active value'),
-      value: formatCompactCurrency(totals.activeValue, currencyForLocale(i18n.language), i18n.language),
+      value: formatCompactCurrency(totals.activeValue, CONTRACT_CURRENCY, i18n.language),
     },
     { key: 'expiring', label: t('dashboard.stats.expiring', 'Expiring soon'), value: totals.expiring },
     { key: 'pending', label: t('dashboard.stats.pending', 'Pending approval'), value: totals.pending },

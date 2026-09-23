@@ -15,7 +15,7 @@ import {
   BarChart3,
   Gamepad2,
 } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion as Motion } from 'framer-motion';
 import { useUser } from '../../hooks/useUser';
 import { useTheme } from '../../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
@@ -346,7 +346,7 @@ const SidebarMobile = () => {
               />
               <AnimatePresence>
                 {isHovered && !isMobile && !collapsed && (
-                  <motion.div
+                  <Motion.div
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 5 }}
                     exit={{ opacity: 0, x: 15 }}
@@ -367,7 +367,7 @@ const SidebarMobile = () => {
                     }}
                   >
                     {t('sidebar.visitIcueTooltip')}
-                  </motion.div>
+                  </Motion.div>
                 )}
               </AnimatePresence>
             </div>
@@ -449,7 +449,7 @@ const SidebarMobile = () => {
             {/* Profile Submenu - Desktop */}
             <AnimatePresence initial={false} mode="wait">
               {!collapsed && profileOpen && !isMobile && (
-                <motion.div
+                <Motion.div
                   key="profile-submenu"
                   initial={{ opacity: 0, maxHeight: 0 }}
                   animate={{ opacity: 1, maxHeight: '100%' }} 
@@ -458,7 +458,7 @@ const SidebarMobile = () => {
                   style={{ overflow: 'hidden' }}
                 >
                   <SubMenu items={profileMenuItems} />
-                </motion.div>
+                </Motion.div>
               )}
             </AnimatePresence>
 
@@ -495,7 +495,7 @@ const SidebarMobile = () => {
 
       {/* Mobile Profile Submenu */}
       {isMobile && profileOpen && (
-        <motion.div
+        <Motion.div
           className="mobile-submenu-modal"
           style={{
             position: 'fixed',
@@ -516,7 +516,7 @@ const SidebarMobile = () => {
           }}
         >
           <SubMenu className="mobile-submenu-subitems" items={profileMenuItems} />
-        </motion.div>
+        </Motion.div>
       )}
 
       {/* Password Change Modal */}

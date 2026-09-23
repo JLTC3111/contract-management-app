@@ -1,3 +1,4 @@
+import { canEditContracts } from '../utils/permissions';
 // src/pages/Dashboard.jsx
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
@@ -40,6 +41,7 @@ const Dashboard = () => {
   const { t } = useTranslation();
   const { user } = useUser() ?? {};
   const navigate = useNavigate();
+  const canEdit = canEditContracts(user);
 
   const [contracts, setContracts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -145,6 +147,7 @@ const Dashboard = () => {
 
   /** Moves each contract one stage along, writing stage + status together. */
   const advance = async (targets) => {
+    if (!canEdit || busy) return;
     const movable = targets
       .map((c) => ({ contract: c, next: getNextStage(getContractStage(c)) }))
       .filter((x) => x.next);
@@ -167,7 +170,8 @@ const Dashboard = () => {
   };
 
 
-  const handleSave = async (target, updates, attachments = [], removedFiles = []) => {
+  const handleSave = async (target, updates, attachments = [], removedFiles = [], attachmentFolder = '') => {
+    if (!canEdit || busy) return;
     setBusy(true);
     try {
       const { stage, ...rest } = updates;
@@ -181,7 +185,7 @@ const Dashboard = () => {
         }
       }
       if (attachments.length) {
-        const { failed } = await uploadAttachments(target.id, attachments);
+        const { failed } = await uploadAttachments(target.id, attachments, attachmentFolder);
         if (failed.length) {
           window.alert(t('dashboard.uploadFailed', 'Some files did not upload: {{names}}', {
             names: failed.map((f) => f.name).join(', '),
@@ -199,6 +203,7 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (target) => {
+    if (!canEdit || busy) return;
     const confirmed = window.confirm(
       t('dashboard.confirmDelete', 'Delete "{{name}}"? This cannot be undone.', {
         name: titleOf(target),
@@ -234,6 +239,7 @@ const Dashboard = () => {
    * rather than only doing so for the Draft -> In Review case.
    */
   const handleSendForApproval = async (target) => {
+    if (!canEdit || busy) return;
     try {
       // The board would otherwise show one card per click.
       const pending = await approvalsApi.getPending().catch(() => []);
@@ -294,7 +300,7 @@ const Dashboard = () => {
         onNotificationClick={handleNotification}
         approvalsCount={pendingApproval.length}
         onApprovals={() => navigate('/approvals')}
-        onNew={() => navigate('/new')}
+        onNew={canEdit ? () => navigate('/new') : undefined}
       />
 
       {loading ? (
@@ -346,7 +352,7 @@ const Dashboard = () => {
             busy={busy}
             onClose={() => setDrawerId(null)}
             onAdvance={(c) => advance([c])}
-            onEdit={(c) => setEditing(c)}
+            onEdit={(c) => { if (canEdit) setEditing(c); }}
             onDelete={handleDelete}
             onSendForApproval={handleSendForApproval}
             onOpenRecord={openRecord}

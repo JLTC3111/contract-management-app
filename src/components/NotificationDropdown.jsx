@@ -44,9 +44,9 @@ const NotificationDropdown = () => {
   const [approvalStatusNotifications, setApprovalStatusNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [generalCount, setGeneralCount] = useState(0);
-  const [commentCount, setCommentCount] = useState(0);
-  const [approvalStatusCount, setApprovalStatusCount] = useState(0);
+  const [, setGeneralCount] = useState(0);
+  const [, setCommentCount] = useState(0);
+  const [, setApprovalStatusCount] = useState(0);
   const [readNotifications, setReadNotifications] = useState(new Set());
   const [autoRefreshInterval, setAutoRefreshInterval] = useState(null);
   const { t } = useTranslation();

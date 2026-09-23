@@ -8,11 +8,12 @@ import { useTheme } from '../hooks/useTheme';
 import { useLoginPhotos } from '../hooks/useLoginPhotos';
 import { authErrorMessage } from '../utils/authErrors';
 import { LANGUAGES, languageFor } from '../i18n/languages';
+import PasswordRecoveryForm from '../components/PasswordRecoveryForm';
 // The display face for the headline and the wordmark. Self-hosted, so no CDN.
 import '@fontsource-variable/archivo';
 import './login.css';
 
-const Login = () => {
+const Login = ({ recovery }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { darkMode, toggleDarkMode } = useTheme();
@@ -154,9 +155,10 @@ const Login = () => {
       <div className="auth-split">
         {/* Form column. Ordered first below 900px - see login.css. */}
         <section className="auth-form-col">
-          <h1 className="auth-form__title">{t('login.loginButton', 'Đăng nhập')}</h1>
+          <h1 className="auth-form__title">{t(recovery ? 'passwordRecovery.title' : 'login.loginButton')}</h1>
           <hr className="auth-rule" />
 
+          {recovery ? <PasswordRecoveryForm recovery={recovery} /> : (
           <form className="auth-form" onSubmit={handleLogin}>
             <label className="field">
               <span>{t('login.email', 'Email')}</span>
@@ -218,6 +220,7 @@ const Login = () => {
               {t('login.noAccount', 'Chưa có tài khoản? Liên hệ quản trị viên.')}
             </p>
           </form>
+          )}
         </section>
 
         <section className="auth-hero">

@@ -1,9 +1,12 @@
+import { useStorageFolder, isStorageFolder } from '../hooks/useStorageFolder';
+import DocumentBreadcrumbs from '../components/dashboard/DocumentBreadcrumbs';
+import { canEditContracts } from '../utils/permissions';
 // src/pages/ContractRecord.jsx
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence } from 'framer-motion';
-import { ArrowLeft, FileText, FolderPlus, Pencil, Trash2, Workflow } from 'lucide-react';
+import { ArrowLeft, FileText, Folder, FolderPlus, Pencil, Trash2, Workflow } from 'lucide-react';
 import toast from 'react-hot-toast';
 import {
   approvalsApi,
@@ -13,7 +16,7 @@ import {
 } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
 import {
-  currencyForLocale,
+  CONTRACT_CURRENCY,
   formatCurrency,
   formatDate,
   formatFileSize,
@@ -48,12 +51,14 @@ const ContractRecord = () => {
   const [busy, setBusy] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  const [documents, setDocuments] = useState([]);
+  const folder = useStorageFolder(`uploads/${contractId}`);
+  const documents = folder.files;
+  const loadDocuments = folder.reload;
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [posting, setPosting] = useState(false);
 
-  const canEdit = !!user && ['admin', 'editor'].includes(user.role);
+  const canEdit = canEditContracts(user);
 
   const loadContract = useCallback(async () => {
     if (!contractId) return;
@@ -68,19 +73,12 @@ const ContractRecord = () => {
     }
   }, [contractId]);
 
-  const loadDocuments = useCallback(async () => {
-    const files = await storageApi.listFiles(`uploads/${contractId}`).catch(() => []);
-    // `.keep` markers only exist to hold an empty folder open; a folder entry has
-    // no mimetype at all.
-    setDocuments((files || []).filter((f) => f.metadata?.mimetype && f.name !== '.keep'));
-  }, [contractId]);
-
   const loadComments = useCallback(async () => {
     setComments(await commentsApi.getByContractId(contractId).catch(() => []) || []);
   }, [contractId]);
 
   useEffect(() => { loadContract(); }, [loadContract]);
-  useEffect(() => { loadDocuments(); loadComments(); }, [loadDocuments, loadComments]);
+  useEffect(() => { loadComments(); }, [loadComments]);
 
   useEffect(() => {
     if (contractId) localStorage.setItem(LAST_RECORD_KEY, String(contractId));
@@ -88,7 +86,7 @@ const ContractRecord = () => {
 
   const stage = getContractStage(contract);
   const title = contract ? getI18nOrFallback(t, contract, 'title_i18n', 'title') : '';
-  const canSendForApproval = stage === APPROVAL_STAGE;
+  const canSendForApproval = canEdit && stage === APPROVAL_STAGE;
 
   /**
    * Activity, derived from where the contract sits in the stage order: every
@@ -111,7 +109,7 @@ const ContractRecord = () => {
   const facts = useMemo(() => {
     if (!contract) return [];
     const money = contract.contract_value
-      ? formatCurrency(contract.contract_value, currencyForLocale(i18n.language), i18n.language)
+      ? formatCurrency(contract.contract_value, CONTRACT_CURRENCY, i18n.language)
       : '—';
     return [
       { key: 'status', label: t('status_label', 'Status'), node: <StageTag stage={stage} /> },
@@ -144,14 +142,15 @@ const ContractRecord = () => {
 
   const openDocument = async (name) => {
     try {
-      const url = await storageApi.getSignedUrl(`uploads/${contractId}/${name}`);
+      const url = await storageApi.getSignedUrl(`${folder.prefix}/${name}`);
       if (url) window.open(url, '_blank', 'noopener');
     } catch (err) {
       console.error('Could not open document:', err);
     }
   };
 
-  const handleSave = async (target, updates, attachments = [], removedFiles = []) => {
+  const handleSave = async (target, updates, attachments = [], removedFiles = [], attachmentFolder = '') => {
+    if (!canEdit || busy) return;
     setBusy(true);
     try {
       const { stage: nextStage, ...rest } = updates;
@@ -165,7 +164,7 @@ const ContractRecord = () => {
         }
       }
       if (attachments.length) {
-        const { failed } = await uploadAttachments(target.id, attachments);
+        const { failed } = await uploadAttachments(target.id, attachments, attachmentFolder);
         if (failed.length) {
           toast.error(t('dashboard.uploadFailed', 'Some files did not upload: {{names}}', {
             names: failed.map((f) => f.name).join(', '),
@@ -183,6 +182,7 @@ const ContractRecord = () => {
   };
 
   const handleDelete = async () => {
+    if (!canEdit || busy) return;
     const confirmed = window.confirm(
       t('dashboard.confirmDelete', 'Delete "{{name}}"? This cannot be undone.', { name: title })
     );
@@ -204,10 +204,11 @@ const ContractRecord = () => {
   /** A folder exists in storage only as long as something is in it, so a new one
       is held open by a `.keep` marker - the same convention FileBrowser used. */
   const handleNewFolder = async () => {
+    if (!canEdit || busy) return;
     const raw = window.prompt(t('record.newFolderPrompt', 'Folder name'));
     if (raw === null) return;
     const name = sanitizeFileName(raw.trim());
-    if (!name) {
+    if (!name || name === '.' || name === '..') {
       toast.error(t('record.folderNameInvalid', 'Folder name must contain letters or numbers.'));
       return;
     }
@@ -215,7 +216,7 @@ const ContractRecord = () => {
     setBusy(true);
     try {
       await storageApi.upload(
-        `uploads/${contractId}/${name}/.keep`,
+        `${folder.prefix}/${name}/.keep`,
         new Blob(['keep'], { type: 'text/plain' })
       );
       toast.success(t('record.folderCreated', 'Folder "{{name}}" created.', { name }));
@@ -233,6 +234,7 @@ const ContractRecord = () => {
    * otherwise show one card per click, so an existing request short-circuits.
    */
   const handleSendForApproval = async () => {
+    if (!canEdit || busy) return;
     setBusy(true);
     try {
       const pending = await approvalsApi.getPending().catch(() => []);
@@ -426,7 +428,8 @@ const ContractRecord = () => {
             </button>
           </div>
           <div className="ledger-panel__body">
-            {documents.length === 0 ? (
+            <DocumentBreadcrumbs folder={folder} />
+            {documents.length === 0 && !folder.loading ? (
               <p className="ledger-record__empty">{t('dashboard.noDocuments', 'No documents yet.')}</p>
             ) : (
               documents.map((doc) => (
@@ -434,12 +437,12 @@ const ContractRecord = () => {
                   key={doc.name}
                   type="button"
                   className="ledger-record__row"
-                  onClick={() => openDocument(doc.name)}
+                  onClick={() => isStorageFolder(doc) ? folder.enter(doc.name) : openDocument(doc.name)}
                 >
-                  <FileText size={16} aria-hidden="true" style={{ flexShrink: 0 }} />
+                  {isStorageFolder(doc) ? <Folder size={16} aria-hidden="true" /> : <FileText size={16} aria-hidden="true" style={{ flexShrink: 0 }} />}
                   <span className="ledger-record__row-name">{doc.name}</span>
                   <span className="ledger-record__row-meta">
-                    {formatFileSize(doc.metadata?.size ?? 0)}
+                    {isStorageFolder(doc) ? '→' : formatFileSize(doc.metadata?.size ?? 0)}
                   </span>
                 </button>
               ))

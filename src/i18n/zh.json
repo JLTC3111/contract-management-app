@@ -136,6 +136,14 @@
     "enterEmailFirst": "请先输入您的邮箱地址。",
     "resetSent": "重置链接已发送，请查收邮件。"
   },
+  "passwordRecovery": {
+    "title": "重置密码",
+    "description": "为 {{email}} 设置新密码。",
+    "save": "保存新密码",
+    "invalidLink": "此链接无效或已过期。请返回登录页面并申请新链接。",
+    "backToLogin": "返回登录",
+    "continue": "继续"
+  },
   "headers": {
     "userManual": "用户手册",
     "changePassword": "更改密码"

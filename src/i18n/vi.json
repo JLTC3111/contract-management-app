@@ -148,6 +148,14 @@
     "enterEmailFirst": "Vui lòng nhập địa chỉ email trước.",
     "resetSent": "Vui lòng kiểm tra email để đặt lại mật khẩu."
   },
+  "passwordRecovery": {
+    "title": "Đặt lại mật khẩu",
+    "description": "Chọn mật khẩu mới cho {{email}}.",
+    "save": "Lưu mật khẩu mới",
+    "invalidLink": "Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn. Quay lại trang đăng nhập và yêu cầu liên kết mới.",
+    "backToLogin": "Quay lại đăng nhập",
+    "continue": "Tiếp tục"
+  },
   "headers": {
     "userManual": "Hướng dẫn sử dụng",
     "changePassword": "Đổi mật khẩu"

@@ -1,6 +1,6 @@
 // src/components/dashboard/DashboardHeader.jsx
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Bell, CheckCircle, ChevronDown, Plus, Search } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
@@ -117,7 +117,7 @@ const DashboardHeader = ({
           </button>
 
           {bellOpen && (
-            <motion.div
+            <Motion.div
               className="ledger-notifications"
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
@@ -153,7 +153,7 @@ const DashboardHeader = ({
                   {t('dashboard.allClear', 'Nothing needs attention.')}
                 </span>
               )}
-            </motion.div>
+            </Motion.div>
           )}
         </div>
 
@@ -215,7 +215,7 @@ const DashboardHeader = ({
           <span className="ledger-btn__badge">{approvalsCount}</span>
         </button>
 
-        <button type="button" className="ledger-btn ledger-btn--primary" onClick={onNew}>
+        <button type="button" className="ledger-btn ledger-btn--primary" onClick={onNew} disabled={!onNew}>
           <Plus size={14} /> <span className="ledger-btn__label">{t('dashboard.newContract', 'New contract')}</span> 
         </button>
       </div>

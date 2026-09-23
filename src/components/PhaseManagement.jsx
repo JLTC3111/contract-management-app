@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { phasesApi } from '../api/contracts';
 import toast from 'react-hot-toast';
+import { useUser } from '../hooks/useUser';
+import { canEditContracts } from '../utils/permissions';
 import {
   DEFAULT_PHASES,
 } from './phase-management/constants';
@@ -13,6 +15,8 @@ import './phase-management/phases.css';
 
 const PhaseManagement = ({ contractId, onUpdate }) => {
   const { t } = useTranslation();
+  const { user } = useUser();
+  const canEdit = canEditContracts(user);
   const [phases, setPhases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -38,7 +42,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
       const existingPhases = await phasesApi.getByContractId(contractId);
 
       if (existingPhases?.length > 0) {
-        if (existingPhases.length < 6) {
+        if (canEdit && existingPhases.length < 6) {
           const missingPhaseNumbers = [];
           for (let i = 1; i <= 6; i += 1) {
             if (!existingPhases.find((p) => p.phase_number === i)) {
@@ -88,7 +92,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
         setPhases(existingPhases);
         const activePhase = existingPhases.find((p) => p.status === 'active');
         if (activePhase) setExpandedPhases(new Set([activePhase.id]));
-      } else {
+      } else if (canEdit) {
         await initializeDefaultPhases();
       }
     } catch (error) {
@@ -134,20 +138,23 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
   };
 
   const updatePhase = async (phaseId, updates, showToast = true) => {
+    if (!canEdit || saving) return false;
     try {
       setSaving(true);
 
       await phasesApi.update(phaseId, updates);
 
-      setPhases((prev) => prev.map((phase) => (
-        phase.id === phaseId ? { ...phase, ...updates } : phase
-      )));
+      // The database advances the next phase in the same transaction.
+      const latest = await phasesApi.getByContractId(contractId);
+      setPhases(latest);
 
       if (showToast) toast.success(t('phaseManagement.updated', 'Phase updated'));
       if (onUpdate) onUpdate();
+      return true;
     } catch (error) {
       console.error('Error updating phase:', error);
       toast.error(t('phaseManagement.errors.failedToUpdate', 'Failed to update phase'));
+      return false;
     } finally {
       setSaving(false);
     }
@@ -173,11 +180,6 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
         status: 'completed',
         end_date: new Date().toISOString(),
       };
-
-      const nextPhase = phases.find((p) => p.phase_number === phase.phase_number + 1);
-      if (nextPhase?.status === 'pending') {
-        await updatePhase(nextPhase.id, { status: 'active', start_date: new Date().toISOString() }, false);
-      }
     }
 
     await updatePhase(phaseId, updates, false);
@@ -204,7 +206,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
     const updatedTasks = [...(phase.tasks ?? []), newTask];
     const progress = Math.round((updatedTasks.filter((task) => task.completed).length / updatedTasks.length) * 100);
 
-    await updatePhase(phaseId, { tasks: updatedTasks, progress }, false);
+    if (!await updatePhase(phaseId, { tasks: updatedTasks, progress }, false)) return;
     setNewTaskInputs((prev) => ({ ...prev, [phaseId]: '' }));
     toast.success(t('phaseManagement.taskAdded', 'Task added'));
   };
@@ -220,7 +222,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
     }
 
     const progress = Math.round((updatedTasks.filter((task) => task.completed).length / updatedTasks.length) * 100);
-    await updatePhase(phaseId, { tasks: updatedTasks, progress }, false);
+    if (!await updatePhase(phaseId, { tasks: updatedTasks, progress }, false)) return;
     toast.success(t('phaseManagement.taskDeleted', 'Task deleted'));
   };
 
@@ -238,23 +240,20 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
       completed_at: new Date().toISOString(),
     }));
 
-    await updatePhase(phaseId, {
+    const saved = await updatePhase(phaseId, {
       status: 'completed',
       end_date: new Date().toISOString(),
       progress: 100,
       tasks: updatedTasks,
     });
 
-    const nextPhase = phases.find((p) => p.phase_number === phase.phase_number + 1);
-    if (nextPhase?.status === 'pending') {
-      await updatePhase(nextPhase.id, { status: 'active', start_date: new Date().toISOString() }, false);
-    }
+    if (!saved) return;
 
     setShowConfirmModal(null);
   };
 
   const reopenPhase = async (phaseId) => {
-    await updatePhase(phaseId, { status: 'active', end_date: null });
+    if (!await updatePhase(phaseId, { status: 'active', end_date: null })) return;
     setShowConfirmModal(null);
   };
 
@@ -299,6 +298,7 @@ const PhaseManagement = ({ contractId, onUpdate }) => {
           <PhaseCard
             key={phase.id}
             phase={phase}
+            readOnly={!canEdit || saving}
             index={index}
             phaseRef={(el) => { phaseRefs.current[index] = el; }}
             isExpanded={expandedPhases.has(phase.id)}

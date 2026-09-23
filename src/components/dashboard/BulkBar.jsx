@@ -1,6 +1,6 @@
 // src/components/dashboard/BulkBar.jsx
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { X } from 'lucide-react';
 
 /**
@@ -10,7 +10,7 @@ const BulkBar = ({ count, onClear }) => {
   const { t } = useTranslation();
 
   return (
-    <motion.div
+    <Motion.div
       className="ledger-bulkbar"
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -23,7 +23,7 @@ const BulkBar = ({ count, onClear }) => {
       <button type="button" className="ledger-btn ledger-btn--ghost" onClick={onClear}>
         <X size={14} /> {t('dashboard.clearSelection', 'Clear selection')}
       </button>
-    </motion.div>
+    </Motion.div>
   );
 };
 

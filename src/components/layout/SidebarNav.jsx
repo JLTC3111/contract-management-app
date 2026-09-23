@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
 

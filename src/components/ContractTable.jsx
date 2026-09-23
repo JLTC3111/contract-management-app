@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { 
   CheckCircle, Clock, FileText, XCircle, AlertOctagon, 
@@ -9,8 +9,8 @@ import {
 import './Table.css';
 
 // Centralized utilities
-import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS, getStatusColor } from '../utils/constants';
-import { formatDate, getDaysUntilExpiry, getI18nOrFallback, getContractStatusLabel, humanizeContractStatus, normalizeContractStatus } from '../utils/formatters';
+import { STATUS_COLORS, STATUS_ICONS, EXPIRY_THRESHOLDS } from '../utils/constants';
+import { formatDate, getDaysUntilExpiry, getI18nOrFallback, getContractStatusLabel, normalizeContractStatus } from '../utils/formatters';
 import { getSearchHighlightSegments, searchMultipleFields } from '../utils/searchUtils';
 import { StatusBadge } from './common';
 import Select from './common/Select';

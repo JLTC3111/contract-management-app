@@ -1,28 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Loader2 } from 'lucide-react';
-import { supabase } from '../utils/supaBaseClient';
 import { approvalsApi, contractsApi } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
-
-// Helper to check demo mode
-const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
-
-// Centralized Supabase insert helper
-const insertToSupabase = async (table, payload) => {
-  const { data, error } = await supabase.from(table).insert(payload);
-  if (error) {
-    console.error(`Supabase ${table} insert error:`, {
-      message: error.message,
-      details: error.details,
-      hint: error.hint,
-      code: error.code
-    });
-    throw error;
-  }
-  return data;
-};
 
 // Loading spinner component
 const LoadingSpinner = ({ size = 16 }) => (

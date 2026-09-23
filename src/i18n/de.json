@@ -146,6 +146,14 @@
     "enterEmailFirst": "Geben Sie zuerst Ihre E-Mail-Adresse ein.",
     "resetSent": "Prüfen Sie Ihren Posteingang auf den Link zum Zurücksetzen."
   },
+  "passwordRecovery": {
+    "title": "Passwort zurücksetzen",
+    "description": "Wählen Sie ein neues Passwort für {{email}}.",
+    "save": "Neues Passwort speichern",
+    "invalidLink": "Dieser Link ist ungültig oder abgelaufen. Kehren Sie zur Anmeldung zurück und fordern Sie einen neuen Link an.",
+    "backToLogin": "Zurück zur Anmeldung",
+    "continue": "Weiter"
+  },
   "headers": {
     "userManual": "Benutzerhandbuch",
     "changePassword": "Passwort ändern"

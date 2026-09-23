@@ -1,39 +1,29 @@
--- Fix RLS policy for contracts table
--- The error "only WITH CHECK expression allowed for INSERT" means
--- the current policy uses USING clause for INSERT, which is invalid
+-- Run the contract audit migration first; it also protects role assignment.
+-- Reapplying this legacy helper must not restore authentication-only writes.
+BEGIN;
+DO $$
+DECLARE p record;
+BEGIN
+  IF to_regprocedure('private.contract_role()') IS NULL THEN
+    RAISE EXCEPTION 'Apply the audit_contract_permissions_and_transitions migration first';
+  END IF;
+  FOR p IN SELECT policyname FROM pg_policies WHERE schemaname = 'public' AND tablename = 'contracts'
+  LOOP
+    EXECUTE format('DROP POLICY %I ON public.contracts', p.policyname);
+  END LOOP;
+END;
+$$;
+ALTER TABLE public.contracts ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.contracts FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.contracts TO authenticated;
+CREATE POLICY contract_members_read ON public.contracts FOR SELECT TO authenticated
+USING ((SELECT private.contract_role()) IN ('admin', 'editor', 'approver', 'viewer'));
+CREATE POLICY contract_editors_insert ON public.contracts FOR INSERT TO authenticated
+WITH CHECK ((SELECT private.contract_role()) IN ('admin', 'editor'));
+CREATE POLICY contract_editors_update ON public.contracts FOR UPDATE TO authenticated
+USING ((SELECT private.contract_role()) IN ('admin', 'editor'))
+WITH CHECK ((SELECT private.contract_role()) IN ('admin', 'editor'));
+CREATE POLICY contract_editors_delete ON public.contracts FOR DELETE TO authenticated
+USING ((SELECT private.contract_role()) IN ('admin', 'editor'));
 
--- First, drop the existing policies to start fresh
-DROP POLICY IF EXISTS "contracts_policy" ON contracts;
-DROP POLICY IF EXISTS "Users can insert contracts" ON contracts;
-DROP POLICY IF EXISTS "Users can view contracts" ON contracts;
-DROP POLICY IF EXISTS "Users can update contracts" ON contracts;
-DROP POLICY IF EXISTS "Users can delete contracts" ON contracts;
-
--- Create correct RLS policies
--- Policy for INSERT (only WITH CHECK allowed)
-CREATE POLICY "Users can insert contracts" ON contracts
-  FOR INSERT
-  WITH CHECK (auth.uid() IS NOT NULL);
-
--- Policy for SELECT
-CREATE POLICY "Users can view contracts" ON contracts
-  FOR SELECT
-  USING (auth.uid() IS NOT NULL);
-
--- Policy for UPDATE 
-CREATE POLICY "Users can update contracts" ON contracts
-  FOR UPDATE
-  USING (auth.uid() IS NOT NULL)
-  WITH CHECK (auth.uid() IS NOT NULL);
-
--- Policy for DELETE
-CREATE POLICY "Users can delete contracts" ON contracts
-  FOR DELETE
-  USING (auth.uid() IS NOT NULL);
-
--- Ensure RLS is enabled
-ALTER TABLE contracts ENABLE ROW LEVEL SECURITY;
-
--- Grant necessary permissions to authenticated users
-GRANT SELECT, INSERT, UPDATE, DELETE ON contracts TO authenticated;
-GRANT USAGE ON SEQUENCE contracts_id_seq TO authenticated;
+COMMIT;

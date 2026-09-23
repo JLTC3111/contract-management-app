@@ -10,7 +10,7 @@
 // the reverse is exactly the reverse. Geometry comes straight out of
 // lucide-react's icon nodes; flubber handles the disc -> crescent stage.
 import { useEffect } from 'react';
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion as Motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { fromCircle } from 'flubber';
 import { __iconNode as sunNode } from 'lucide-react/dist/esm/icons/sun.js';
 
@@ -93,12 +93,12 @@ const SunMoonIcon = ({
       strokeLinejoin="round"
       {...props}
     >
-      <motion.g style={{ opacity: rayOpacity, scale: rayScale }}>
+      <Motion.g style={{ opacity: rayOpacity, scale: rayScale }}>
         {SUN_RAYS.map((ray) => (
           <path key={ray} d={ray} />
         ))}
-      </motion.g>
-      <motion.path d={d} fill={fill} fillOpacity={fillOpacity} />
+      </Motion.g>
+      <Motion.path d={d} fill={fill} fillOpacity={fillOpacity} />
     </svg>
   );
 };

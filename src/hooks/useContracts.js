@@ -1,9 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { contractsApi } from '../api/contracts';
-import { getDemoContracts, setDemoContracts, generateDemoId } from '../data/mockData';
-
-// Helper to check demo mode
-const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
 
 /**
  * Custom hook for managing contracts data
@@ -77,7 +73,7 @@ export const useContracts = (options = {}) => {
     };
     
     contracts.forEach(contract => {
-      if (counts.hasOwnProperty(contract.status)) {
+      if (Object.prototype.hasOwnProperty.call(counts, contract.status)) {
         counts[contract.status]++;
       }
     });

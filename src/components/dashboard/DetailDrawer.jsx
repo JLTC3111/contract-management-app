@@ -1,12 +1,15 @@
+import { useStorageFolder, isStorageFolder } from '../../hooks/useStorageFolder';
+import DocumentBreadcrumbs from './DocumentBreadcrumbs';
+import { canEditContracts } from '../../utils/permissions';
 // src/components/dashboard/DetailDrawer.jsx
 import { useCallback, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ChevronsRight, FileText, Pencil, Trash2, X } from 'lucide-react';
+import { ChevronsRight, FileText, Folder, Pencil, Trash2, X } from 'lucide-react';
 import { commentsApi, phasesApi, storageApi } from '../../api/contracts';
 import { useUser } from '../../hooks/useUser';
 import {
-  currencyForLocale,
+  CONTRACT_CURRENCY,
   formatCurrency,
   formatDate,
   formatFileSize,
@@ -42,9 +45,11 @@ const DetailDrawer = ({
   const { t, i18n } = useTranslation();
   // Tolerate being rendered outside UserProvider (tests, storybook-style use).
   const { user } = useUser() ?? {};
+  const canEdit = canEditContracts(user);
   const [tab, setTab] = useState('overview');
   const [timeline, setTimeline] = useState([]);
-  const [documents, setDocuments] = useState([]);
+  const folder = useStorageFolder(`uploads/${contract.id}`);
+  const documents = folder.files;
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [posting, setPosting] = useState(false);
@@ -53,14 +58,13 @@ const DetailDrawer = ({
   const stage = getContractStage(contract);
   const next = getNextStage(stage);
   const title = getI18nOrFallback(t, contract, 'title_i18n', 'title');
-  const canSendForApproval = APPROVAL_REQUESTABLE_STAGES.includes(stage);
+  const canSendForApproval = canEdit && APPROVAL_REQUESTABLE_STAGES.includes(stage);
 
   useEffect(() => {
     let active = true;
     (async () => {
-      const [phases, files, notes] = await Promise.all([
+      const [phases, notes] = await Promise.all([
         phasesApi.getByContractId(contract.id).catch(() => []),
-        storageApi.listFiles(`uploads/${contract.id}`).catch(() => []),
         commentsApi.getByContractId(contract.id).catch(() => []),
       ]);
       if (!active) return;
@@ -70,7 +74,6 @@ const DetailDrawer = ({
         status: p.status,
         date: p.end_date || p.start_date || p.created_at || null,
       })));
-      setDocuments((files || []).filter((f) => f.metadata?.mimetype && f.name !== '.keep'));
       setComments(notes || []);
     })();
     return () => { active = false; };
@@ -85,7 +88,7 @@ const DetailDrawer = ({
 
   const openDocument = async (name) => {
     try {
-      const url = await storageApi.getSignedUrl(`uploads/${contract.id}/${name}`);
+      const url = await storageApi.getSignedUrl(`${folder.prefix}/${name}`);
       if (url) window.open(url, '_blank', 'noopener');
     } catch (err) {
       console.error('Could not open document:', err);
@@ -116,13 +119,14 @@ const DetailDrawer = ({
   };
 
   const sendForApproval = useCallback(async () => {
+    if (!canSendForApproval) return;
     setSending(true);
     try {
       await onSendForApproval(contract);
     } finally {
       setSending(false);
     }
-  }, [contract, onSendForApproval]);
+  }, [contract, onSendForApproval, canSendForApproval]);
 
   const facts = [
     { label: t('dashboard.col.owner', 'Owner'), value: contract.author || '—' },
@@ -130,7 +134,7 @@ const DetailDrawer = ({
     {
       label: t('dashboard.col.value', 'Value'),
       value: contract.contract_value
-        ? formatCurrency(contract.contract_value, currencyForLocale(i18n.language), i18n.language)
+        ? formatCurrency(contract.contract_value, CONTRACT_CURRENCY, i18n.language)
         : '—',
     },
     {
@@ -141,7 +145,7 @@ const DetailDrawer = ({
 
   return (
     <>
-      <motion.div
+      <Motion.div
         className="ledger-scrim"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -149,7 +153,7 @@ const DetailDrawer = ({
         transition={{ duration: 0.18 }}
         onClick={suppressDismiss ? undefined : onClose}
       />
-      <motion.aside
+      <Motion.aside
         className="ledger-drawer"
         role="dialog"
         aria-label={title || t('dashboard.contract', 'Contract')}
@@ -191,22 +195,22 @@ const DetailDrawer = ({
           <button
             type="button"
             className="ledger-btn ledger-btn--primary"
-            onClick={() => onAdvance(contract)}
-            disabled={!next || busy}
+            onClick={() => { if (canEdit) onAdvance(contract); }}
+            disabled={!canEdit || !next || busy}
             title={next
               ? t('dashboard.advanceTo', 'Advance to {{stage}}', { stage: getStageLabel(t, next) })
               : t('dashboard.noNextStage', 'No further stage')}
           >
             <ChevronsRight size={14} /> {t('dashboard.manageStage', 'Manage stage')}
           </button>
-          <button type="button" className="ledger-btn ledger-btn--ghost" onClick={() => onEdit(contract)}>
+          <button type="button" className="ledger-btn ledger-btn--ghost" onClick={() => { if (canEdit) onEdit(contract); }} disabled={!canEdit || busy}>
             <Pencil size={14} /> {t('buttons.edit', 'Edit')}
           </button>
           <button
             type="button"
             className="ledger-btn ledger-btn--danger"
-            onClick={() => onDelete(contract)}
-            disabled={busy}
+            onClick={() => { if (canEdit) onDelete(contract); }}
+            disabled={!canEdit || busy}
           >
             <Trash2 size={14} /> {t('buttons.deleteContract', 'Delete')}
           </button>
@@ -274,7 +278,8 @@ const DetailDrawer = ({
           <>
             <h3 className="ledger-drawer__section">{t('dashboard.documents', 'Documents')}</h3>
             <div className="ledger-docs">
-              {documents.length === 0 ? (
+              <DocumentBreadcrumbs folder={folder} />
+              {documents.length === 0 && !folder.loading ? (
                 <p className="ledger-drawer__empty">{t('dashboard.noDocuments', 'No documents yet.')}</p>
               ) : (
                 documents.map((doc) => (
@@ -282,11 +287,11 @@ const DetailDrawer = ({
                     key={doc.name}
                     type="button"
                     className="ledger-docs__row"
-                    onClick={() => openDocument(doc.name)}
+                    onClick={() => isStorageFolder(doc) ? folder.enter(doc.name) : openDocument(doc.name)}
                   >
-                    <FileText size={15} aria-hidden="true" />
+                    {isStorageFolder(doc) ? <Folder size={15} aria-hidden="true" /> : <FileText size={15} aria-hidden="true" />}
                     <span className="ledger-docs__name">{doc.name}</span>
-                    <span className="ledger-docs__size">{formatFileSize(doc.metadata?.size ?? 0)}</span>
+                    <span className="ledger-docs__size">{isStorageFolder(doc) ? '→' : formatFileSize(doc.metadata?.size ?? 0)}</span>
                   </button>
                 ))
               )}
@@ -346,7 +351,7 @@ const DetailDrawer = ({
         >
           {t('record.viewFull', 'View full details')} →
         </button>
-      </motion.aside>
+      </Motion.aside>
     </>
   );
 };

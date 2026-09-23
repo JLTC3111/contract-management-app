@@ -1,20 +1,18 @@
 // src/pages/ApprovalsBoard.jsx
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useUser } from '../hooks/useUser';
 import { approvalsApi, contractsApi } from '../api/contracts';
-import { getContractStage, getNextStage, stageUpdatePayload } from '../utils/stages';
+import { getContractStage } from '../utils/stages';
 import { formatDate, getI18nOrFallback } from '../utils/formatters';
+import { canDecideApproval } from '../utils/permissions';
 import { StageTag } from '../components/dashboard/StageTag';
 import '../components/dashboard/dashboard.css';
 
 const CAN_VIEW = ['admin', 'approver', 'editor'];
-/** Editors see the queue but cannot act on it, so their controls are locked. */
-const CAN_ACT = ['admin', 'approver'];
-
 /**
  * Approval request page: one request read top to bottom in a single measured
  * column. `/approvals/:id` shows that request; `/approvals` shows the pending
@@ -41,7 +39,8 @@ const ApprovalsBoard = () => {
   const [saving, setSaving] = useState(false);
 
   const canView = !!user && CAN_VIEW.includes(user.role);
-  const canAct = !!user && CAN_ACT.includes(user.role);
+  const [deciding, setDeciding] = useState(null);
+  const decisionInFlight = useRef(false);
 
   const load = useCallback(async () => {
     if (!canView) return;
@@ -107,37 +106,29 @@ const ApprovalsBoard = () => {
   }), [t]);
 
   const handleDecision = async (request, action) => {
-    const approved = action === 'approve';
+    if (!canDecideApproval(user, request) || statusOf(request) !== 'pending' || decisionInFlight.current) return;
+    decisionInFlight.current = true;
+    setDeciding(request.id);
     try {
-      await approvalsApi.update(request.id, { status: approved ? 'approved' : 'rejected' });
-
-      // Approving moves the contract on to the next stage; rejecting only
-      // stamps the status and leaves the stage where it is.
-      try {
-        let updates = { status: 'rejected' };
-        if (approved) {
-          const current = getContractStage(request.contracts);
-          // Sign-off on a Draft or In Review contract lands it in Negotiation.
-          const next = ['draft', 'in_review'].includes(current)
-            ? 'negotiation'
-            : getNextStage(current) ?? current;
-          updates = stageUpdatePayload(next);
-        }
-        await contractsApi.update(request.contract_id, updates);
-        toast.success(t('contract_approval_action_completed_successfully'));
-      } catch (contractError) {
-        console.error('Error updating contract status:', contractError);
-        toast.error(t('approval_action_completed_but_failed_to_update_contract_status'));
-      }
-
-      setDecisions((prev) => ({ ...prev, [request.id]: approved ? 'approved' : 'rejected' }));
+      const decided = await approvalsApi.decide(request.id, action === 'approve' ? 'approved' : 'rejected');
+      setDecisions((prev) => ({ ...prev, [request.id]: decided.status }));
+      setRequests((prev) => prev.map((row) => row.id === request.id ? { ...row, ...decided } : row));
+      toast.success(t('contract_approval_action_completed_successfully'));
+      // Refresh the displayed contract after the transaction has committed.
+      contractsApi.getById(request.contract_id).then((contract) => {
+        setRequests((prev) => prev.map((row) => row.id === request.id ? { ...row, contracts: contract } : row));
+      }).catch((error) => console.error('Could not refresh contract:', error));
     } catch (err) {
       console.error('Error handling approval action:', err);
       toast.error(t('failed_to_process_approval_action'));
+    } finally {
+      decisionInFlight.current = false;
+      setDeciding(null);
     }
   };
 
   const startEdit = (request) => {
+    if (!canDecideApproval(user, request)) return;
     setEditingId(request.id);
     setDraft(request.approval_response || t('defaultApprovalResponseText'));
   };
@@ -148,6 +139,8 @@ const ApprovalsBoard = () => {
   }, []);
 
   const saveEdit = useCallback(async (requestId, text) => {
+    const request = requests.find((row) => row.id === requestId);
+    if (!request || !canDecideApproval(user, request) || saving) return;
     const message = text.trim();
     if (!message) {
       toast.error(t('response_message_cannot_be_empty', 'Response message cannot be empty'));
@@ -171,7 +164,7 @@ const ApprovalsBoard = () => {
     } finally {
       setSaving(false);
     }
-  }, [t]);
+  }, [t, requests, user, saving]);
 
   // Cmd/Ctrl+Enter commits the response, Escape abandons it.
   useEffect(() => {
@@ -250,7 +243,8 @@ const ApprovalsBoard = () => {
       ) : (
         <div className="ledger-approvals__body">
           {requests.map((request) => {
-            const decision = decisions[request.id];
+            const decision = statusOf(request) === 'pending' ? null : statusOf(request);
+            const canAct = canDecideApproval(user, request);
             const editing = editingId === request.id;
             const lockedClass = canAct ? '' : ' ledger-approvals__locked';
 
@@ -308,7 +302,7 @@ const ApprovalsBoard = () => {
                       type="button"
                       className={`ledger-panel__action${lockedClass}`}
                       onClick={() => (editing ? saveEdit(request.id, draft) : startEdit(request))}
-                      disabled={saving}
+                      disabled={!canAct || saving || deciding !== null}
                     >
                       {editing
                         ? (saving ? t('approval_board_saving') : t('approvals.done', 'Done'))
@@ -344,6 +338,7 @@ const ApprovalsBoard = () => {
                     <button
                       type="button"
                       className="btn-accent"
+                      disabled={!canAct || deciding !== null}
                       onClick={() => handleDecision(request, 'approve')}
                     >
                       {t('approval_board_approve')}
@@ -351,6 +346,7 @@ const ApprovalsBoard = () => {
                     <button
                       type="button"
                       className="btn-secondary"
+                      disabled={!canAct || deciding !== null}
                       onClick={() => handleDecision(request, 'reject')}
                     >
                       {t('approval_board_reject')}

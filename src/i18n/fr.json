@@ -147,6 +147,14 @@
     "enterEmailFirst": "Saisissez d’abord votre adresse e-mail.",
     "resetSent": "Consultez votre boîte de réception pour le lien de réinitialisation."
   },
+  "passwordRecovery": {
+    "title": "Réinitialiser le mot de passe",
+    "description": "Choisissez un nouveau mot de passe pour {{email}}.",
+    "save": "Enregistrer le nouveau mot de passe",
+    "invalidLink": "Ce lien est invalide ou a expiré. Revenez à la page de connexion et demandez un nouveau lien.",
+    "backToLogin": "Retour à la connexion",
+    "continue": "Continuer"
+  },
   "headers": {
     "userManual": "Manuel d'utilisateur",
     "changePassword": "Changer le mot de passe"

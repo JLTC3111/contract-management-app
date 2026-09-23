@@ -90,7 +90,7 @@ BEGIN
   NEW.updated_at = NOW();
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY INVOKER SET search_path = public, pg_temp;
 
 -- Create triggers for updated_at columns
 CREATE TRIGGER update_contract_phases_updated_at
@@ -114,7 +114,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY INVOKER SET search_path = public, pg_temp;
 
 CREATE TRIGGER calculate_phase_duration_trigger
   BEFORE UPDATE ON contract_phases
@@ -157,7 +157,7 @@ BEGIN
   
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY INVOKER SET search_path = public, pg_temp;
 
 CREATE TRIGGER update_contract_status_from_phases_trigger
   AFTER UPDATE ON contract_phases
@@ -190,18 +190,19 @@ BEGIN
         (SUM(cp.budget_spent) / SUM(cp.budget_allocated) * 100)::DECIMAL
       ELSE 0::DECIMAL
     END as budget_utilization
-  FROM contract_phases cp
+  FROM public.contract_phases cp
   WHERE (p_contract_id IS NULL OR cp.contract_id = p_contract_id);
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY INVOKER SET search_path = '';
 
--- Grant permissions
-GRANT ALL ON contract_phases TO authenticated;
-GRANT ALL ON phase_comments TO authenticated;
-GRANT ALL ON phase_milestones TO authenticated;
-GRANT ALL ON phase_resources TO authenticated;
-
-GRANT EXECUTE ON FUNCTION get_contract_phase_analytics(INTEGER) TO authenticated;
-GRANT EXECUTE ON FUNCTION update_updated_at_column() TO authenticated;
-GRANT EXECUTE ON FUNCTION calculate_phase_duration() TO authenticated;
-GRANT EXECUTE ON FUNCTION update_contract_status_from_phases() TO authenticated;
+-- Protected by default; role/ownership policies live in the audit migration.
+ALTER TABLE public.contract_phases ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.phase_comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.phase_milestones ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.phase_resources ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.contract_phases, public.phase_comments, public.phase_milestones, public.phase_resources
+  FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.contract_phases, public.phase_comments, public.phase_milestones, public.phase_resources
+  TO authenticated;
+REVOKE ALL ON FUNCTION public.get_contract_phase_analytics(integer) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.get_contract_phase_analytics(integer) TO authenticated;

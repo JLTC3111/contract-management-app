@@ -1,6 +1,6 @@
 // src/components/dashboard/CreateContractModal.jsx
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ADVANCEABLE_STAGES, getStageLabel } from '../../utils/stages';
 import { CONTRACT_CATEGORIES, getCategoryLabel } from '../../utils/constants';
@@ -38,7 +38,7 @@ const CreateContractModal = ({ onCancel, onCreate, busy }) => {
 
   return (
     <>
-      <motion.div
+      <Motion.div
         className="ledger-scrim"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -46,7 +46,7 @@ const CreateContractModal = ({ onCancel, onCreate, busy }) => {
         transition={{ duration: 0.18 }}
         onClick={onCancel}
       />
-      <motion.form
+      <Motion.form
         className="ledger-modal"
         role="dialog"
         aria-label={t('dashboard.newContract', 'New contract')}
@@ -120,7 +120,7 @@ const CreateContractModal = ({ onCancel, onCreate, busy }) => {
             {t('buttons.create', 'Create')}
           </button>
         </div>
-      </motion.form>
+      </Motion.form>
     </>
   );
 };

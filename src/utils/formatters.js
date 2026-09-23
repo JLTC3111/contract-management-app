@@ -123,32 +123,8 @@ export const formatCurrency = (amount, currency = 'USD', locale = 'en-US') => {
   }
 };
 
-/**
- * Currency shown for each UI language.
- *
- * NOTE: contracts store a bare number with no currency of their own, and nothing
- * here converts between currencies - the same figure is simply rendered in the
- * active language's currency. Amounts are therefore only accurate when they were
- * entered in that currency. A per-contract `currency` column is the real fix.
- */
-export const LOCALE_CURRENCY = {
-  en: 'USD',
-  de: 'EUR',
-  fr: 'EUR',
-  es: 'EUR',
-  ja: 'JPY',
-  th: 'THB',
-  vi: 'VND',
-  zh: 'CNY',
-};
-
-/**
- * Currency code for a language tag ('vi', 'de-DE', ...). Falls back to USD.
- * @param {string} locale - Language tag
- * @returns {string} ISO currency code
- */
-export const currencyForLocale = (locale) =>
-  LOCALE_CURRENCY[String(locale || '').split('-')[0].toLowerCase()] || 'USD';
+/** Contract amounts are entered in USD. Language changes formatting only. */
+export const CONTRACT_CURRENCY = 'USD';
 
 /**
  * Format a date as month + year only ("Aug 2027"). formatDate always merges in
@@ -226,7 +202,7 @@ export const formatPercentage = (value, decimals = 1, isDecimal = false) => {
  * @param {string} format - Format pattern (default: international)
  * @returns {string} Formatted phone number
  */
-export const formatPhoneNumber = (phone, format = 'international') => {
+export const formatPhoneNumber = (phone) => {
   if (!phone) return '-';
   
   // Remove all non-digit characters

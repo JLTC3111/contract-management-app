@@ -39,14 +39,14 @@ export const validateAttachment = (file) => {
  * Uploads files for a contract, best effort: one failure doesn't abort the rest.
  * @returns {Promise<{uploaded: string[], failed: {name: string, message: string}[]}>}
  */
-export const uploadAttachments = async (contractId, files) => {
+export const uploadAttachments = async (contractId, files, folder = '') => {
   const uploaded = [];
   const failed = [];
 
   for (const file of files || []) {
     const name = sanitizeFileName(file.name) || `file-${Date.now()}`;
     try {
-      await storageApi.upload(`uploads/${contractId}/${name}`, file);
+      await storageApi.upload(`uploads/${contractId}/${folder ? `${folder}/` : ''}${name}`, file);
       uploaded.push(name);
     } catch (err) {
       failed.push({ name: file.name, message: err?.message || 'upload failed' });

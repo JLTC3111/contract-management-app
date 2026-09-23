@@ -12,6 +12,7 @@ import { getTaskTranslationKey, phaseState } from './constants';
  */
 const PhaseCard = ({
   phase,
+  readOnly = false,
   phaseRef,
   isExpanded,
   onToggleExpand,
@@ -108,7 +109,7 @@ const PhaseCard = ({
                   type="checkbox"
                   checked={task.completed}
                   onChange={() => onToggleTask(phase.id, task.id)}
-                  disabled={phase.status === 'pending'}
+                  disabled={readOnly || phase.status === 'pending'}
                   aria-label={taskText(task)}
                 />
                 <span className="phase-task__text">
@@ -132,7 +133,7 @@ const PhaseCard = ({
                     </span>
                   )}
                 </span>
-                {task.custom && phase.status !== 'completed' && (
+                {!readOnly && task.custom && phase.status !== 'completed' && (
                   <button
                     type="button"
                     className="phase-task__del"
@@ -146,7 +147,7 @@ const PhaseCard = ({
             ))}
           </ul>
 
-          {phase.status !== 'completed' && (
+          {!readOnly && phase.status !== 'completed' && (
             <div className="phase-item__add">
               <input
                 className="input"
@@ -169,7 +170,7 @@ const PhaseCard = ({
             </div>
           )}
 
-          <div className="phase-item__actions">
+          {!readOnly && <div className="phase-item__actions">
             {phase.status === 'pending' && (
               <button type="button" className="btn-secondary" onClick={() => onStartPhase(phase.id)}>
                 <Play size={15} aria-hidden="true" />
@@ -188,7 +189,7 @@ const PhaseCard = ({
                 {t('phaseManagement.reopenPhase', 'Reopen phase')}
               </button>
             )}
-          </div>
+          </div>}
         </div>
       )}
     </div>

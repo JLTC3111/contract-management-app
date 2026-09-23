@@ -146,7 +146,7 @@ async function resetUserPassword(userEmail, supabaseAdmin) {
     console.log(`🔐 Generated temporary password for ${userEmail}`);
     
     // Update user password using admin API
-    const { data: updateData, error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
       user.id,
       {
         password: tempPassword,

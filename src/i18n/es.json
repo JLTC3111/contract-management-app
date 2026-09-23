@@ -147,6 +147,14 @@
     "enterEmailFirst": "Introduce primero tu dirección de correo.",
     "resetSent": "Revisa tu bandeja de entrada para el enlace de restablecimiento."
   },
+  "passwordRecovery": {
+    "title": "Restablecer contraseña",
+    "description": "Elige una nueva contraseña para {{email}}.",
+    "save": "Guardar nueva contraseña",
+    "invalidLink": "Este enlace no es válido o ha caducado. Vuelve al inicio de sesión y solicita un nuevo enlace.",
+    "backToLogin": "Volver al inicio de sesión",
+    "continue": "Continuar"
+  },
   "headers": {
     "userManual": "Manual de usuario",
     "changePassword": "Cambiar contraseña"

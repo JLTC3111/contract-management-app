@@ -9,7 +9,8 @@
  *
  * Rather than hard-coding one schema, the adapter learns the real column set
  * from the rows it reads, remaps anything that has a known older name, and drops
- * what genuinely isn't there. In the normal case no failed request is made.
+ * only explicitly optional compatibility fields. Substantive data must never
+ * disappear from an otherwise successful write.
  */
 
 /** Columns this app writes, and the older name they may live under. */
@@ -81,7 +82,13 @@ export const createSchemaAdapter = (aliases = COLUMN_ALIASES, optional = OPTIONA
 
       const legacy = aliases[column];
       if (legacy && !aliased.has(column)) aliased.set(column, legacy);
-      else absent.add(column);
+      else if (optional.includes(column)) absent.add(column);
+      else {
+        const schemaError = new Error(`Cannot save "${column}" because the database needs an update. Contact your administrator.`);
+        schemaError.code = 'CONTRACT_SCHEMA_MISMATCH';
+        schemaError.cause = error;
+        throw schemaError;
+      }
 
       const next = adaptPayload(payload);
       // No change means retrying would just repeat the same failing request.

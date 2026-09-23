@@ -1,3 +1,5 @@
+import { useUser } from '../hooks/useUser';
+import { canEditContracts } from '../utils/permissions';
 // src/pages/CreateContractPage.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +20,8 @@ const CATEGORY_OPTIONS = CONTRACT_CATEGORIES.filter((c) => c !== 'All');
 const CreateContractPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { user } = useUser();
+  const canEdit = canEditContracts(user);
 
   const [form, setForm] = useState({
     title: '',
@@ -35,7 +39,7 @@ const CreateContractPage = () => {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim() || busy) return;
+    if (!canEdit || !form.title.trim() || busy) return;
 
     setBusy(true);
     try {
@@ -64,6 +68,8 @@ const CreateContractPage = () => {
       setBusy(false);
     }
   };
+
+  if (!canEdit) return <p className="ledger-state">{t('access_denied')}</p>;
 
   return (
     <div className="ledger">
