@@ -4,6 +4,8 @@ import { approvalsApi, contractsApi } from '../api/contracts';
 import { useUser } from '../hooks/useUser';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { APPROVAL_REQUESTABLE_STAGES, getContractStage } from '../utils/stages';
+import { canEditContracts } from '../utils/permissions';
 
 // Loading spinner component
 const LoadingSpinner = ({ size = 16 }) => (
@@ -18,15 +20,15 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
   const { t } = useTranslation();
   const rootRef = useRef(null);
   const textareaRef = useRef(null);
-  // Check if user already has a pending approval request
-  const hasPendingRequest = contract.status === 'pending';
+  const submissionInFlight = useRef(false);
+  const canRequest = canEditContracts(user) && APPROVAL_REQUESTABLE_STAGES.includes(getContractStage(contract));
 
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
-        if (approvalMessage.trim() && !submitting && !hasPendingRequest) {
+        if (approvalMessage.trim() && !submitting && canRequest) {
           handleSubmitApprovalRequest();
         }
       }
@@ -34,41 +36,35 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [approvalMessage, submitting, hasPendingRequest]);
+  }, [approvalMessage, submitting, canRequest]);
 
   // Submit approval request with better error handling
   const handleSubmitApprovalRequest = async () => {
+    if (!canRequest || submitting || submissionInFlight.current) return;
     if (!approvalMessage.trim()) {
       toast.error(t('Please enter a message for the approval request'));
       return;
     }
 
-    if (hasPendingRequest) {
-      toast.error(t('Contract is already pending approval'));
-      return;
-    }
-
+    submissionInFlight.current = true;
     setSubmitting(true);
     try {
       // Use approvalsApi which handles demo mode
       await approvalsApi.create({
         contract_id: contractId,
+        expected_revision: contract.revision,
         requester_id: user.id,
         requester_email: user.email,
         message: approvalMessage.trim(),
         status: 'pending'
       });
 
-      // Update contract status to pending using contractsApi
-      try {
-        await contractsApi.update(contractId, { status: 'pending' });
-        toast.success(t('Approval request submitted successfully!'));
-        setApprovalMessage('');
-        setShowForm(false);
-        onStatusUpdate && onStatusUpdate('pending');
-      } catch (contractError) {
-        console.error('Error updating contract status:', contractError);
-        toast.error(t('Approval request sent but failed to update contract status'));
+      toast.success(t('Approval request submitted successfully!'));
+      setApprovalMessage('');
+      setShowForm(false);
+      if (onStatusUpdate) {
+        contractsApi.getById(contractId).then((updated) => onStatusUpdate(updated.status))
+          .catch((error) => console.error('Could not refresh submitted contract:', error));
       }
     } catch (err) {
       console.error('Error submitting approval request:', {
@@ -90,6 +86,7 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
         toast.error(t('failed_to_submit_approval_request') + `: ${err.message || err.details || 'Database error'}`);
       }
     } finally {
+      submissionInFlight.current = false;
       setSubmitting(false);
     }
   };
@@ -102,16 +99,16 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
       {!showForm ? (
         <button className="btn-hover-effect"
           onClick={() => setShowForm(true)}
-          disabled={hasPendingRequest}
-          aria-label={hasPendingRequest ? t('approval_already_pending') : t('send_approval_request')}
+          disabled={!canRequest}
+          aria-label={t('send_approval_request')}
           style={{
-            backgroundColor: hasPendingRequest ? '#e5e7eb' : '#3b82f6',
-            color: hasPendingRequest ? '#6b7280' : '#fff',
+            backgroundColor: !canRequest ? '#e5e7eb' : '#3b82f6',
+            color: !canRequest ? '#6b7280' : '#fff',
             border: 'none',
             padding: '0.5rem 1rem',
             borderRadius: '6px',
-            cursor: hasPendingRequest ? 'not-allowed' : 'pointer',
-            opacity: hasPendingRequest ? 0.6 : 1,
+            cursor: !canRequest ? 'not-allowed' : 'pointer',
+            opacity: !canRequest ? 0.6 : 1,
           }}
         >
           {t('send_approval_request')}
@@ -189,4 +186,4 @@ const ApprovalRequestForm = ({ contractId, contract, onStatusUpdate }) => {
   );
 };
 
-export default ApprovalRequestForm; 
+export default ApprovalRequestForm;

@@ -34,22 +34,22 @@ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
 BEGIN
   RETURN QUERY
   WITH changed AS (
-    UPDATE public.contracts c SET status = CASE WHEN expiry_date < CURRENT_DATE THEN 'expired' ELSE 'expiring' END,
+    UPDATE public.contracts c SET status = private.contract_expiry_status(COALESCE(c.expiry_date, c.expiration_date), c.lifecycle_status),
       updated_at = now()
-    WHERE (expiry_date < CURRENT_DATE AND status IN ('draft', 'pending', 'approved', 'rejected', 'in_progress', 'completed', 'expiring'))
-      OR (expiry_date >= CURRENT_DATE AND expiry_date <= CURRENT_DATE + CASE status WHEN 'draft' THEN 21 WHEN 'pending' THEN 14 ELSE 7 END
-        AND status IN ('draft', 'pending', 'approved', 'rejected', 'in_progress', 'completed'))
+    WHERE c.status IS DISTINCT FROM private.contract_expiry_status(COALESCE(c.expiry_date, c.expiration_date), c.lifecycle_status)
     RETURNING c.id, c.title, c.author, c.status, c.expiry_date
   ), sent AS (
     INSERT INTO public.notifications(user_id, title, message, type, contract_id)
     SELECT u.id, CASE WHEN c.status = 'expired' THEN 'Contract Expired' ELSE 'Contract Expiring Soon' END,
       'Your contract "' || c.title || '" ' || CASE WHEN c.status = 'expired' THEN 'expired on ' ELSE 'expires on ' END || c.expiry_date || '.',
       CASE WHEN c.status = 'expired' THEN 'error' ELSE 'warning' END, c.id
-    FROM changed c JOIN public.users u ON u.email = c.author RETURNING id
+    FROM changed c JOIN public.users u ON u.email = c.author
+    WHERE c.status IN ('expiring','expired') RETURNING id
   )
   SELECT count(*)::integer, count(*) FILTER (WHERE status = 'expired')::integer,
     count(*) FILTER (WHERE status = 'expiring')::integer, (SELECT count(*)::integer FROM sent) FROM changed;
 END;
 $$;
+
 REVOKE ALL ON FUNCTION public.update_contract_expirations() FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.update_contract_expirations() TO service_role;

@@ -8,11 +8,12 @@ const root = fileURLToPath(new URL('../../', import.meta.url));
 const component = (name) => Object.assign(() => null, { displayName: name });
 
 // Source-level handler tests. This deliberately does not claim browser coverage.
-export function harness({ seed = [], user = { id: 'editor', role: 'editor' }, api = {}, supabase } = {}) {
+export function harness({ seed = [], user = { id: 'editor', role: 'editor' }, api = {}, supabase, globals = {} } = {}) {
   const state = [...seed];
   const refs = [];
   let cursor = 0;
   let refCursor = 0;
+  let effects = [];
   const react = {
     useState(initial) {
       const slot = cursor++;
@@ -20,7 +21,7 @@ export function harness({ seed = [], user = { id: 'editor', role: 'editor' }, ap
       return [state[slot], (next) => { state[slot] = typeof next === 'function' ? next(state[slot]) : next; }];
     },
     useRef(value) { return refs[refCursor++] ||= { current: value }; },
-    useEffect() {},
+    useEffect(fn) { effects.push(fn); },
     useMemo: (fn) => fn(),
     useCallback: (fn) => fn,
   };
@@ -42,6 +43,7 @@ export function harness({ seed = [], user = { id: 'editor', role: 'editor' }, ap
       if (/\/api\/contracts$/.test(specifier)) return api;
       if (specifier.endsWith('.css')) return {};
       if (specifier === 'lucide-react') return new Proxy({}, { get: (_, name) => component(name) });
+      if (specifier === 'framer-motion') return { AnimatePresence: component('AnimatePresence'), motion: new Proxy({}, { get: (_, name) => component(name) }) };
       if (specifier === 'react-hot-toast') return { success() {}, error() {} };
       if (specifier === 'react-i18next') return { useTranslation: () => ({
         t: (key, fallback) => typeof fallback === 'string' ? fallback : key, i18n: { language: 'en' },
@@ -60,11 +62,19 @@ export function harness({ seed = [], user = { id: 'editor', role: 'editor' }, ap
       require, module, exports: module.exports,
       testJsx: (type, props, ...children) => ({ type, props: { ...props, children } }), testFragment: 'fragment',
       console: { log() {}, error() {} }, Date, Intl, Map, Set, crypto: globalThis.crypto,
-      localStorage: { getItem: () => null },
+      localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
+      window: { alert() {}, confirm: () => true }, Blob, URL,
+      ...globals,
     }, { filename: absolute });
     return module.exports;
   }
-  return { load, state, render: (fn, props) => { cursor = refCursor = 0; return fn(props); } };
+  return { load, state,
+    render: (fn, props) => { cursor = refCursor = 0; effects = []; return fn(props); },
+    async runEffects() {
+      effects.forEach((fn) => fn());
+      await new Promise((done) => setTimeout(done, 0));
+    },
+  };
 }
 
 export const nodes = (tree) => Array.isArray(tree) ? tree.flatMap(nodes) :

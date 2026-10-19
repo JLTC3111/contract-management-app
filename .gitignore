@@ -3,7 +3,14 @@
 
 # Installed dependencies and generated output
 node_modules/
-dist/
+# The repository already ships dist. Keep its entrypoint and hashed app bundles
+# reviewable while ignoring other newly generated output.
+dist/*
+!dist/index.html
+!dist/assets/
+dist/assets/*
+!dist/assets/index-*.js
+!dist/assets/index-*.css
 
 # Admin logs (contains sensitive information)
 logs/

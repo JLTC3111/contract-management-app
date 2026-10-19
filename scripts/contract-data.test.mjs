@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { spawnSync } from 'node:child_process';
 import { createSchemaAdapter } from '../src/api/schemaAdapter.js';
 import { fetchAllRows } from '../src/api/pagination.js';
 import { CONTRACT_CURRENCY, formatCurrency, formatCompactCurrency } from '../src/utils/formatters.js';
 import { canEditContracts, canDecideApproval } from '../src/utils/permissions.js';
+import { contractEditPayload } from '../src/utils/stages.js';
+import { csvCell, serializeCsv } from '../src/utils/csv.js';
 
 const missing = (column) => ({ message: `Could not find the '${column}' column of 'contracts' in the schema cache` });
 
@@ -86,4 +89,35 @@ test('editing and approval permissions match the database role model', () => {
   assert.equal(canDecideApproval({ role: 'approver', id: 'one' }, {}), true);
   assert.equal(canDecideApproval({ role: 'approver', id: 'one' }, { approver_id: 'two' }), false);
   assert.equal(canDecideApproval({ role: 'admin', id: 'one' }, { approver_id: 'two' }), true);
+});
+
+test('unchanged expiry stages are omitted so renewal can restore the saved lifecycle', () => {
+  assert.deepEqual(contractEditPayload({ status: 'expired', stage: 'executed' }, {
+    expiry_date: '2027-10-09', stage: 'expired', status: 'expired',
+  }), { expiry_date: '2027-10-09' });
+  assert.deepEqual(contractEditPayload({ status: 'rejected', stage: 'in_review' }, {
+    title: 'Renamed', stage: 'negotiation',
+  }), { title: 'Renamed', stage: 'negotiation', status: 'in_progress' });
+});
+
+test('CSV keeps fields quoted and formula-capable values as text', () => {
+  for (const text of ['=1+1', '+SUM(A1)', '-1+1', '@SUM(A1)', '  =1+1', '＝1+1', '＋1', '－1', '＠SUM(A1)']) {
+    assert.ok(csvCell(text).startsWith('"\t'), text);
+  }
+  for (const text of ['\tvalue', '\rvalue', '\nvalue']) assert.ok(csvCell(text).startsWith('"\''));
+  assert.equal(csvCell('a,"b"\nc'), '"a,""b""\nc"');
+  assert.equal(serializeCsv([['Title', 'Owner'], ['=1+1', 'Jane']]), '"Title","Owner"\r\n"\t=1+1","Jane"');
+});
+
+test('calendar dates retain their day in western and eastern time zones while timestamps keep their instant', () => {
+  const moduleUrl = new URL('../src/utils/formatters.js', import.meta.url).href;
+  const script = `import { formatDate, formatMonthYear } from ${JSON.stringify(moduleUrl)};
+    console.log(JSON.stringify([formatDate('2026-10-09',{},'en-US'),
+      formatDate('2026-10-09T00:00:00Z',{},'en-US'), formatMonthYear('2026-11-01','en-US'),
+      formatDate('2026-02-30',{},'en-US')]));`;
+  for (const [zone, timestampDay] of [['America/Los_Angeles', 'Oct 8, 2026'], ['Asia/Ho_Chi_Minh', 'Oct 9, 2026']]) {
+    const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', env: { ...process.env, TZ: zone } });
+    assert.equal(result.status, 0, result.stderr);
+    assert.deepEqual(JSON.parse(result.stdout), ['Oct 9, 2026', timestampDay, 'Nov 2026', '-']);
+  }
 });

@@ -74,7 +74,7 @@ SELECT pg_temp.denied('SELECT public.decide_contract_approval(10,''approved'')',
 SELECT pg_temp.check_true((SELECT count(*) FROM public.notifications) = 0,'other notifications hidden');
 
 SELECT set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000002',true);
-SELECT pg_temp.affected('UPDATE public.contracts SET title=''Edited'' WHERE id=10',1,'editor can edit contract');
+SELECT pg_temp.affected('UPDATE public.contracts SET title=''Edited'' WHERE id=30',1,'editor can edit contract');
 SELECT pg_temp.denied('SELECT public.decide_contract_approval(10,''approved'')','editor cannot approve own request');
 SELECT pg_temp.denied('UPDATE public.contract_approval_requests SET status=''approved'' WHERE id=10','direct decision write denied');
 SELECT pg_temp.check_true((SELECT count(*) FROM public.notifications) = 1,'only own notifications visible');

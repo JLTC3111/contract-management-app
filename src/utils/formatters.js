@@ -3,6 +3,12 @@
  * Consistent formatting across all components
  */
 
+import { parseISO } from './calendar.js';
+
+const parseDate = (value) => typeof value === 'string'
+  ? (/^\d{4}-\d{2}-\d{2}$/.test(value) ? parseISO(value) : new Date(value))
+  : value;
+
 /**
  * Format a date for display
  * @param {string|Date} date - Date to format
@@ -14,9 +20,9 @@ export const formatDate = (date, options = {}, locale = undefined) => {
   if (!date) return '-';
   
   try {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const dateObj = parseDate(date);
     
-    if (isNaN(dateObj.getTime())) return '-';
+    if (!dateObj || isNaN(dateObj.getTime())) return '-';
     
     const defaultOptions = {
       year: 'numeric',
@@ -137,8 +143,8 @@ export const formatMonthYear = (date, locale = undefined) => {
   if (!date) return '-';
 
   try {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    if (isNaN(dateObj.getTime())) return '-';
+    const dateObj = parseDate(date);
+    if (!dateObj || isNaN(dateObj.getTime())) return '-';
     return new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short' }).format(dateObj);
   } catch (error) {
     console.error('Date formatting error:', error);
@@ -347,15 +353,14 @@ export const getDaysUntilExpiry = (expiryDate) => {
   if (!expiryDate) return null;
   
   try {
-    const expiry = typeof expiryDate === 'string' ? new Date(expiryDate) : expiryDate;
-    if (isNaN(expiry.getTime())) return null;
+    const expiry = parseDate(expiryDate);
+    if (!expiry || isNaN(expiry.getTime())) return null;
     
     const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    expiry.setHours(0, 0, 0, 0);
-    
-    const diffMs = expiry - now;
-    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    // Count calendar days without mutating the supplied Date or crossing DST.
+    const diffMs = Date.UTC(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())
+      - Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.round(diffMs / (1000 * 60 * 60 * 24));
   } catch (error) {
     console.error('Days until expiry calculation error:', error);
     return null;

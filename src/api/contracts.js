@@ -113,15 +113,19 @@ const demoContractsApi = {
     return newContract;
   },
 
-  async update(id, updates) {
+  async update(id, updates, { expectedRevision } = {}) {
     const contracts = getDemoContracts();
     const index = contracts.findIndex(c => c.id === id);
     if (index === -1) {
       throw new Error('Contract not found');
     }
+    if (expectedRevision != null && expectedRevision !== (contracts[index].revision ?? 0)) {
+      throw new Error('Contract changed. Reload it before saving.');
+    }
     contracts[index] = {
       ...contracts[index],
       ...updates,
+      revision: (contracts[index].revision ?? 0) + 1,
       updated_at: new Date().toISOString(),
     };
     setDemoContracts(contracts);
@@ -461,10 +465,10 @@ export const contractsApi = {
    * @param {object} updates - Fields to update
    * @returns {Promise<object>} Updated contract
    */
-  async update(id, updates) {
+  async update(id, updates, { expectedRevision } = {}) {
     // Demo mode: use localStorage
     if (isDemoMode()) {
-      return demoContractsApi.update(id, updates);
+      return demoContractsApi.update(id, updates, { expectedRevision });
     }
 
     const payload = {
@@ -478,9 +482,15 @@ export const contractsApi = {
     }
 
     const data = await contractsSchema.writeWithFallback(
-      (body) => supabase.from('contracts').update(body).eq('id', id).select().single(),
+      (body) => {
+        let query = supabase.from('contracts').update(body).eq('id', id);
+        if (expectedRevision != null) query = query.eq('revision', expectedRevision);
+        return query.select().maybeSingle();
+      },
       payload
     );
+
+    if (!data) throw new Error('Contract changed or is no longer available. Reload it before saving.');
 
     contractsSchema.learnFromRow(data);
     return normalizeContractRow(data);
@@ -501,18 +511,17 @@ export const contractsApi = {
    * @param {number|string} id - Contract ID
    * @returns {Promise<void>}
    */
-  async delete(id) {
+  async delete(id, { expectedRevision } = {}) {
     // Demo mode: use localStorage
     if (isDemoMode()) {
       return demoContractsApi.delete(id);
     }
     
-    const { error } = await supabase
-      .from('contracts')
-      .delete()
-      .eq('id', id);
-    
+    const { data, error } = await supabase.functions.invoke('contract-delete', {
+      body: { contract_id: id, expected_revision: expectedRevision },
+    });
     if (error) throw error;
+    return data;
   },
 
   /**
@@ -868,14 +877,9 @@ export const approvalsApi = {
     if (isDemoMode()) {
       return demoApprovalsApi.getAll();
     }
-    // Real implementation would go here
-    const { data, error } = await supabase
-      .from('contract_approval_requests')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data || [];
+    return fetchAllRows((withCount) => supabase.from('contract_approval_requests')
+      .select('*', withCount ? { count: 'exact' } : {})
+      .order('created_at', { ascending: false }).order('id', { ascending: true }));
   },
 
   async getById(id) {
@@ -896,28 +900,27 @@ export const approvalsApi = {
     if (isDemoMode()) {
       return demoApprovalsApi.getPending();
     }
-    const { data, error } = await supabase
-      .from('contract_approval_requests')
-      .select('*')
-      .eq('status', 'pending')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data || [];
+    return fetchAllRows((withCount) => supabase.from('contract_approval_requests')
+      .select('*', withCount ? { count: 'exact' } : {}).eq('status', 'pending')
+      .order('created_at', { ascending: false }).order('id', { ascending: true }));
   },
 
   async create(approval) {
     if (isDemoMode()) {
+      const pending = (await demoApprovalsApi.getPending()).find((row) => row.contract_id === approval.contract_id);
+      if (pending) return pending;
+      const contract = await demoContractsApi.getById(approval.contract_id);
+      const stage = getContractStage(contract);
+      if (stage === 'draft' || contract.status === 'rejected') {
+        await demoContractsApi.update(contract.id, stageUpdatePayload(stage === 'draft' ? 'in_review' : stage));
+      }
       return demoApprovalsApi.create(approval);
     }
-    const { data, error } = await supabase
-      .from('contract_approval_requests')
-      .insert({
-        ...approval,
-        created_at: new Date().toISOString()
-      })
-      .select()
-      .single();
+    const { data, error } = await supabase.rpc('request_contract_approval', {
+      p_contract_id: approval.contract_id,
+      p_message: approval.message || '',
+      p_expected_revision: approval.expected_revision ?? null,
+    }).single();
     
     if (error) throw error;
     return data;

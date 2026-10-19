@@ -20,6 +20,8 @@ import { useUser } from '../../hooks/useUser';
 import { useTheme } from '../../hooks/useTheme';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+import { supabase } from '../../utils/supaBaseClient';
+import { canEditContracts } from '../../utils/permissions';
 
 // Extracted components
 import { SidebarButton, SubMenu } from './SidebarNav';
@@ -82,37 +84,22 @@ const SidebarMobile = () => {
   const handleStatusUpdate = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (statusUpdateLoading) return;
+    if (statusUpdateLoading || !canEditContracts(user) || isDemoMode) return;
     
     setStatusUpdateLoading(true);
     try {
-      const response = await fetch('https://idkfmgdfzcsydrqnjcla.functions.supabase.co/contract-status-cron', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_CRON_SECRET}`,
-        },
-      });
-      const result = await response.json();
-      
-      if (!response.ok) {
-        console.error('Cron failed:', result);
-        toast.error(`${t('sidebar.cronFailed')} ${result.error || result.message || 'Unknown error'}`);
-      } else {
-        const { updated_count, expired_count, expiring_count, notifications_sent } = result;
-        let message = t('sidebar.statusUpdated');
-        
-        if (updated_count > 0) {
-          const details = [];
-          if (expired_count > 0) details.push(`${expired_count} expired`);
-          if (expiring_count > 0) details.push(`${expiring_count} expiring`);
-          if (notifications_sent > 0) details.push(`${notifications_sent} notifications sent`);
-          message += ` (${updated_count} contracts updated: ${details.join(', ')})`;
-        } else {
-          message += '';
-        }
-        toast.success(message);
+      const { data: result, error } = await supabase.functions.invoke('contract-status-cron');
+      if (error) throw error;
+      const { updated_count, expired_count, expiring_count, notifications_sent } = result;
+      let message = t('sidebar.statusUpdated');
+      if (updated_count > 0) {
+        const details = [];
+        if (expired_count > 0) details.push(`${expired_count} expired`);
+        if (expiring_count > 0) details.push(`${expiring_count} expiring`);
+        if (notifications_sent > 0) details.push(`${notifications_sent} notifications sent`);
+        message += ` (${updated_count} contracts updated: ${details.join(', ')})`;
       }
+      toast.success(message);
     } catch (error) {
       console.error('Error triggering cron:', error);
       toast.error(t('sidebar.cronTriggerFailed'));
@@ -432,7 +419,7 @@ const SidebarMobile = () => {
               label={statusUpdateLoading ? t('sidebar.updatingStatus') : t('sidebar.updateStatus')}
               collapsed={collapsed}
               onClick={handleStatusUpdate}
-              disabled={statusUpdateLoading}
+              disabled={statusUpdateLoading || !canEditContracts(user) || isDemoMode}
             />
 
             {/* Profile */}

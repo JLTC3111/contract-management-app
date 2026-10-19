@@ -121,43 +121,23 @@ CREATE TRIGGER calculate_phase_duration_trigger
   FOR EACH ROW EXECUTE FUNCTION calculate_phase_duration();
 
 -- Function to auto-progress contract status based on phases
-CREATE OR REPLACE FUNCTION update_contract_status_from_phases()
-RETURNS TRIGGER AS $$
-DECLARE
-  contract_phases_count INTEGER;
-  completed_phases_count INTEGER;
-  contract_record RECORD;
+CREATE OR REPLACE FUNCTION public.update_contract_status_from_phases()
+RETURNS trigger LANGUAGE plpgsql SECURITY INVOKER SET search_path = '' AS $$
+DECLARE total integer; completed integer; base_status text;
 BEGIN
-  -- Get contract phases info
-  SELECT COUNT(*) INTO contract_phases_count
-  FROM contract_phases 
-  WHERE contract_id = NEW.contract_id;
-  
-  SELECT COUNT(*) INTO completed_phases_count
-  FROM contract_phases 
-  WHERE contract_id = NEW.contract_id AND status = 'completed';
-  
-  -- Get current contract info
-  SELECT * INTO contract_record
-  FROM contracts 
-  WHERE id = NEW.contract_id;
-  
-  -- Update contract status based on phase progress
-  IF completed_phases_count = contract_phases_count AND contract_phases_count > 0 THEN
-    -- All phases completed - mark contract as completed
-    UPDATE contracts 
-    SET status = 'completed', updated_at = NOW()
-    WHERE id = NEW.contract_id AND status NOT IN ('completed', 'expired');
-  ELSIF completed_phases_count > 0 AND contract_record.status IN ('approved', 'pending') THEN
-    -- Some phases completed - mark as in progress
-    UPDATE contracts 
-    SET status = 'in_progress', updated_at = NOW()
-    WHERE id = NEW.contract_id AND status NOT IN ('in_progress', 'completed', 'expired');
+  SELECT count(*), count(*) FILTER (WHERE status = 'completed') INTO total, completed
+    FROM public.contract_phases WHERE contract_id = NEW.contract_id;
+  SELECT lifecycle_status INTO base_status FROM public.contracts WHERE id = NEW.contract_id FOR UPDATE;
+  IF total > 0 AND completed = total THEN
+    UPDATE public.contracts SET stage = 'executed', status = 'completed', updated_at = now()
+      WHERE id = NEW.contract_id AND lifecycle_status <> 'completed';
+  ELSIF completed > 0 AND base_status IN ('approved','pending') THEN
+    UPDATE public.contracts SET stage = 'negotiation', status = 'in_progress', updated_at = now()
+      WHERE id = NEW.contract_id;
   END IF;
-  
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY INVOKER SET search_path = public, pg_temp;
+$$;
 
 CREATE TRIGGER update_contract_status_from_phases_trigger
   AFTER UPDATE ON contract_phases

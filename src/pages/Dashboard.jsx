@@ -1,6 +1,6 @@
 import { canEditContracts } from '../utils/permissions';
 // src/pages/Dashboard.jsx
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { isContractExpiringSoon } from '../utils/contractMetrics';
 import { deleteAttachments, uploadAttachments } from '../utils/uploads';
 import {
   APPROVAL_STAGES,
+  contractEditPayload,
   getContractStage,
   getNextStage,
   stageUpdatePayload,
@@ -46,6 +47,7 @@ const Dashboard = () => {
   const [contracts, setContracts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  const approvalInFlight = useRef(false);
 
   const saved = useMemo(loadFilters, []);
 
@@ -63,6 +65,7 @@ const Dashboard = () => {
   const [selected, setSelected] = useState(() => new Set());
   const [drawerId, setDrawerId] = useState(null);
   const [editing, setEditing] = useState(null);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     localStorage.setItem(FILTERS_KEY, JSON.stringify({
@@ -73,13 +76,15 @@ const Dashboard = () => {
   const load = useCallback(async () => {
     try {
       const data = await contractsApi.getAll({ orderBy: 'updated_at', ascending: false });
-      if (!Array.isArray(data)) return;
+      if (!Array.isArray(data)) throw new Error('Invalid contract response');
       setContracts(data.map((c) => ({
         ...c,
         status: normalizeContractStatus(c.status) || c.status || 'draft',
       })));
+      setLoadError(null);
     } catch (err) {
       console.error('Error fetching contracts:', err.message);
+      setLoadError(err.message || 'Could not load contracts');
     }
   }, []);
 
@@ -157,7 +162,7 @@ const Dashboard = () => {
     try {
       await Promise.all(
         movable.map(({ contract, next }) =>
-          contractsApi.update(contract.id, stageUpdatePayload(next))
+          contractsApi.update(contract.id, stageUpdatePayload(next), { expectedRevision: contract.revision })
         )
       );
       await load();
@@ -174,8 +179,7 @@ const Dashboard = () => {
     if (!canEdit || busy) return;
     setBusy(true);
     try {
-      const { stage, ...rest } = updates;
-      await contractsApi.update(target.id, { ...rest, ...stageUpdatePayload(stage) });
+      await contractsApi.update(target.id, contractEditPayload(target, updates), { expectedRevision: target.revision });
       if (removedFiles.length) {
         const { failed } = await deleteAttachments(target.id, removedFiles);
         if (failed.length) {
@@ -213,7 +217,9 @@ const Dashboard = () => {
 
     setBusy(true);
     try {
-      await contractsApi.delete(target.id);
+      const result = await contractsApi.delete(target.id, { expectedRevision: target.revision });
+      if (result?.cleanup_pending) window.alert(t('dashboard.cleanupPending',
+        'Contract deleted. Document cleanup is pending and will be retried automatically.'));
       setDrawerId(null);
       setSelected((prev) => {
         const next = new Set(prev);
@@ -239,20 +245,13 @@ const Dashboard = () => {
    * rather than only doing so for the Draft -> In Review case.
    */
   const handleSendForApproval = async (target) => {
-    if (!canEdit || busy) return;
+    if (!canEdit || busy || approvalInFlight.current) return;
+    approvalInFlight.current = true;
+    setBusy(true);
     try {
-      // The board would otherwise show one card per click.
-      const pending = await approvalsApi.getPending().catch(() => []);
-      if (pending.some((r) => String(r.contract_id) === String(target.id))) {
-        window.alert(t(
-          'dashboard.approvalAlreadyPending',
-          'This contract already has an approval request awaiting review.'
-        ));
-        return;
-      }
-
       await approvalsApi.create({
         contract_id: target.id,
+        expected_revision: target.revision,
         requester_id: user?.id,
         requester_email: user?.email,
         message: t('dashboard.approvalRequestMessage', 'Approval requested for "{{name}}".', {
@@ -260,15 +259,15 @@ const Dashboard = () => {
         }),
         status: 'pending',
       });
-      if (getContractStage(target) === 'draft') {
-        await contractsApi.update(target.id, stageUpdatePayload('in_review'));
-      }
       setEditing(null);
       setDrawerId(null);
       await load();
     } catch (err) {
       console.error('Send for approval failed:', err);
       window.alert(t('dashboard.approvalFailed', 'Could not send for approval: {{msg}}', { msg: err.message }));
+    } finally {
+      approvalInFlight.current = false;
+      setBusy(false);
     }
   };
 
@@ -305,6 +304,15 @@ const Dashboard = () => {
 
       {loading ? (
         <p className="ledger-empty">{t('dashboard.loading', 'Loading...')}</p>
+      ) : loadError ? (
+        <div className="ledger-empty" role="alert">
+          <p>{t('dashboard.loadFailed', 'Could not load contracts. Please retry.')}</p>
+          <button type="button" className="btn-secondary" onClick={async () => {
+            setLoading(true);
+            await load();
+            setLoading(false);
+          }}>{t('buttons.retry', 'Retry')}</button>
+        </div>
       ) : (
         <>
           <StatStrip totals={totals} />

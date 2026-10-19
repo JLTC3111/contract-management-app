@@ -12,6 +12,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
  */
 const assertNoServiceRoleInClientEnv = (mode) => {
   const env = loadEnv(mode, __dirname, 'VITE_')
+  if (env.VITE_CRON_SECRET) {
+    throw new Error('CRON_SECRET must be server-only. Remove VITE_CRON_SECRET from the browser environment.')
+  }
   for (const [name, value] of Object.entries(env)) {
     const payload = String(value).split('.')[1]
     if (!payload) continue

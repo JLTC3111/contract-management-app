@@ -10,7 +10,9 @@ export const parseISO = (value) => {
   const [y, m, d] = String(value).slice(0, 10).split('-').map(Number);
   if (!y || !m || !d) return null;
   const date = new Date(y, m - 1, d);
-  return Number.isNaN(date.getTime()) ? null : date;
+  date.setFullYear(y);
+  return Number.isNaN(date.getTime()) || date.getFullYear() !== y || date.getMonth() !== m - 1 || date.getDate() !== d
+    ? null : date;
 };
 
 /** Local Date -> 'YYYY-MM-DD', with no timezone round-trip. */

@@ -2,7 +2,7 @@ import { useStorageFolder, isStorageFolder } from '../hooks/useStorageFolder';
 import DocumentBreadcrumbs from '../components/dashboard/DocumentBreadcrumbs';
 import { canEditContracts } from '../utils/permissions';
 // src/pages/ContractRecord.jsx
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence } from 'framer-motion';
@@ -24,9 +24,10 @@ import {
 } from '../utils/formatters';
 import {
   ADVANCEABLE_STAGES,
+  APPROVAL_REQUESTABLE_STAGES,
+  contractEditPayload,
   getContractStage,
   getStageLabel,
-  stageUpdatePayload,
 } from '../utils/stages';
 import { getCategoryLabel } from '../utils/constants';
 import { deleteAttachments, sanitizeFileName, uploadAttachments } from '../utils/uploads';
@@ -36,9 +37,6 @@ import '../components/dashboard/dashboard.css';
 
 /** The sidebar's "Full record" row reopens whatever was last read here. */
 export const LAST_RECORD_KEY = 'ledger.lastRecordId';
-
-/** Only a Draft can be sent for approval from this page. */
-const APPROVAL_STAGE = 'draft';
 
 const ContractRecord = () => {
   const { contractId } = useParams();
@@ -50,6 +48,7 @@ const ContractRecord = () => {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [editing, setEditing] = useState(false);
+  const approvalInFlight = useRef(false);
 
   const folder = useStorageFolder(`uploads/${contractId}`);
   const documents = folder.files;
@@ -86,7 +85,7 @@ const ContractRecord = () => {
 
   const stage = getContractStage(contract);
   const title = contract ? getI18nOrFallback(t, contract, 'title_i18n', 'title') : '';
-  const canSendForApproval = canEdit && stage === APPROVAL_STAGE;
+  const canSendForApproval = canEdit && APPROVAL_REQUESTABLE_STAGES.includes(stage);
 
   /**
    * Activity, derived from where the contract sits in the stage order: every
@@ -153,8 +152,7 @@ const ContractRecord = () => {
     if (!canEdit || busy) return;
     setBusy(true);
     try {
-      const { stage: nextStage, ...rest } = updates;
-      await contractsApi.update(target.id, { ...rest, ...stageUpdatePayload(nextStage) });
+      await contractsApi.update(target.id, contractEditPayload(target, updates), { expectedRevision: target.revision });
       if (removedFiles.length) {
         const { failed } = await deleteAttachments(target.id, removedFiles);
         if (failed.length) {
@@ -190,7 +188,9 @@ const ContractRecord = () => {
 
     setBusy(true);
     try {
-      await contractsApi.delete(contract.id);
+      const result = await contractsApi.delete(contract.id, { expectedRevision: contract.revision });
+      if (result?.cleanup_pending) toast.error(t('dashboard.cleanupPending',
+        'Contract deleted. Document cleanup is pending and will be retried automatically.'));
       localStorage.removeItem(LAST_RECORD_KEY);
       navigate('/');
     } catch (err) {
@@ -230,24 +230,16 @@ const ContractRecord = () => {
   };
 
   /**
-   * Files an approval request and moves the Draft to In Review. The board would
-   * otherwise show one card per click, so an existing request short-circuits.
+   * The database commits the request and initial transition together.
    */
   const handleSendForApproval = async () => {
-    if (!canEdit || busy) return;
+    if (!canSendForApproval || busy || approvalInFlight.current) return;
+    approvalInFlight.current = true;
     setBusy(true);
     try {
-      const pending = await approvalsApi.getPending().catch(() => []);
-      if (pending.some((r) => String(r.contract_id) === String(contract.id))) {
-        toast.error(t(
-          'dashboard.approvalAlreadyPending',
-          'This contract already has an approval request awaiting review.'
-        ));
-        return;
-      }
-
       await approvalsApi.create({
         contract_id: contract.id,
+        expected_revision: contract.revision,
         requester_id: user?.id,
         requester_email: user?.email,
         message: t('dashboard.approvalRequestMessage', 'Approval requested for "{{name}}".', {
@@ -255,13 +247,13 @@ const ContractRecord = () => {
         }),
         status: 'pending',
       });
-      await contractsApi.update(contract.id, stageUpdatePayload('in_review'));
       toast.success(t('success.approvalRequestSent', 'Approval request sent successfully!'));
       await loadContract();
     } catch (err) {
       console.error('Send for approval failed:', err);
       toast.error(t('dashboard.approvalFailed', 'Could not send for approval: {{msg}}', { msg: err.message }));
     } finally {
+      approvalInFlight.current = false;
       setBusy(false);
     }
   };
@@ -422,7 +414,7 @@ const ContractRecord = () => {
               disabled={!canSendForApproval || busy}
               title={canSendForApproval
                 ? undefined
-                : t('record.approvalDraftOnly', 'Only draft contracts can be sent for approval.')}
+                : t('record.approvalUnavailable', 'This contract cannot be sent for approval.')}
             >
               {t('dashboard.sendForApproval', 'Send for approval')}
             </button>

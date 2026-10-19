@@ -103,6 +103,7 @@ const ApprovalsBoard = () => {
     pending: t('pending'),
     approved: t('status.approved', 'Approved'),
     rejected: t('approvals.rejected', 'Rejected'),
+    superseded: t('approvals.superseded', 'Superseded'),
   }), [t]);
 
   const handleDecision = async (request, action) => {
@@ -120,7 +121,8 @@ const ApprovalsBoard = () => {
       }).catch((error) => console.error('Could not refresh contract:', error));
     } catch (err) {
       console.error('Error handling approval action:', err);
-      toast.error(t('failed_to_process_approval_action'));
+      toast.error(err.message || t('failed_to_process_approval_action'));
+      if (err.code === '55000') await load();
     } finally {
       decisionInFlight.current = false;
       setDeciding(null);
@@ -329,7 +331,9 @@ const ApprovalsBoard = () => {
 
                 {decision ? (
                   <p className="ledger-approvals__decision" role="status">
-                    {decision === 'approved'
+                    {decision === 'superseded'
+                      ? t('approvals.supersededConfirmation', 'The contract changed. Submit a new approval request.')
+                      : decision === 'approved'
                       ? t('approvals.approvedConfirmation', 'You approved this request.')
                       : t('approvals.rejectedConfirmation', 'You rejected this request.')}
                   </p>

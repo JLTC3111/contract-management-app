@@ -5,8 +5,8 @@
  * column is left untouched and kept in sync on every write, so ContractTable,
  * ContractAnalytics, the approvals flow and the status cron all keep working.
  *
- * Expiry is owned by the status cron, not by people: once it marks a contract
- * expiring/expired that wins over whatever stage the row carries.
+ * The database preserves the lifecycle beneath expiry warnings, reevaluating
+ * those warnings when the date changes. Expiry wins over the displayed stage.
  */
 
 export const STAGES = [
@@ -103,4 +103,11 @@ export function getNextStage(stage) {
 /** The update payload for moving a contract to a stage, keeping status in sync. */
 export function stageUpdatePayload(stage) {
   return { stage, status: stageToStatus(stage) };
+}
+
+/** Ordinary edits must preserve rejection and the lifecycle beneath expiry. */
+export function contractEditPayload(contract, updates) {
+  const { stage, status: _status, ...fields } = updates;
+  if (!stage || stage === getContractStage(contract)) return fields;
+  return { ...fields, ...stageUpdatePayload(stage) };
 }

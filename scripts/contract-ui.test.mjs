@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { harness, button, named } from './helpers/componentHarness.mjs';
+import { harness, button, named, nodes, textOf } from './helpers/componentHarness.mjs';
 
 const request = { id: 10, contract_id: 20, status: 'pending', contracts: { id: 20, title: 'Agreement', stage: 'in_review' } };
 const approvalSeed = (row = request) => [[row], false, {}, null, '', false, null];
@@ -104,4 +104,95 @@ test('folder navigation keeps empty folders visible and nested paths intact', as
   folder.goTo('');
   assert.equal(render().prefix, 'uploads/10');
   assert.deepEqual(paths, ['uploads/10', 'uploads/10/Legal']);
+});
+
+const dashboardRow = { id: 20, title: 'Agreement', status: 'rejected', stage: 'in_review', revision: 4 };
+const dashboardSeed = (row = dashboardRow) => [[row], false, false, '', false, '', 'All', 'all', 'table', new Set(), row.id, row, null];
+
+test('dashboard double submission makes one atomic request and no separate contract update', async () => {
+  let calls = 0;
+  let resolve;
+  const app = harness({ seed: dashboardSeed({ ...dashboardRow, stage: 'draft', status: 'draft' }), api: {
+    approvalsApi: { create: (payload) => {
+      assert.equal(payload.expected_revision, 4);
+      calls++;
+      return new Promise((done) => { resolve = done; });
+    } },
+    contractsApi: { update: () => assert.fail('Submission must be one database transaction'), getAll: async () => [] },
+  } });
+  const Page = app.load('src/pages/Dashboard.jsx').default;
+  const send = named(app.render(Page), 'DetailDrawer').props.onSendForApproval;
+  const first = send({ ...dashboardRow, stage: 'draft', status: 'draft' });
+  await send(dashboardRow);
+  assert.equal(calls, 1);
+  resolve({ status: 'pending' });
+  await first;
+  assert.equal(app.state[2], false);
+  assert.equal(app.state[10], null);
+});
+
+test('failed dashboard submission remains retryable without a partial local transition', async () => {
+  const row = { ...dashboardRow, stage: 'draft', status: 'draft' };
+  const app = harness({ seed: dashboardSeed(row), api: {
+    approvalsApi: { create: async () => { throw new Error('Transaction rolled back'); } },
+    contractsApi: { update: () => assert.fail('Must not write separately') },
+  } });
+  const Page = app.load('src/pages/Dashboard.jsx').default;
+  await named(app.render(Page), 'DetailDrawer').props.onSendForApproval(row);
+  assert.equal(app.state[0][0].stage, 'draft');
+  assert.equal(app.state[2], false);
+  assert.equal(app.state[10], row.id);
+});
+
+test('renaming a rejected contract preserves status and sends the loaded revision', async () => {
+  let saved;
+  const app = harness({ seed: dashboardSeed(), api: { contractsApi: {
+    update: async (...args) => { saved = args; }, getAll: async () => [],
+  } } });
+  const Page = app.load('src/pages/Dashboard.jsx').default;
+  await named(app.render(Page), 'EditContractModal').props.onSave(dashboardRow, { title: 'Renamed', stage: 'in_review' });
+  assert.equal(saved[0], 20);
+  assert.equal(saved[1].title, 'Renamed');
+  assert.equal('status' in saved[1], false);
+  assert.equal('stage' in saved[1], false);
+  assert.equal(saved[2].expectedRevision, 4);
+});
+
+test('a failed dashboard load shows an error and retry instead of zero totals', async () => {
+  let attempts = 0;
+  const app = harness({ api: { contractsApi: { getAll: async () => {
+    if (++attempts === 1) throw new Error('Connection lost');
+    return [dashboardRow];
+  } } } });
+  const Page = app.load('src/pages/Dashboard.jsx').default;
+  app.render(Page);
+  await app.runEffects();
+  let tree = app.render(Page);
+  assert.ok(nodes(tree).some((node) => node.props?.role === 'alert'));
+  assert.equal(named(tree, 'StatStrip'), undefined);
+  assert.equal(named(tree, 'ContractsTable'), undefined);
+  assert.match(textOf(tree), /Could not load contracts/);
+  await button(tree, 'Retry').props.onClick();
+  tree = app.render(Page);
+  assert.equal(nodes(tree).some((node) => node.props?.role === 'alert'), false);
+  assert.equal(named(tree, 'StatStrip').props.totals.total, 1);
+});
+
+test('superseded approval details explain the required resubmission', () => {
+  const app = harness({ seed: approvalSeed({ ...request, status: 'superseded' }), user: { id: 'approver', role: 'approver' } });
+  const tree = app.render(app.load('src/pages/ApprovalsBoard.jsx').default);
+  assert.equal(button(tree, 'approval_board_approve'), undefined);
+  assert.match(textOf(tree), /contract changed.*new approval/i);
+});
+
+test('the shared request form also commits through one transaction without overwriting a later stage', async () => {
+  let submitted = 0;
+  const app = harness({ seed: [true, 'Review these terms', false], api: {
+    approvalsApi: { create: async (payload) => { submitted++; assert.equal(payload.expected_revision, 4); return { status: 'pending' }; } },
+    contractsApi: { update: () => assert.fail('No second lifecycle write is allowed') },
+  } });
+  const Form = app.load('src/components/ApprovalRequestForm.jsx').default;
+  await button(app.render(Form, { contractId: 20, contract: dashboardRow }), 'send_request').props.onClick();
+  assert.equal(submitted, 1);
+  assert.equal(app.state[0], false);
 });

@@ -3,7 +3,8 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Download, RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { getI18nOrFallback } from '../utils/formatters';
+import { formatDate, getI18nOrFallback } from '../utils/formatters';
+import { serializeCsv } from '../utils/csv';
 import { STAGES, getContractStage, getStageLabel } from '../utils/stages';
 import { getCategoryShortLabel } from '../utils/constants';
 import { StageTag } from './dashboard/StageTag';
@@ -34,7 +35,7 @@ const PIE_RAMP = [
   'var(--color-accent-100)',
 ];
 
-const shortDate = (value) => (value ? new Date(value).toLocaleDateString() : '—');
+const shortDate = (value) => (value ? formatDate(value, { month: 'numeric' }) : '—');
 
 /**
  * Analytics & history. Everything here is derived from the stage model, and the
@@ -134,9 +135,7 @@ const ContractAnalytics = ({ contracts = [], loading = false, onRefresh }) => {
       shortDate(c.updated_at),
       shortDate(c.expiry_date),
     ]);
-    const csv = [headers, ...body]
-      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
+    const csv = serializeCsv([headers, ...body]);
 
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
     const a = document.createElement('a');
