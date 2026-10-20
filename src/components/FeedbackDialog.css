@@ -1,0 +1,54 @@
+.feedback-dialog {
+  width: min(520px, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 2px solid var(--card-border);
+  border-radius: 0;
+  background: var(--card-bg);
+  color: var(--text);
+  text-align: left;
+}
+
+.feedback-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.feedback-dialog * { box-sizing: border-box; border-radius: 0; }
+.feedback-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid var(--card-border);
+}
+.feedback-dialog h2, .feedback-dialog h3 { margin: 0; font-size: 1.15rem; font-weight: 700; }
+.feedback-dialog__close {
+  display: flex;
+  flex-shrink: 0;
+  padding: 0.25rem;
+  background: transparent;
+  color: inherit;
+  border: 0;
+}
+.feedback-dialog__body { display: flex; flex-direction: column; gap: 1rem; padding: 1.25rem; }
+.feedback-dialog p { margin: 0; font-size: 0.9rem; line-height: 1.5; }
+.feedback-dialog label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; font-weight: 600; }
+.feedback-dialog input, .feedback-dialog select, .feedback-dialog textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 0.65rem;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+  font-weight: 400;
+}
+.feedback-dialog input[readonly] { background: var(--sidebar-bg); }
+.feedback-dialog textarea { resize: vertical; }
+.feedback-dialog__actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.feedback-dialog__actions a { color: inherit; text-decoration: underline; font-size: 0.85rem; }
+.feedback-dialog__submit { align-self: flex-start; padding: 0.7rem 1rem; border: 0; background: var(--primary); color: #fff; font-size: 0.9rem; font-weight: 600; }
+.feedback-dialog button { cursor: pointer; }
+.feedback-dialog button:disabled { cursor: not-allowed; opacity: 0.55; }
+.feedback-dialog :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.feedback-dialog__error { color: var(--danger); }

@@ -1,0 +1,14 @@
+{
+  "version": "5",
+  "specifiers": {
+    "npm:nodemailer@10.1.7": "10.1.7"
+  },
+  "npm": {
+    "nodemailer@10.1.7": {
+      "integrity": "sha512-OQa6FDln5fLttmqSbjDiRYvFDOFNrBqfiOwHPlEbURil3b+vPB1v8xpi+Sp46drzNDlsTnNsS502vthmz56r4w=="
+    }
+  },
+  "remote": {
+    "https://esm.sh/@supabase/supabase-js@2.39.4": "f0abcb1f3a8fdd7cfd0aaa338f6e1286c20007f308da818f15c5b30724868db7"
+  }
+}

@@ -10,6 +10,7 @@ export const SidebarButton = ({
   icon, 
   label, 
   onClick, 
+  href,
   collapsed, 
   path, 
   currentPath, 
@@ -27,9 +28,11 @@ export const SidebarButton = ({
   }
   
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+  const Element = href ? 'a' : 'div';
   
   return (
-    <div
+    <Element
+      href={href}
       onClick={disabled ? undefined : onClick}
       className="sidebar-button"
       {...rest}
@@ -45,7 +48,8 @@ export const SidebarButton = ({
         padding: isMobile ? '0.5rem' : '0.5rem 0.75rem',
         borderRadius: '8px',
         backgroundColor: isActive ? 'var(--sidebar-active-bg, #c7d2fe)' : 'transparent',
-        color: isActive ? 'var(--sidebar-active-text, rgb(220, 229, 254))' : undefined,
+        color: isActive ? 'var(--sidebar-active-text, rgb(220, 229, 254))' : 'var(--sidebar-text)',
+        textDecoration: 'none',
         fontWeight: isActive ? 'bold' : 'normal',
         transition: 'transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease',
         transform: 'translateX(0)',
@@ -94,7 +98,7 @@ export const SidebarButton = ({
           {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </div>
       )}
-    </div>
+    </Element>
   );
 };
 

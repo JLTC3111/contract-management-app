@@ -99,7 +99,9 @@ const Login = ({ recovery }) => {
   return (
     <div className="auth">
       <nav className="auth-nav">
-        <img src="/logoIcons/logo.png" alt="Logo" className="auth-nav__logo" />
+        <a href="https://icue.vn" style={{ display: 'flex', flexShrink: 0 }}>
+          <img src="/logoIcons/logo.png" alt="ICUE" className="auth-nav__logo" />
+        </a>
         <p className="auth-nav__brand">{t('login.title', 'Quản Lý Hợp Đồng')}</p>
 
         <div className="auth-nav__end">

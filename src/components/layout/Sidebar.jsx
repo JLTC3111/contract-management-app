@@ -13,18 +13,22 @@ import {
   LayoutDashboard,
   Lightbulb,
   LogOut,
+  Newspaper,
   Settings,
   UserRound,
+  Users,
   Workflow,
 } from 'lucide-react';
 import RssPulse from './RssPulse';
 import { useUser } from '../../hooks/useUser';
 import { useTranslation } from 'react-i18next';
+import { getAppNavigation } from '../app-switcher/appLinks.js';
 import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supaBaseClient';
 import { canEditContracts } from '../../utils/permissions';
 import PasswordChangeModal from './PasswordChangeModal';
 import SidebarMobile from './SidebarMobile';
+import FeedbackDialog from '../FeedbackDialog';
 import { LAST_RECORD_KEY } from '../../pages/ContractRecord';
 import './sidebar.css';
 
@@ -38,6 +42,7 @@ const MOBILE_BREAKPOINT = 1024;
  * floating cards, one accent for the active row.
  */
 const Sidebar = () => {
+  const [showFeedback, setShowFeedback] = useState(false);
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < MOBILE_BREAKPOINT
   );
@@ -58,16 +63,22 @@ const Sidebar = () => {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Below the breakpoint the original horizontal bar is used unchanged.
-  if (isMobile) return <SidebarMobile />;
-  return <SidebarRail />;
+  return (
+    <>
+      {isMobile
+        ? <SidebarMobile onFeedback={() => setShowFeedback(true)} />
+        : <SidebarRail onFeedback={() => setShowFeedback(true)} />}
+      {showFeedback && <FeedbackDialog onClose={() => setShowFeedback(false)} />}
+    </>
+  );
 };
 
-const SidebarRail = () => {
+const SidebarRail = ({ onFeedback }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, isDemoMode, disableDemoMode } = useUser() ?? {};
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [website, hr] = getAppNavigation(i18n.resolvedLanguage || i18n.language).apps;
 
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
   const [personalOpen, setPersonalOpen] = useState(
@@ -131,10 +142,10 @@ const SidebarRail = () => {
 
   const items = [
     {
-      key: 'home',
-      icon: Home,
-      label: t('sidebar.home', 'Home'),
-      onClick: () => { window.location.href = 'https://icue.vn'; },
+      key: 'newsroom',
+      icon: Newspaper,
+      label: t('sidebar.newsroom', 'Newsroom'),
+      href: 'https://icue.vn/newsroom/',
     },
     {
       key: 'dashboard',
@@ -204,15 +215,19 @@ const SidebarRail = () => {
       key: 'feedback',
       icon: Lightbulb,
       label: t('sidebar.sendFeedback', 'Send feedback'),
-      onClick: () => window.open('mailto:support@icue.vn?subject=Contract Management App Feedback', '_blank'),
+      onClick: onFeedback,
     },
   ];
 
   const Row = ({ item, sub = false }) => {
     const Icon = item.icon;
+    const Element = item.href ? 'a' : 'button';
     return (
-      <button
-        type="button"
+      <Element
+        type={item.href ? undefined : 'button'}
+        href={item.href}
+        target={item.external ? '_blank' : undefined}
+        rel={item.external ? 'noopener noreferrer' : undefined}
         className={[
           'rail__item',
           sub ? 'rail__item--sub' : '',
@@ -221,11 +236,12 @@ const SidebarRail = () => {
         onClick={item.onClick}
         disabled={item.disabled}
         title={item.hint || (collapsed ? item.label : undefined)}
+        aria-label={item.label}
         aria-current={item.active ? 'page' : undefined}
       >
         <Icon size={18} aria-hidden="true" />
         {!collapsed && <span className="rail__label">{item.label}</span>}
-      </button>
+      </Element>
     );
   };
 
@@ -282,6 +298,10 @@ const SidebarRail = () => {
             label: t('sidebar.signOut', 'Log out'),
             onClick: handleLogout,
           }} />
+          <div className="rail__portals">
+            <Row item={{ key: 'website', icon: Home, label: website.label, href: website.href, external: true }} />
+            <Row item={{ key: 'hr', icon: Users, label: hr.label, href: hr.href, external: true }} />
+          </div>
         </div>
 
         {!collapsed && (

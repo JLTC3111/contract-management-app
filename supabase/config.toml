@@ -14,3 +14,9 @@ entrypoint = "./functions/contract-status-cron/index.ts"
 enabled = true
 verify_jwt = false
 entrypoint = "./functions/contract-delete/index.ts"
+
+[functions.contract-feedback]
+enabled = true
+# The handler validates the user with Auth, or checks the server-only retry token.
+verify_jwt = false
+entrypoint = "./functions/contract-feedback/index.ts"

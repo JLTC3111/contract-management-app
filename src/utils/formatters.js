@@ -111,11 +111,11 @@ export const formatFileSize = (bytes, decimals = 2) => {
 /**
  * Format a number as currency
  * @param {number} amount - Amount to format
- * @param {string} currency - Currency code (default: USD)
+ * @param {string} currency - Currency code (default: VND)
  * @param {string} locale - Locale string
  * @returns {string} Formatted currency string
  */
-export const formatCurrency = (amount, currency = 'USD', locale = 'en-US') => {
+export const formatCurrency = (amount, currency = 'VND', locale = 'en-US') => {
   if (amount === null || amount === undefined) return '-';
   
   try {
@@ -129,8 +129,8 @@ export const formatCurrency = (amount, currency = 'USD', locale = 'en-US') => {
   }
 };
 
-/** Contract amounts are entered in USD. Language changes formatting only. */
-export const CONTRACT_CURRENCY = 'USD';
+/** Contract amounts are entered in VND. Language changes formatting only. */
+export const CONTRACT_CURRENCY = 'VND';
 
 /**
  * Format a date as month + year only ("Aug 2027"). formatDate always merges in
@@ -153,14 +153,14 @@ export const formatMonthYear = (date, locale = undefined) => {
 };
 
 /**
- * Format a number as compact currency ($2.1M, $250K) for overview surfaces
+ * Format a number as compact currency for overview surfaces
  * where full precision is noise. Detail views should use formatCurrency.
  * @param {number} amount - Amount to format
- * @param {string} currency - Currency code (default: USD)
+ * @param {string} currency - Currency code (default: VND)
  * @param {string} locale - Locale string
  * @returns {string} Formatted currency string
  */
-export const formatCompactCurrency = (amount, currency = 'USD', locale = 'en-US') => {
+export const formatCompactCurrency = (amount, currency = 'VND', locale = 'en-US') => {
   if (amount === null || amount === undefined) return '-';
 
   try {

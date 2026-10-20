@@ -72,11 +72,11 @@ test('a later page failure rejects the load instead of returning misleading part
     { data: [{ id: 1 }], count: 2 } : { error: failure } })), failure);
 });
 
-test('all UI languages format the same USD amount', () => {
+test('all UI languages format the same VND amount', () => {
   for (const language of ['en', 'vi', 'de', 'fr', 'es', 'ja', 'th', 'zh']) {
     assert.equal(formatCurrency(1234.56, CONTRACT_CURRENCY, language),
-      new Intl.NumberFormat(language, { style: 'currency', currency: 'USD' }).format(1234.56));
-    assert.equal(formatCompactCurrency(1234.56, CONTRACT_CURRENCY, language), formatCompactCurrency(1234.56, 'USD', language));
+      new Intl.NumberFormat(language, { style: 'currency', currency: 'VND' }).format(1234.56));
+    assert.equal(formatCompactCurrency(1234.56, CONTRACT_CURRENCY, language), formatCompactCurrency(1234.56, 'VND', language));
   }
 });
 

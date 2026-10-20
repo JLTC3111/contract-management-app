@@ -26,6 +26,7 @@
 }
 
 .rail--collapsed .rail__top { justify-content: center; }
+.rail__portals { margin-top: auto; padding-top: 0.4rem; border-top: 1px solid var(--card-border); }
 
 .rail__toggle {
   display: flex;
@@ -61,6 +62,7 @@
   font-size: 0.86rem;
   font-weight: 700;
   text-align: left;
+  text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
@@ -75,7 +77,8 @@
 
 .rail__label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
 
-.rail__item--active {
+.rail__item--active,
+.rail__item:active:not(:disabled) {
   background: color-mix(in srgb, var(--primary) 14%, transparent);
   border-left-color: var(--primary);
   color: var(--primary);
@@ -142,6 +145,13 @@
 
 @media (hover: hover) {
   .rail__item:hover:not(:disabled),
-  .rail__toggle:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); }
-  .rail__item--active:hover { background: color-mix(in srgb, var(--primary) 18%, transparent); }
+  .rail__toggle:hover {
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
+    color: var(--sidebar-text);
+  }
+  .rail__item--active:hover,
+  .rail__item:active:not(:disabled):hover {
+    background: color-mix(in srgb, var(--primary) 18%, transparent);
+    color: var(--primary);
+  }
 }

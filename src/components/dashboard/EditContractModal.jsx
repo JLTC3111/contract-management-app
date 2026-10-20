@@ -221,7 +221,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
           </label>
 
           <label className="ledger-field">
-            <span>{t('dashboard.valueUsd', 'Value ($)')}</span>
+            <span>{t('dashboard.valueUsd', 'Value (VND)')}</span>
             <input type="number" min="0" step="any" value={form.contract_value} onChange={set('contract_value')} />
           </label>
 

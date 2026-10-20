@@ -90,6 +90,8 @@ try {
   assert.equal(query("SELECT count(*) FROM public.contract_approval_requests WHERE contract_id=901 AND status='pending';").stdout.trim(), '1');
   assert.equal(query('SELECT stage FROM public.contracts WHERE id=901;').stdout.trim(), 'in_review');
   console.log('Concurrent submissions return one pending request and one initial transition.');
+  const feedback = query(`BEGIN;\n${readFileSync(new URL('../supabase/tests/contract_feedback.sql', import.meta.url), 'utf8')}\nROLLBACK;`);
+  console.log(`${(feedback.stderr.match(/PASS:/g) || []).length} feedback storage, retry and permission checks passed.`);
 } finally {
   docker(['stop', container]);
 }

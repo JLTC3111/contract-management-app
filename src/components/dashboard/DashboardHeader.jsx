@@ -81,7 +81,9 @@ const DashboardHeader = ({
     <header className="ledger-header">
       <div className="ledger-header__brand">
         <div className="ledger-header__brand-row">
-          <img src="/logoIcons/logo.png" alt="" style={{ width: 18, height: 18 }} />
+          <a href="https://icue.vn" style={{ display: 'flex', flexShrink: 0 }}>
+            <img src="/logoIcons/logo.png" alt="ICUE" style={{ width: 18, height: 18 }} />
+          </a>
           <span className="ledger-header__title">{t('navbar.title', 'Quản Lý Hợp Đồng')}</span>
         </div>
          <span className="ledger-header__kicker">

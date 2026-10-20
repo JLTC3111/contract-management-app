@@ -1,0 +1,54 @@
+.icue-apps { display: flex; flex: none; align-items: center; color: inherit; }
+.icue-apps .icue-apps__trigger {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-width: 44px; min-height: 44px; margin: 0; padding: 8px 10px;
+  border: 1px solid currentColor; border-radius: 8px; background: transparent;
+  color: inherit; font: inherit; font-size: 13px; line-height: 1.2; white-space: nowrap;
+  cursor: pointer; box-shadow: none; text-transform: none; letter-spacing: normal;
+}
+.icue-apps .icue-apps__trigger:hover, .icue-apps .icue-apps__trigger[aria-expanded='true'] { background: color-mix(in srgb, currentColor 10%, transparent); }
+.icue-apps__trigger svg { flex: none; }
+.icue-apps--pill .icue-apps__trigger { min-height: var(--pill-nav-height, 48px); border-color: #ffffff30; border-radius: 999px; background: #0a0e14f0; color: #f4f6f8; }
+.icue-apps--band { align-self: stretch; border-right: 1px solid #f2f2f32e; }
+.icue-apps--band .icue-apps__trigger { align-self: stretch; padding-inline: 14px; border: 0; border-radius: 0; }
+.icue-apps--square .icue-apps__trigger { border-radius: 0; }
+.icue-apps--compact .icue-apps__trigger-label, .icue-apps--compact .icue-apps__chevron { display: none; }
+.main-site-nav__dock-zone .icue-apps__trigger-label, .main-site-nav__dock-zone .icue-apps__chevron { display: none; }
+@media (min-width: 1025px) { .main-site-nav--dock-expanded .icue-apps__trigger-label { display: inline; } }
+.icue-apps__panel {
+  --icue-apps-surface: #ffffff; --icue-apps-ink: #20303b; --icue-apps-muted: #536271;
+  --icue-apps-rule: #dce2e7; --icue-apps-hover: #edf2f6; --icue-apps-focus: #376f9f;
+  position: fixed; z-index: 2147483001; box-sizing: border-box;
+  width: min(352px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto;
+  padding: 8px; border: 1px solid var(--icue-apps-rule); border-radius: 16px;
+  background: var(--icue-apps-surface); color: var(--icue-apps-ink);
+  box-shadow: 0 16px 44px #00000029;
+  font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-align: left; color-scheme: light; isolation: isolate; overscroll-behavior: contain;
+}
+.icue-apps__panel[data-appearance='dark'] { --icue-apps-surface: #18232e; --icue-apps-ink: #f1f4f7; --icue-apps-muted: #b6c3ce; --icue-apps-rule: #3d4b58; --icue-apps-hover: #2a3b4c; --icue-apps-focus: #a4d3ff; color-scheme: dark; }
+.icue-apps__panel--square { border-radius: 0; }
+.icue-apps__panel *, .icue-apps__panel *::before, .icue-apps__panel *::after { box-sizing: border-box; }
+.icue-apps__heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-left: 12px; color: var(--icue-apps-muted); font-size: 12px; }
+.icue-apps__panel .icue-apps__close { display: grid; place-items: center; min-width: 44px; min-height: 44px; padding: 8px; margin: 0; border: 0; border-radius: 6px; background: transparent; color: var(--icue-apps-ink); cursor: pointer; box-shadow: none; }
+.icue-apps__panel .icue-apps__destination { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 70px; margin: 0; padding: 12px; border: 0; border-radius: 8px; color: var(--icue-apps-ink); background: transparent; text-decoration: none; text-align: left; font: inherit; transform: none; }
+.icue-apps__panel .icue-apps__destination:hover, .icue-apps__panel .icue-apps__close:hover, .icue-apps__panel .icue-apps__destination--current { background: var(--icue-apps-hover); color: var(--icue-apps-ink); }
+.icue-apps__panel--square .icue-apps__destination, .icue-apps__panel--square .icue-apps__close { border-radius: 0; }
+.icue-apps__icon, .icue-apps__external { flex: none; }
+.icue-apps__copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 3px; }
+.icue-apps__name { font-weight: 500; overflow-wrap: anywhere; }
+.icue-apps__description { color: var(--icue-apps-muted); font-size: 12px; overflow-wrap: anywhere; }
+.icue-apps__current { display: flex; align-items: center; gap: 4px; flex: none; color: var(--icue-apps-muted); }
+.icue-apps__current span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.icue-apps__trigger:focus-visible, .icue-apps__panel a:focus-visible, .icue-apps__panel button:focus-visible { outline: 2px solid var(--icue-apps-focus, currentColor); outline-offset: 2px; }
+.icue-apps__sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.icue-apps__backdrop { position: fixed; inset: 0; z-index: 2147483000; background: #00000066; touch-action: none; }
+.icue-apps__panel--mobile { inset: auto 12px max(12px, env(safe-area-inset-bottom)); width: auto; max-height: calc(100dvh - 40px); border-radius: 18px; padding-bottom: 12px; }
+@media (max-width: 1180px) { .pill-site-header .icue-apps__trigger-label, .pill-site-header .icue-apps__chevron { display: none; } }
+@media (max-width: 640px) {
+  .icue-apps .icue-apps__trigger-label, .icue-apps .icue-apps__chevron { display: none; }
+  .icue-apps--pill .icue-apps__trigger { min-height: 44px; border: 0; background: transparent; padding: 8px; }
+  .icue-apps--band .icue-apps__trigger { padding-inline: 10px; }
+  .main-site-nav .main-site-nav__dock--unified .main-site-nav__dock-zone { flex: 0 1 auto; max-width: none; min-width: 0; }
+}
+@media (max-width: 390px) { .main-site-nav__dock-slot--brand .logo-wordmark { display: none; } }

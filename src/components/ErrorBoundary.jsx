@@ -13,7 +13,9 @@ function CrashScreen({ error, errorInfo, fallback }) {
   return (
     <div className="crash" role="alert">
       <nav className="crash-nav">
-        <img src="/logoIcons/logo.png" alt="" className="crash-nav__logo" />
+        <a href="https://icue.vn" style={{ display: 'flex', flexShrink: 0 }}>
+          <img src="/logoIcons/logo.png" alt="ICUE" className="crash-nav__logo" />
+        </a>
         <p className="crash-nav__brand">{t('login.title', 'Contract Manager')}</p>
       </nav>
 

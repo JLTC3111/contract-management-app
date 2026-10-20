@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
+  Newspaper,
   LayoutDashboardIcon,
   LogOutIcon,
   Check,
   ChevronsLeft,
   FileText,
   UserLock,
+  Users,
   BookOpen,
   Settings,
   Lightbulb,
@@ -31,18 +33,20 @@ import UserProfileSection from './UserProfileSection';
 import { LAST_RECORD_KEY } from '../../pages/ContractRecord';
 
 import '../Table.css';
+import { getAppNavigation } from '../app-switcher/appLinks.js';
 
 /**
  * The original sidebar, kept verbatim for the mobile horizontal bar.
  * Desktop now uses the flat rail in Sidebar.jsx; this component is rendered
  * only below the mobile breakpoint, where its layout was hand-tuned.
  */
-const SidebarMobile = () => {
+const SidebarMobile = ({ onFeedback }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, isDemoMode, disableDemoMode } = useUser() ?? {};
   const { darkMode } = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [website, hr] = getAppNavigation(i18n.resolvedLanguage || i18n.language).apps;
   const sidebarRef = useRef();
   
   // State
@@ -111,7 +115,8 @@ const SidebarMobile = () => {
   // Navigation handlers
   const handleReadManual = () => navigate('/manual');
   const handleSendFeedback = () => {
-    window.open('mailto:support@icue.vn?subject=Contract Management App Feedback', '_blank');
+    setProfileOpen(false);
+    onFeedback();
   };
 
   // Resize handlers
@@ -201,7 +206,7 @@ const SidebarMobile = () => {
           alignItems: 'center',
           justifyContent: isMobile ? 'space-around' : 'space-between',
           width: isMobile ? '100%' : collapsed ? '72px' : `${sidebarWidth}px`,
-          height: isMobile ? (collapsed ? '36px' : 'auto') : '100vh',
+          height: isMobile ? (collapsed ? '48px' : 'auto') : '100vh',
           backgroundColor: 'var(--sidebar-bg)',
           transition: isResizing || isMobile ? 'none' : 'width 0.3s',
           boxShadow: '2px 0 5px rgba(0,0,0,0.05)',
@@ -325,11 +330,14 @@ const SidebarMobile = () => {
             >
               <SidebarButton
                 icon={<HomeIcon size={20} />}
-                label={t('sidebar.home', 'Home')}
+                label={website.label}
                 path="/home"
                 collapsed={collapsed || isMobile}
                 currentPath={location.pathname}
-                onClick={() => window.location.href = 'https://icue.vn'}
+                href={website.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={website.label}
               />
               <AnimatePresence>
                 {isHovered && !isMobile && !collapsed && (
@@ -358,6 +366,26 @@ const SidebarMobile = () => {
                 )}
               </AnimatePresence>
             </div>
+
+            <SidebarButton
+              icon={<Users size={20} />}
+              label={hr.label}
+              href={hr.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              collapsed={collapsed || isMobile}
+              aria-label={hr.label}
+              title={hr.label}
+            />
+
+            <SidebarButton
+              icon={<Newspaper size={20} />}
+              label={t('sidebar.newsroom', 'Newsroom')}
+              href="https://icue.vn/newsroom/"
+              collapsed={collapsed || isMobile}
+              aria-label={t('sidebar.newsroom', 'Newsroom')}
+              title={t('sidebar.newsroom', 'Newsroom')}
+            />
 
             {/* Dashboard */}
             <SidebarButton
