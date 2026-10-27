@@ -6,6 +6,7 @@
  */
 import { storageApi } from '../api/contracts';
 import { FILE_CONSTRAINTS } from './constants';
+import { isRetryableError } from './network';
 
 /**
  * Storage keys must be ASCII-safe.
@@ -44,12 +45,28 @@ export const uploadAttachments = async (contractId, files, folder = '') => {
   const failed = [];
 
   for (const file of files || []) {
-    const name = sanitizeFileName(file.name) || `file-${Date.now()}`;
+    const name = sanitizeFileName(file.name) || `file-${file.lastModified || 0}-${file.size}`;
+    const path = `uploads/${contractId}/${folder ? `${folder}/` : ''}${name}`;
     try {
-      await storageApi.upload(`uploads/${contractId}/${folder ? `${folder}/` : ''}${name}`, file);
+      await storageApi.upload(path, file);
       uploaded.push(name);
     } catch (err) {
-      failed.push({ name: file.name, message: err?.message || 'upload failed' });
+      // An upload can commit before its response is lost. A matching existing
+      // object is success; a different object is never overwritten on retry.
+      try {
+        if (isRetryableError(err) || Number(err.statusCode || err.status) === 409) {
+          const existing = await storageApi.download(path);
+          if (existing.size === file.size) {
+            const [left, right] = await Promise.all([existing.arrayBuffer(), file.arrayBuffer()]);
+            const [a, b] = await Promise.all([crypto.subtle.digest('SHA-256', left), crypto.subtle.digest('SHA-256', right)]);
+            if (new Uint8Array(a).every((byte, index) => byte === new Uint8Array(b)[index])) {
+              uploaded.push(name);
+              continue;
+            }
+          }
+        }
+      } catch { /* retain the file for explicit retry */ }
+      failed.push({ name: file.name, file, message: err?.message || 'upload failed' });
     }
   }
 

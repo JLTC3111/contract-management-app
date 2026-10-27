@@ -1,14 +1,15 @@
+import { browserStorage } from '../utils/browserStorage';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const DemoContext = createContext();
 
 export const DemoProvider = ({ children }) => {
   const [isDemoMode, setIsDemoMode] = useState(() => {
-    return localStorage.getItem('isDemoMode') === 'true';
+    return browserStorage.getItem('isDemoMode') === 'true';
   });
 
   useEffect(() => {
-    localStorage.setItem('isDemoMode', isDemoMode);
+    browserStorage.setItem('isDemoMode', isDemoMode);
   }, [isDemoMode]);
 
   const enableDemoMode = () => setIsDemoMode(true);

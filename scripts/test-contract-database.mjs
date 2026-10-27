@@ -92,6 +92,18 @@ try {
   console.log('Concurrent submissions return one pending request and one initial transition.');
   const feedback = query(`BEGIN;\n${readFileSync(new URL('../supabase/tests/contract_feedback.sql', import.meta.url), 'utf8')}\nROLLBACK;`);
   console.log(`${(feedback.stderr.match(/PASS:/g) || []).length} feedback storage, retry and permission checks passed.`);
+  const recovery = query(readFileSync(new URL('../supabase/tests/contract_recovery.sql', import.meta.url), 'utf8'));
+  console.log(`${(recovery.stderr.match(/PASS:/g) || []).length} creation recovery and permission checks passed.`);
+  const createRetry = (id) => `BEGIN; SET LOCAL ROLE authenticated;
+    SELECT set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000002',true);
+    INSERT INTO public.contracts(id,title,status,stage,client_request_id)
+      VALUES (${id},'Concurrent retry','draft','draft','30000000-0000-4000-8000-000000000001');
+    SELECT pg_sleep(0.15); COMMIT;`;
+  const creations = await Promise.all([concurrentQuery(createRetry(3001)), concurrentQuery(createRetry(3002))]);
+  assert.equal(creations.filter((result) => result.code === 0).length, 1);
+  assert.ok(creations.some((result) => result.error.includes('duplicate key')));
+  assert.equal(query("SELECT count(*) FROM public.contracts WHERE client_request_id='30000000-0000-4000-8000-000000000001';").stdout.trim(), '1');
+  console.log('Concurrent creation retries commit only one contract.');
 } finally {
   docker(['stop', container]);
 }

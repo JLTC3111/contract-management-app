@@ -1,3 +1,5 @@
+import { browserStorage } from '../utils/browserStorage';
+import { isRetryableError } from '../utils/network';
 /**
  * Contracts API Service
  * Centralized contract CRUD operations with Supabase
@@ -22,7 +24,7 @@ import {
 } from '../data/mockData';
 
 // Helper to check demo mode
-const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
+const isDemoMode = () => browserStorage.getItem('isDemoMode') === 'true';
 
 /**
  * Normalize contract rows from Supabase for consistent UI fields.
@@ -442,21 +444,32 @@ export const contractsApi = {
    * @param {object} contract - Contract data
    * @returns {Promise<object>} Created contract
    */
-  async create(contract) {
+  async create(contract, { requestId = crypto.randomUUID() } = {}) {
     // Demo mode: use localStorage
     if (isDemoMode()) {
-      return demoContractsApi.create(contract);
+      const existing = (await demoContractsApi.getAll()).find((row) => row.client_request_id === requestId);
+      return existing || demoContractsApi.create({ ...contract, client_request_id: requestId });
     }
     
     const now = new Date().toISOString();
 
-    const data = await contractsSchema.writeWithFallback(
-      (body) => supabase.from('contracts').insert(body).select().single(),
-      { ...contract, created_at: now, updated_at: now }
-    );
+    let data;
+    try {
+      data = await contractsSchema.writeWithFallback(
+        (body) => supabase.from('contracts').insert(body).select().single(),
+        { ...contract, client_request_id: requestId, created_at: now, updated_at: now }
+      );
+    } catch (error) {
+      if (error.code === '23505' || isRetryableError(error)) {
+        // The server may have committed even though its response never arrived.
+        const result = await supabase.from('contracts').select('*').eq('client_request_id', requestId).maybeSingle();
+        if (!result.error && result.data) data = result.data;
+      }
+      if (!data) throw error;
+    }
 
     contractsSchema.learnFromRow(data);
-    return data;
+    return normalizeContractRow(data);
   },
 
   /**
@@ -481,16 +494,37 @@ export const contractsApi = {
       payload.content = updates.description;
     }
 
-    const data = await contractsSchema.writeWithFallback(
+    let data;
+    let writeError;
+    try { data = await contractsSchema.writeWithFallback(
       (body) => {
         let query = supabase.from('contracts').update(body).eq('id', id);
         if (expectedRevision != null) query = query.eq('revision', expectedRevision);
         return query.select().maybeSingle();
       },
       payload
-    );
+    ); } catch (error) {
+      if (error.code !== 'PGRST116' || !/0 rows/.test(error.details || '')) {
+        if (!isRetryableError(error)) throw error;
+        writeError = error;
+      }
+    }
 
-    if (!data) throw new Error('Contract changed or is no longer available. Reload it before saving.');
+    if (!data) {
+      let latest;
+      try { latest = await this.getById(id); } catch { /* keep the original uncertainty */ }
+      if (latest && Object.entries(updates).every(([key, value]) => {
+        const actual = latest[key];
+        if (key === 'status' && ['expired', 'expiring'].includes(actual)) return latest.lifecycle_status === value;
+        if (value == null || value === '') return actual == null || actual === '';
+        return String(actual) === String(value);
+      })) return latest;
+      if (writeError && (!latest || latest.revision === expectedRevision)) throw writeError;
+      const conflict = new Error('Contract changed or is no longer available. Reload it before saving.');
+      conflict.code = 'CONTRACT_CONFLICT';
+      conflict.latest = latest;
+      throw conflict;
+    }
 
     contractsSchema.learnFromRow(data);
     return normalizeContractRow(data);
@@ -783,6 +817,11 @@ export const commentsApi = {
  * File storage operations
  */
 export const storageApi = {
+  async download(path) {
+    const { data, error } = await supabase.storage.from('contracts').download(path);
+    if (error) throw error;
+    return data;
+  },
   /**
    * Upload a file
    * @param {string} path - Storage path

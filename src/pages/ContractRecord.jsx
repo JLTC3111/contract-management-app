@@ -1,3 +1,5 @@
+import { saveContractEdit } from '../utils/contractRecovery';
+import { browserStorage } from '../utils/browserStorage';
 import { useStorageFolder, isStorageFolder } from '../hooks/useStorageFolder';
 import DocumentBreadcrumbs from '../components/dashboard/DocumentBreadcrumbs';
 import { canEditContracts } from '../utils/permissions';
@@ -25,14 +27,17 @@ import {
 import {
   ADVANCEABLE_STAGES,
   APPROVAL_REQUESTABLE_STAGES,
-  contractEditPayload,
   getContractStage,
   getStageLabel,
 } from '../utils/stages';
 import { getCategoryLabel } from '../utils/constants';
-import { deleteAttachments, sanitizeFileName, uploadAttachments } from '../utils/uploads';
+import { sanitizeFileName } from '../utils/uploads';
 import { StageTag } from '../components/dashboard/StageTag';
 import EditContractModal from '../components/dashboard/EditContractModal';
+import DraftNotice from '../components/common/DraftNotice';
+import RetryNotice from '../components/common/RetryNotice';
+import { useDraftRecovery } from '../hooks/useDraftRecovery';
+import { useRevalidate } from '../hooks/useRevalidate';
 import '../components/dashboard/dashboard.css';
 
 /** The sidebar's "Full record" row reopens whatever was last read here. */
@@ -56,31 +61,50 @@ const ContractRecord = () => {
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [posting, setPosting] = useState(false);
+  const [loadError, setLoadError] = useState(null);
+  const [commentsError, setCommentsError] = useState(null);
+  const loadGeneration = useRef(0);
+  const commentsGeneration = useRef(0);
+  const commentRecovery = useDraftRecovery({
+    accountId: user?.id, scope: `comment:${contractId}`, value: commentText,
+    dirty: !!commentText.trim(), onRestore: (text) => { if (typeof text === 'string') setCommentText(text); },
+  });
 
   const canEdit = canEditContracts(user);
 
   const loadContract = useCallback(async () => {
     if (!contractId) return;
+    const request = ++loadGeneration.current;
     try {
       const data = await contractsApi.getById(contractId);
+      if (request !== loadGeneration.current) return;
       setContract(data || null);
+      setLoadError(null);
     } catch (err) {
+      if (request !== loadGeneration.current) return;
       console.error('Could not load contract:', err);
-      setContract(null);
+      if (err.code === 'PGRST116' && /0 rows/.test(err.details || '')) {
+        setContract(null); setLoadError(null);
+      } else setLoadError(err);
     } finally {
-      setLoading(false);
+      if (request === loadGeneration.current) setLoading(false);
     }
   }, [contractId]);
 
   const loadComments = useCallback(async () => {
-    setComments(await commentsApi.getByContractId(contractId).catch(() => []) || []);
+    const request = ++commentsGeneration.current;
+    try {
+      const notes = await commentsApi.getByContractId(contractId);
+      if (request === commentsGeneration.current) { setComments(notes || []); setCommentsError(null); }
+    } catch (error) { if (request === commentsGeneration.current) setCommentsError(error); }
   }, [contractId]);
 
-  useEffect(() => { loadContract(); }, [loadContract]);
-  useEffect(() => { loadComments(); }, [loadComments]);
+  useEffect(() => { loadContract(); return () => { loadGeneration.current += 1; }; }, [loadContract]);
+  useEffect(() => { loadComments(); return () => { commentsGeneration.current += 1; }; }, [loadComments]);
+  useRevalidate(() => { if (!busy) return Promise.all([loadContract(), loadComments()]); });
 
   useEffect(() => {
-    if (contractId) localStorage.setItem(LAST_RECORD_KEY, String(contractId));
+    if (contractId) browserStorage.setItem(LAST_RECORD_KEY, String(contractId));
   }, [contractId]);
 
   const stage = getContractStage(contract);
@@ -149,31 +173,12 @@ const ContractRecord = () => {
   };
 
   const handleSave = async (target, updates, attachments = [], removedFiles = [], attachmentFolder = '') => {
-    if (!canEdit || busy) return;
+    if (!canEdit || busy) throw new Error('Verify your access before saving changes.');
     setBusy(true);
     try {
-      await contractsApi.update(target.id, contractEditPayload(target, updates), { expectedRevision: target.revision });
-      if (removedFiles.length) {
-        const { failed } = await deleteAttachments(target.id, removedFiles);
-        if (failed.length) {
-          toast.error(t('dashboard.deleteFileFailed', 'Some files could not be deleted: {{names}}', {
-            names: failed.map((f) => f.name).join(', '),
-          }));
-        }
-      }
-      if (attachments.length) {
-        const { failed } = await uploadAttachments(target.id, attachments, attachmentFolder);
-        if (failed.length) {
-          toast.error(t('dashboard.uploadFailed', 'Some files did not upload: {{names}}', {
-            names: failed.map((f) => f.name).join(', '),
-          }));
-        }
-      }
-      setEditing(false);
+      const result = await saveContractEdit(target, updates, attachments, removedFiles, attachmentFolder);
       await Promise.all([loadContract(), loadDocuments()]);
-    } catch (err) {
-      console.error('Save failed:', err);
-      toast.error(t('dashboard.saveFailed', 'Could not save changes: {{msg}}', { msg: err.message }));
+      return result;
     } finally {
       setBusy(false);
     }
@@ -191,7 +196,7 @@ const ContractRecord = () => {
       const result = await contractsApi.delete(contract.id, { expectedRevision: contract.revision });
       if (result?.cleanup_pending) toast.error(t('dashboard.cleanupPending',
         'Contract deleted. Document cleanup is pending and will be retried automatically.'));
-      localStorage.removeItem(LAST_RECORD_KEY);
+      browserStorage.removeItem(LAST_RECORD_KEY);
       navigate('/');
     } catch (err) {
       console.error('Delete failed:', err);
@@ -260,7 +265,7 @@ const ContractRecord = () => {
 
   const postComment = async () => {
     const body = commentText.trim();
-    if (!body) return;
+    if (!body || posting || user?.recoveryPending || commentRecovery.pending) return;
     setPosting(true);
     try {
       // contract_comments RLS is WITH CHECK (auth.uid() = user_id), so the row
@@ -271,6 +276,7 @@ const ContractRecord = () => {
         user_email: user?.email,
         comment: body,
       });
+      commentRecovery.clear();
       setCommentText('');
       await loadComments();
     } catch (err) {
@@ -288,6 +294,8 @@ const ContractRecord = () => {
       </div>
     );
   }
+
+  if (!contract && loadError) return <div className="ledger"><RetryNotice onRetry={loadContract} /></div>;
 
   if (!contract) {
     return (
@@ -315,6 +323,7 @@ const ContractRecord = () => {
 
   return (
     <div className="ledger ledger-record">
+      {loadError && <RetryNotice onRetry={loadContract} />}
       <header className="ledger-record__head">
         <button
           type="button"
@@ -421,7 +430,7 @@ const ContractRecord = () => {
           </div>
           <div className="ledger-panel__body">
             <DocumentBreadcrumbs folder={folder} />
-            {documents.length === 0 && !folder.loading ? (
+            {documents.length === 0 && !folder.loading && !folder.error ? (
               <p className="ledger-record__empty">{t('dashboard.noDocuments', 'No documents yet.')}</p>
             ) : (
               documents.map((doc) => (
@@ -467,7 +476,8 @@ const ContractRecord = () => {
             <span className="ledger-panel__label">{t('dashboard.comments', 'Comments')}</span>
           </div>
           <div className="ledger-panel__body">
-            {comments.length === 0 ? (
+            {commentsError && <RetryNotice onRetry={loadComments} />}
+            {comments.length === 0 && !commentsError ? (
               <p className="ledger-record__empty">{t('dashboard.noComments', 'No comments yet.')}</p>
             ) : (
               comments.map((c) => (
@@ -481,8 +491,10 @@ const ContractRecord = () => {
             )}
 
             <div className="ledger-record__compose">
+              <DraftNotice recovery={commentRecovery} />
               <textarea
                 value={commentText}
+                disabled={posting || commentRecovery.pending}
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder={t('dashboard.addComment', 'Add a comment...')}
                 aria-label={t('dashboard.addComment', 'Add a comment...')}
@@ -491,7 +503,7 @@ const ContractRecord = () => {
                 type="button"
                 className="btn-accent"
                 onClick={postComment}
-                disabled={posting || !commentText.trim()}
+                disabled={posting || user?.recoveryPending || commentRecovery.pending || !commentText.trim()}
               >
                 {t('dashboard.postComment', 'Post comment')}
               </button>

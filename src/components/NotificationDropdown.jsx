@@ -1,3 +1,4 @@
+import { browserStorage } from '../utils/browserStorage';
 import { useState, useEffect } from 'react';
 import {
   AlertTriangle,
@@ -30,7 +31,7 @@ const NotificationTypeIcon = ({ type, size = 16 }) => {
   return Icon ? <Icon size={size} aria-hidden="true" /> : null;
 };
 
-const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
+const isDemoMode = () => browserStorage.getItem('isDemoMode') === 'true';
 
 const NotificationDropdown = () => {
   const { user } = useUser();

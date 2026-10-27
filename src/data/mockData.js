@@ -1,3 +1,4 @@
+import { browserStorage } from '../utils/browserStorage';
 // Demo mode storage keys
 const DEMO_CONTRACTS_KEY = 'demo_contracts';
 const DEMO_COMMENTS_KEY = 'demo_comments';
@@ -319,7 +320,7 @@ export const MOCK_USER = {
 
 // Helper functions for demo data management
 export const getDemoContracts = () => {
-  const stored = localStorage.getItem(DEMO_CONTRACTS_KEY);
+  const stored = browserStorage.getItem(DEMO_CONTRACTS_KEY);
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
@@ -342,91 +343,91 @@ export const getDemoContracts = () => {
       });
 
       // Persist merged back to localStorage to keep consistency
-      localStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(merged));
+      browserStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(merged));
       return merged;
     } catch (e) {
       console.error('Failed to parse stored demo contracts, resetting to defaults', e);
-      localStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(INITIAL_MOCK_CONTRACTS));
+      browserStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(INITIAL_MOCK_CONTRACTS));
       return INITIAL_MOCK_CONTRACTS;
     }
   }
   // Initialize with default data
-  localStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(INITIAL_MOCK_CONTRACTS));
+  browserStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(INITIAL_MOCK_CONTRACTS));
   return INITIAL_MOCK_CONTRACTS;
 };
 
 export const setDemoContracts = (contracts) => {
-  localStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(contracts));
+  browserStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(contracts));
 };
 
 export const getDemoComments = () => {
-  const stored = localStorage.getItem(DEMO_COMMENTS_KEY);
+  const stored = browserStorage.getItem(DEMO_COMMENTS_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
-  localStorage.setItem(DEMO_COMMENTS_KEY, JSON.stringify(INITIAL_MOCK_COMMENTS));
+  browserStorage.setItem(DEMO_COMMENTS_KEY, JSON.stringify(INITIAL_MOCK_COMMENTS));
   return INITIAL_MOCK_COMMENTS;
 };
 
 export const setDemoComments = (comments) => {
-  localStorage.setItem(DEMO_COMMENTS_KEY, JSON.stringify(comments));
+  browserStorage.setItem(DEMO_COMMENTS_KEY, JSON.stringify(comments));
 };
 
 export const getDemoPhases = () => {
-  const stored = localStorage.getItem(DEMO_PHASES_KEY);
+  const stored = browserStorage.getItem(DEMO_PHASES_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
-  localStorage.setItem(DEMO_PHASES_KEY, JSON.stringify(INITIAL_MOCK_PHASES));
+  browserStorage.setItem(DEMO_PHASES_KEY, JSON.stringify(INITIAL_MOCK_PHASES));
   return INITIAL_MOCK_PHASES;
 };
 
 export const setDemoPhases = (phases) => {
-  localStorage.setItem(DEMO_PHASES_KEY, JSON.stringify(phases));
+  browserStorage.setItem(DEMO_PHASES_KEY, JSON.stringify(phases));
 };
 
 export const getDemoFiles = () => {
-  const stored = localStorage.getItem(DEMO_FILES_KEY);
+  const stored = browserStorage.getItem(DEMO_FILES_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
-  localStorage.setItem(DEMO_FILES_KEY, JSON.stringify(INITIAL_MOCK_FILES));
+  browserStorage.setItem(DEMO_FILES_KEY, JSON.stringify(INITIAL_MOCK_FILES));
   return INITIAL_MOCK_FILES;
 };
 
 export const setDemoFiles = (files) => {
-  localStorage.setItem(DEMO_FILES_KEY, JSON.stringify(files));
+  browserStorage.setItem(DEMO_FILES_KEY, JSON.stringify(files));
 };
 
 export const getDemoApprovals = () => {
-  const stored = localStorage.getItem(DEMO_APPROVALS_KEY);
+  const stored = browserStorage.getItem(DEMO_APPROVALS_KEY);
   if (stored) {
     return JSON.parse(stored);
   }
-  localStorage.setItem(DEMO_APPROVALS_KEY, JSON.stringify(INITIAL_MOCK_APPROVALS));
+  browserStorage.setItem(DEMO_APPROVALS_KEY, JSON.stringify(INITIAL_MOCK_APPROVALS));
   return INITIAL_MOCK_APPROVALS;
 };
 
 export const setDemoApprovals = (approvals) => {
-  localStorage.setItem(DEMO_APPROVALS_KEY, JSON.stringify(approvals));
+  browserStorage.setItem(DEMO_APPROVALS_KEY, JSON.stringify(approvals));
 };
 
 // Reset all demo data to initial state
 export const resetDemoData = () => {
-  localStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(INITIAL_MOCK_CONTRACTS));
-  localStorage.setItem(DEMO_COMMENTS_KEY, JSON.stringify(INITIAL_MOCK_COMMENTS));
-  localStorage.setItem(DEMO_PHASES_KEY, JSON.stringify(INITIAL_MOCK_PHASES));
-  localStorage.setItem(DEMO_FILES_KEY, JSON.stringify(INITIAL_MOCK_FILES));
-  localStorage.setItem(DEMO_APPROVALS_KEY, JSON.stringify(INITIAL_MOCK_APPROVALS));
+  browserStorage.setItem(DEMO_CONTRACTS_KEY, JSON.stringify(INITIAL_MOCK_CONTRACTS));
+  browserStorage.setItem(DEMO_COMMENTS_KEY, JSON.stringify(INITIAL_MOCK_COMMENTS));
+  browserStorage.setItem(DEMO_PHASES_KEY, JSON.stringify(INITIAL_MOCK_PHASES));
+  browserStorage.setItem(DEMO_FILES_KEY, JSON.stringify(INITIAL_MOCK_FILES));
+  browserStorage.setItem(DEMO_APPROVALS_KEY, JSON.stringify(INITIAL_MOCK_APPROVALS));
 };
 
 // Clear all demo data
 export const clearDemoData = () => {
-  localStorage.removeItem(DEMO_CONTRACTS_KEY);
-  localStorage.removeItem(DEMO_COMMENTS_KEY);
-  localStorage.removeItem(DEMO_PHASES_KEY);
-  localStorage.removeItem(DEMO_FILES_KEY);
-  localStorage.removeItem(DEMO_APPROVALS_KEY);
+  browserStorage.removeItem(DEMO_CONTRACTS_KEY);
+  browserStorage.removeItem(DEMO_COMMENTS_KEY);
+  browserStorage.removeItem(DEMO_PHASES_KEY);
+  browserStorage.removeItem(DEMO_FILES_KEY);
+  browserStorage.removeItem(DEMO_APPROVALS_KEY);
 };
 
 // Generate unique ID for demo items

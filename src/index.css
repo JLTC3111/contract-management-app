@@ -999,3 +999,12 @@ body.dark .dashboard-metrics .metric-completed:hover {
     font-size: clamp(1.1rem, 6vw, 2rem);
   }
 }
+.recovery-notice {
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  border: 1px solid var(--card-border, #cbd5e1);
+  background: var(--card-bg, #fff);
+  color: var(--text-primary, #1e293b);
+}
+.recovery-notice p { margin: 0 0 0.5rem; }
+.recovery-notice button { margin: 0.25rem 0.5rem 0.25rem 0; }

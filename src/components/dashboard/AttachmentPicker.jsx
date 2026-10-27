@@ -10,7 +10,7 @@ import { FILE_CONSTRAINTS } from '../../utils/constants';
  * Stages files for upload. The actual upload happens after the contract is
  * saved, since a file needs a contract id to live under.
  */
-const AttachmentPicker = ({ files, onChange }) => {
+const AttachmentPicker = ({ files, onChange, disabled = false }) => {
   const { t } = useTranslation();
   const inputRef = useRef(null);
   const [rejected, setRejected] = useState([]);
@@ -48,12 +48,14 @@ const AttachmentPicker = ({ files, onChange }) => {
         ref={inputRef}
         type="file"
         multiple
+        disabled={disabled}
         className="ledger-attach__input"
         accept={FILE_CONSTRAINTS.allowedExtensions.join(',')}
         onChange={add}
       />
       <button
         type="button"
+        disabled={disabled}
         className="ledger-btn ledger-btn--ghost ledger-btn--block"
         onClick={() => inputRef.current?.click()}
       >
@@ -68,6 +70,7 @@ const AttachmentPicker = ({ files, onChange }) => {
               <span className="ledger-attach__size">{formatFileSize(file.size)}</span>
               <button
                 type="button"
+                disabled={disabled}
                 className="ledger-attach__remove"
                 onClick={() => remove(i)}
                 aria-label={t('dashboard.removeFile', 'Remove {{name}}', { name: file.name })}

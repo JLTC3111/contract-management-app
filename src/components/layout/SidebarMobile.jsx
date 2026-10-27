@@ -1,3 +1,4 @@
+import { browserStorage } from '../../utils/browserStorage';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -50,13 +51,13 @@ const SidebarMobile = ({ onFeedback }) => {
   const sidebarRef = useRef();
   
   // State
-  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
+  const [collapsed, setCollapsed] = useState(() => browserStorage.getItem('collapsed') === 'true');
   // Expanded by default; only a stored 'false' collapses it.
   const [profileOpen, setProfileOpen] = useState(
-    () => localStorage.getItem('profileOpen') !== 'false'
+    () => browserStorage.getItem('profileOpen') !== 'false'
   );
   const [sidebarWidth, setSidebarWidth] = useState(() => {
-    const saved = localStorage.getItem('sidebarWidth');
+    const saved = browserStorage.getItem('sidebarWidth');
     return saved ? parseInt(saved) : 380;
   });
   const [isResizing, setIsResizing] = useState(false);
@@ -68,15 +69,16 @@ const SidebarMobile = ({ onFeedback }) => {
 
   // Persist state to localStorage
   useEffect(() => {
-    localStorage.setItem('collapsed', collapsed);
-    localStorage.setItem('profileOpen', profileOpen);
-    localStorage.setItem('sidebarWidth', sidebarWidth);
+    browserStorage.setItem('collapsed', collapsed);
+    browserStorage.setItem('profileOpen', profileOpen);
+    browserStorage.setItem('sidebarWidth', sidebarWidth);
   }, [collapsed, profileOpen, sidebarWidth]);
 
   // Handle logout
   const handleLogout = async () => {
     try {
-      await logout();
+      const result = await logout();
+      if (result?.error) toast(t('recovery.localLogout', 'Signed out on this device. Other devices could not be signed out while the service was unavailable.'));
       navigate('/login');
     } catch (err) {
       console.error('Logout error:', err);
@@ -405,7 +407,7 @@ const SidebarMobile = ({ onFeedback }) => {
               collapsed={collapsed}
               currentPath={location.pathname}
               onClick={() => {
-                const id = localStorage.getItem(LAST_RECORD_KEY);
+                const id = browserStorage.getItem(LAST_RECORD_KEY);
                 if (id) navigate(`/contracts/${id}`);
                 else toast(t('record.sidebarHint', 'Open a contract from the dashboard first.'));
               }}

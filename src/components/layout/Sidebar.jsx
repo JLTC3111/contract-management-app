@@ -1,3 +1,4 @@
+import { browserStorage } from '../../utils/browserStorage';
 // src/components/layout/Sidebar.jsx
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -55,7 +56,7 @@ const Sidebar = () => {
       // Coming back up to a desktop width, expand again. The mobile bar stores
       // collapsed=true for its own layout, which would otherwise leave the rail
       // collapsed the moment it takes over.
-      if (wasMobile.current && !nowMobile) localStorage.setItem('collapsed', 'false');
+      if (wasMobile.current && !nowMobile) browserStorage.setItem('collapsed', 'false');
       wasMobile.current = nowMobile;
       setIsMobile(nowMobile);
     };
@@ -80,16 +81,16 @@ const SidebarRail = ({ onFeedback }) => {
   const { t, i18n } = useTranslation();
   const [website, hr] = getAppNavigation(i18n.resolvedLanguage || i18n.language).apps;
 
-  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('collapsed') === 'true');
+  const [collapsed, setCollapsed] = useState(() => browserStorage.getItem('collapsed') === 'true');
   const [personalOpen, setPersonalOpen] = useState(
-    () => localStorage.getItem('profileOpen') !== 'false'
+    () => browserStorage.getItem('profileOpen') !== 'false'
   );
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('collapsed', collapsed);
-    localStorage.setItem('profileOpen', personalOpen);
+    browserStorage.setItem('collapsed', collapsed);
+    browserStorage.setItem('profileOpen', personalOpen);
   }, [collapsed, personalOpen]);
 
   const handleLogout = async () => {
@@ -99,7 +100,8 @@ const SidebarRail = ({ onFeedback }) => {
       return;
     }
     try {
-      await logout?.();
+      const result = await logout?.();
+      if (result?.error) toast(t('recovery.localLogout', 'Signed out on this device. Other devices could not be signed out while the service was unavailable.'));
     } catch (err) {
       console.error('Logout error:', err);
     }
@@ -135,7 +137,7 @@ const SidebarRail = ({ onFeedback }) => {
    * read. Keyed on the path so visiting a record immediately re-points it.
    */
   const lastRecordId = useMemo(
-    () => localStorage.getItem(LAST_RECORD_KEY),
+    () => browserStorage.getItem(LAST_RECORD_KEY),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [location.pathname]
   );

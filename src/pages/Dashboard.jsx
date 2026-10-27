@@ -1,3 +1,4 @@
+import { browserStorage } from '../utils/browserStorage';
 import { canEditContracts } from '../utils/permissions';
 // src/pages/Dashboard.jsx
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -9,10 +10,9 @@ import { useUser } from '../hooks/useUser';
 import { getI18nOrFallback, normalizeContractStatus } from '../utils/formatters';
 import { partialSearchMatch } from '../utils/searchUtils';
 import { isContractExpiringSoon } from '../utils/contractMetrics';
-import { deleteAttachments, uploadAttachments } from '../utils/uploads';
+import { saveContractEdit } from '../utils/contractRecovery';
 import {
   APPROVAL_STAGES,
-  contractEditPayload,
   getContractStage,
   getNextStage,
   stageUpdatePayload,
@@ -25,6 +25,8 @@ import ContractsTable from '../components/dashboard/ContractsTable';
 import KanbanBoard from '../components/dashboard/KanbanBoard';
 import DetailDrawer from '../components/dashboard/DetailDrawer';
 import EditContractModal from '../components/dashboard/EditContractModal';
+import RetryNotice from '../components/common/RetryNotice';
+import { useRevalidate } from '../hooks/useRevalidate';
 import '../components/dashboard/dashboard.css';
 
 /** Filters survive reloads and navigation, not just tab switches. */
@@ -32,7 +34,7 @@ const FILTERS_KEY = 'ledger.filters';
 
 const loadFilters = () => {
   try {
-    return JSON.parse(localStorage.getItem(FILTERS_KEY)) || {};
+    return JSON.parse(browserStorage.getItem(FILTERS_KEY)) || {};
   } catch {
     return {};
   }
@@ -66,16 +68,19 @@ const Dashboard = () => {
   const [drawerId, setDrawerId] = useState(null);
   const [editing, setEditing] = useState(null);
   const [loadError, setLoadError] = useState(null);
+  const loadGeneration = useRef(0);
 
   useEffect(() => {
-    localStorage.setItem(FILTERS_KEY, JSON.stringify({
+    browserStorage.setItem(FILTERS_KEY, JSON.stringify({
       query, fileQuery, category, stageFilter, view,
     }));
   }, [query, fileQuery, category, stageFilter, view]);
 
   const load = useCallback(async () => {
+    const request = ++loadGeneration.current;
     try {
       const data = await contractsApi.getAll({ orderBy: 'updated_at', ascending: false });
+      if (request !== loadGeneration.current) return;
       if (!Array.isArray(data)) throw new Error('Invalid contract response');
       setContracts(data.map((c) => ({
         ...c,
@@ -83,10 +88,12 @@ const Dashboard = () => {
       })));
       setLoadError(null);
     } catch (err) {
+      if (request !== loadGeneration.current) return;
       console.error('Error fetching contracts:', err.message);
       setLoadError(err.message || 'Could not load contracts');
     }
   }, []);
+  useRevalidate(() => { if (!busy) return load(); });
 
   useEffect(() => {
     (async () => {
@@ -94,6 +101,7 @@ const Dashboard = () => {
       await load();
       setLoading(false);
     })();
+    return () => { loadGeneration.current += 1; };
   }, [load]);
 
   const expiring = useMemo(() => contracts.filter(isContractExpiringSoon), [contracts]);
@@ -176,31 +184,12 @@ const Dashboard = () => {
 
 
   const handleSave = async (target, updates, attachments = [], removedFiles = [], attachmentFolder = '') => {
-    if (!canEdit || busy) return;
+    if (!canEdit || busy) throw new Error('Verify your access before saving changes.');
     setBusy(true);
     try {
-      await contractsApi.update(target.id, contractEditPayload(target, updates), { expectedRevision: target.revision });
-      if (removedFiles.length) {
-        const { failed } = await deleteAttachments(target.id, removedFiles);
-        if (failed.length) {
-          window.alert(t('dashboard.deleteFileFailed', 'Some files could not be deleted: {{names}}', {
-            names: failed.map((f) => f.name).join(', '),
-          }));
-        }
-      }
-      if (attachments.length) {
-        const { failed } = await uploadAttachments(target.id, attachments, attachmentFolder);
-        if (failed.length) {
-          window.alert(t('dashboard.uploadFailed', 'Some files did not upload: {{names}}', {
-            names: failed.map((f) => f.name).join(', '),
-          }));
-        }
-      }
-      setEditing(null);
+      const result = await saveContractEdit(target, updates, attachments, removedFiles, attachmentFolder);
       await load();
-    } catch (err) {
-      console.error('Save failed:', err);
-      window.alert(t('dashboard.saveFailed', 'Could not save changes: {{msg}}', { msg: err.message }));
+      return result;
     } finally {
       setBusy(false);
     }
@@ -304,7 +293,7 @@ const Dashboard = () => {
 
       {loading ? (
         <p className="ledger-empty">{t('dashboard.loading', 'Loading...')}</p>
-      ) : loadError ? (
+      ) : loadError && contracts.length === 0 ? (
         <div className="ledger-empty" role="alert">
           <p>{t('dashboard.loadFailed', 'Could not load contracts. Please retry.')}</p>
           <button type="button" className="btn-secondary" onClick={async () => {
@@ -315,6 +304,7 @@ const Dashboard = () => {
         </div>
       ) : (
         <>
+          {loadError && <RetryNotice onRetry={load} />}
           <StatStrip totals={totals} />
 
           <FilterRow

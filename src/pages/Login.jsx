@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, ChevronDown, Eye, EyeOff, Mail, MoonStar, Sun } from 'lucide-react';
-import { supabase } from '../utils/supaBaseClient';
+import { beginSignIn, supabase } from '../utils/supaBaseClient';
 import { useTheme } from '../hooks/useTheme';
 import { useLoginPhotos } from '../hooks/useLoginPhotos';
 import { authErrorMessage } from '../utils/authErrors';
@@ -53,6 +53,7 @@ const Login = ({ recovery }) => {
     setNotice('');
     setBusy(true);
     try {
+      beginSignIn();
       const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
       if (signInError) {
         setError(authErrorMessage(t, signInError));

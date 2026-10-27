@@ -11,6 +11,11 @@ import { CONTRACT_CATEGORIES, getCategoryLabel } from '../../utils/constants';
 import DatePicker from './DatePicker';
 import AttachmentPicker from './AttachmentPicker';
 import Select from '../common/Select';
+import DraftNotice from '../common/DraftNotice';
+import { useUser } from '../../hooks/useUser';
+import { draftFiles, draftKey, useDraftRecovery } from '../../hooks/useDraftRecovery';
+import { contractsApi } from '../../api/contracts';
+import { contractForm, mergeContractDraft } from '../../utils/contractRecovery';
 
 const CATEGORY_OPTIONS = CONTRACT_CATEGORIES.filter((c) => c !== 'All');
 
@@ -56,6 +61,33 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
   const uploaded = folder.files;
   const loadingFiles = folder.loading;
   const [removed, setRemoved] = useState(() => new Set());
+  const { user } = useUser();
+  const [base, setBase] = useState(contract);
+  const [saveError, setSaveError] = useState('');
+  const [conflict, setConflict] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [missingFiles, setMissingFiles] = useState([]);
+  const inFlight = useRef(false);
+  const scope = `edit:${contract.id}`;
+  const filesKey = draftKey(user?.id, scope);
+  const fileNames = [...missingFiles, ...attachments.map((file) => file.name)];
+  const recovery = useDraftRecovery({
+    accountId: user?.id, scope, value: { base, form, removed: [...removed], fileNames },
+    dirty: JSON.stringify(form) !== JSON.stringify(contractForm(base)) || removed.size > 0 || fileNames.length > 0,
+    onRestore: (saved) => {
+      if (saved?.base?.id !== contract.id || typeof saved.form?.title !== 'string') return;
+      setBase(saved.base); setForm(saved.form); setRemoved(new Set(saved.removed || []));
+      const files = draftFiles.get(filesKey); setAttachments(files);
+      setMissingFiles((saved.fileNames || []).filter((name) => !files.some((file) => file.name === name)));
+    },
+  });
+  const changeAttachments = (files) => {
+    setAttachments(files); draftFiles.set(filesKey, files);
+    setMissingFiles((names) => names.filter((name) => !files.some((file) => file.name === name)));
+  };
+  const cancel = useCallback(() => {
+    if (!inFlight.current && recovery.confirmLeave()) onCancel();
+  }, [onCancel, recovery]);
 
   const toggleRemoved = (name) => setRemoved((prev) => {
     const next = new Set(prev);
@@ -68,12 +100,12 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
     const onKey = (e) => {
       if (e.key === 'Escape') {
         e.stopPropagation();
-        onCancel();
+        cancel();
       }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [onCancel]);
+  }, [cancel]);
 
   // Keep the panel reachable if the window shrinks under it.
   useEffect(() => {
@@ -126,15 +158,47 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim()) return;
-    onSave(contract, {
+    if (!form.title.trim() || inFlight.current || busy || user?.recoveryPending || recovery.pending || conflict || missingFiles.length) return;
+    inFlight.current = true;
+    setSubmitting(true);
+    setSaveError('');
+    try {
+      const result = await onSave(base, {
       ...form,
       title: form.title.trim(),
       contract_value: form.contract_value === '' ? null : Number(form.contract_value),
       expiry_date: form.expiry_date || null,
-    }, attachments, [...removed], folder.path);
+      }, attachments, [...removed], folder.path);
+      setBase(result.contract);
+      setForm(contractForm(result.contract));
+      changeAttachments(result.uploaded.failed.map((entry) => entry.file));
+      setRemoved(new Set(result.deleted.failed.map((entry) => entry.name)));
+      if (result.uploaded.failed.length || result.deleted.failed.length) {
+        setSaveError(t('recovery.filesPending', 'Contract details are saved. Retry the remaining file operations.'));
+        await folder.reload();
+      } else {
+        recovery.clear();
+        onCancel();
+      }
+    } catch (error) {
+      setSaveError(error.message || t('recovery.saveFailed', 'Could not confirm the save. Please retry.'));
+      if (error.code === 'CONTRACT_CONFLICT') setConflict({ latest: error.latest });
+    } finally {
+      inFlight.current = false;
+      setSubmitting(false);
+    }
+  };
+
+  const reviewLatest = async (keepEdits) => {
+    try {
+      const latest = conflict.latest || await contractsApi.getById(contract.id);
+      if (!latest) throw new Error('Contract is no longer available.');
+      const merge = mergeContractDraft(base, form, latest);
+      setBase(latest); setForm(keepEdits ? merge.merged : merge.theirs);
+      setConflict(null); setSaveError('');
+    } catch (error) { setSaveError(error.message); }
   };
 
   // A legacy free-text category must stay selectable.
@@ -148,6 +212,12 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
   const stages = ADVANCEABLE_STAGES.includes(currentStage)
     ? ADVANCEABLE_STAGES
     : [...ADVANCEABLE_STAGES, currentStage];
+  const fieldLabels = {
+    title: t('dashboard.col.name', 'Name'), category: t('dashboard.col.category', 'Category'),
+    stage: t('dashboard.col.stage', 'Stage'), author: t('dashboard.col.owner', 'Owner'),
+    client_name: t('dashboard.counterparty', 'Counterparty'), contract_value: t('dashboard.valueUsd', 'Value (VND)'),
+    expiry_date: t('dashboard.col.expires', 'Expires'),
+  };
 
   return (
     <>
@@ -157,7 +227,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.18 }}
-        onClick={onCancel}
+        onClick={cancel}
       />
       <Motion.form
         className="ledger-modal ledger-modal--floating"
@@ -176,7 +246,8 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
           <button
             type="button"
             className="ledger-modal__close"
-            onClick={onCancel}
+            onClick={cancel}
+            disabled={busy || submitting}
             onPointerDown={(e) => e.stopPropagation()}
             aria-label={t('buttons.close', 'Close')}
           >
@@ -185,6 +256,17 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
         </div>
 
         <div className="ledger-modal__body">
+          <DraftNotice recovery={recovery} />
+          {saveError && <p role="alert">{saveError}</p>}
+          {conflict && <div className="recovery-notice" role="alert">
+            <p>{t('recovery.conflict', 'A newer version is available. Review it before saving your edits.')}</p>
+            {conflict.latest && mergeContractDraft(base, form, conflict.latest).conflicts.map((item) => <p key={item.key}>
+              {fieldLabels[item.key]}: {t('recovery.yours', 'Yours')} “{item.key === 'stage' ? getStageLabel(t, item.mine) : String(item.mine || '—')}”; {t('recovery.latest', 'Latest')} “{item.key === 'stage' ? getStageLabel(t, item.theirs) : String(item.theirs || '—')}”
+            </p>)}
+            <button type="button" className="btn-secondary" onClick={() => reviewLatest(true)}>{t('recovery.keepEdits', 'Review latest, keep my edits')}</button>
+            <button type="button" className="btn-secondary" onClick={() => reviewLatest(false)}>{t('recovery.useLatest', 'Use latest values')}</button>
+          </div>}
+          <fieldset disabled={busy || submitting || recovery.pending} style={{ display: 'contents' }}>
           <label className="ledger-field ledger-field--wide">
             <span>{t('dashboard.col.name', 'Name')}</span>
             <input value={form.title} onChange={set('title')} required autoFocus />
@@ -240,7 +322,7 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
             <DocumentBreadcrumbs folder={folder} />
             {loadingFiles ? (
               <p className="ledger-attach__hint">{t('dashboard.loadingFiles', 'Loading files...')}</p>
-            ) : uploaded.length === 0 ? (
+            ) : !folder.error && uploaded.length === 0 ? (
               <p className="ledger-attach__hint">{t('dashboard.noDocuments', 'No documents yet.')}</p>
             ) : (
               <>
@@ -286,15 +368,20 @@ const EditContractModal = ({ contract, onCancel, onSave, busy }) => {
               </>
             )}
 
-            <AttachmentPicker files={attachments} onChange={setAttachments} />
+            <AttachmentPicker files={attachments} onChange={changeAttachments} disabled={busy || submitting || recovery.pending} />
+            {missingFiles.length > 0 && <div className="recovery-notice" role="alert">
+              <p>{t('recovery.reselectFiles', 'Select these files again to continue: {{names}}', { names: missingFiles.join(', ') })}</p>
+              <button type="button" className="btn-secondary" onClick={() => setMissingFiles([])}>{t('recovery.skipFiles', 'Continue without these files')}</button>
+            </div>}
           </div>
+          </fieldset>
         </div>
 
         <div className="ledger-modal__actions">
-          <button type="button" className="ledger-btn ledger-btn--ghost" onClick={onCancel}>
+          <button type="button" className="ledger-btn ledger-btn--ghost" onClick={cancel} disabled={busy || submitting}>
             {t('buttons.cancel', 'Cancel')}
           </button>
-          <button type="submit" className="ledger-btn ledger-btn--primary" disabled={busy || !form.title.trim()}>
+          <button type="submit" className="ledger-btn ledger-btn--primary" disabled={busy || submitting || user?.recoveryPending || recovery.pending || !!conflict || missingFiles.length > 0 || !form.title.trim()}>
             {t('dashboard.saveChanges', 'Save changes')}
           </button>
         </div>

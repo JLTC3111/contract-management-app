@@ -288,3 +288,15 @@ button:disabled {
     padding: clamp(0.25em, 2vw, 0.5em);
   }
 }
+
+/* Reserve the fixed mobile navigation and its open profile row, so the last
+   form action stays inside the scroll viewport and can be tapped after errors. */
+@media (max-width: 1023px) {
+  .app-container { height: 100dvh !important; }
+  .app-container .main-content {
+    flex: 0 0 calc(100dvh - 96px - env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(100dvh - 96px - env(safe-area-inset-bottom, 0px)) !important;
+    min-height: 0;
+  }
+  .app-container .content-area { min-height: 0; box-sizing: border-box; }
+}

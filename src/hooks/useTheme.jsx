@@ -1,15 +1,16 @@
+import { browserStorage } from '../utils/browserStorage';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [darkMode, setDarkMode] = useState(() => {
-    const stored = localStorage.getItem('darkMode');
+    const stored = browserStorage.getItem('darkMode');
     return stored === null ? window.matchMedia('(prefers-color-scheme: dark)').matches : stored === 'true';
   });
 
   useEffect(() => {
-    localStorage.setItem('darkMode', darkMode);
+    browserStorage.setItem('darkMode', darkMode);
     if (darkMode) {
       document.body.classList.add('dark');
     } else {

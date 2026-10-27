@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { storageApi } from '../api/contracts';
+import { useRevalidate } from './useRevalidate';
 
 export const isStorageFolder = (entry) => entry.id == null && entry.metadata == null;
 
@@ -27,6 +28,7 @@ export function useStorageFolder(root) {
       if (request === generation.current) setLoading(false);
     }
   }, [prefix]);
+  useRevalidate(reload);
 
   useEffect(() => {
     reload();

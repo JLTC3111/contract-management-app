@@ -1,5 +1,8 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '../utils/supaBaseClient';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { authStorage, signOut, supabase } from '../utils/supaBaseClient';
+import { browserStorage } from '../utils/browserStorage';
+import { isRetryableError, setSessionVerified, withDeadline } from '../utils/network';
+import { useRevalidate } from './useRevalidate';
 import { MOCK_USER } from '../data/mockData';
 
 const UserContext = createContext();
@@ -7,141 +10,111 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isDemoMode, setIsDemoMode] = useState(() => {
-    return localStorage.getItem('isDemoMode') === 'true';
-  });
+  const [sessionError, setSessionError] = useState(null);
+  const [isDemoMode, setIsDemoMode] = useState(() => browserStorage.getItem('isDemoMode') === 'true');
+  const currentUser = useRef(null);
+  const generation = useRef(0);
+  const signedOut = useRef(false);
 
-  // Demo mode functions
-  const enableDemoMode = () => {
-    localStorage.setItem('isDemoMode', 'true');
-    setIsDemoMode(true);
-    setUser(MOCK_USER);
-    setLoading(false);
-  };
-
-  const disableDemoMode = async () => {
-    localStorage.removeItem('isDemoMode');
-    setIsDemoMode(false);
-    setUser(null);
-    // After exiting demo, try to fetch real user if logged in
-    await fetchUser();
-  };
-
-  /**
-   * @param {object} options
-   * @param {boolean} options.silent - refresh in the background without raising
-   *   the global loading flag. App.jsx unmounts the entire routed tree while
-   *   `loading` is true, so a noisy refresh throws away every page's local state
-   *   (open dialogs, filters, selections).
-   */
-  const fetchUser = async ({ silent = false } = {}) => {
-    // If in demo mode, use mock user
-    if (localStorage.getItem('isDemoMode') === 'true') {
-      setUser(MOCK_USER);
-      setLoading(false);
-      return;
-    }
-
-    if (!silent) setLoading(true);
-    try {
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-
-      if (sessionError) {
-        console.error('Error getting session:', sessionError.message);
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-
-      const authUser = session?.user;
-
-      if (authUser) {
-        // Now fetch the custom user from your own `users` table
-        const { data: customUser, error: userError } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', authUser.id)
-          .single();
-
-        if (userError) {
-          console.error('Error fetching custom user:', userError.message);
-          // If it's a 403 or auth error, the session might be invalid
-          if (userError.message.includes('JWT') || userError.message.includes('expired') || userError.message.includes('403')) {
-            console.log('Session appears invalid, signing out...');
-            await supabase.auth.signOut();
-          }
-          setUser(null);
-        } else {
-          setUser(customUser); // Now `user.role` will exist
-        }
-      } else {
-        setUser(null);
-      }
-    } catch (error) {
-      console.error('Unexpected error in fetchUser:', error);
-      setUser(null);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchUser();
-
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state change:', event, 'Session:', !!session);
-      if (session?.user) {
-        // Always silent: Supabase fires TOKEN_REFRESHED/SIGNED_IN whenever the
-        // tab regains focus, and raising `loading` here would remount the whole
-        // app and close whatever the user had open. The initial fetchUser()
-        // below still gates the first paint.
-        fetchUser({ silent: true });
-      } else {
-        console.log('Session cleared, setting user to null');
-        setUser(null);
-      }
-    });
-
-    return () => listener?.subscription?.unsubscribe();
+  const applyUser = useCallback((next) => {
+    currentUser.current = next;
+    setUser(next);
+    setSessionVerified(!!next && !next.recoveryPending);
   }, []);
 
-  const logout = async () => {
-    // If in demo mode, just exit demo
-    if (isDemoMode) {
-      await disableDemoMode();
+  const clearUser = useCallback(() => {
+    generation.current += 1;
+    signedOut.current = true;
+    applyUser(null);
+    setSessionError(null);
+    setLoading(false);
+  }, [applyUser]);
+
+  const fetchUser = useCallback(async (suppliedSession) => {
+    if (browserStorage.getItem('isDemoMode') === 'true') {
+      applyUser(MOCK_USER);
+      setLoading(false);
       return;
     }
-
+    if (authStorage.isSignedOut() || signedOut.current) return;
+    const request = ++generation.current;
     try {
-      console.log('Starting logout process...');
-      
-      // Clear any local storage that might contain stale auth data
-      localStorage.removeItem('supabase.auth.token');
-      localStorage.removeItem('sb-auth-token');
-      
-      // Attempt to sign out from Supabase
-      const { error } = await supabase.auth.signOut();
-      
-      if (error && error.message !== 'Auth session missing!') {
-        console.error('Error during logout:', error);
-      } else {
-        console.log('Supabase signOut completed');
-      }
+      const result = suppliedSession
+        ? { data: { session: suppliedSession } }
+        : await withDeadline(supabase.auth.getSession());
+      if (request !== generation.current) return;
+      if (result.error) throw result.error;
+      const session = result.data.session;
+      if (!session?.user) { applyUser(null); setSessionError(null); return; }
+      if (currentUser.current && currentUser.current.id !== session.user.id) applyUser(null);
+      const { data: profile, error, status } = await withDeadline(supabase.from('users')
+        .select('*').eq('id', session.user.id).single());
+      if (request !== generation.current || authStorage.isSignedOut()) return;
+      if (error) throw Object.assign(error, { status: error.status || status });
+      applyUser(profile);
+      setSessionError(null);
     } catch (error) {
-      console.error('Error during logout:', error);
+      if (request !== generation.current || signedOut.current || authStorage.isSignedOut()) return;
+      if (isRetryableError(error) && currentUser.current) {
+        // Retain the page and its drafts, while all writes await revalidation.
+        applyUser({ ...currentUser.current, recoveryPending: true });
+      } else {
+        applyUser(null);
+      }
+      setSessionError(error);
     } finally {
-      // Always clear user state regardless of signOut success
-      console.log('Clearing user state');
-      setUser(null);
-      setLoading(false);
+      if (request === generation.current) setLoading(false);
     }
+  }, [applyUser]);
+
+  useRevalidate(fetchUser);
+  useEffect(() => {
+    signedOut.current = authStorage.isSignedOut();
+    if (signedOut.current) setLoading(false);
+    else fetchUser();
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session?.user) {
+        if (browserStorage.getItem('isDemoMode') !== 'true') clearUser();
+        return;
+      }
+      if (authStorage.isSignedOut()) return;
+      signedOut.current = false;
+      const request = ++generation.current;
+      // Auth callbacks run under the SDK lock. Leave it before reading profiles.
+      setTimeout(() => { if (request === generation.current) fetchUser(session); }, 0);
+    });
+    const onStorage = (event) => {
+      if (event.key === authStorage.logoutKey && authStorage.isSignedOut()) clearUser();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => {
+      generation.current += 1;
+      listener?.subscription?.unsubscribe();
+      window.removeEventListener('storage', onStorage);
+    };
+  }, [clearUser, fetchUser]);
+
+  const enableDemoMode = () => {
+    browserStorage.setItem('isDemoMode', 'true');
+    setIsDemoMode(true);
+    applyUser(MOCK_USER);
+    setLoading(false);
+  };
+  const disableDemoMode = async () => {
+    browserStorage.removeItem('isDemoMode');
+    setIsDemoMode(false);
+    clearUser();
+    signedOut.current = authStorage.isSignedOut();
+    if (!signedOut.current) await fetchUser();
+  };
+  const logout = async () => {
+    if (isDemoMode) return disableDemoMode();
+    clearUser();
+    return signOut();
   };
 
   return (
-    <UserContext.Provider value={{ user, loading, logout, isDemoMode, enableDemoMode, disableDemoMode }}>
+    <UserContext.Provider value={{ user, loading, sessionError, retrySession: () => fetchUser(), logout, isDemoMode, enableDemoMode, disableDemoMode }}>
       {children}
     </UserContext.Provider>
   );

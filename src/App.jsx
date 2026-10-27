@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { useUser } from './hooks/useUser';
 import Dashboard from './pages/Dashboard';
 import ContractRecord from './pages/ContractRecord';
@@ -15,12 +15,14 @@ import './App.css';
 import React, { useState, useEffect, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
 import { passwordRecovery } from './utils/supaBaseClient';
+import RetryNotice from './components/common/RetryNotice';
 
 function App() {
   const { t } = useTranslation();
+  const location = useLocation();
   const [isBot, setIsBot] = useState(false);
   const [forcePasswordChange, setForcePasswordChange] = useState(false);
-  const { user, loading } = useUser();
+  const { user, loading, sessionError, retrySession, logout } = useUser();
   const recovery = useSyncExternalStore(passwordRecovery.subscribe, passwordRecovery.getSnapshot);
 
   useEffect(() => {
@@ -56,6 +58,12 @@ function App() {
 
   if (recovery) return <Login recovery={recovery} />;
   if (loading) return <p>{t('common.loading')}</p>;
+  if (!user && sessionError) return (
+    <main className="ledger">
+      <RetryNotice onRetry={retrySession}>{t('recovery.verifySession', 'Could not verify your access. Check your connection and retry.')}</RetryNotice>
+      <button type="button" className="btn-secondary" onClick={logout}>{t('passwordRecovery.backToLogin', 'Back to login')}</button>
+    </main>
+  );
   if (!user) return <Login />;
 
   // Show force password change modal if needed
@@ -70,7 +78,7 @@ function App() {
 
 
   return (
-      <Routes>
+      <Routes key={location.pathname}>
         {/* Routes with Sidebar */}
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />

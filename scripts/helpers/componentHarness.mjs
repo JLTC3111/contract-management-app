@@ -63,7 +63,9 @@ export function harness({ seed = [], user = { id: 'editor', role: 'editor' }, ap
       testJsx: (type, props, ...children) => ({ type, props: { ...props, children } }), testFragment: 'fragment',
       console: { log() {}, error() {} }, Date, Intl, Map, Set, crypto: globalThis.crypto,
       localStorage: { getItem: () => null, setItem() {}, removeItem() {} },
-      window: { alert() {}, confirm: () => true }, Blob, URL,
+      window: { alert() {}, confirm: () => true, addEventListener() {}, removeEventListener() {} },
+      document: { visibilityState: 'visible', addEventListener() {}, removeEventListener() {} },
+      navigator: { onLine: true }, setTimeout, clearTimeout, AbortController, Headers, Response, Blob, URL,
       ...globals,
     }, { filename: absolute });
     return module.exports;

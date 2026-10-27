@@ -1,3 +1,4 @@
+import { browserStorage } from '../utils/browserStorage';
 import React, { useRef, useState } from 'react';
 import { supabase } from '../utils/supaBaseClient';
 import toast from 'react-hot-toast';
@@ -7,20 +8,20 @@ import { Loader2, Upload, Check, X, UploadCloud } from 'lucide-react';
 import { isImageFile, isTextFile, getFileTypeCategory } from '../utils/fileViewerUtils';
 
 // Helper to check demo mode
-const isDemoMode = () => localStorage.getItem('isDemoMode') === 'true';
+const isDemoMode = () => browserStorage.getItem('isDemoMode') === 'true';
 
 // Demo file storage key
 const DEMO_FILES_KEY = 'demo_files';
 
 // Get demo files from localStorage
 const getDemoFiles = () => {
-  const stored = localStorage.getItem(DEMO_FILES_KEY);
+  const stored = browserStorage.getItem(DEMO_FILES_KEY);
   return stored ? JSON.parse(stored) : [];
 };
 
 // Save demo files to localStorage
 const setDemoFiles = (files) => {
-  localStorage.setItem(DEMO_FILES_KEY, JSON.stringify(files));
+  browserStorage.setItem(DEMO_FILES_KEY, JSON.stringify(files));
 };
 
 // Generate demo file ID

@@ -23,7 +23,14 @@
          from public/flags/, so there is nothing to fetch off a CDN either. -->
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main role="status" style="max-width:560px;margin:12vh auto;padding:24px;font:16px/1.5 system-ui,sans-serif">
+        <p>Loading Contract Manager…</p>
+        <p>If loading is interrupted, check your connection and reload.</p>
+        <button type="button" onclick="window.location.reload()" style="min-height:44px;padding:10px 24px;font:inherit;cursor:pointer">Reload</button>
+        <noscript><p>Enable JavaScript in your browser to open the app.</p></noscript>
+      </main>
+    </div>
 
     <!-- jszip is a dependency and is imported where it is used, so it ships in the
          bundle - pulling it off a CDN here loaded it a second time, for nothing. -->

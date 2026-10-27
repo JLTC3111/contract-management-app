@@ -2,7 +2,7 @@ import { useStorageFolder, isStorageFolder } from '../../hooks/useStorageFolder'
 import DocumentBreadcrumbs from './DocumentBreadcrumbs';
 import { canEditContracts } from '../../utils/permissions';
 // src/components/dashboard/DetailDrawer.jsx
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion as Motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ChevronsRight, FileText, Folder, Pencil, Trash2, X } from 'lucide-react';
@@ -24,6 +24,10 @@ import {
 } from '../../utils/stages';
 import { getCategoryLabel } from '../../utils/constants';
 import { StageTag } from './StageTag';
+import DraftNotice from '../common/DraftNotice';
+import RetryNotice from '../common/RetryNotice';
+import { useDraftRecovery } from '../../hooks/useDraftRecovery';
+import { useRevalidate } from '../../hooks/useRevalidate';
 
 /**
  * Right-side overlay. The activity feed is derived from `contract_phases`, which
@@ -54,30 +58,36 @@ const DetailDrawer = ({
   const [commentText, setCommentText] = useState('');
   const [posting, setPosting] = useState(false);
   const [sending, setSending] = useState(false);
+  const [activityError, setActivityError] = useState(null);
+  const generation = useRef(0);
+  const commentRecovery = useDraftRecovery({
+    accountId: user?.id, scope: `comment:${contract.id}`, value: commentText,
+    dirty: !!commentText.trim(), onRestore: (text) => { if (typeof text === 'string') setCommentText(text); },
+  });
 
   const stage = getContractStage(contract);
   const next = getNextStage(stage);
   const title = getI18nOrFallback(t, contract, 'title_i18n', 'title');
   const canSendForApproval = canEdit && APPROVAL_REQUESTABLE_STAGES.includes(stage);
 
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      const [phases, notes] = await Promise.all([
-        phasesApi.getByContractId(contract.id).catch(() => []),
-        commentsApi.getByContractId(contract.id).catch(() => []),
+  const loadActivity = useCallback(async () => {
+      const request = ++generation.current;
+      const [phases, notes] = await Promise.allSettled([
+        phasesApi.getByContractId(contract.id),
+        commentsApi.getByContractId(contract.id),
       ]);
-      if (!active) return;
-      setTimeline((phases || []).map((p) => ({
+      if (request !== generation.current) return;
+      setActivityError(phases.status === 'rejected' ? phases.reason : notes.status === 'rejected' ? notes.reason : null);
+      if (phases.status === 'fulfilled') setTimeline((phases.value || []).map((p) => ({
         id: p.id,
         name: p.name,
         status: p.status,
         date: p.end_date || p.start_date || p.created_at || null,
       })));
-      setComments(notes || []);
-    })();
-    return () => { active = false; };
+      if (notes.status === 'fulfilled') setComments(notes.value || []);
   }, [contract.id]);
+  useEffect(() => { loadActivity(); return () => { generation.current += 1; }; }, [loadActivity]);
+  useRevalidate(loadActivity);
 
   useEffect(() => {
     if (suppressDismiss) return undefined;
@@ -97,7 +107,7 @@ const DetailDrawer = ({
 
   const postComment = async () => {
     const body = commentText.trim();
-    if (!body) return;
+    if (!body || posting || user?.recoveryPending || commentRecovery.pending) return;
     setPosting(true);
     try {
       // contract_comments RLS is WITH CHECK (auth.uid() = user_id), so the row
@@ -108,6 +118,7 @@ const DetailDrawer = ({
         user_email: user?.email,
         comment: body,
       });
+      commentRecovery.clear();
       setCommentText('');
       setComments(await commentsApi.getByContractId(contract.id));
     } catch (err) {
@@ -249,7 +260,8 @@ const DetailDrawer = ({
             </dl>
 
             <h3 className="ledger-drawer__section">{t('dashboard.activity', 'Activity')}</h3>
-            {timeline.length === 0 ? (
+            {activityError && <RetryNotice onRetry={loadActivity} />}
+            {timeline.length === 0 && !activityError ? (
               <p className="ledger-drawer__empty">
                 {t('dashboard.noActivity', 'No recorded stage moves yet.')}
               </p>
@@ -279,7 +291,7 @@ const DetailDrawer = ({
             <h3 className="ledger-drawer__section">{t('dashboard.documents', 'Documents')}</h3>
             <div className="ledger-docs">
               <DocumentBreadcrumbs folder={folder} />
-              {documents.length === 0 && !folder.loading ? (
+              {documents.length === 0 && !folder.loading && !folder.error ? (
                 <p className="ledger-drawer__empty">{t('dashboard.noDocuments', 'No documents yet.')}</p>
               ) : (
                 documents.map((doc) => (
@@ -310,7 +322,8 @@ const DetailDrawer = ({
             </button>
 
             <h3 className="ledger-drawer__section">{t('dashboard.comments', 'Comments')}</h3>
-            {comments.length === 0 ? (
+            {activityError && <RetryNotice onRetry={loadActivity} />}
+            {comments.length === 0 && !activityError ? (
               <p className="ledger-drawer__empty">{t('dashboard.noComments', 'No comments yet.')}</p>
             ) : (
               <ul className="ledger-comments">
@@ -325,10 +338,12 @@ const DetailDrawer = ({
               </ul>
             )}
 
+            <DraftNotice recovery={commentRecovery} />
             <textarea
               className="ledger-textarea"
               rows={3}
               value={commentText}
+              disabled={posting || commentRecovery.pending}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder={t('dashboard.addComment', 'Add a comment...')}
               aria-label={t('dashboard.addComment', 'Add a comment...')}
@@ -337,7 +352,7 @@ const DetailDrawer = ({
               type="button"
               className="ledger-btn ledger-btn--primary ledger-btn--block"
               onClick={postComment}
-              disabled={posting || !commentText.trim()}
+              disabled={posting || user?.recoveryPending || commentRecovery.pending || !commentText.trim()}
             >
               {t('dashboard.postComment', 'Post comment')}
             </button>

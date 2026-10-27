@@ -18,7 +18,10 @@ export default function DocumentBreadcrumbs({ folder }) {
         </span>
       ))}
       {folder.loading && <p role="status">{t('common.loading')}</p>}
-      {folder.error && <p role="alert">{folder.error.message}</p>}
+      {folder.error && <div className="recovery-notice" role="alert">
+        <p>{t('recovery.loadFailed', 'Could not load this information. Please try again.')}</p>
+        <button type="button" className="btn-secondary" onClick={folder.reload} disabled={folder.loading}>{t('buttons.retry', 'Retry')}</button>
+      </div>}
     </nav>
   );
 }
