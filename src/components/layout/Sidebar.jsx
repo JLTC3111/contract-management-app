@@ -147,7 +147,7 @@ const SidebarRail = ({ onFeedback }) => {
       key: 'newsroom',
       icon: Newspaper,
       label: t('sidebar.newsroom', 'Newsroom'),
-      href: 'https://icue.vn/newsroom/',
+      href: 'https://vi.icue.vn/newsroom/',
     },
     {
       key: 'dashboard',

@@ -1,6 +1,6 @@
 // Kept local to each independently deployed ICUE app; no cross-repository runtime dependency.
 export const APP_URLS = Object.freeze({
-  website: 'https://icue.vn/',
+  website: 'https://vi.icue.vn/',
   hr: 'https://hr.icue.vn/',
   contracts: 'https://contract.icue.vn/',
 });

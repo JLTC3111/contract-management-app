@@ -383,7 +383,7 @@ const SidebarMobile = ({ onFeedback }) => {
             <SidebarButton
               icon={<Newspaper size={20} />}
               label={t('sidebar.newsroom', 'Newsroom')}
-              href="https://icue.vn/newsroom/"
+              href="https://vi.icue.vn/newsroom/"
               collapsed={collapsed || isMobile}
               aria-label={t('sidebar.newsroom', 'Newsroom')}
               title={t('sidebar.newsroom', 'Newsroom')}
