@@ -22,7 +22,6 @@ import {
 import RssPulse from './RssPulse';
 import { useUser } from '../../hooks/useUser';
 import { useTranslation } from 'react-i18next';
-import AppSwitcher from '../app-switcher/AppSwitcher.jsx';
 import { useTheme } from '../../hooks/useTheme';
 import { withNavigationPreferences } from '../../lib/navigationPreferences.js';
 import toast from 'react-hot-toast';
@@ -303,9 +302,6 @@ const SidebarRail = ({ onFeedback }) => {
             label: t('sidebar.signOut', 'Log out'),
             onClick: handleLogout,
           }} />
-          <div className="rail__portals">
-            <AppSwitcher currentApp="contracts" locale={locale} appearance={appearance} compact={collapsed} />
-          </div>
         </div>
 
         {!collapsed && (

@@ -8,6 +8,7 @@ import { DEFAULT_DASHBOARD_METRIC_FILTER } from '../utils/contractMetrics';
 import { useUser } from '../hooks/useUser';
 import { contractsApi, phasesApi } from '../api/contracts';
 import PhaseManagement from '../components/PhaseManagement';
+import HeaderAppSwitcher from '../components/layout/HeaderAppSwitcher';
 import PhaseStepper from '../components/phase-management/PhaseStepper';
 import Select from '../components/common/Select';
 import {
@@ -101,6 +102,7 @@ const PhaseManagementPage = () => {
         <ArrowLeft size={19} />
       </button>
       <h1 className="phase-head__title">{t('phaseManagement.title', 'Phase management')}</h1>
+      <HeaderAppSwitcher />
     </header>
   );
 

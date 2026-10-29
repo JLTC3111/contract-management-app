@@ -11,6 +11,7 @@ import { formatDate, getI18nOrFallback } from '../utils/formatters';
 import { canDecideApproval } from '../utils/permissions';
 import { StageTag } from '../components/dashboard/StageTag';
 import RetryNotice from '../components/common/RetryNotice';
+import HeaderAppSwitcher from '../components/layout/HeaderAppSwitcher';
 import DraftNotice from '../components/common/DraftNotice';
 import { draftKey, readDraft, useDraftRecovery } from '../hooks/useDraftRecovery';
 import { useRevalidate } from '../hooks/useRevalidate';
@@ -236,6 +237,7 @@ const ApprovalsBoard = () => {
             <ArrowLeft size={19} />
           </button>
           <h1 className="ledger-approvals__title">{t('access_denied')}</h1>
+          <HeaderAppSwitcher />
         </header>
         <p className="ledger-state">{t('no_permission_to_view_approval_requests')}</p>
       </div>
@@ -264,6 +266,7 @@ const ApprovalsBoard = () => {
             {statusLabel[headerStatus] || statusLabel.pending}
           </span>
         )}
+        <HeaderAppSwitcher />
       </header>
 
       {loadError && <RetryNotice onRetry={() => load({ silent: true })} />}

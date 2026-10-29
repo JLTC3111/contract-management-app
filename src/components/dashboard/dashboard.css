@@ -123,6 +123,34 @@
 
 .ledger-header__bell { position: relative; flex: none; }
 
+/* Ecosystem menu, moved out of the sidebar. Same 38px cell as the bell. */
+.ledger-apps { display: flex; flex: none; align-items: center; }
+.ledger-header > .ledger-apps { align-self: center; margin-left: auto; margin-right: 12px; }
+.ledger-record__head > .ledger-apps:only-child { margin-left: auto; }
+
+.ledger .ledger-apps .icue-apps__trigger {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0;
+  border: 2px solid var(--color-divider);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text);
+}
+
+.ledger .ledger-apps .icue-apps__trigger:hover,
+.ledger .ledger-apps .icue-apps__trigger[aria-expanded='true'] {
+  border-color: var(--color-divider);
+  box-shadow: none;
+}
+
+.ledger .ledger-apps .icue-apps__trigger[aria-expanded='true'] {
+  background: var(--ledger-hover);
+}
+
 /* index.css pulls in Tailwind's preflight (border-box) but then re-pads every
    button with `0.6em 1.2em`. On a fixed 38px square that padding eats the whole
    content box and the icon collapses to nothing, so the padding is zeroed here
@@ -1914,6 +1942,7 @@ body.dark .ledger {
 @media (hover: hover) {
   .ledger-btn:hover:not(:disabled),
   .ledger-iconbtn:hover,
+  .ledger .ledger-apps .icue-apps__trigger:hover,
   .ledger-header__lang:hover,
   .ledger-header__theme:hover,
   .ledger-header__langitem:hover,
@@ -2076,7 +2105,8 @@ body.dark .ledger {
 
   /* Header actions get their own full-width row rather than overflowing. */
   .ledger-header .ledger-btn { flex: 1 1 auto; justify-content: center; }
-  .ledger-header__bell { order: 2; }
+  .ledger-header__bell,
+  .ledger-header .ledger-apps { order: 2; }
 
   .ledger-filters__chips { width: 100%; overflow-x: auto; }
   .ledger-filters__stage { flex: 1 1 auto; }

@@ -33,7 +33,6 @@ import UserProfileSection from './UserProfileSection';
 import { LAST_RECORD_KEY } from '../../pages/ContractRecord';
 
 import '../Table.css';
-import AppSwitcher from '../app-switcher/AppSwitcher.jsx';
 import { withNavigationPreferences } from '../../lib/navigationPreferences.js';
 
 /**
@@ -323,9 +322,6 @@ const SidebarMobile = ({ onFeedback }) => {
             overflow: isMobile ? 'visible' : 'auto',
             paddingTop: isMobile ? '0' : '1rem'
           }}>
-            
-            <AppSwitcher currentApp="contracts" locale={locale} appearance={appearance} compact={collapsed || isMobile} />
-
             <SidebarButton
               icon={<Newspaper size={20} />}
               label={t('sidebar.newsroom', 'Newsroom')}

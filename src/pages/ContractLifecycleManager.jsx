@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useUser } from '../hooks/useUser';
 import { contractsApi } from '../api/contracts';
 import ContractAnalytics from '../components/ContractAnalytics';
+import HeaderAppSwitcher from '../components/layout/HeaderAppSwitcher';
 import '../components/dashboard/dashboard.css';
 
 /**
@@ -54,6 +55,7 @@ const ContractLifecycleManager = () => {
           <Clock size={15} aria-hidden="true" />
           {t('phaseManagement.title', 'Phase Management')}
         </button>
+        <HeaderAppSwitcher />
       </header>
 
       <ContractAnalytics

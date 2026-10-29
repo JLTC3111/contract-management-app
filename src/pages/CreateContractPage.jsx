@@ -10,6 +10,7 @@ import { uploadAttachments } from '../utils/uploads';
 import { ADVANCEABLE_STAGES, getStageLabel, stageUpdatePayload } from '../utils/stages';
 import { CONTRACT_CATEGORIES, getCategoryLabel } from '../utils/constants';
 import DatePicker from '../components/dashboard/DatePicker';
+import HeaderAppSwitcher from '../components/layout/HeaderAppSwitcher';
 import AttachmentPicker from '../components/dashboard/AttachmentPicker';
 import Select from '../components/common/Select';
 import DraftNotice from '../components/common/DraftNotice';
@@ -115,6 +116,7 @@ const CreateContractPage = () => {
           <ArrowLeft size={14} /> {t('buttons.back', 'Back')}
         </button>
         <h1 className="ledger-page__title">{t('dashboard.newContract', 'New contract')}</h1>
+        <HeaderAppSwitcher />
       </header>
 
       <form className="ledger-page__form" onSubmit={submit}>

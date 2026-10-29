@@ -36,6 +36,7 @@ import { StageTag } from '../components/dashboard/StageTag';
 import EditContractModal from '../components/dashboard/EditContractModal';
 import DraftNotice from '../components/common/DraftNotice';
 import RetryNotice from '../components/common/RetryNotice';
+import HeaderAppSwitcher from '../components/layout/HeaderAppSwitcher';
 import { useDraftRecovery } from '../hooks/useDraftRecovery';
 import { useRevalidate } from '../hooks/useRevalidate';
 import '../components/dashboard/dashboard.css';
@@ -290,12 +291,24 @@ const ContractRecord = () => {
   if (loading) {
     return (
       <div className="ledger ledger-record">
+        <header className="ledger-record__head">
+          <HeaderAppSwitcher />
+        </header>
         <p className="ledger-state">{t('dashboard.loading', 'Loading...')}</p>
       </div>
     );
   }
 
-  if (!contract && loadError) return <div className="ledger"><RetryNotice onRetry={loadContract} /></div>;
+  if (!contract && loadError) {
+    return (
+      <div className="ledger">
+        <header className="ledger-record__head">
+          <HeaderAppSwitcher />
+        </header>
+        <RetryNotice onRetry={loadContract} />
+      </div>
+    );
+  }
 
   if (!contract) {
     return (
@@ -312,6 +325,7 @@ const ContractRecord = () => {
           <h1 className="ledger-record__brand">
             {t('lifecycle.contractNotFound', 'Contract not found')}
           </h1>
+          <HeaderAppSwitcher />
         </header>
         <p className="ledger-state">
           {t('lifecycle.contractNotFoundMessage',
@@ -336,6 +350,7 @@ const ContractRecord = () => {
         </button>
         <h1 className="ledger-record__brand" title={title}>{title || '—'}</h1>
         <StageTag stage={stage} />
+        <HeaderAppSwitcher />
       </header>
 
       <div className="ledger-record__body">

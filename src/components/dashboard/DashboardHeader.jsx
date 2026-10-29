@@ -4,6 +4,7 @@ import { motion as Motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Bell, CheckCircle, ChevronDown, Plus, Search } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
+import HeaderAppSwitcher from '../layout/HeaderAppSwitcher';
 import SunMoonIcon from '../common/SunMoonIcon';
 import { formatDate } from '../../utils/formatters';
 import { LANGUAGES, languageFor } from '../../i18n/languages';
@@ -159,6 +160,8 @@ const DashboardHeader = ({
             </Motion.div>
           )}
         </div>
+
+        <HeaderAppSwitcher />
 
         <div className="ledger-header__langtheme" ref={langRef}>
           <button
