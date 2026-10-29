@@ -7,6 +7,7 @@ import { useTheme } from '../../hooks/useTheme';
 import SunMoonIcon from '../common/SunMoonIcon';
 import { formatDate } from '../../utils/formatters';
 import { LANGUAGES, languageFor } from '../../i18n/languages';
+import { withNavigationPreferences } from '../../lib/navigationPreferences.js';
 import './dashboard.css';
 
 // 8-spoke asterisk mark - the app's mark appears once, here, on the dashboard.
@@ -81,7 +82,7 @@ const DashboardHeader = ({
     <header className="ledger-header">
       <div className="ledger-header__brand">
         <div className="ledger-header__brand-row">
-          <a href="https://icue.vn" style={{ display: 'flex', flexShrink: 0 }}>
+          <a href={withNavigationPreferences('https://icue.vn', { locale: i18n.resolvedLanguage || i18n.language, theme: darkMode ? 'dark' : 'light' })} style={{ display: 'flex', flexShrink: 0 }}>
             <img src="/logoIcons/logo.png" alt="ICUE" style={{ width: 18, height: 18 }} />
           </a>
           <span className="ledger-header__title">{t('navbar.title', 'Quản Lý Hợp Đồng')}</span>

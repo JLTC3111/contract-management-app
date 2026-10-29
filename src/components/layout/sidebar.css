@@ -27,6 +27,10 @@
 
 .rail--collapsed .rail__top { justify-content: center; }
 .rail__portals { margin-top: auto; padding-top: 0.4rem; border-top: 1px solid var(--card-border); }
+.rail__portals .icue-apps { justify-content: center; padding: 0.4rem; }
+
+/* The mobile bar hides its old collapse button using button:first-child. */
+.sidebar-container .icue-apps .icue-apps__trigger { display: inline-flex !important; }
 
 .rail__toggle {
   display: flex;

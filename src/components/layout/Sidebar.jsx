@@ -10,7 +10,6 @@ import {
   ChevronsLeft,
   ChevronsRight,
   FileText,
-  Home,
   LayoutDashboard,
   Lightbulb,
   LogOut,
@@ -23,7 +22,9 @@ import {
 import RssPulse from './RssPulse';
 import { useUser } from '../../hooks/useUser';
 import { useTranslation } from 'react-i18next';
-import { getAppNavigation } from '../app-switcher/appLinks.js';
+import AppSwitcher from '../app-switcher/AppSwitcher.jsx';
+import { useTheme } from '../../hooks/useTheme';
+import { withNavigationPreferences } from '../../lib/navigationPreferences.js';
 import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supaBaseClient';
 import { canEditContracts } from '../../utils/permissions';
@@ -79,7 +80,9 @@ const SidebarRail = ({ onFeedback }) => {
   const location = useLocation();
   const { user, logout, isDemoMode, disableDemoMode } = useUser() ?? {};
   const { t, i18n } = useTranslation();
-  const [website, hr] = getAppNavigation(i18n.resolvedLanguage || i18n.language).apps;
+  const { darkMode } = useTheme();
+  const locale = i18n.resolvedLanguage || i18n.language;
+  const appearance = darkMode ? 'dark' : 'light';
 
   const [collapsed, setCollapsed] = useState(() => browserStorage.getItem('collapsed') === 'true');
   const [personalOpen, setPersonalOpen] = useState(
@@ -147,7 +150,7 @@ const SidebarRail = ({ onFeedback }) => {
       key: 'newsroom',
       icon: Newspaper,
       label: t('sidebar.newsroom', 'Newsroom'),
-      href: 'https://vi.icue.vn/newsroom/',
+      href: withNavigationPreferences('https://vi.icue.vn/newsroom/', { locale, theme: appearance }),
     },
     {
       key: 'dashboard',
@@ -301,8 +304,7 @@ const SidebarRail = ({ onFeedback }) => {
             onClick: handleLogout,
           }} />
           <div className="rail__portals">
-            <Row item={{ key: 'website', icon: Home, label: website.label, href: website.href, external: true }} />
-            <Row item={{ key: 'hr', icon: Users, label: hr.label, href: hr.href, external: true }} />
+            <AppSwitcher currentApp="contracts" locale={locale} appearance={appearance} compact={collapsed} />
           </div>
         </div>
 

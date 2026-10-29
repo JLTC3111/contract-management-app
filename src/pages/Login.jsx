@@ -9,6 +9,8 @@ import { useLoginPhotos } from '../hooks/useLoginPhotos';
 import { authErrorMessage } from '../utils/authErrors';
 import { LANGUAGES, languageFor } from '../i18n/languages';
 import PasswordRecoveryForm from '../components/PasswordRecoveryForm';
+import AppSwitcher from '../components/app-switcher/AppSwitcher.jsx';
+import { withNavigationPreferences } from '../lib/navigationPreferences.js';
 // The display face for the headline and the wordmark. Self-hosted, so no CDN.
 import '@fontsource-variable/archivo';
 import './login.css';
@@ -100,12 +102,13 @@ const Login = ({ recovery }) => {
   return (
     <div className="auth">
       <nav className="auth-nav">
-        <a href="https://icue.vn" style={{ display: 'flex', flexShrink: 0 }}>
+        <a href={withNavigationPreferences('https://icue.vn', { locale: i18n.resolvedLanguage || i18n.language, theme: darkMode ? 'dark' : 'light' })} style={{ display: 'flex', flexShrink: 0 }}>
           <img src="/logoIcons/logo.png" alt="ICUE" className="auth-nav__logo" />
         </a>
         <p className="auth-nav__brand">{t('login.title', 'Quản Lý Hợp Đồng')}</p>
 
         <div className="auth-nav__end">
+          <AppSwitcher currentApp="contracts" locale={i18n.resolvedLanguage || i18n.language} appearance={darkMode ? 'dark' : 'light'} compact />
           <div className="auth-lang" ref={langRef}>
             <button
               type="button"

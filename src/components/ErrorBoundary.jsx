@@ -1,11 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight } from 'lucide-react';
+import { withNavigationPreferences } from '../lib/navigationPreferences.js';
 import '@fontsource-variable/archivo';
 import './ErrorBoundary.css';
 
 function CrashScreen({ error, errorInfo, fallback }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dump = [error && error.toString(), errorInfo && errorInfo.componentStack]
     .filter(Boolean)
     .join('\n');
@@ -13,7 +14,7 @@ function CrashScreen({ error, errorInfo, fallback }) {
   return (
     <div className="crash" role="alert">
       <nav className="crash-nav">
-        <a href="https://icue.vn" style={{ display: 'flex', flexShrink: 0 }}>
+        <a href={withNavigationPreferences('https://icue.vn', { locale: i18n.resolvedLanguage || i18n.language, theme: document.body.classList.contains('dark') ? 'dark' : 'light' })} style={{ display: 'flex', flexShrink: 0 }}>
           <img src="/logoIcons/logo.png" alt="ICUE" className="crash-nav__logo" />
         </a>
         <p className="crash-nav__brand">{t('login.title', 'Contract Manager')}</p>

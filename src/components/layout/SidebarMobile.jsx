@@ -2,7 +2,6 @@ import { browserStorage } from '../../utils/browserStorage';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  HomeIcon,
   Newspaper,
   LayoutDashboardIcon,
   LogOutIcon,
@@ -34,7 +33,8 @@ import UserProfileSection from './UserProfileSection';
 import { LAST_RECORD_KEY } from '../../pages/ContractRecord';
 
 import '../Table.css';
-import { getAppNavigation } from '../app-switcher/appLinks.js';
+import AppSwitcher from '../app-switcher/AppSwitcher.jsx';
+import { withNavigationPreferences } from '../../lib/navigationPreferences.js';
 
 /**
  * The original sidebar, kept verbatim for the mobile horizontal bar.
@@ -47,7 +47,8 @@ const SidebarMobile = ({ onFeedback }) => {
   const { user, logout, isDemoMode, disableDemoMode } = useUser() ?? {};
   const { darkMode } = useTheme();
   const { t, i18n } = useTranslation();
-  const [website, hr] = getAppNavigation(i18n.resolvedLanguage || i18n.language).apps;
+  const locale = i18n.resolvedLanguage || i18n.language;
+  const appearance = darkMode ? 'dark' : 'light';
   const sidebarRef = useRef();
   
   // State
@@ -64,7 +65,6 @@ const SidebarMobile = ({ onFeedback }) => {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [statusUpdateLoading, setStatusUpdateLoading] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [isResizeHandleHovered, setIsResizeHandleHovered] = useState(false);
 
   // Persist state to localStorage
@@ -324,66 +324,12 @@ const SidebarMobile = ({ onFeedback }) => {
             paddingTop: isMobile ? '0' : '1rem'
           }}>
             
-            {/* Home Button with Tooltip */}
-            <div
-              style={{ position: 'relative', display: 'inline-block' }}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              <SidebarButton
-                icon={<HomeIcon size={20} />}
-                label={website.label}
-                path="/home"
-                collapsed={collapsed || isMobile}
-                currentPath={location.pathname}
-                href={website.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={website.label}
-              />
-              <AnimatePresence>
-                {isHovered && !isMobile && !collapsed && (
-                  <Motion.div
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 5 }}
-                    exit={{ opacity: 0, x: 15 }}
-                    transition={{ duration: 0.2 }}
-                    style={{
-                      position: 'absolute',
-                      left: '105%',
-                      top: '15%',
-                      transform: 'translateY(-50%)',
-                      backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                      color: '#fff',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '0.75rem',
-                      pointerEvents: 'auto',
-                      whiteSpace: 'nowrap',
-                      zIndex: 100,
-                    }}
-                  >
-                    {t('sidebar.visitIcueTooltip')}
-                  </Motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <SidebarButton
-              icon={<Users size={20} />}
-              label={hr.label}
-              href={hr.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              collapsed={collapsed || isMobile}
-              aria-label={hr.label}
-              title={hr.label}
-            />
+            <AppSwitcher currentApp="contracts" locale={locale} appearance={appearance} compact={collapsed || isMobile} />
 
             <SidebarButton
               icon={<Newspaper size={20} />}
               label={t('sidebar.newsroom', 'Newsroom')}
-              href="https://vi.icue.vn/newsroom/"
+              href={withNavigationPreferences('https://vi.icue.vn/newsroom/', { locale, theme: appearance })}
               collapsed={collapsed || isMobile}
               aria-label={t('sidebar.newsroom', 'Newsroom')}
               title={t('sidebar.newsroom', 'Newsroom')}
